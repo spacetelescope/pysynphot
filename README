@@ -1,0 +1,22 @@
+This is a prototype module for manipulating spectra.
+It is intended for it to be used for synthetic
+photometry, i.e. constructing source spectra and
+then passing these spectra through an astronomical
+observatory (e.g. HST, JWST...).
+
+Install the module the usual way:
+
+python setup.py install
+
+The spectrum manipulation module spectrum.py will work
+standalone, whereas the observationmode.py module
+is designed to work with the HST synphot database, so
+won't be much use unless you also install synphot.
+
+You can get synphot from
+
+http://www.stsci.edu/resources/software_hardware/stsdas/synphot
+
+If you have questions about this module, send mail to
+help@stsci.edu and it will get to the appropriate
+person.
