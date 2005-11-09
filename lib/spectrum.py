@@ -1,6 +1,24 @@
 import pyfits
 import numarray
 import math
+import units
+import magnitudes
+
+def MergeWaveSets(waveset1, waveset2):
+    '''Global function to merge 2 wavesets.
+    Used by CompositeSourceFunction and CompositeSpectralElement'''
+    if waveset1 is None and waveset2 is not None:
+        MergedWaveSet = waveset2
+    elif waveset2 is None and waveset1 is not None:
+        MergedWaveSet = waveset1
+    elif waveset1 is None and Waveset2 is None:
+        MergedWaveSet = None
+    else:
+        MergedWaveSet = numarray.concatenate((waveset1, waveset2))
+        MergedWaveSet = numarray.sort(MergedWaveSet, 1)
+        MergedWaveSet = numarray.compress(MergedWaveSet[:-1] !=
+                                          MergedWaveSet[1:], MergedWaveSet)
+    return MergedWaveSet
 
 class SourceSpectrum:
     '''Base class for the Source Spectrum object.'''
@@ -19,7 +37,7 @@ class SourceSpectrum:
         objects'''
 
         if type(other) in [type(1), type(1.0)]:
-            other = ConstantSpectralElement(other)
+            other = UniformTransmission(other)
         if not isinstance(other, SpectralElement):
             print "SourceSpectrum objects can only be multiplied by' + \
             'SpectralElement objects or constants"
@@ -46,11 +64,25 @@ class SourceSpectrum:
         integrand = 0.5*(fluxes[indices+1] + fluxes[indices])*dlambda
         return integrand.sum()
 
-##      def Renormalize(self, obsmode, value):
-##          '''Renormalize makes the total flux of the source equal to
-##          value when observed with obsmode'''
+    def convert(self, targetunits):
+        '''Convert to other units.  Delegate to methods in the
+        Units class'''
+        if targetunits == 'angstroms' or targetunits == 'hz':
+            return self.waveunits.Convert(self, targetunits)
+        return self.fluxunits.Convert(self, targetunits)
 
-         
+    def SetMagnitude(self, Mag):
+        '''SetMagnitude makes the magnitude of the source equal to Mag
+        Mag is a magnitudes.Magnitude object'''
+        
+        ObjectFlux = Mag.CalcTotalFlux(self)
+        VegaFlux = Mag.CalcVegaFlux()
+        MagDiff = -2.5*math.log10(ObjectFlux/VegaFlux)
+        Factor = 10**(-0.4*(Mag.value - MagDiff))
+
+        '''Object returned is a CompositeSourceSpectrum'''
+        
+        return self*Factor
 
 class CompositeSourceSpectrum(SourceSpectrum):
     '''Composite Source Spectrum object, handles addition, multiplication and
@@ -79,17 +111,8 @@ class CompositeSourceSpectrum(SourceSpectrum):
         waveset1 = self.component1.GetWaveSet()
         waveset2 = self.component2.GetWaveSet()
 
-        ## Concatenate the two wavelength sets
-        wtable = numarray.concatenate((waveset1, waveset2))
-
-        ## Sort
-        wtable = numarray.sort(wtable, 1)
-
-        ## Remove duplicates
-        self.wavetable = numarray.compress(wtable[:-1] != wtable[1:], wtable)
-
-        return self.wavetable
-
+        return MergeWaveSets(waveset1, waveset2)
+    
 class TabularSourceSpectrum(SourceSpectrum):
     '''Class for a source spectrum that is read in from a FITS table'''
 
@@ -108,8 +131,8 @@ class TabularSourceSpectrum(SourceSpectrum):
 
             ## Units are stored in the header in these variables
 
-            self.fluxunits = fs[1].header['tunit2'].lower()
-            self.waveunits = fs[1].header['tunit1'].lower()
+            self.fluxunits = units.Units(fs[1].header['tunit2'].lower())
+            self.waveunits = units.Units(fs[1].header['tunit1'].lower())
 
             ## Be nice and tidy up
 
@@ -199,7 +222,7 @@ class TabularSourceSpectrum(SourceSpectrum):
 class GaussianSource(SourceSpectrum):
     '''Gaussian Source Function.'''
 
-    def __init__(self, total, center, width, waveunits='Angstrom',
+    def __init__(self, total, center, width, waveunits='angstroms',
                  fluxunits='flam'):
         '''The integrated flux is total, centered on center with a
         sigma of width.  Default wavelength units are Angstroms and
@@ -208,8 +231,8 @@ class GaussianSource(SourceSpectrum):
         self.total = total
         self.center = center
         self.width = width
-        self.waveunits = waveunits
-        self.fluxunits = fluxunits
+        self.waveunits = units.Units(waveunits)
+        self.fluxunits = units.Units(fluxunits)
 
     def __call__(self, wavelength):
         '''This is where the actual Gaussian is calculated'''
@@ -285,29 +308,23 @@ class CompositeSpectralElement(SpectralElement):
         wave1 = self.component1.GetWaveSet()
         wave2 = self.component2.GetWaveSet()
 
-        ## Concatenate the wavelength tables of the components
-        wtable = numarray.concatenate((wave1, wave2))
-
-        ## Sort them
-        wtable = numarray.sort(wtable, 1)
-
-        ## Remove duplicates
-        indices = numarray.where(wtable[:-1] == wtable[1:])
-        wtable[indices] = -1
-        self.wavetable = numarray.compress(wtable != -1, wtable)
-
-        return self.wavetable
+        return MergeWaveSets(waveset1, waveset2)
 
 class UniformTransmission(SpectralElement):
     '''Uniform Transmission Spectral Element.
     Need to add a GetWaveSet method (or just return None)'''
 
-    def __init__(self, value, waveunits='angstrom'):
+    def __init__(self, value, waveunits='angstroms'):
         '''The __init__ method just populates the waveunits and value
         members'''
 
-        self.waveunits = waveunits
+        self.waveunits = units.Units(waveunits)
         self.value = value
+
+    def GetWaveSet(self):
+        '''A UniformTransmission object has no wavelength set'''
+
+        return None
 
     def __call__(self, wavelength):
         '''__call__ returns the constant value as an array, given a
@@ -335,7 +352,7 @@ class TabularSpectralElement(SpectralElement):
             ## Assume that the wavelength units are stored in this header
             ## parameter
 
-            self.waveunits = fs[1].header['tunit1'].lower()
+            self.waveunits = units.Units(fs[1].header['tunit1'].lower())
             self.throughputunits = 'none'
             fs.close()
         else:
@@ -418,4 +435,3 @@ class TabularSpectralElement(SpectralElement):
         table'''
 
         return self.wavetable
-
