@@ -39,8 +39,10 @@ class Flam:
         Wavelength units are Hz'''
 
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = (C*1.0e8)/InSpectrum.wavetable[::-1]
-        Temp = (InSpectrum.wavetable**2)*InSpectrum.fluxtable/(C*1.0e8)
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
+        Temp = (InWave**2)*InFlux/(C*1.0e8)
         OutSpectrum.fluxtable = Temp[::-1]
         OutSpectrum.fluxunits = Units('fnu')
         OutSpectrum.waveunits = Units('hz')
@@ -54,9 +56,10 @@ class Flam:
 
         constant = 5.03411762e7
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = InSpectrum.fluxtable * constant \
-                                * InSpectrum.wavetable
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = InFlux * constant * InWave
         OutSpectrum.fluxunits = Units('photlam')
         OutSpectrum.waveunits = InSpectrum.waveunits
         
@@ -80,8 +83,10 @@ class Flam:
         Wavelength units are unchanged'''
         
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        Temp = (InSpectrum.wavetable**2)*InSpectrum.fluxtable/(C*1.0e8)
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        Temp = (InWave**2)*InFlux/(C*1.0e8)
         OutSpectrum.fluxtable = -48.6 -2.5*numarray.log10(Temp)
         OutSpectrum.fluxunits = Units('abmag')
         OutSpectrum.waveunits = InSpectrum.waveunits
@@ -94,9 +99,10 @@ class Flam:
         Wavelength units are unchanged'''
 
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = -21.10 - \
-                                2.5*numarray.log10(InSpectrum.fluxtable)
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = -21.10 - 2.5*numarray.log10(InFlux)
         OutSpectrum.fluxunits = Units('stmag')
         OutSpectrum.waveunits = InSpectrum.waveunits
         return OutSpectrum
@@ -127,8 +133,10 @@ class Fnu:
         Wavelength units are angstroms'''
 
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = (C*1.0e8)/InSpectrum.wavetable[::-1]
-        Temp = InSpectrum.fluxtable*(InSpectrum.wavetable)**2/(C*1.0e8)
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
+        Temp = InFlux*(InWave**2)/(C*1.0e8)
         OutSpectrum.fluxtable = Temp[::-1]
         OutSpectrum.fluxunits = Units('flam')
         OutSpectrum.waveunits = Units('angstroms')
@@ -148,9 +156,10 @@ class Fnu:
 
         constant = 5.03411762e7
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = InSpectrum.fluxtable * constant \
-                                * InSpectrum.wavetable
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = InFlux * constant * InWave
         OutSpectrum.fluxunits = Units('photlam')
         OutSpectrum.waveunits = InSpectrum.waveunits
         return OutSpectrum
@@ -161,8 +170,10 @@ class Fnu:
         Wavelength units are unchanged'''
         
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = InSpectrum.fluxtable * 1.0e23
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = InFlux * 1.0e23
         OutSpectrum.fluxunits = Units('jy')
         OutSpectrum.waveunits = InSpectrum.waveunits
         return OutSpectrum
@@ -173,9 +184,10 @@ class Fnu:
         Wavelength units are unchanged'''
         
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = -48.60 - \
-                                2.5*numarray.log10(InSpectrum.fluxtable)
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = -48.60 - 2.5*numarray.log10(InFlux)
         OutSpectrum.fluxunits = Units('abmag')
         OutSpectrum.waveunits = InSpectrum.waveunits
 
@@ -187,12 +199,14 @@ class Fnu:
         Wavelength units are angstroms'''
 
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
         OutSpectrum.waveunits = InSpectrum.waveunits
         if isinstance(OutSpectrum.waveunits,Angstroms):
-            print "It's an Angstroms instance"
+            Temp = (C*1.0e8)*InFlux/(InWave**2)
         elif isinstance(OutSpectrum.waveunits,Hz):
-            print "It's a Hz instance"
+            Temp = (InWave**2)*InFlux/(C*1.0e8)
         else:
             print "I don't know what the wavelength units are"
         
@@ -224,9 +238,10 @@ class Photlam:
         Units are erg cm^-2 s^-1 Ang^-1'''
         constant = 5.03411762e7
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = InSpectrum.fluxtable / InSpectrum.wavetable \
-                                / constant
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = InFlux/InWave/constant
         OutSpectrum.fluxunits = Units('flam')
         OutSpectrum.waveunits = InSpectrum.waveunits
         return OutSpectrum
@@ -237,9 +252,10 @@ class Photlam:
         Wavelength units are Hz'''
         constant = 5.03411762e7
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = (C*1.0e8)/InSpectrum.wavetable[::-1]
-        Temp = (InSpectrum.wavetable**3)*InSpectrum.fluxtable \
-               /(C*1.0e8)/constant
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
+        Temp = (InWave**3)*InFlux/(C*1.0e8)/constant
         OutSpectrum.fluxtable = Temp[::-1]
         OutSpectrum.fluxunits = Units('fnu')
         OutSpectrum.waveunits = Units('hz')
@@ -249,6 +265,7 @@ class Photlam:
         '''Convert to PhotLam.
         Flux units are photons cm^-2 s^-1 Ang^-1
         Wavelength units are Angstrom'''
+        
         return InSpectrum
 
     def ToJy(self, InSpectrum):
@@ -302,8 +319,10 @@ class Jy:
         Units are erg cm^-2 s^-1 Ang^-1'''
 
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = (C*1.0e8)/InSpectrum.wavetable[::-1]
-        Temp = InSpectrum.fluxtable*(InSpectrum.wavetable)**2/(C*1.0e8)
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
+        Temp = InFlux*(InWave**2)/(C*1.0e8)
         OutSpectrum.fluxtable = Temp[::-1]
         OutSpectrum.fluxunits = Units('flam')
         OutSpectrum.waveunits = Units('angstroms')
@@ -314,8 +333,12 @@ class Jy:
         Flux units are erg cm^-2 s^-1 Hz^-1
         Wavelength units are Hz'''
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = InSpectrum.fluxtable * 1.0e-23
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = InFlux * 1.0e-23
+        OutSpectrum.waveunits = InSpectrum.waveunits
+        OutSpectrum.fluxunits = Units('fnu')
         
         return OutSpectrum
 
@@ -326,17 +349,22 @@ class Jy:
 
         constant = 5.03411762e7
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = InSpectrum.fluxtable * constant \
-                                * InSpectrum.wavetable
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = InFlux * constant * InWave
         OutSpectrum.fluxunits = Units('photlam')
+        OutSpectrum.waveunits = InSpectrum.waveunits
+        
         return OutSpectrum
 
     def ToJy(self, InSpectrum):
         '''Convert to Jy
         Flux units are Jy'''
 
-        return InSpectrum
+        print 'Conversion not implemented yet'
+        
+        return None
 
     def ToABMag(self, InSpectrum):
         '''Convert to ABMag
@@ -380,12 +408,17 @@ class ABMag:
         '''Convert to Flam
         Units are erg cm^-2 s^-1 Ang^-1'''
 
+        print 'Conversion not implemented yet'
+        
         return None
 
     def ToFnu(self, InSpectrum):
         '''Convert to Fnu.
         Flux units are erg cm^-2 s^-1 Hz^-1
         Wavelength units are Hz'''
+
+        print 'Conversion not implemented yet'
+        
         return None
 
     def ToPhotlam(self, InSpectrum):
@@ -393,12 +426,16 @@ class ABMag:
         Flux units are photons cm^-2 s^-1 Ang^-1
         Wavelength units are Angstrom'''
 
+        print 'Conversion not implemented yet'
+
         return None
 
     def ToJy(self, InSpectrum):
         '''Convert to Jy
         Flux units are Jy'''
 
+        print 'Conversion not implemented yet'
+        
         return None
 
     def ToABMag(self, InSpectrum):
@@ -444,8 +481,10 @@ class STMag:
         Units are erg cm^-2 s^-1 Ang^-1'''
 
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = InSpectrum.wavetable
-        OutSpectrum.fluxtable = 10.0**(-0.4*(InSpectrum.fluxtable + 21.10))
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = InWave
+        OutSpectrum.fluxtable = 10.0**(-0.4*(InFlux + 21.10))
         OutSpectrum.fluxunits = Units('flam')
         OutSpectrum.waveunits = InSpectrum.waveunits
         
@@ -455,6 +494,9 @@ class STMag:
         '''Convert to Fnu.
         Flux units are erg cm^-2 s^-1 Hz^-1
         Wavelength units are Hz'''
+
+        print 'Conversion not implemented yet'
+        
         return None
 
     def ToPhotlam(self, InSpectrum):
@@ -462,12 +504,16 @@ class STMag:
         Flux units are photons cm^-2 s^-1 Ang^-1
         Wavelength units are Angstrom'''
 
+        print 'Conversion not implemented yet'
+        
         return None
 
     def ToJy(self, InSpectrum):
         '''Convert to Jy
         Flux units are Jy'''
 
+        print 'Conversion not implemented yet'
+        
         return None
 
     def ToABMag(self, InSpectrum):
@@ -512,9 +558,11 @@ class Angstroms:
         Units are Hz'''
 
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = (C*1.0e8)/InSpectrum.wavetable[::-1]
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
         OutSpectrum.waveunits = Units('hz')
-        OutSpectrum.fluxtable = InSpectrum.fluxtable[::-1]
+        OutSpectrum.fluxtable = InFlux[::-1]
         OutSpectrum.fluxunits = InSpectrum.fluxunits
         
         return OutSpectrum
@@ -540,9 +588,11 @@ class Hz:
         Units are Angstroms'''
 
         OutSpectrum = spectrum.TabularSourceSpectrum()
-        OutSpectrum.wavetable = (C*1.0e8)/InSpectrum.wavetable[::-1]
+        InWave = InSpectrum.GetWaveSet()
+        InFlux = InSpectrum(InWave)
+        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
         OutSpectrum.waveunits = Units('angstroms')
-        OutSpectrum.fluxtable = InSpectrum.fluxtable[::-1]
+        OutSpectrum.fluxtable = InFlux[::-1]
         OutSpectrum.fluxunits = InSpectrum.fluxunits
         
         return OutSpectrum
