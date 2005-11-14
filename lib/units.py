@@ -27,6 +27,7 @@ class Flam:
                          'jy':self.ToJy,
                          'abmag':self.ToABMag,
                          'stmag':self.ToSTMag}
+        self.name = 'flam'
     
     def ToFlam(self, InSpectrum):
         '''This is the default, so just return input spectrum.
@@ -126,6 +127,7 @@ class Fnu:
                          'jy':self.ToJy,
                          'abmag':self.ToABMag,
                          'stmag':self.ToSTMag}
+        self.name = 'fnu'
     
     def ToFlam(self, InSpectrum):
         '''Convert to Flam
@@ -232,6 +234,7 @@ class Photlam:
                          'jy':self.ToJy,
                          'abmag':self.ToABMag,
                          'stmag':self.ToSTMag}
+        self.name = 'photlam'
     
     def ToFlam(self, InSpectrum):
         '''Convert to Flam
@@ -272,7 +275,9 @@ class Photlam:
         '''Convert to Jy
         Flux units are Jy (10^-23 erg cm^-2 s^-1 Hz^-1
         Wavelength units are Hz'''
-        print 'Conversion not implemented yet'
+        
+        OutSpectrum = InSpectrum.convert('hz')
+        
         
         return None
     
@@ -313,6 +318,7 @@ class Jy:
                          'jy':self.ToJy,
                          'abmag':self.ToABMag,
                          'stmag':self.ToSTMag}
+        self.name = 'jy'
     
     def ToFlam(self, InSpectrum):
         '''Convert to Flam
@@ -403,6 +409,7 @@ class ABMag:
                          'jy':self.ToJy,
                          'abmag':self.ToABMag,
                          'stmag':self.ToSTMag}
+        self.name = 'abmag'
     
     def ToFlam(self, InSpectrum):
         '''Convert to Flam
@@ -475,6 +482,7 @@ class STMag:
                          'jy':self.ToJy,
                          'abmag':self.ToABMag,
                          'stmag':self.ToSTMag}
+        self.name = 'stmag'
     
     def ToFlam(self, InSpectrum):
         '''Convert to Flam
@@ -547,6 +555,7 @@ class Angstroms:
 
         self.Dispatch = {'angstroms' : self.ToAngstroms,
                          'hz': self.ToHz}
+        self.name = 'angstroms'
 
     def ToAngstroms(self, InSpectrum):
         '''Return original spectrum object'''
@@ -582,6 +591,7 @@ class Hz:
 
         self.Dispatch = {'angstroms': self.ToAngstroms,
                          'hz' : self.ToHz}
+        self.name = 'hz'
     
     def ToAngstroms(self, InSpectrum):
         '''Convert wavetable to Angstroms

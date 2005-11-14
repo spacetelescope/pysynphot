@@ -92,13 +92,17 @@ class CompositeSourceSpectrum(SourceSpectrum):
         '''__init__ just populates data members'''
 
         self.component1 = source1
-        self.component2 = source2
+        _fluxunits = self.component1.fluxunits.name
+        _waveunits = self.component1.waveunits.name
+        self.component2 = source2.convert(_fluxunits)
+        self.component2 = self.component2.convert(_waveunits)
+        self.fluxunits = source1.fluxunits
+        self.waveunits = source1.waveunits
         self.operation = operation
 
     def __call__(self, wavelength):
         '''Add or multiply components, delegating the function calculation to
         the individual objects'''
-
         if self.operation == 'add':
             return self.component1(wavelength) + self.component2(wavelength)
         if self.operation == 'multiply':
