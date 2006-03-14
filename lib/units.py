@@ -1,622 +1,315 @@
-import spectrum
 import math
+import string
 import numarray
+import spectrum   # circular import is required for vegamag transformation 
+import locations
 
-C = 2.99792458e10
+C = 2.99792458e18 # speed of light in Angstrom/sec
+H = 6.62620E-27   # Planck's constant
+HC = H * C
+ABZERO = -48.60   # magnitude zero points
+STZERO = -21.10
 
-def Units(Inunits):
+HSTAREA = 45238.93416  # cm^2
 
-    if Inunits == 'flam': return Flam()
-    if Inunits == 'fnu': return Fnu()
-    if Inunits == 'photlam' : return Photlam()
-    if Inunits == 'jy' : return Jy()
-    if Inunits == 'abmag' : return ABMag()
-    if Inunits == 'stmag' : return STMag()
-    if Inunits == 'angstroms' : return Angstroms()
-    if Inunits == 'hz' : return Hz()
-    print 'Unknown units: ' + Inunits
-    return None
+# Wavelenghts must be expressed in Angstrom.
 
-class Flam:
-
-    def __init__(self):
-
-        self.Dispatch = {'flam': self.ToFlam,
-                         'fnu': self.ToFnu,
-                         'photlam': self.ToPhotlam,
-                         'jy':self.ToJy,
-                         'abmag':self.ToABMag,
-                         'stmag':self.ToSTMag}
-        self.name = 'flam'
-    
-    def ToFlam(self, InSpectrum):
-        '''This is the default, so just return input spectrum.
-        Units are erg cm^-2 s^-1 Ang^-1'''
-        return InSpectrum
-
-    def ToFnu(self, InSpectrum):
-        '''Convert to Fnu.
-        Flux units are erg cm^-2 s^-1 Hz^-1
-        Wavelength units are Hz'''
-
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
-        Temp = (InWave**2)*InFlux/(C*1.0e8)
-        OutSpectrum.fluxtable = Temp[::-1]
-        OutSpectrum.fluxunits = Units('fnu')
-        OutSpectrum.waveunits = Units('hz')
-        
-        return OutSpectrum
-
-    def ToPhotlam(self, InSpectrum):
-        '''Convert to PhotLam.
-        Flux units are photons cm^-2 s^-1 Ang^-1
-        Wavelength units are unchanged'''
-
-        constant = 5.03411762e7
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = InFlux * constant * InWave
-        OutSpectrum.fluxunits = Units('photlam')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        
-        return OutSpectrum
-
-    def ToJy(self, InSpectrum):
-        '''Convert to Jy
-        Flux units are Jy (10^-23 erg cm^-2 s^-1 Hz^-1
-        Wavelength units are unchanged'''
-
-        OutSpectrum = self.Convert(InSpectrum, 'fnu')
-        OutSpectrum.fluxtable = OutSpectrum.fluxtable * 1.0e23
-        OutSpectrum.fluxunits = Units('jy')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        
-        return OutSpectrum
-    
-    def ToABMag(self, InSpectrum):
-        '''Convert to ABMag
-        Flux units are ABMag
-        Wavelength units are unchanged'''
-        
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        Temp = (InWave**2)*InFlux/(C*1.0e8)
-        OutSpectrum.fluxtable = -48.6 -2.5*numarray.log10(Temp)
-        OutSpectrum.fluxunits = Units('abmag')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-
-        return OutSpectrum
-
-    def ToSTMag(self, InSpectrum):
-        '''Convert to STMag
-        Flux units are STMag
-        Wavelength units are unchanged'''
-
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = -21.10 - 2.5*numarray.log10(InFlux)
-        OutSpectrum.fluxunits = Units('stmag')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        return OutSpectrum
-    
-    def Convert(self, InSpectrum, TargetUnits):
-
-        if self.Dispatch.has_key(TargetUnits):
-            OutSpectrum = self.Dispatch[TargetUnits](InSpectrum)
-        else:
-            print 'Units ' + TargetUnits + ' not recognized'
-            raise KeyError
-        return OutSpectrum
-
-class Fnu:
-        
-    def __init__(self):
-
-        self.Dispatch = {'flam': self.ToFlam,
-                         'fnu': self.ToFnu,
-                         'photlam': self.ToPhotlam,
-                         'jy':self.ToJy,
-                         'abmag':self.ToABMag,
-                         'stmag':self.ToSTMag}
-        self.name = 'fnu'
-    
-    def ToFlam(self, InSpectrum):
-        '''Convert to Flam
-        Units are erg cm^-2 s^-1 Ang^-1
-        Wavelength units are angstroms'''
-
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
-        Temp = InFlux*(InWave**2)/(C*1.0e8)
-        OutSpectrum.fluxtable = Temp[::-1]
-        OutSpectrum.fluxunits = Units('flam')
-        OutSpectrum.waveunits = Units('angstroms')
-        return OutSpectrum
-
-    def ToFnu(self, InSpectrum):
-        '''Convert to Fnu.
-        Flux units are erg cm^-2 s^-1 Hz^-1
-        Wavelength units are Hz'''
-
-        return InSpectrum
-
-    def ToPhotlam(self, InSpectrum):
-        '''Convert to PhotLam.
-        Flux units are photons cm^-2 s^-1 Ang^-1
-        Wavelength units are unchanged'''
-
-        constant = 5.03411762e7
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = InFlux * constant * InWave
-        OutSpectrum.fluxunits = Units('photlam')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        return OutSpectrum
-
-    def ToJy(self, InSpectrum):
-        '''Convert to Jy
-        Flux units are Jy (10^-23 erg cm^-2 s^-1 Hz^-1
-        Wavelength units are unchanged'''
-        
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = InFlux * 1.0e23
-        OutSpectrum.fluxunits = Units('jy')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        return OutSpectrum
-    
-    def ToABMag(self, InSpectrum):
-        '''Convert to ABMag
-        Flux units are ABMag
-        Wavelength units are unchanged'''
-        
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = -48.60 - 2.5*numarray.log10(InFlux)
-        OutSpectrum.fluxunits = Units('abmag')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-
-        return OutSpectrum
-
-    def ToSTMag(self, InSpectrum):
-        '''Convert to STMag
-        Flux units are STMag
-        Wavelength units are angstroms'''
-
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        if isinstance(OutSpectrum.waveunits,Angstroms):
-            Temp = (C*1.0e8)*InFlux/(InWave**2)
-        elif isinstance(OutSpectrum.waveunits,Hz):
-            Temp = (InWave**2)*InFlux/(C*1.0e8)
-        else:
-            print "I don't know what the wavelength units are"
-        
+def Units(units):
+    try:
+        return factory(units) 
+    except KeyError:
+        print 'Unknown units: ' + units
         return None
-    
-    def Convert(self, InSpectrum, TargetUnits):
 
+def _getDeltaWave(wave):
+    last = wave.shape[0]-1
+
+    hold1 = numarray.array(shape=wave.shape, type='Float32')
+    hold2 = numarray.array(shape=wave.shape, type='Float32')
+
+    hold1[1::] = wave[0:last]
+    hold2[0:last] = wave[1::]
+
+    delta = (hold2 - hold1) / 2.0
+
+    delta[0] = wave[1] - wave[0]
+    delta[last] = wave[last] - wave[last-1]
+
+    return delta
+
+
+class _UnitsConverter(object):
+    def Convert(self, wave, flux, TargetUnits):
         if self.Dispatch.has_key(TargetUnits):
-            OutSpectrum = self.Dispatch[TargetUnits](InSpectrum)
+            result = self.Dispatch[TargetUnits](wave, flux)
         else:
             print 'Units ' + TargetUnits + ' not recognized'
             raise KeyError
-        return OutSpectrum
+        return result
 
-class Photlam:
-
+class _ToInternalWaveUnitsConverter(_UnitsConverter):
     def __init__(self):
+        self.Dispatch = {'angstrom' : self.ToAngstrom}
+        self.isFlux = False
 
+class _ToExternalWaveUnitsConverter(_UnitsConverter):
+    def __init__(self):
+        self.Dispatch = {'angstrom' : self.ToAngstrom,
+                         'nm': self.ToNm,
+                         'micron': self.ToMicron,
+                         'mm': self.ToMm,
+                         'cm': self.ToCm,
+                         'm': self.ToMeter,
+                         'hz': self.ToHz}
+        self.isFlux = False
 
+class _ToInternallFluxUnitsConverter(_UnitsConverter):
+    def __init__(self):
+        self.Dispatch = {'photlam': self.ToPhotlam}
+        self.isFlux = True
+
+class _ToExternalFluxUnitsConverter(_UnitsConverter):
+    def __init__(self):
         self.Dispatch = {'flam': self.ToFlam,
                          'fnu': self.ToFnu,
                          'photlam': self.ToPhotlam,
+                         'photnu': self.ToPhotnu,
                          'jy':self.ToJy,
+                         'mjy':self.TomJy,
                          'abmag':self.ToABMag,
-                         'stmag':self.ToSTMag}
+                         'stmag':self.ToSTMag,
+                         'obmag':self.ToOBMag,
+                         'vegamag':self.ToVegaMag,
+                         'counts':self.ToCounts}
+        self.isFlux = True
+
+class Photlam(_ToExternalFluxUnitsConverter):
+    ''' photlam = photons cm^-2 s^-1 Ang^-1)'''
+    def __init__(self):
+        _ToExternalFluxUnitsConverter.__init__(self)
         self.name = 'photlam'
     
-    def ToFlam(self, InSpectrum):
-        '''Convert to Flam
-        Units are erg cm^-2 s^-1 Ang^-1'''
-        constant = 5.03411762e7
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = InFlux/InWave/constant
-        OutSpectrum.fluxunits = Units('flam')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        return OutSpectrum
+    def ToFlam(self, wave, flux):
+        return HC * flux / wave
 
-    def ToFnu(self, InSpectrum):
-        '''Convert to Fnu.
-        Flux units are erg cm^-2 s^-1 Hz^-1
-        Wavelength units are Hz'''
-        constant = 5.03411762e7
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
-        Temp = (InWave**3)*InFlux/(C*1.0e8)/constant
-        OutSpectrum.fluxtable = Temp[::-1]
-        OutSpectrum.fluxunits = Units('fnu')
-        OutSpectrum.waveunits = Units('hz')
-        return InSpectrum
+    def ToFnu(self, wave, flux):
+        return H * flux * wave
 
-    def ToPhotlam(self, InSpectrum):
-        '''Convert to PhotLam.
-        Flux units are photons cm^-2 s^-1 Ang^-1
-        Wavelength units are Angstrom'''
-        
-        return InSpectrum
+    def ToPhotlam(self, wave, flux):
+        return flux.copy() # No conversion, just copy the array.
 
-    def ToJy(self, InSpectrum):
-        '''Convert to Jy
-        Flux units are Jy (10^-23 erg cm^-2 s^-1 Hz^-1
-        Wavelength units are Hz'''
-        
-        OutSpectrum = InSpectrum.convert('hz')
-        
-        
-        return None
+    def ToPhotnu(self, wave, flux):
+        return flux * wave * wave / C
+
+    def ToJy(self, wave, flux):
+        return 1.0e+23 * H * flux * wave
     
-    def ToABMag(self, InSpectrum):
-        '''Convert to ABMag
-        Flux units are ABMag
-        Wavelength units are unchanged'''
-        
-        print 'Conversion not implemented yet'
-
-        return None
-
-    def ToSTMag(self, InSpectrum):
-        '''Convert to STMag
-        Flux units are STMag
-        Wavelength units are Angstrom'''
-
-        print 'Conversion not implemented yet'
-
-        return None
+    def TomJy(self, wave, flux):
+        return 1.0e+26 * H * flux * wave
     
-    def Convert(self, InSpectrum, TargetUnits):
+    def ToABMag(self, wave, flux):
+        arg = H * flux * wave
+        return -1.085736 * numarray.log(arg) + ABZERO
+    
+    def ToSTMag(self, wave, flux):
+        arg = H * C* flux / wave
+        return -1.085736 * numarray.log(arg) + STZERO
+    
+    def ToOBMag(self, wave, flux):
+        dw = _getDeltaWave(wave)
+        arg = flux * dw * HSTAREA
+        return -1.085736 * numarray.log(arg)
 
-        if self.Dispatch.has_key(TargetUnits):
-            OutSpectrum = self.Dispatch[TargetUnits](InSpectrum)
-        else:
-            print 'Units ' + TargetUnits + ' not recognized'
-            raise KeyError
-        return OutSpectrum
+    def ToVegaMag(self, wave, flux):
+        vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
+        resampled = vegaspec.resample(wave)
+        normalized = flux / resampled._fluxtable
+        return -2.5 * numarray.log10(normalized)
 
-class Jy:
-        
+    def ToCounts(self, wave, flux):
+        return flux * _getDeltaWave(wave) * HSTAREA
+
+class Flam(_ToInternallFluxUnitsConverter):
+    ''' flam = erg cm^-2 s^-1 Ang^-1'''
     def __init__(self):
+        _ToInternallFluxUnitsConverter.__init__(self)
+        self.name = 'flam'
+    
+    def ToPhotlam(self, wave, flux):
+        return flux * wave / HC
 
-        self.Dispatch = {'flam': self.ToFlam,
-                         'fnu': self.ToFnu,
-                         'photlam': self.ToPhotlam,
-                         'jy':self.ToJy,
-                         'abmag':self.ToABMag,
-                         'stmag':self.ToSTMag}
+class Photnu(_ToInternallFluxUnitsConverter):
+    ''' photnu = photon cm^-2 s^-1 Hz^-1'''
+    def __init__(self):
+        _ToInternallFluxUnitsConverter.__init__(self)
+        self.name = 'photnu'
+    
+    def ToPhotlam(self, wave, flux):
+        return C * flux / (wave * wave)
+
+class Fnu(_ToInternallFluxUnitsConverter):
+    ''' fnu = erg cm^-2 s^-1 Hz^-1'''
+    def __init__(self):
+        _ToInternallFluxUnitsConverter.__init__(self)
+        self.name = 'fnu'
+    
+    def ToPhotlam(self, wave, flux):
+        return flux /wave / H
+
+class Jy(_ToInternallFluxUnitsConverter):
+    ''' jy = 10^-23 erg cm^-2 s^-1 Hz^-1'''
+    def __init__(self):
+        _ToInternallFluxUnitsConverter.__init__(self)
         self.name = 'jy'
-    
-    def ToFlam(self, InSpectrum):
-        '''Convert to Flam
-        Units are erg cm^-2 s^-1 Ang^-1'''
 
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
-        Temp = InFlux*(InWave**2)/(C*1.0e8)
-        OutSpectrum.fluxtable = Temp[::-1]
-        OutSpectrum.fluxunits = Units('flam')
-        OutSpectrum.waveunits = Units('angstroms')
-        return OutSpectrum
+    def ToPhotlam(self, wave, flux):
+        return flux / wave * (1.0e-23 / H)
 
-    def ToFnu(self, InSpectrum):
-        '''Convert to Fnu.
-        Flux units are erg cm^-2 s^-1 Hz^-1
-        Wavelength units are Hz'''
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = InFlux * 1.0e-23
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        OutSpectrum.fluxunits = Units('fnu')
-        
-        return OutSpectrum
-
-    def ToPhotlam(self, InSpectrum):
-        '''Convert to PhotLam.
-        Flux units are photons cm^-2 s^-1 Ang^-1
-        Wavelength units are Angstrom'''
-
-        constant = 5.03411762e7
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = InFlux * constant * InWave
-        OutSpectrum.fluxunits = Units('photlam')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        
-        return OutSpectrum
-
-    def ToJy(self, InSpectrum):
-        '''Convert to Jy
-        Flux units are Jy'''
-
-        print 'Conversion not implemented yet'
-        
-        return None
-
-    def ToABMag(self, InSpectrum):
-        '''Convert to ABMag
-        Flux units are ABMag
-        Wavelength units are unchanged'''
-        
-        print 'Conversion not implemented yet'
-
-        return None
-
-    def ToSTMag(self, InSpectrum):
-        '''Convert to STMag
-        Flux units are STMag
-        Wavelength units are Angstrom'''
-
-        print 'Conversion not implemented yet'
-
-        return None
-    
-    def Convert(self, InSpectrum, TargetUnits):
-
-        if self.Dispatch.has_key(TargetUnits):
-            OutSpectrum = self.Dispatch[TargetUnits](InSpectrum)
-        else:
-            print 'Units ' + TargetUnits + ' not recognized'
-            raise KeyError
-        return OutSpectrum
-
-class ABMag:
-        
+class mJy(_ToInternallFluxUnitsConverter):
+    ''' mjy = 10^-26 erg cm^-2 s^-1 Hz^-1'''
     def __init__(self):
+        _ToInternallFluxUnitsConverter.__init__(self)
+        self.name = 'mjy'
 
-        self.Dispatch = {'flam': self.ToFlam,
-                         'fnu': self.ToFnu,
-                         'photlam': self.ToPhotlam,
-                         'jy':self.ToJy,
-                         'abmag':self.ToABMag,
-                         'stmag':self.ToSTMag}
+    def ToPhotlam(self, wave, flux):
+        return flux / wave * (1.0e-26 / H)
+
+class ABMag(_ToInternallFluxUnitsConverter):
+    def __init__(self):
+        _ToInternallFluxUnitsConverter.__init__(self)
         self.name = 'abmag'
     
-    def ToFlam(self, InSpectrum):
-        '''Convert to Flam
-        Units are erg cm^-2 s^-1 Ang^-1'''
+    def ToPhotlam(self, wave, flux):
+        return 1.0 / (H * wave) * 10.0**(-0.4 * (flux - ABZERO))
 
-        print 'Conversion not implemented yet'
-        
-        return None
-
-    def ToFnu(self, InSpectrum):
-        '''Convert to Fnu.
-        Flux units are erg cm^-2 s^-1 Hz^-1
-        Wavelength units are Hz'''
-
-        print 'Conversion not implemented yet'
-        
-        return None
-
-    def ToPhotlam(self, InSpectrum):
-        '''Convert to PhotLam.
-        Flux units are photons cm^-2 s^-1 Ang^-1
-        Wavelength units are Angstrom'''
-
-        print 'Conversion not implemented yet'
-
-        return None
-
-    def ToJy(self, InSpectrum):
-        '''Convert to Jy
-        Flux units are Jy'''
-
-        print 'Conversion not implemented yet'
-        
-        return None
-
-    def ToABMag(self, InSpectrum):
-        '''Convert to ABMag
-        Flux units are ABMag
-        Wavelength units are unchanged'''
-        
-        return InSpectrum
-
-        return None
-
-    def ToSTMag(self, InSpectrum):
-        '''Convert to STMag
-        Flux units are STMag
-        Wavelength units are Angstrom'''
-
-        print 'Conversion not implemented yet'
-
-        return None
-    
-    def Convert(self, InSpectrum, TargetUnits):
-
-        if self.Dispatch.has_key(TargetUnits):
-            OutSpectrum = self.Dispatch[TargetUnits](InSpectrum)
-        else:
-            print 'Units ' + TargetUnits + ' not recognized'
-            raise KeyError
-        return OutSpectrum
-    
-class STMag:
-        
+class STMag(_ToInternallFluxUnitsConverter):
     def __init__(self):
-
-        self.Dispatch = {'flam': self.ToFlam,
-                         'fnu': self.ToFnu,
-                         'photlam': self.ToPhotlam,
-                         'jy':self.ToJy,
-                         'abmag':self.ToABMag,
-                         'stmag':self.ToSTMag}
+        _ToInternallFluxUnitsConverter.__init__(self)
         self.name = 'stmag'
     
-    def ToFlam(self, InSpectrum):
-        '''Convert to Flam
-        Units are erg cm^-2 s^-1 Ang^-1'''
+    def ToPhotlam(self, wave, flux):
+        return wave / H / C * 10.0**(-0.4 * (flux - STZERO))
 
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = InWave
-        OutSpectrum.fluxtable = 10.0**(-0.4*(InFlux + 21.10))
-        OutSpectrum.fluxunits = Units('flam')
-        OutSpectrum.waveunits = InSpectrum.waveunits
-        
-        return OutSpectrum
-
-    def ToFnu(self, InSpectrum):
-        '''Convert to Fnu.
-        Flux units are erg cm^-2 s^-1 Hz^-1
-        Wavelength units are Hz'''
-
-        print 'Conversion not implemented yet'
-        
-        return None
-
-    def ToPhotlam(self, InSpectrum):
-        '''Convert to PhotLam.
-        Flux units are photons cm^-2 s^-1 Ang^-1
-        Wavelength units are Angstrom'''
-
-        print 'Conversion not implemented yet'
-        
-        return None
-
-    def ToJy(self, InSpectrum):
-        '''Convert to Jy
-        Flux units are Jy'''
-
-        print 'Conversion not implemented yet'
-        
-        return None
-
-    def ToABMag(self, InSpectrum):
-        '''Convert to ABMag
-        Flux units are ABMag
-        Wavelength units are unchanged'''
-        
-        print 'Conversion not implemented yet'
-
-        return None
-
-    def ToSTMag(self, InSpectrum):
-        '''Convert to STMag
-        Flux units are STMag
-        Wavelength units are Angstrom'''
-
-        return InSpectrum
-    
-    def Convert(self, InSpectrum, TargetUnits):
-
-        if self.Dispatch.has_key(TargetUnits):
-            OutSpectrum = self.Dispatch[TargetUnits](InSpectrum)
-        else:
-            print 'Units ' + TargetUnits + ' not recognized'
-            raise KeyError
-        return OutSpectrum
-
-class Angstroms:
-
+class OBMag(_ToInternallFluxUnitsConverter):
     def __init__(self):
-
-        self.Dispatch = {'angstroms' : self.ToAngstroms,
-                         'hz': self.ToHz}
-        self.name = 'angstroms'
-
-    def ToAngstroms(self, InSpectrum):
-        '''Return original spectrum object'''
-
-        return InSpectrum
+        _ToInternallFluxUnitsConverter.__init__(self)
+        self.name = 'obmag'
     
-    def ToHz(self, InSpectrum):
-        '''Convert wavetable to Hz
-        Units are Hz'''
+    def ToPhotlam(self, wave, flux):
+        dw = _getDeltaWave(wave)
+        return 10.0**(-0.4 * flux) / (dw * HSTAREA)
 
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
-        OutSpectrum.waveunits = Units('hz')
-        OutSpectrum.fluxtable = InFlux[::-1]
-        OutSpectrum.fluxunits = InSpectrum.fluxunits
-        
-        return OutSpectrum
-
-    def Convert(self, InSpectrum, TargetUnits):
-
-        if self.Dispatch.has_key(TargetUnits):
-            OutSpectrum = self.Dispatch[TargetUnits](InSpectrum)
-        else:
-            print 'Units ' + TargetUnits + ' not recognized'
-            raise KeyError
-        return OutSpectrum
-
-class Hz:
-
+class VegaMag(_ToInternallFluxUnitsConverter):
     def __init__(self):
+        _ToInternallFluxUnitsConverter.__init__(self)
+        self.name = 'vegamag'
+    
+    def ToPhotlam(self, wave, flux):
+        vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
+        resampled = vegaspec.resample(wave)
+        return resampled.fluxtable * 10.0**(-0.4 * flux)
 
-        self.Dispatch = {'angstroms': self.ToAngstroms,
-                         'hz' : self.ToHz}
+class Counts(_ToInternallFluxUnitsConverter):
+    def __init__(self):
+        _ToInternallFluxUnitsConverter.__init__(self)
+        self.name = 'counts'
+    
+    def ToPhotlam(self, wave, flux):
+        return flux / (_getDeltaWave(wave) * HSTAREA)
+
+class Angstrom(_ToExternalWaveUnitsConverter):
+    def __init__(self):
+        _ToExternalWaveUnitsConverter.__init__(self)
+        self.name = 'angstrom'
+
+    def ToAngstrom(self, wave, dummy):
+        return wave
+    
+    def ToNm(self, wave, dummy):
+        return wave / 10.0
+    
+    def ToMicron(self, wave, dummy):
+        return wave * 1.0e-4
+    
+    def ToMm(self, wave, dummy):
+        return wave * 1.0e-7
+    
+    def ToCm(self, wave, dummy):
+        return wave * 1.0e-8
+    
+    def ToMeter(self, wave, dummy):
+        return wave * 1.0e-10
+    
+    def ToHz(self, wave, dummy):
+        return C / wave
+
+class Hz(_ToInternalWaveUnitsConverter):
+    def __init__(self):
+        _ToInternalWaveUnitsConverter.__init__(self)
         self.name = 'hz'
     
-    def ToAngstroms(self, InSpectrum):
-        '''Convert wavetable to Angstroms
-        Units are Angstroms'''
+    def ToAngstrom(self, wave, dummy):
+        return C / wave
 
-        OutSpectrum = spectrum.TabularSourceSpectrum()
-        InWave = InSpectrum.GetWaveSet()
-        InFlux = InSpectrum(InWave)
-        OutSpectrum.wavetable = (C*1.0e8)/InWave[::-1]
-        OutSpectrum.waveunits = Units('angstroms')
-        OutSpectrum.fluxtable = InFlux[::-1]
-        OutSpectrum.fluxunits = InSpectrum.fluxunits
-        
-        return OutSpectrum
+class _MetricWavelength(_ToInternalWaveUnitsConverter):
+    def ToAngstrom(self, wave, dummy):
+        return wave * self.factor
 
-    def ToHz(self, InSpectrum):
-        '''Return original spectrum object'''
+class Nm(_MetricWavelength):
+    def __init__(self):
+        _MetricWavelength.__init__(self)
+        self.name = 'nm'
+        self.factor = 10.0
+    
+class Micron(_MetricWavelength):
+    def __init__(self):
+        _MetricWavelength.__init__(self)
+        self.name = 'micron'
+        self.factor = 1.0e4
 
-        return InSpectrum
+class Mm(_MetricWavelength):
+    def __init__(self):
+        _MetricWavelength.__init__(self)
+        self.name = 'mm'
+        self.factor = 1.0e7
 
-    def Convert(self, InSpectrum, TargetUnits):
+class Cm(_MetricWavelength):
+    def __init__(self):
+        _MetricWavelength.__init__(self)
+        self.name = 'cm'
+        self.factor = 1.0e8
 
-        if self.Dispatch.has_key(TargetUnits):
-            OutSpectrum = self.Dispatch[TargetUnits](InSpectrum)
-        else:
-            print 'Units ' + TargetUnits + ' not recognized'
-            raise KeyError
-        return OutSpectrum
+class Meter(_MetricWavelength):
+    def __init__(self):
+        _MetricWavelength.__init__(self)
+        self.name = 'm'
+        self.factor = 1.0e10
+
+
+################   Factory for Units subclasses.   #####################
+
+unitsClasses = {'flam'      : Flam,
+                'fnu'       : Fnu,
+                'photlam'   : Photlam,
+                'photnu'    : Photnu,
+                'jy'        : Jy,
+                'mjy'       : mJy,
+                'abmag'     : ABMag,
+                'stmag'     : STMag,
+                'obmag'     : OBMag,
+                'vegamag'   : VegaMag,
+                'counts'    : Counts,
+                'angstrom'  : Angstrom,
+                'angstroms' : Angstrom,
+                'nm'        : Nm,
+                'micron'    : Micron,
+                'um'        : Micron,
+                'mm'        : Mm,
+                'cm'        : Cm,
+                'm'         : Meter,
+                'meter'     : Meter,
+                'hz'        : Hz}
+
+def factory(units, *args, **kwargs):
+    return apply(unitsClasses[string.lower(units)], args, kwargs)
+

@@ -1,59 +1,51 @@
 import locations
+import spectrum  # circular import.....
 
-class Magnitude:
+class Magnitude(object):
     '''Base class for Magnitudes'''
 
-    def CalcTotalFlux(self, InSpectrum):
+    def calcTotalFlux(self, inSpectrum):
         '''Calculate the flux of our target spectrum through the selected
         filter'''
-        filteredflux = InSpectrum*self.throughput
-        TotalFlux = filteredflux.integrate()
-        return TotalFlux
+        filteredflux = inSpectrum*self._throughput
+        return filteredflux.integrate()
     
-    def CalcVegaFlux(self):
+    def calcVegaFlux(self):
         '''Calculate the flux of the Vega standard spectrum through the
         selected filter'''
         vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
-        filteredvega = vegaspec*self.throughput
-
-        VegaFlux = filteredvega.integrate()
-        
-        return VegaFlux
+        filteredvega = vegaspec*self._throughput
+        return filteredvega.integrate()
 
 class VMag(Magnitude):
-    '''V Magnitude'''
     def __init__(self, value):
         self.value = value
-        self.ThroughputFile = locations.Magtable['v']
-        self.throughput = spectrum.TabularSpectralElement(self.ThroughputFile)
+        self._throughputFile = locations.magtable['v']
+        self._throughput = spectrum.TabularSpectralElement(self._throughputFile)
 
 
 class BMag(Magnitude):
-    '''B Magnitude'''
     def __init__(self, value):
         self.value = value
-        self.ThroughputFile = locations.Magtable['b']
-        self.throughput = spectrum.TabularSpectralElement(self.ThroughputFile)
+        self._throughputFile = locations.magtable['b']
+        self._throughput = spectrum.TabularSpectralElement(self._throughputFile)
 
 
 class UMag(Magnitude):
-    '''U Vagnitude'''
     def __init__(self, value):
         self.value = value
-        self.ThroughputFile = locations.Magtable['u']
-        self.throughput = spectrum.TabularSpectralElement(self.ThroughputFile)
+        self._throughputFile = locations.magtable['u']
+        self._throughput = spectrum.TabularSpectralElement(self._throughputFile)
 
 
 class RMag(Magnitude):
-    '''R Magnitude'''
     def __init__(self, value):
         self.value = value
-        self.ThroughputFile = locations.Magtable['r']
-        self.throughput = spectrum.TabularSpectralElement(self.ThroughputFile)
+        self._throughputFile = locations.magtable['r']
+        self._throughput = spectrum.TabularSpectralElement(self._throughputFile)
 
 
 class IMag(Magnitude):
-    '''I Magnitude'''
     def __init__(self, value):
         self.value = value
         self.ThroughputFile = locations.Magtable['i']

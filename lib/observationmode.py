@@ -1,6 +1,14 @@
 import pyfits
 import numarray
 import spectrum
+import units
+import locations
+
+rootdir = locations.rootdir
+
+GRAPHTABLE = rootdir + 'mtab/p1s1748gm_tmg.fits'
+COMPTABLE  = rootdir + 'mtab/p1s1748hm_tmc.fits'
+
 
 def irafconvert(iraffilename):
     '''Convert the IRAF file name (in directory$file format) to its
@@ -14,8 +22,6 @@ def irafconvert(iraffilename):
 
     ## This dictionary maps IRAF-specific directory names for synphot
     ## directories into their unix equivalents
-
-    rootdir = '/data/cdbs1/'
 
     convertdic = {'crrefer$':rootdir,
                   'crotacomp$':rootdir+'comp/ota/',
@@ -63,7 +69,7 @@ def irafconvert(iraffilename):
 
     return unixfilename
 
-class CompTable:
+class CompTable(object):
     '''CompTable class; opens the specified comptable and populates 1-d
     arrays of component names and file names in the members compnames
     and filenames'''
@@ -86,7 +92,7 @@ class CompTable:
 
         cp.close()
 
-class GraphTable:
+class GraphTable(object):
     '''GraphTable class; opens the specified graph table and populates
     1-d arrays of keyword names, innodes, outnodes and component names
     in the members keywords, innodes, outnodes and compnames'''
@@ -116,16 +122,14 @@ class GraphTable:
         the modes list, starting at the given innode.
         This method isnt actually used, its just a helper method for
         debugging purposes'''
-
         nodes = numarray.where(self.innodes == innode)
 
         ## If there's no entry for the given innode, return -1
-
-        if nodes[0].nelements() == 0: return -1
+        if nodes[0].nelements() == 0:
+            return -1
 
         ## If we don't match anything in the modes list, we find the
         ## outnode corresponding the the string 'default'
-
         defaultindex = self.keywords[nodes].match('default')[0]
 
         if defaultindex.nelements() != 0:
@@ -134,7 +138,6 @@ class GraphTable:
         ## Now try and match one of the strings in the modes list with
         ## the keywords corresponding to the list of entries with the given
         ## innode
-
         for mode in modes:
             result = self.keywords[nodes].count(mode)
             if result != 0:
@@ -144,14 +147,12 @@ class GraphTable:
 
         ## Return the outnode corresponding either to the matched mode,
         ## or to 'default'
-
         return outnode
 
     def GetComponents(self, modes, innode):
         '''GetComponents returns a list of component names corresponding
         to those obtained by waling down the graph table starting at
         innode'''
-
         components = []
         outnode = 0
 
@@ -160,13 +161,12 @@ class GraphTable:
             nodes = numarray.where(self.innodes == innode)
 
             ## If there are no entries with this innode, we're done
-
-            if nodes[0].nelements() == 0: return components
+            if nodes[0].nelements() == 0:
+                return components
 
             ## Find the entry corresponding to the component named
             ## 'default', bacause thats the one we'll use if we don't
             ## match anything in the modes list
-
             defaultindex = self.keywords[nodes].match('default')[0]
 
             if defaultindex.nelements() != 0:
@@ -174,7 +174,6 @@ class GraphTable:
                 component = self.compnames[nodes[0][defaultindex[0]]]
 
             ## Now try and match something from the modes list
-
             for mode in modes:
                 result = self.keywords[nodes].count(mode)
                 if result != 0:
@@ -183,44 +182,36 @@ class GraphTable:
                     outnode = self.outnodes[nodes[0][index[0]]]
 
             ## We only include components that aren't named 'clear'
-
-            if component != 'clear': components.append(component)
+            if component != 'clear':
+                components.append(component)
             innode = outnode
 
         return components
 
-class ObservationMode:
+class ObservationMode(object):
     '''The ObservationMode class handles converting the given obsmode
     into a list of component file names'''
 
     def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
         '''__init__ populates the files data member given the obsmode'''
 
-        ## Convert the comma-delimited obsmode string into a list of
-        ## lowercase strings
+        self.area = units.HSTAREA
 
+        # For sensitivity calculations: 5.03411762e7 is hc in
+        # the appropriate units
+        self._constant = 5.03411762e7 * self.area
+
+        # Convert the comma-delimited obsmode string into a list of
+        # lowercase strings
         modes = obsmode.lower().split(',')
 
-        ## Need the HST area to convert erg/cm^2/sec/Angstrom to counts
-
-        self.area = 45238.9342
-
-        ## For the moment the graph table and component table names are
-        ## hardcoded
-
-        graphtable = '/data/cdbs1/mtab/p1s1748gm_tmg.fits'
-
-        gt = GraphTable(graphtable)
-
-        comptable = '/data/cdbs1/mtab/p1s1748hm_tmc.fits'
-
+        # For the moment the graph table and component table names are hardcoded
+        gt = GraphTable(GRAPHTABLE)
         components = gt.GetComponents(modes,1)
+        ct = CompTable(COMPTABLE)
 
-        ct = CompTable(comptable)
-
-        ## Turn the list of components found by traversing the graph
-        ## table into a list of filenames by reading the component table
-
+        # Turn the list of components found by traversing the graph
+        # table into a list of filenames by reading the component table
         self.files = []
 
         for component in components:
@@ -229,19 +220,16 @@ class ObservationMode:
 
             ## Convert iraf file name in the component table into a
             ## Unix file name
-
             filename = irafconvert(iraffilename)
             self.files.append(filename)
 
     def GetFiles(self):
         '''Helper function to provide an interface to the list of files'''
-
         return self.files
 
     def GetComponents(self):
-        '''Return a list of TabularSpectralElements obtained from the
+        '''Return a list of s obtained from the
         list of component file names'''
-
         Components = []
 
         for file in self.files:
@@ -254,53 +242,38 @@ class ObservationMode:
         with hc/lambda to convert erg/cm^2/sec/Angstrom to counts/sec.
         Multiplying this by the flux in erg/cm^2/sec/Angstrom will give
         counts/sec/Angstrom'''
-
-        ## 5.03411762e7 is hc in the appropriate units
-
-        constant = 5.03411762e7*self.area
-
-        ## Make a new TabularSpectralElement to hold the sensitivity curve
-
         sensitivity = spectrum.TabularSpectralElement()
 
-        components = self.GetComponents()
-
-        ## Multiply all the components tegether
-
-        product = components[0]
-
-        for component in components[1:]:
-            product = product*component
-
-        ## Fill the wavetable and throughputtable members of the sensitivity
-        ## TabularSpectralElement object
+        product = self._multiplyComponents()
 
         sensitivity.wavetable = product.GetWaveSet()
         sensitivity.throughputtable = product(sensitivity.wavetable) * \
-        sensitivity.wavetable*constant
+        sensitivity.wavetable * self._constant
 
         return sensitivity
 
     def Throughput(self):
         '''Throughput returns the TabularSpectralElement obtained by
         multiplying the SpectralElement components together.  Unitless'''
-
-        ## Make a TabularSpectralElement to hold the throughput
         throughput = spectrum.TabularSpectralElement()
 
-        components = self.GetComponents()
-
-        ## Multiply the throughputs of the individual components
-        product = components[0]
-
-        for component in components[1:]:
-            product = product*component
-
-        ## Populate the wavetable and throughputtable members of the
-        ## throughput object
+        product = self._multiplyComponents()
 
         throughput.wavetable = product.GetWaveSet()
         throughput.throughputtable = product(throughput.wavetable)
 
         return throughput
+
+    def _multiplyComponents(self):
+        components = self.GetComponents()
+        product = components[0]
+        for component in components[1:]:
+            product = product * component
+        return product
+
+
+
+
+
+
 
