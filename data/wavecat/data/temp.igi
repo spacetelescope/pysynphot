@@ -1,0 +1,10 @@
+DATA vega.dat
+ LOCATION .1 .9 .1 .9
+ XCOLUMN 1
+ YCOLUMN 2
+ LIMITS 1000 12000 0 1750
+ BOX
+ XLABEL 'Wavelength in angstroms'
+ YLABEL 'Flux in photlam'
+ TITLE 'Test run of spectrum of vega.dat' 
+ CONNECT 
