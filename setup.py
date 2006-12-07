@@ -1,4 +1,3 @@
-#
 from distutils.core import setup
 setup(name='specman',
       version='0.1',
