@@ -24,8 +24,8 @@ def Units(units):
 def _getDeltaWave(wave):
     last = wave.shape[0]-1
 
-    hold1 = numarray.array(shape=wave.shape, type='Float32')
-    hold2 = numarray.array(shape=wave.shape, type='Float32')
+    hold1 = numarray.array(shape=wave.shape, type='Float64')
+    hold2 = numarray.array(shape=wave.shape, type='Float64')
 
     hold1[1::] = wave[0:last]
     hold2[0:last] = wave[1::]
@@ -310,6 +310,6 @@ unitsClasses = {'flam'      : Flam,
                 'meter'     : Meter,
                 'hz'        : Hz}
 
-def factory(units, *args, **kwargs):
-    return apply(unitsClasses[string.lower(units)], args, kwargs)
+def factory(unit, *args, **kwargs):
+    return apply(unitsClasses[string.lower(unit)], args, kwargs)
 

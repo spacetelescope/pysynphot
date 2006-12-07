@@ -1,8 +1,11 @@
 from spark import GenericScanner, GenericParser, GenericASTTraversal
 from spark import GenericASTBuilder, GenericASTMatcher
 import spectrum
+import extinction
 import observationmode
+import locations
 import etc
+import catalog
 
 syfunctions = [
     'spec',
@@ -10,6 +13,7 @@ syfunctions = [
     'box',
     'bb',
     'pl',
+    'em',
     'hi',
     'cat',
     'icat',
@@ -17,10 +21,10 @@ syfunctions = [
     'rn',
     'z',
     'ebmv',
-    'embvx',
+    'ebmvx',
     'band'
     ]
-syforms = [
+synforms = [
     'fnu',
     'flam',
     'photnu',
@@ -101,7 +105,7 @@ class Scanner(BaseScanner):
     def __init__(self):
         BaseScanner.__init__(self)
     def t_float(self, s):
-        r' ((\d*\.\d+)|(\d+\.d*)) ([eE][-+]?\d+)?'
+        r' ((\d*\.\d+)|(\d+\.d*)|(\d+)) ([eE][-+]?\d+)?'
         self.rv.append(Token(type='FLOAT', attr=s))
     def t_divop(self, s):
         r' \s/\s '
@@ -199,24 +203,56 @@ class Interpreter(GenericASTMatcher):
         else:
             if fname == 'unit':
                 # constant spectrum
-                tree.value = spectrum.UnitSpectrum(args[0], fluxunits=args[1])
+                tree.value = spectrum.UnitSpectrum(args[0],fluxunits=args[1])
             elif fname == 'bb':
                 # black body
                 tree.value = spectrum.BlackBody(args[0])
             elif fname == 'pl':
                 # power law
-                if arg[2] not in synforms:
-                    print "Error: unrecognized units:", arg[2]
+                if args[2] not in synforms:
+                    print "Error: unrecognized units:", args[2]
                 # code to create powerlaw spectrum object
+                tree.value = spectrum.Powerlaw(args[0],args[1],fluxunits=args[2])
             elif fname == 'box':
                 # box throughput
                 tree.value = spectrum.Box(args[0],args[1])
+            elif fname == 'spec':
+                # spectrum from reference file (for now....)
+                name = getName(args[0])
+                tree.value = spectrum.TabularSourceSpectrum(_handleIRAFName(name))
+            elif fname == 'band':
+                # passband
+                tree.value = spectrum.Band(args)
+            elif fname == 'em':
+                # emmission line
+                tree.value = spectrum.GaussianSource(args[2],args[0],args[1],fluxunits=args[3])
+            elif fname == 'icat':
+                # catalog interpolation
+                tree.value = catalog.Icat(args)
             elif fname == 'rn':
                 # renormalize
-                tree.value = spectrum.renormalize(args[0],args[1],args[2],args[3])
+                sp = args[0]
+                if not isinstance(sp,spectrum.SourceSpectrum):
+                    sp = spectrum.TabularSourceSpectrum(getName(args[0]))
+                tree.value = spectrum.renormalize(sp,args[1],args[2],args[3])
             elif fname == 'z':
-                # Don't know what the real method is
-                tree.value = arg[0].redshift(arg[1])
+                # redshift
+                if args[0] != 'null': # the ETC generates junk sometimes....
+                    try:
+                        tree.value = args[0].redshift(args[1])
+                    except AttributeError:
+                        try:
+                            name = getName(args[0])
+                            sp = spectrum.TabularSourceSpectrum( \
+                                 _handleIRAFName(name))
+                            tree.value = sp.redshift(args[1])
+                        except AttributeError:
+                            tree.value = spectrum.UnitSpectrum(1.0)
+                else:
+                    tree.value = spectrum.UnitSpectrum(1.0)
+            elif fname == 'ebmvx':
+                # extinction
+                tree.value = extinction.Ebmvx(args[0], args[1])
             else:
                 tree.value = "would call %s with the following args: %s" % (fname, repr(args))
             
@@ -233,7 +269,7 @@ def convertstr(value):
     # This is a utility function used by the interpreter to do the
     # conversion from string to spectrum object
     if type(value) == type(''):
-        return spectrum.TabularSourceSpectrum(value)
+        return _handleThroughputFiles(_handleIRAFName(value))
     else:
         return value
 
@@ -250,13 +286,45 @@ def interpret(ast):
     interpreter = Interpreter(ast)
     interpreter.match()
     value = ast.value
-    if type(value) == type(''):
-        # means we need to read from a file
-        # needs extra logic to search for different file types?
-        return spectrum.TabularSourceSpectrum(value)
-    else:
-        return value
-    
+    return convertstr(value)
+
 def ptokens(tlist):
     for token in tlist:
         print token.type, token.attr
+
+def getName(iname):
+    try:
+        return locations.specdir+iname
+    except KeyError:
+        return observationmode.irafconvert(iname)
+
+def _handleIRAFName(name):
+    if name.rfind('$') > -1:
+        return observationmode.irafconvert(name.split('/')[-1])
+    elif name.rfind('/') > -1 or name.rfind('\\') > -1: 
+        return name
+    else:
+        return locations.specdir + name
+
+def _handleThroughputFiles(name):
+    # if name is listed as a special throughput file, return a
+    # SpectralElement; if not, return a SourceSpectrum.
+    try:
+        locations.throughputfiles.index(name)
+        return spectrum.TabularSpectralElement(_handleIRAFName(name))
+    except ValueError:
+        return spectrum.TabularSourceSpectrum(_handleIRAFName(name))
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,13 +1,30 @@
-import pyfits
+import string
+import glob
+import re
 import numarray
+import pyfits
+
 import spectrum
 import units
 import locations
+import planck
+import wavetable
 
 rootdir = locations.rootdir
+userdir = locations.userdir
+datadir = locations.specdir
+wavecat = locations.wavecat
 
-GRAPHTABLE = rootdir + 'mtab/p1s1748gm_tmg.fits'
-COMPTABLE  = rootdir + 'mtab/p1s1748hm_tmc.fits'
+# Component tables are defined here.
+def _refTable(template):
+    names = glob.glob(rootdir + template)
+    names.sort()
+    return names[-1]
+
+GRAPHTABLE = _refTable('mtab/*_tmg.fits')
+COMPTABLE  = _refTable('mtab/*_tmc.fits') 
+THERMTABLE = _refTable('mtab/*_tmt.fits')
+CLEAR = 'clear'
 
 
 def irafconvert(iraffilename):
@@ -21,7 +38,7 @@ def irafconvert(iraffilename):
               Non-string input raises an AttributeError'''
 
     ## This dictionary maps IRAF-specific directory names for synphot
-    ## directories into their unix equivalents
+    ## directories into their Unix equivalents.
 
     convertdic = {'crrefer$':rootdir,
                   'crotacomp$':rootdir+'comp/ota/',
@@ -44,6 +61,8 @@ def irafconvert(iraffilename):
                   'crnicmoscomp$':rootdir+'comp/nicmos/',
                   'crnonhstcomp$':rootdir+'comp/nonhst/',
                   'crstiscomp$':rootdir+'comp/stis/',
+                  'crstiscomp$':rootdir+'comp/stis/',
+                  'crwfc3comp$':rootdir+'comp/wfc3/',
                   'crwave$':rootdir+'crwave/',
                   'crwfpccomp$':rootdir+'comp/wfpc/',
                   'crwfpc2comp$':rootdir+'comp/wfpc2/',
@@ -56,7 +75,9 @@ def irafconvert(iraffilename):
                   'crgridk93$':rootdir+'grid/k93models/',
                   'crgridagn$':rootdir+'grid/agn/',
                   'crgridgalactic$':rootdir+'grid/galactic/',
-                  'crgridkc96$':rootdir+'grid/kc96/'}
+                  'crgridkc96$':rootdir+'grid/kc96/',
+                  'userFiles$':userdir+'userFiles/',
+                  'synphot$': wavecat}
 
     ## If no $ sign found, just return the filename unchanged
     unixfilename = iraffilename
@@ -114,6 +135,27 @@ class GraphTable(object):
         self.innodes = gp[1].data.field('innode')
         self.outnodes = gp[1].data.field('outnode')
         self.compnames = gp[1].data.field('compname')
+        self.thcompnames = gp[1].data.field('thcompname')
+
+        # keywords must be forced to lower case (STIS keywords are
+        # mixed mode %^&^(*^*^%%%@#$!!!)
+        for i in range(len(self.keywords)):
+            self.keywords[i] = self.keywords[i].lower()
+
+
+##        for comp in self.compnames:
+##            try:
+##                if comp.index('nic') == 0:
+##                    print comp
+##            except:
+##                pass
+
+        # prints components associated with a given keyword
+##        i = -1
+##        for keyword in self.keywords:
+##            i = i + 1
+##            if keyword == 'acs':
+##                print self.compnames[i]
 
         gp.close()
 
@@ -149,51 +191,80 @@ class GraphTable(object):
         ## or to 'default'
         return outnode
 
-    def GetComponents(self, modes, innode):
-        '''GetComponents returns a list of component names corresponding
-        to those obtained by waling down the graph table starting at
-        innode'''
+    def GetComponentsFromGT(self, modes, innode):
+        '''GetComponentsFromGT returns two lists of component names
+        corresponding to those obtained by waling down the graph
+        table starting at innode. The first list contains the optical
+        components, the second list, the thermal components.'''
         components = []
+        thcomponents = []
         outnode = 0
+        self.rampFilterWavelength = None
 
+        count = 0
         while outnode != -1:
 
+            previous_outnode = outnode
+
             nodes = numarray.where(self.innodes == innode)
+##            print
+##            print "innode: ", innode, " nodes: ", nodes
 
-            ## If there are no entries with this innode, we're done
+            # If there are no entries with this innode, we're done
             if nodes[0].nelements() == 0:
-                return components
+                return (components,thcomponents)
 
-            ## Find the entry corresponding to the component named
-            ## 'default', bacause thats the one we'll use if we don't
-            ## match anything in the modes list
+            # Find the entry corresponding to the component named
+            # 'default', bacause thats the one we'll use if we don't
+            # match anything in the modes list
             defaultindex = self.keywords[nodes].match('default')[0]
+##            print "default index is: ", defaultindex
 
             if defaultindex.nelements() != 0:
                 outnode = self.outnodes[nodes[0][defaultindex[0]]]
                 component = self.compnames[nodes[0][defaultindex[0]]]
+##                print "component: ", component, " outnode: ", outnode
+                thcomponent = self.thcompnames[nodes[0][defaultindex[0]]]
 
-            ## Now try and match something from the modes list
+            # Now try and match something from the modes list
             for mode in modes:
+##                print "mode: ", mode
+
+                # handle #-separated ramp filter spec.
+                modeFields = mode.lower().split('#')
+                if len(modeFields) > 1:
+                    mode = modeFields[0] + '#'
+                    self.rampFilterWavelength = float(modeFields[1])
+
                 result = self.keywords[nodes].count(mode)
+
                 if result != 0:
                     index = self.keywords[nodes].match(mode)[0]
                     component = self.compnames[nodes[0][index[0]]]
+                    thcomponent = self.thcompnames[nodes[0][index[0]]]
                     outnode = self.outnodes[nodes[0][index[0]]]
+##                    print "from modes list:  index: ", index, "  component: ", component, " outnode: ", outnode
+                    
+            components.append(component)
+            thcomponents.append(thcomponent)
 
-            ## We only include components that aren't named 'clear'
-            if component != 'clear':
-                components.append(component)
             innode = outnode
+ 
+            if outnode == previous_outnode:
+                count += 1
+                if count > 3:
+                    break
 
-        return components
+        return (components,thcomponents)
 
-class ObservationMode(object):
-    '''The ObservationMode class handles converting the given obsmode
-    into a list of component file names'''
 
+class BaseObservationMode(object):
+    ''' Class that handles the graph table, common to both optical and
+    thermal obsmodes.
+    '''
     def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
-        '''__init__ populates the files data member given the obsmode'''
+
+        self._obsmode = obsmode
 
         self.area = units.HSTAREA
 
@@ -201,41 +272,148 @@ class ObservationMode(object):
         # the appropriate units
         self._constant = 5.03411762e7 * self.area
 
-        # Convert the comma-delimited obsmode string into a list of
-        # lowercase strings
         modes = obsmode.lower().split(',')
 
-        # For the moment the graph table and component table names are hardcoded
         gt = GraphTable(GRAPHTABLE)
-        components = gt.GetComponents(modes,1)
+        self.compnames,self.thcompnames = gt.GetComponentsFromGT(modes,1)
+
+        self._rampFilterWavelength = gt.rampFilterWavelength
+
+        self.pixscale = None
+
+    def _getFileNames(self, comptable, compnames):
+        files = []
+        for compname in compnames:
+            if compname != None and compname != '' and compname != CLEAR:
+                index = numarray.where(comptable.compnames == compname)
+                try:
+                    iraffilename = comptable.filenames[index[0][0]]
+                    filename = irafconvert(iraffilename)
+                    files.append(filename)
+                except IndexError:
+                    files.append(CLEAR)
+            else:
+                files.append(CLEAR)
+
+        return files
+
+    def GetFileNames(self):
+        return self._throughput_filenames
+
+    def bandWave(self):
+
+        # ETC-generated obsmodes for STIS must be massaged
+        # before looking up in the wavetable. Ugly code below
+        # begs for refactoring....
+
+        obmlist = self._obsmode.lower().split(',')
+
+        if ('ccd','fuvmama','nuvmama').__contains__(obmlist[1]):
+            obmlist = [obmlist[0]] + obmlist[2:]
+
+        if obmlist[0] == 'stis':            
+            for element in obmlist[1:]:
+                if element.startswith('s'):
+                    obmlist.remove(element)
+
+        obm = ""
+        for element in obmlist:
+            obm = obm + ',' + element
+        obm = obm[1:]
+
+        try:
+            coeff = wavetable.wavetable[obm]
+
+            if coeff.startswith('('):
+                return self._computeBandwave(coeff)
+            else:
+                return self._getBandwaveFomFile(coeff)
+        except KeyError:
+            if obm.startswith('stis'):
+                obm = ""
+                for element in obmlist[:-1]:
+                    obm = obm + ',' + element
+                obm = obm[1:]
+
+                try:
+                    coeff = wavetable.wavetable[obm]
+
+                    if coeff.startswith('('):
+                        return self._computeBandwave(coeff)
+                    else:
+                        return self._getBandwaveFomFile(coeff)
+                except KeyError:
+                    return None
+            else:
+                return None
+
+    def _computeBandwave(self, coeff):
+        (a,b,c,nwave) = self._computeQuadraticCoefficients(coeff)
+
+        result = numarray.zeros(shape=[nwave,], type='Float64')
+
+        for i in range(nwave):
+            result[i] = ((a * i) + b) * i + c
+
+        return result
+
+    def _computeQuadraticCoefficients(self, coeff):
+
+        coefficients = (coeff[1:][:-1]).split(',')
+
+        c0 = float(coefficients[0])
+        c1 = float(coefficients[1])
+        c2 = (c1 - c0) / 1999.0    # arbitraily copied from synphot....
+        c3 = c2
+        if len(coefficients) > 2:
+            c2 = float(coefficients[2])
+            c3 = c2
+        if len(coefficients) > 3:
+            c3 = float(coefficients[3])
+            
+        nwave = int(2.0 * (c1 - c0) / (c3 + c2)) + 1
+
+        c = c0
+        b = c2
+        a = (c3 * c3 - c2 * c2) / (4.0 * (c1 - c0))
+
+        return (a,b,c,nwave)
+
+    def _getBandwaveFomFile(self, filename):
+        name = irafconvert(filename)
+
+        fs = open(name, mode='r')
+        lines = fs.readlines()
+        tokens = []
+        for line in lines:
+            if not line.startswith('#'):
+                token = line.split('\n')[0]
+                tokens.append(string.atof(token))
+
+        return numarray.array(tokens)
+
+
+class ObservationMode(BaseObservationMode):
+
+    def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
+
+        BaseObservationMode.__init__(self, obsmode, method, graphtable)
+
         ct = CompTable(COMPTABLE)
+        self._throughput_filenames = self._getFileNames(ct, self.compnames)
 
-        # Turn the list of components found by traversing the graph
-        # table into a list of filenames by reading the component table
-        self.files = []
+        self.components = self._getOpticalComponents(self._throughput_filenames)
 
-        for component in components:
-            index = numarray.where(ct.compnames == component)
-            iraffilename = ct.filenames[index[0][0]]
+    def _getOpticalComponents(self, throughput_filenames):
+        components = []
+        for throughput_name in throughput_filenames:
 
-            ## Convert iraf file name in the component table into a
-            ## Unix file name
-            filename = irafconvert(iraffilename)
-            self.files.append(filename)
+            component = _Component(throughput_name, self._rampFilterWavelength)
 
-    def GetFiles(self):
-        '''Helper function to provide an interface to the list of files'''
-        return self.files
+            if not component.isEmpty():
+                components.append(component)
 
-    def GetComponents(self):
-        '''Return a list of s obtained from the
-        list of component file names'''
-        Components = []
-
-        for file in self.files:
-            Components.append(spectrum.TabularSpectralElement(file))
-
-        return Components
+        return components
 
     def Sensitivity(self):
         '''Calculate the sensitivity by combining the throughput curves
@@ -244,32 +422,232 @@ class ObservationMode(object):
         counts/sec/Angstrom'''
         sensitivity = spectrum.TabularSpectralElement()
 
-        product = self._multiplyComponents()
+        product = self._multiplyThroughputs()
 
         sensitivity.wavetable = product.GetWaveSet()
         sensitivity.throughputtable = product(sensitivity.wavetable) * \
-        sensitivity.wavetable * self._constant
+                                      sensitivity.wavetable * self._constant
 
         return sensitivity
 
     def Throughput(self):
         '''Throughput returns the TabularSpectralElement obtained by
         multiplying the SpectralElement components together.  Unitless'''
-        throughput = spectrum.TabularSpectralElement()
+        try:
+            throughput = spectrum.TabularSpectralElement()
 
-        product = self._multiplyComponents()
+            product = self._multiplyThroughputs(0)
 
-        throughput.wavetable = product.GetWaveSet()
-        throughput.throughputtable = product(throughput.wavetable)
+            throughput.wavetable = product.GetWaveSet()
+            throughput.throughputtable = product(throughput.wavetable)
 
-        return throughput
+##            throughput = throughput.resample(spectrum.default_waveset)
 
-    def _multiplyComponents(self):
-        components = self.GetComponents()
-        product = components[0]
-        for component in components[1:]:
-            product = product * component
+            return throughput
+
+        except IndexError:   # graph table is broken.
+            return None
+
+    def _multiplyThroughputs(self, index):
+        product = self.components[index].throughput
+        if len(self.components) > index:
+            for component in self.components[index+1:]:
+                if component.throughput != None:
+                    product = product * component.throughput
         return product
+
+    def ThermalSpectrum(self):
+        try:
+            # delegate to subclass.
+            thom = _ThermalObservationMode(self._obsmode)
+            self.pixscale = thom.pixscale
+            return thom._getSpectrum()
+        except IndexError:   # graph table is broken.
+            return None
+
+
+class _ThermalObservationMode(BaseObservationMode):
+
+    def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
+
+        BaseObservationMode.__init__(self, obsmode, method, graphtable)
+
+        ct = CompTable(COMPTABLE)
+        throughput_filenames = self._getFileNames(ct, self.compnames)
+
+        thct = CompTable(THERMTABLE)
+        thermal_filenames = self._getFileNames(thct, self.thcompnames)
+
+        self.components = self._getThermalComponents(throughput_filenames, \
+                                                     thermal_filenames)
+
+        self.pixscale = self._getPixelScale()
+
+    def _getPixelScale(self):
+        obsmode = self._obsmode.split(',')
+        obsmode = str(obsmode[0]) + ',' + str(obsmode[1])
+
+        fs = open(locations.specdir + 'detectors.dat',mode='r')
+        lines = fs.readlines()
+
+        regx = re.compile(r'\S+', re.IGNORECASE)
+        for line in lines:
+            try:
+                tokens = regx.findall(line)
+                if tokens[0] == obsmode:
+                    break
+            except:
+                pass
+
+        fs.close()
+
+        return float(tokens[1])
+
+    def _getThermalComponents(self, throughput_filenames, thermal_filenames):
+        components = []
+        for i in range(len(throughput_filenames)):
+            throughput_name = throughput_filenames[i]
+            thermal_name = thermal_filenames[i]
+
+            component = _ThermalComponent(throughput_name, thermal_name, \
+                                          self._rampFilterWavelength)
+            if not component.isEmpty():
+                components.append(component)
+
+        return components
+
+    def _multiplyThroughputs(self):
+        ''' Overrides base class in order to deal with opaque components.
+        '''
+        index = 0
+        for component in self.components:
+            if component.throughput != None:
+                break
+            index += 1
+
+        return BaseObservationMode._multiplyThroughputs(self, index)
+
+    def _getSpectrum(self):
+        sp = spectrum.TabularSourceSpectrum()
+        sp._wavetable = self._getWavesetIntersection()
+        sp._fluxtable = numarray.zeros(shape=sp._wavetable.shape,type='Float32')
+
+        sp.waveunits = units.Units('angstrom')
+        sp.fluxunits = units.Units('photlam')
+
+        minw = sp._wavetable[0]
+        maxw = sp._wavetable[-1]
+
+        for component in self.components:
+            # transmissive section
+            if component.throughput != None:
+                sp = sp * component.throughput
+
+                sp = spectrum.trimSpectrum(sp, minw, maxw)
+
+            # thermal section
+            if component.emissivity != None:
+                bb = self._bb(sp.GetWaveSet(), component.emissivity.temperature)
+ 
+                sp_comp = component.emissivity.beamFillFactor * bb * \
+                          component.emissivity
+
+                sp = sp + sp_comp
+
+                sp = spectrum.trimSpectrum(sp, minw, maxw)
+
+        return sp
+
+    def _getWavesetIntersection(self):
+        minw = spectrum.default_waveset[0]
+        maxw = spectrum.default_waveset[-1]
+
+        for component in self.components[1:]:
+            if component.emissivity != None:
+                wave = component.emissivity.GetWaveSet()
+
+                minw = max(minw, wave[0])
+                maxw = min(maxw, wave[-1])
+
+        result = self._mergeEmissivityWavesets()
+
+        result = numarray.compress(result > minw, result)
+        result = numarray.compress(result < maxw, result)
+
+        # intersection with vega spectrum (why???)
+        vegasp = spectrum.TabularSourceSpectrum(locations.VegaFile)
+        vegaws = vegasp.GetWaveSet()
+        result = numarray.compress(result > vegaws[0], result)
+        result = numarray.compress(result < vegaws[-1], result)
+
+        return result
+
+    def _mergeEmissivityWavesets(self):
+        index = 1
+        for component in self.components:
+            emissivity = component.emissivity
+            if emissivity == None:
+                index = index + 1
+            else:
+                result = emissivity.GetWaveSet()
+                break;
+
+        for component in self.components[index:]:
+            if component.emissivity != None:
+                result = spectrum.MergeWaveSets(result, \
+                         component.emissivity.GetWaveSet())
+        return result
+
+    def _bb(self, wave, temperature):
+        sp = spectrum.TabularSourceSpectrum()
+        sp._wavetable = wave
+        sp._fluxtable = planck.bb_photlam_arcsec(wave, temperature)
+        return sp
+
+
+class _Component(object):
+
+    def __init__(self, throughput_name, rampFilterWavelength):
+        self.throughput_name = throughput_name
+
+        self._empty = True
+
+        self.throughput = self._buildThroughput(throughput_name, rampFilterWavelength)
+
+    def _buildThroughput(self, name, rampFilterWavelength):
+        if name != CLEAR:
+            if len(name.split('[')) == 1:
+                self._empty = False
+                return spectrum.TabularSpectralElement(name)
+            else:
+                self._empty = False
+                return spectrum.InterpolatedSpectralElement(name, rampFilterWavelength)
+        else:
+            return None
+
+    def isEmpty(self):
+        return self._empty
+
+
+class _ThermalComponent(_Component):
+
+    def __init__(self, throughput_name, thermal_name, rampFilterWavelength):
+        self.throughput_name = throughput_name
+        self.thermal_name = thermal_name
+
+        self._empty = True
+
+        self.throughput = self._buildThroughput(throughput_name, rampFilterWavelength)
+
+        if thermal_name != CLEAR:
+            self._empty = False
+            self.emissivity = spectrum.ThermalSpectralElement(thermal_name)
+        else:
+            self.emissivity = None
+
+
+
+
 
 
 
