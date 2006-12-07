@@ -1,0 +1,1 @@
+C:\python24\python -c "import etc" 
