@@ -26,7 +26,6 @@ COMPTABLE  = _refTable('mtab/*_tmc.fits')
 THERMTABLE = _refTable('mtab/*_tmt.fits')
 CLEAR = 'clear'
 
-
 def irafconvert(iraffilename):
     '''Convert the IRAF file name (in directory$file format) to its
     unix equivalent
@@ -63,6 +62,7 @@ def irafconvert(iraffilename):
                   'crstiscomp$':rootdir+'comp/stis/',
                   'crstiscomp$':rootdir+'comp/stis/',
                   'crwfc3comp$':rootdir+'comp/wfc3/',
+                  'coscomp$':rootdir+'comp/cos/',
                   'crwave$':rootdir+'crwave/',
                   'crwfpccomp$':rootdir+'comp/wfpc/',
                   'crwfpc2comp$':rootdir+'comp/wfpc2/',
@@ -85,7 +85,7 @@ def irafconvert(iraffilename):
     dollarpos = iraffilename.find('$')
 
     if dollarpos != -1:
-        irafdir = iraffilename[:dollarpos+1]
+        irafdir = iraffilename[:dollarpos+1].lstrip()
         unixfilename = iraffilename.replace(irafdir,convertdic[irafdir])
 
     return unixfilename
@@ -275,8 +275,8 @@ class BaseObservationMode(object):
         modes = obsmode.lower().split(',')
 
         gt = GraphTable(GRAPHTABLE)
-        self.compnames,self.thcompnames = gt.GetComponentsFromGT(modes,1)
 
+        self.compnames,self.thcompnames = gt.GetComponentsFromGT(modes,1)
         self._rampFilterWavelength = gt.rampFilterWavelength
 
         self.pixscale = None
@@ -289,7 +289,7 @@ class BaseObservationMode(object):
                 try:
                     iraffilename = comptable.filenames[index[0][0]]
                     filename = irafconvert(iraffilename)
-                    files.append(filename)
+                    files.append(filename.lstrip())
                 except IndexError:
                     files.append(CLEAR)
             else:
@@ -307,7 +307,6 @@ class BaseObservationMode(object):
         # begs for refactoring....
 
         obmlist = self._obsmode.lower().split(',')
-
         if ('ccd','fuvmama','nuvmama').__contains__(obmlist[1]):
             obmlist = [obmlist[0]] + obmlist[2:]
 
@@ -320,10 +319,8 @@ class BaseObservationMode(object):
         for element in obmlist:
             obm = obm + ',' + element
         obm = obm[1:]
-
         try:
             coeff = wavetable.wavetable[obm]
-
             if coeff.startswith('('):
                 return self._computeBandwave(coeff)
             else:
@@ -407,7 +404,6 @@ class ObservationMode(BaseObservationMode):
     def _getOpticalComponents(self, throughput_filenames):
         components = []
         for throughput_name in throughput_filenames:
-
             component = _Component(throughput_name, self._rampFilterWavelength)
 
             if not component.isEmpty():

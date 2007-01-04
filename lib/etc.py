@@ -99,23 +99,31 @@ class SpecSourcerateSpec(Countrate):
             print 'elapsed time: ', str(t2-t1), 'sec.  obsmode is:', \
                   self._obsmode
 
-        filename = self._write()
-
-        return str(effstim) + ';' + filename 
-
-    def _write(self):
         filename = locations.temporary + "obsp" + \
                    str((self._spectrum + self._obsmode).__hash__()) + \
                    ".fits"
+        writer = SpectrumWriter(filename, self.observed_spectrum);
+        writer.write()
+
+        return str(effstim) + ';' + filename 
+
+
+class SpectrumWriter(object):
+
+    def __init__(self, filename, spectrum):
+        self._filename = filename
+        self._spectrum = spectrum
+
+    def write(self):
         try:
-            os.remove(filename)
+            os.remove(self._filename)
         except OSError:
             pass
 
-        (wave, flux) = self.observed_spectrum.getArrays()
+        (wave, flux) = self._spectrum.getArrays()
 
-        waveunits = self.observed_spectrum.waveunits
-        fluxunits = self.observed_spectrum.fluxunits
+        waveunits = self._spectrum.waveunits
+        fluxunits = self._spectrum.fluxunits
 
         # Get rid of zeros at both ends. However, leave one zero at each
         # end, the ETC requires it.....
@@ -139,9 +147,7 @@ class SpecSourcerateSpec(Countrate):
         cols = pyfits.ColDefs([cw, cf])
         hdu = pyfits.new_table(cols)
         hdulist.append(hdu)
-        hdu.writeto(filename)
-
-        return filename
+        hdu.writeto(self._filename)
 
 
 class Thermback(Countrate):
@@ -236,7 +242,7 @@ def startServer():
     dispatcher = ServerDispatcher()
     dispatcher.start()
 
-startServer()
+##startServer()
 
 
 
