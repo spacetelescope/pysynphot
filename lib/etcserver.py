@@ -12,6 +12,7 @@ import observation
 import spparser as P
 
 debug = 1
+count = 0
 
 class Calcphot(object):
 
@@ -99,9 +100,13 @@ class SpecSourcerateSpec(Countrate):
             print 'elapsed time: ', str(t2-t1), 'sec.  obsmode is:', \
                   self._obsmode
 
-        filename = locations.temporary + "obsp" + \
-                   str((self._spectrum + self._obsmode).__hash__()) + \
-                   ".fits"
+        global count
+        count = count + 1
+        if count > 99:
+            count = 1
+        code = str((self._spectrum + self._obsmode).__hash__()).replace("-","") + \
+               str(count)
+        filename = locations.temporary + "obsp" + code + ".fits"
         writer = SpectrumWriter(filename, self.observed_spectrum);
         writer.write()
 
@@ -147,7 +152,7 @@ class SpectrumWriter(object):
         cols = pyfits.ColDefs([cw, cf])
         hdu = pyfits.new_table(cols)
         hdulist.append(hdu)
-        hdu.writeto(self._filename)
+        hdulist.writeto(self._filename, clobber=True)
 
 
 class Thermback(Countrate):
@@ -236,5 +241,15 @@ tasks = {'calcphot':           Calcphot,
 
 def factory(task, *args, **kwargs):
     return apply(tasks[task], args, kwargs)
+
+
+def startServer():
+    dispatcher = ServerDispatcher()
+    dispatcher.start()
+
+startServer()
+
+
+
 
 

@@ -1,4 +1,5 @@
 import sys
+import math
 import unittest
 import pylab
 
@@ -12,41 +13,43 @@ import etc
 import planck
 
 
+accuracy = 1.0e-5    # floating point comparison accuracy
+
 testindex = 0
 # spectrum values @ testindex
-values = {'flam':           '2.79979E-11',
-          'flam z=2.5':     '6.53011E-13',
-          'fnu':            '1.23037E-23',
-          'photlam':        '1.61773E+00',
-          'photlam z=1.0':  '4.04432E-01',
-          'photlam z=2.5':  '1.32060E-01',
-          'photnu':         '7.10915E-13',
-          'jy':             '1.23037E+00',
-          'mjy':            '1.23037E+03',
-          'abmag':          '8.67490E+00',
-          'stmag':          '5.28218E+00',
-          'obmag':          '-1.23590E+01',
-          'v=0.0':          '4.38149E-07',
-          'v=5.0':          '4.38149E-09',
-          'vegamag':        '1.81443E+00',
-          'counts':         '8.78177E+04',
-          'angstrom':       '1.14780E+03',
-          'angstrom z=1.0': '2.29560E+03',
-          'angstrom z=2.5': '4.01730E+03',
-          'hz':             '2.61189E+15',
-          'nm':             '1.14780E+02',
-          'micron':         '1.14780E-01',
-          'mm':             '1.14780E-04',
-          'cm':             '1.14780E-05',
-          'm':              '1.14780E-07',
-          'integral':       '1.65862E+03',
-          'sp_npoints':     '5.11000E+03',
-          'thru_npoints':   '1.00600E+03',
-          'thru_500':       '1.22485E-01',
+values = {'flam':           2.79979E-11,
+          'flam z=2.5':     6.53011E-13,
+          'fnu':            1.23037E-23,
+          'photlam':        1.61773E+00,
+          'photlam z=1.0':  4.04432E-01,
+          'photlam z=2.5':  1.32060E-01,
+          'photnu':         7.10915E-13,
+          'jy':             1.23037E+00,
+          'mjy':            1.23037E+03,
+          'abmag':          8.67490E+00,
+          'stmag':          5.28218E+00,
+          'obmag':          -1.23590E+01,
+          'v=0.0':          4.38149E-07,
+          'v=5.0':          4.38149E-09,
+          'vegamag':        1.81443E+00,
+          'counts':         8.78177E+04,
+          'angstrom':       1.14780E+03,
+          'angstrom z=1.0': 2.29560E+03,
+          'angstrom z=2.5': 4.01730E+03,
+          'hz':             2.61189E+15,
+          'nm':             1.14780E+02,
+          'micron':         1.14780E-01,
+          'mm':             1.14780E-04,
+          'cm':             1.14780E-05,
+          'm':              1.14780E-07,
+          'integral':       1.65862E+03,
+          'sp_npoints':     5.11000E+03,
+          'thru_npoints':   1.00600E+03,
+          'thru_500':       1.22485E-01,
           'obsmode':        'acs,hrc,f555w',
-          'hstarea':        '4.52389E+04',
-          'countrate':      '7.64522E+05',
-          'efflam':         '5.32599E+03'
+          'hstarea':        4.52389E+04,
+          'countrate':      7.64522E+05,
+          'efflam':         5.32599E+03
           }
 
 format_spec = '%.5E'    # floating point precision in assert
@@ -82,32 +85,36 @@ def testAll():
     
     testcase = UnitsTestCase()
     runner.run(testcase)
+    testcase = SpectrumReadTest()
+    runner.run(testcase)
     testcase = SpectrumTestCase()
     runner.run(testcase)
     testcase = PlanckTestCase()
     runner.run(testcase)
     testcase = ObsmodeTestCase()
     runner.run(testcase)
+##    testcase = ObsmodeWFC3TestCase()
+##    runner.run(testcase)
     testcase = CalcphotTestCase()
     runner.run(testcase)
     testcase = FunctionTestCase()
     runner.run(testcase)
     testcase = ParserTestCase()
     runner.run(testcase)
-    testcase = IcatTestCase()
-    runner.run(testcase)
-    testcase = ResamplerTestCase()
-    runner.run(testcase)
-    testcase = ETCTestCase_Imag1()
-    runner.run(testcase)
-    testcase = ETCTestCase_Imag2()
-    runner.run(testcase)
-    testcase = ETCTestCase_Spec1()
-    runner.run(testcase)
-    testcase = ETCTestCase_Spec2()
-    runner.run(testcase)
-    testcase = ETCTestCase_Spec3()
-    runner.run(testcase)
+##    testcase = IcatTestCase()
+##    runner.run(testcase)
+##    testcase = ResamplerTestCase()
+##    runner.run(testcase)
+##    testcase = ETCTestCase_Imag1()
+##    runner.run(testcase)
+##    testcase = ETCTestCase_Imag2()
+##    runner.run(testcase)
+##    testcase = ETCTestCase_Spec1()
+##    runner.run(testcase)
+##    testcase = ETCTestCase_Spec2()
+##    runner.run(testcase)
+##    testcase = ETCTestCase_Spec3()
+##    runner.run(testcase)
 
 
 class TestSetUp(unittest.TestCase):
@@ -120,24 +127,32 @@ class TestSetUp(unittest.TestCase):
 
         assert self.sp != None, 'cannot build spectrum object'
 
+    def assertEqualFP(self, testvalue, expected):
+        ''' Floating point comaprison
+        '''
+        result = math.fabs((testvalue - expected) / expected)
+        if result > accuracy:
+            self.assertEqual(str(testvalue), str(expected))
+
+
+class SpectrumReadTest(TestSetUp):
+    def setUp(self):
+        TestSetUp.setUp(self)
+
+    def runTest(self):
         self.assertEqual(self.sp.waveunits.name,'angstrom')
         self.assertEqual(self.sp.fluxunits.name,'flam')
-        self.assertEqual(format(len(self.sp._wavetable)), values['sp_npoints'])
-        self.assertEqual(format(len(self.sp._fluxtable)), values['sp_npoints'])
+        self.assertEqualFP(len(self.sp._wavetable), values['sp_npoints'])
+        self.assertEqualFP(len(self.sp._fluxtable), values['sp_npoints'])
 
         # check internal arrays; they should always be expressed
         # in internal units.
-        self.assertEqual(format(self.sp._wavetable[testindex]),values['angstrom'])
-        self.assertEqual(format(self.sp._fluxtable[testindex]),values['photlam'])
+        self.assertEqualFP(self.sp._wavetable[testindex],values['angstrom'])
+        self.assertEqualFP(self.sp._fluxtable[testindex],values['photlam'])
 
         # fluxes should be expressed in flam
         (wav,flux) = self.sp.getArrays()
-        self.assertEqual(format(flux[testindex]),values['flam'])
-
-    # Turns off all assertion errors. This is to be used temporarily
-    # while the graph table files are still separate (COS and WFC3 versions).
-    def assertEqual(self, testvalue, expected):
-        pass
+        self.assertEqualFP(flux[testindex],values['flam'])
 
 
 class UnitsTestCase(TestSetUp):
@@ -170,12 +185,12 @@ class UnitsTestCase(TestSetUp):
     def _testFlux(self, spectrum, units):
         spectrum.convert(units)
         (waves, fluxes) = spectrum.getArrays()
-        self.assertEqual(format(fluxes[testindex]), values[units])
+        self.assertEqualFP(fluxes[testindex], values[units])
 
     def _testWave(self, spectrum, units):
         spectrum.convert(units)
         (waves, fluxes) = spectrum.getArrays()
-        self.assertEqual(format(waves[testindex]), values[units])
+        self.assertEqualFP(waves[testindex], values[units])
 
 
 class SpectrumTestCase(TestSetUp):
@@ -190,66 +205,67 @@ class SpectrumTestCase(TestSetUp):
     def _testRedshift(self):
         # redshift = 0 should return the same input.
         sp = self.sp.redshift(0.0)
-        self.assertEqual(format(sp._wavetable[testindex]), values['angstrom'])
-        self.assertEqual(format(sp._fluxtable[testindex]), values['photlam'])
+        self.assertEqualFP(sp._wavetable[testindex], values['angstrom'])
+        self.assertEqualFP(sp._fluxtable[testindex], values['photlam'])
         (dummy, fluxes) = sp.getArrays()
-        self.assertEqual(format(fluxes[testindex]),values['flam'])
+        self.assertEqualFP(fluxes[testindex],values['flam'])
 
         # convert to photnu, then redshift, and check that flux in
         # photonu units didn't change.
         sp.convert('photnu')
-        self.assertEqual(format(sp._wavetable[testindex]), values['angstrom'])
-        self.assertEqual(format(sp._fluxtable[testindex]), values['photlam'])
+        self.assertEqualFP(sp._wavetable[testindex], values['angstrom'])
+        self.assertEqualFP(sp._fluxtable[testindex], values['photlam'])
         (dummy, fluxes) = sp.getArrays()
-        self.assertEqual(format(fluxes[testindex]),values['photnu'])
+        self.assertEqualFP(fluxes[testindex],values['photnu'])
 
         z = 1.0
         sp2 = sp.redshift(z)
-        self.assertEqual(format(sp2._wavetable[testindex]), values['angstrom z=1.0'])
+        self.assertEqualFP(sp2._wavetable[testindex], values['angstrom z=1.0'])
         (dummy, fluxes) = sp2.getArrays()
-        self.assertEqual(format(fluxes[testindex]),values['photnu'])
+        self.assertEqualFP(fluxes[testindex],values['photnu'])
 
         # internal array should change though, it's in photlam units.
-        self.assertEqual(format(sp2._fluxtable[testindex]),values['photlam z=1.0'])
+        self.assertEqualFP(sp2._fluxtable[testindex],values['photlam z=1.0'])
 
         # now test redshift in flam units.
         sp.convert('flam')
         sp2 = sp.redshift(2.5)
-        self.assertEqual(format(sp2._wavetable[testindex]), values['angstrom z=2.5'])
-        self.assertEqual(format(sp2._fluxtable[testindex]), values['photlam z=2.5'])
+        self.assertEqualFP(sp2._wavetable[testindex], values['angstrom z=2.5'])
+        self.assertEqualFP(sp2._fluxtable[testindex], values['photlam z=2.5'])
         (dummy, fluxes) = sp2.getArrays()
-        self.assertEqual(format(fluxes[testindex]),values['flam z=2.5'])
+        self.assertEqualFP(fluxes[testindex],values['flam z=2.5'])
 
     def _testIntegrate(self):
         integral = self.sp.integrate()
-        self.assertEqual(format(integral), values['integral'])
+        self.assertEqualFP(integral, values['integral'])
 
     def _testMagnitude(self):
         vmag = spectrum.Magnitude('johnson,v',0.0)
         sp2 = self.sp.setMagnitude(vmag)
         (dummy, fluxes) = sp2.getArrays()
-        self.assertEqual(format(fluxes[testindex]), values['v=0.0'])
+        self.assertEqualFP(fluxes[testindex], values['v=0.0'])
 
         vmag = spectrum.Magnitude('johnson,v',5.0)
         sp2 = self.sp.setMagnitude(vmag)
         (dummy, fluxes) = sp2.getArrays()
-        self.assertEqual(format(fluxes[testindex]), values['v=5.0'])
+        self.assertEqualFP(fluxes[testindex], values['v=5.0'])
 
 
-class PlanckTestCase(unittest.TestCase):
+class PlanckTestCase(TestSetUp):
     def runTest(self):
         flux = planck.bb_photlam_arcsec(spectrum.default_waveset, 1000.)
+        self.assertEqualFP(flux[5000], 3.8914E-8)
 
 
-class ObsmodeTestCase(unittest.TestCase):
+class ObsmodeTestCase(TestSetUp):
     def runTest(self):
 
         obsmode = observationmode.ObservationMode(values['obsmode'])
 
-        self.assertEqual(format(obsmode.area), values['hstarea'])
+        self.assertEqualFP(obsmode.area, values['hstarea'])
         throughput = obsmode.Throughput().throughputtable
-        self.assertEqual(format(len(throughput)), values['thru_npoints'])
-        self.assertEqual(format(throughput[500]), values['thru_500'])
+        self.assertEqualFP(len(throughput), values['thru_npoints'])
+        self.assertEqualFP(throughput[500], values['thru_500'])
         
         obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
 ##        files = obsmode.GetFiles()
@@ -257,39 +273,56 @@ class ObsmodeTestCase(unittest.TestCase):
 ##            print f
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[500], 1.23418E-6)
 
         obsmode = observationmode.ObservationMode("acs,wfc1,FR647M#6470")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[500], 1.830412E-4)
 
         obsmode = observationmode.ObservationMode("acs,sbc,F125LP")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[500], 6.35017E-15)
 
         obsmode = observationmode.ObservationMode("stis,ccd")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[500], 0.145239893)
 
         obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[500], 1.23418E-6)
 
         obsmode = observationmode.ObservationMode("acs,wfc1,G800L")
-##        obsmode = observationmode.ObservationMode("stis,g750m,c8825")
         wave = obsmode.bandWave()
+        throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[500], 0.1981341)
+
+        obsmode = observationmode.ObservationMode("stis,g750m,c8825")
+        wave = obsmode.bandWave()
+        throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[7500], 0.067808)
 
         obsmode = observationmode.ObservationMode("stis,fuvmama,g140l,s52x2")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[200], 0.0295800)
 
         obsmode = observationmode.ObservationMode("acs,hrc,PR200L")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[500], 0.24288104)
 
         obsmode = observationmode.ObservationMode("stis,nuvmama,e230h,c2263,s02x02")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
+        self.assertEqualFP(throughput[1500], 0.004894058)
 
+
+class ObsmodeWFC3TestCase(TestSetUp):
+    def runTest(self):
         obsmode = observationmode.ObservationMode("wfc3,ir,f160w")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
@@ -304,52 +337,52 @@ class CalcphotTestCase(TestSetUp):
         obs = observation.Observation(self.sp, obsmode)
 
         countrate = obs.calcphot()
-        self.assertEqual(format(countrate[0]), values['countrate'])
+        self.assertEqualFP(countrate[0], values['countrate'])
 
         efflam = obs.calcphot(func='efflam')
-        self.assertEqual(format(efflam), values['efflam'])
+        self.assertEqualFP(efflam, values['efflam'])
 
 
-class FunctionTestCase(unittest.TestCase):
+class FunctionTestCase(TestSetUp):
     def runTest(self):
         an = spectrum.AnalyticSpectrum()
         wave = an.GetWaveSet()
 
         sp = spectrum.UnitSpectrum(1.0,fluxunits='photlam')
         fluxes = sp(wave)
-        self.assertEqual(format(fluxes.shape[0]),'1.00000E+04')
-        self.assertEqual(format(fluxes[0]),'1.00000E+00')
-        self.assertEqual(format(fluxes[9000]),'1.00000E+00')
+        self.assertEqualFP(fluxes.shape[0], 1.0E+04)
+        self.assertEqualFP(fluxes[0], 1.0)
+        self.assertEqualFP(fluxes[9000], 1.0)
 
         sp = spectrum.UnitSpectrum(1.0,fluxunits='flam')
         fluxes = sp(wave)
-        self.assertEqual(format(fluxes[0]),'2.51701E+10')
-        self.assertEqual(format(fluxes[9000]),'8.81633E+11')
+        self.assertEqualFP(fluxes[0], 2.51701E+10)
+        self.assertEqualFP(fluxes[9000], 8.81633E+11)
         waves,fluxes = sp.getArrays()
-        self.assertEqual(format(fluxes[0]),'1.00000E+00')
-        self.assertEqual(format(fluxes[9000]),'1.00000E+00')
+        self.assertEqualFP(fluxes[0],1.0)
+        self.assertEqualFP(fluxes[9000],1.0)
 
         box = spectrum.Box(5500.0,1.0)
-        self.assertEqual(format(box.wavetable.shape[0]),'2.20000E+01')
-        self.assertEqual(format(box.throughputtable.shape[0]),'2.20000E+01')
-        self.assertEqual(format(box.throughputtable[1]),'1.00000E+00')
+        self.assertEqualFP(box.wavetable.shape[0], 22.)
+        self.assertEqualFP(box.throughputtable.shape[0], 22.)
+        self.assertEqualFP(box.throughputtable[1], 1.0)
 
         sp = spectrum.UnitSpectrum(1.0,fluxunits='photlam')
         box = spectrum.Box(5500.0,1.0)
         sp = sp * box
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertEqual(format(fluxes.sum()),'2.00000E+01')
+        self.assertEqualFP(fluxes.sum(), 20.)
 
         sp = spectrum.UnitSpectrum(1.0,fluxunits='flam')
         box = spectrum.Box(5500.0,1.0)
         sp = sp * box
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertEqual(format(fluxes.sum()),'5.53744E+12')
+        self.assertEqualFP(fluxes.sum(), 5.53744E+12)
 
 
-class ParserTestCase(unittest.TestCase):
+class ParserTestCase(TestSetUp):
     def runTest(self):
         an = spectrum.AnalyticSpectrum()
         wave = an.GetWaveSet()
@@ -358,31 +391,31 @@ class ParserTestCase(unittest.TestCase):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertEqual(format(fluxes.shape[0]),'1.00000E+04')
-        self.assertEqual(format(fluxes[0]),'1.00000E+00')
-        self.assertEqual(format(fluxes[9000]),'1.00000E+00')
+        self.assertEqualFP(fluxes.shape[0], 1.0E+04)
+        self.assertEqualFP(fluxes[0], 1.0)
+        self.assertEqualFP(fluxes[9000], 1.0)
 
         expr = "unit(1,flam)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertEqual(format(fluxes[0]),'2.51701E+10')
-        self.assertEqual(format(fluxes[9000]),'8.81633E+11')
+        self.assertEqualFP(fluxes[0], 2.51701E+10)
+        self.assertEqualFP(fluxes[9000], 8.81633E+11)
         waves,fluxes = sp.getArrays()
-        self.assertEqual(format(fluxes[0]),'1.00000E+00')
-        self.assertEqual(format(fluxes[9000]),'1.00000E+00')
+        self.assertEqualFP(fluxes[0], 1.0)
+        self.assertEqualFP(fluxes[9000], 1.0)
 
         expr = "(unit(1,flam) * box(5500.0,1.0))"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertEqual(format(fluxes.sum()),'5.53744E+12')
+        self.assertEqualFP(fluxes.sum(), 5.53744E+12)
 
         expr = "(unit(1,flam) * box(5500.0,20.0))"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertEqual(format(fluxes.sum()),'1.13241E+14')
+        self.assertEqualFP(fluxes.sum(), 1.13241E+14)
 
         expr = "rn(unit(1,flam),box(5500.0,1000),1.0E-18,flam)"
         sp = P.interpret(P.parse(P.scan(expr)))
@@ -390,218 +423,220 @@ class ParserTestCase(unittest.TestCase):
         wave = sp.GetWaveSet()
         sp(wave)
         wav,flux = sp.getArrays()
-        self.assertEqual(format(flux[0]),'1.00000E-18')
+        self.assertEqualFP(flux[0], 1.0E-18)
         box = spectrum.Box(5500.0,1.0)
         sp = sp * box
         integral = sp.integrate(fluxunits='flam')
-        self.assertEqual(format(integral),'1.00000E-18')
+        self.assertEqualFP(integral, 1.0E-18)
 
         om = observationmode.ObservationMode("acs,hrc,f220w")
         sp = P.interpret(P.parse(P.scan("rn(unit(1,flam),box(5500.0,1),1.0E-18,flam)")))
         ob = observation.Observation(sp, om)
         effstim = ob.calcphot()
-        self.assertEqual(format(effstim[0]),'1.15706E-01')
+        self.assertEqualFP(effstim[0], 1.15706E-1)
         efflam = ob.calcphot(func='efflam')
-        self.assertEqual(format(efflam),'2.35765E+03')
+        self.assertEqualFP(efflam, 2357.65)
 
         expr = "spec(Zodi.fits)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         f = sp(wave)
         w,f = sp.getArrays()
-        self.assertEqual(format(f[0]),'4.74300E-29')
+        self.assertEqualFP(f[0], 4.74300E-29)
 
         expr = "earthshine.fits"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         f = sp(wave)
         w,f = sp.getArrays()
-        self.assertEqual(format(f[0]),'2.41358E-23')
+        self.assertEqualFP(f[0], 2.41358E-23)
 
         expr = "band(V)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[10]),'9.97000E-01')
+        self.assertEqualFP(flux[10], 9.97E-1)
 
         expr = "rn(spec(Zodi.fits),band(V),22.7,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[100]),'3.29485E-16')
+        self.assertEqualFP(flux[100], 3.29485E-16)
 
         expr = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[1000]),'1.16471E-13')
+        self.assertEqualFP(flux[1000], 1.16471E-13)
 
         expr = "rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[1000]),'1.33871E-04')
+        self.assertEqualFP(flux[1000], 1.33871E-4)
 
         expr = "spec(crcalspec$gd71_mod_005.fits)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[1000]),'9.44461E-02')
+        self.assertEqualFP(flux[1000], 9.44461E-2)
 
         expr = "pl(4000.,1,photlam)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[5270]),'1.00287E+00')
+        self.assertEqualFP(flux[5270], 1.00287)
 
         expr = "pl(4000.,1,jy)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         f = sp(wave)
         w,f = sp.getArrays()
-        self.assertEqual(format(f[5270]),'1.00287E+00')
+        self.assertEqualFP(f[5270], 1.00287)
 
         expr = "bb(10000.0)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[5000]),'1.06813E-02')
+        self.assertEqualFP(flux[5000], 1.06813E-2)
 
         expr = "z(bb(10000.0),1.0)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[5000]),'2.67032E-03')
+        self.assertEqualFP(flux[5000], 2.67032E-3)
 
         expr = "em(3880.0,10.0,1.0000000168623835E-16,flam)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[50]),'1.83491E-06')
+        self.assertEqualFP(flux[50], 1.83491E-6)
 
         expr = "rn(elliptical.fits,band(johnson,v),15.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[50]),'2.17656E-04')
+        self.assertEqualFP(flux[50], 2.17656E-4)
 
         expr = "spec(userFiles$vb8.inr.2a)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[5000]),'8.15545E-03')
+        self.assertEqualFP(flux[5000], 8.15545E-3)
 
         expr = "rn(unit(1,flam)*ebmvx(0.1,gal1),box(5500.0,1),1.0E-18,flam)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[5000]),'1.53329E-07')
+        self.assertEqualFP(flux[5000], 1.53329E-7)
 
         expr = "spec(userFiles$test.dat)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[5000]),'6.08108E+10')
+        self.assertEqualFP(flux[5000], 6.08108E+10)
 
         expr = "rn(icat(k93models,5770,0.0,4.5),band(johnson,v),20.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[500]),'1.02024E-05')
+        self.assertEqualFP(flux[500], 1.02024E-5)
 
         expr = "rn(bb(5500.0),band(bessell,h),22.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[6000]),'3.88200E-07')
+        self.assertEqualFP(flux[6000], 3.88200E-7)
 
         expr = "rn(egal.dat,band(bessell,h),20.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[500]),'9.60494E-07')
+        self.assertEqualFP(flux[500], 9.60494E-7)
 
         expr = "rn(bb(5500.0)*ebmvx(0.5,lmc),band(bessell,h),20.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[7000]),'1.38877E-06')
+        self.assertEqualFP(flux[7000], 1.38877E-6)
 
         expr = "rn(z(null,NaN),band(johnson,v),15.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[5000]),'9.92766E-04')
+        self.assertEqualFP(flux[5000], 9.92766E-4)
 
         expr = "rn(icat(k93models,3500,0.0,4.6),band(johnson,v),15.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[1000]),'5.86311E-04')
+        self.assertEqualFP(flux[1000], 5.86311E-4)
 
         expr = "(spec(crcalspec$grw_70d5824_stis_001.fits))"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[1000]),'5.08782E-02')
+        self.assertEqualFP(flux[1000], 5.08782E-2)
 
         expr = "rn((icat(k93models,44500,0.0,5.0))*ebmvx(0.5,smc),band(johnson,v),15.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[1000]),'1.10761E-03')
+        self.assertEqualFP(flux[1000], 1.10761E-3)
 
         expr = "(spec(crcalspec$grw_70d5824_stis_001.fits))"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[2000]),'1.41039E-02')
+        self.assertEqualFP(flux[2000], 1.41039E-2)
 
         expr = "ebmvx(0.1,gal1)"
         th = P.interpret(P.parse(P.scan(expr)))
         wave = th.GetWaveSet()
         throughput = th.throughputtable
-
-        expr = "(spec(crcalspec$gd71_mod_005.fits))*ebmvx(0.1,gal1)"
-        sp = P.interpret(P.parse(P.scan(expr)))
-        wave = sp.GetWaveSet()
-        flux = sp(wave)
-        self.assertEqual(format(flux[2000]),'7.15737E-03')
-
-        expr = "rn(z(qso_template.fits,1),band(johnson,v),18.0,vegamag)"
-        sp = P.interpret(P.parse(P.scan(expr)))
-        wave = sp.GetWaveSet()
-        flux = sp(wave)
-        self.assertEqual(format(flux[2000]),'2.87132E-05')
+        self.assertEqualFP(throughput[1000], 0.9816266)
 
         expr = "ebmvx(0.5,smc)"
         th = P.interpret(P.parse(P.scan(expr)))
         wave = th.GetWaveSet()
         throughput = th.throughputtable
+        self.assertEqualFP(throughput[1000], 3.64702691)
+
+        expr = "(spec(crcalspec$gd71_mod_005.fits))*ebmvx(0.1,gal1)"
+        sp = P.interpret(P.parse(P.scan(expr)))
+        wave = sp.GetWaveSet()
+        flux = sp(wave)
+        self.assertEqualFP(flux[2000], 7.15737E-3)
+
+        expr = "rn(z(qso_template.fits,1),band(johnson,v),18.0,vegamag)"
+        sp = P.interpret(P.parse(P.scan(expr)))
+        wave = sp.GetWaveSet()
+        flux = sp(wave)
+        self.assertEqualFP(flux[2000], 2.87132E-5)
 
         expr = "rn((icat(k93models,44500,0.0,5.0))*ebmvx(0.5,smc),band(johnson,v),15.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[200]),'5.48990E-05')
+        self.assertEqualFP(flux[200], 5.48990E-5)
 
         expr = "rn((icat(k93models,44500,0.0,5.0)),band(johnson,v),10.516,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[200]),'1.08948E+00')
+        self.assertEqualFP(flux[200], 1.08948)
 
         expr = "rn((spec(crcalspec$bd_28d4211_stis_001.fits)),box(2000.0,1),1.0E-12,flam)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[200]),'2.92770E-01')
+        self.assertEqualFP(flux[200], 0.292770)
 
         expr = "rn((spec(crcalspec$gd71_mod_005.fits))*ebmvx(0.1,gal1),box(5500.0,1),1.0E-16,flam)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertEqual(format(flux[2000]),'4.37347E-05')
+        self.assertEqualFP(flux[2000], 4.37347E-5)
 
 
 ##class ETCTestCase_Imag1(unittest.TestCase):
@@ -835,35 +870,35 @@ class ETCTestCase_Spec2(TestSetUp):
 class ETCTestCase_Spec3(TestSetUp):
     def runTest(self):
 
-        spectrum = "spectrum=em(4300.0,1.0,9.999999960041972E-13,flam)"
-        instrument = "instrument=stis,ccd,g430l"
-        parameters = [spectrum, instrument]
-        calculator = etc.SpecSourcerateSpec(parameters)
-        countrate = calculator.run()
-        sp = calculator.observed_spectrum
-        (wave, flux) = sp.getArrays()
-        self.assertEqual(format(float(countrate.split(';')[0])),'9.24085E+02')
-
-        spectrum = "spectrum=rn((icat(k93models,5770,0.0,4.5)),band(johnson,v),20.0,vegamag)"
-        instrument = "instrument=acs,hrc,PR200L"
-        parameters = [spectrum, instrument]
-        calculator = etc.SpecSourcerateSpec(parameters)
-        countrate = calculator.run()
-        sp = calculator.observed_spectrum
-        (wave, flux) = sp.getArrays()
-        self.assertEqual(format(float(countrate.split(';')[0])),'1.19709E+02')
-
-        spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
-        instrument = "instrument=stis,fuvmama,g140l"
-        parameters = [spectrum, instrument]
-        calculator = etc.SpecSourcerateSpec(parameters)
-        countrate = calculator.run()
-        sp = calculator.observed_spectrum
-        (wave, flux) = sp.getArrays()
-        self.assertEqual(format(float(countrate.split(';')[0])),'1.15518E+01')
-        sp = calculator.observed_spectrum
-        (wave, flux) = sp.getArrays()
-        self.assertEqual(format(float(countrate.split(';')[0])),'1.15518E+01')
+##        spectrum = "spectrum=em(4300.0,1.0,9.999999960041972E-13,flam)"
+##        instrument = "instrument=stis,ccd,g430l"
+##        parameters = [spectrum, instrument]
+##        calculator = etc.SpecSourcerateSpec(parameters)
+##        countrate = calculator.run()
+##        sp = calculator.observed_spectrum
+##        (wave, flux) = sp.getArrays()
+##        self.assertEqual(format(float(countrate.split(';')[0])),'9.24085E+02')
+##
+##        spectrum = "spectrum=rn((icat(k93models,5770,0.0,4.5)),band(johnson,v),20.0,vegamag)"
+##        instrument = "instrument=acs,hrc,PR200L"
+##        parameters = [spectrum, instrument]
+##        calculator = etc.SpecSourcerateSpec(parameters)
+##        countrate = calculator.run()
+##        sp = calculator.observed_spectrum
+##        (wave, flux) = sp.getArrays()
+##        self.assertEqual(format(float(countrate.split(';')[0])),'1.19709E+02')
+##
+##        spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
+##        instrument = "instrument=stis,fuvmama,g140l"
+##        parameters = [spectrum, instrument]
+##        calculator = etc.SpecSourcerateSpec(parameters)
+##        countrate = calculator.run()
+##        sp = calculator.observed_spectrum
+##        (wave, flux) = sp.getArrays()
+##        self.assertEqual(format(float(countrate.split(';')[0])),'1.15518E+01')
+##        sp = calculator.observed_spectrum
+##        (wave, flux) = sp.getArrays()
+##        self.assertEqual(format(float(countrate.split(';')[0])),'1.15518E+01')
 
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=cos,fuv,g130m,c1309"
@@ -873,8 +908,27 @@ class ETCTestCase_Spec3(TestSetUp):
         sp = calculator.observed_spectrum
         (wave, flux) = sp.getArrays()
         self.assertEqual(format(float(countrate.split(';')[0])),'2.65409E+01')
+        print "SpecSourcerateSpec response: ",countrate
 
+        spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
+        instrument = "instrument=cos,fuv,g130m,c1309"
+        parameters = [spectrum, instrument]
+        calculator = etc.SpecSourcerateSpec(parameters)
+        countrate = calculator.run()
+        sp = calculator.observed_spectrum
+        (wave, flux) = sp.getArrays()
+        self.assertEqual(format(float(countrate.split(';')[0])),'2.65409E+01')
+        print "SpecSourcerateSpec response: ",countrate
 
+        spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
+        instrument = "instrument=cos,fuv,g130m,c1309"
+        parameters = [spectrum, instrument]
+        calculator = etc.SpecSourcerateSpec(parameters)
+        countrate = calculator.run()
+        sp = calculator.observed_spectrum
+        (wave, flux) = sp.getArrays()
+        self.assertEqual(format(float(countrate.split(';')[0])),'2.65409E+01')
+        print "SpecSourcerateSpec response: ",countrate
 ##        pylab.ion()
 ##        pylab.clf()
 ##        pylab.scatter(wave,flux)
