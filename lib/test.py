@@ -73,8 +73,10 @@ def testAll():
 ##    testsuite = unittest.TestSuite()
 ##
 ##    testsuite.addTest(UnitsTestCase)
-##    testsuite.addTest(ObsmodeTestCase)
+##    testsuite.addTest(SpectrumReadTestCase)
 ##    testsuite.addTest(SpectrumTestCase)
+##    testsuite.addTest(PlanckTestCase)
+##    testsuite.addTest(ObsmodeTestCase)
 ##
 ##    runner = unittest.TextTestRunner()
 ##    runner.run(testsuite)
@@ -85,7 +87,7 @@ def testAll():
     
     testcase = UnitsTestCase()
     runner.run(testcase)
-    testcase = SpectrumReadTest()
+    testcase = SpectrumReadTestCase()
     runner.run(testcase)
     testcase = SpectrumTestCase()
     runner.run(testcase)
@@ -135,7 +137,7 @@ class TestSetUp(unittest.TestCase):
             self.assertEqual(str(testvalue), str(expected))
 
 
-class SpectrumReadTest(TestSetUp):
+class SpectrumReadTestCase(TestSetUp):
     def setUp(self):
         TestSetUp.setUp(self)
 
