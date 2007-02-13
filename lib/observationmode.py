@@ -62,6 +62,7 @@ def irafconvert(iraffilename):
                   'crstiscomp$':rootdir+'comp/stis/',
                   'crstiscomp$':rootdir+'comp/stis/',
                   'crwfc3comp$':rootdir+'comp/wfc3/',
+                  'crcoscomp$':rootdir+'comp/cos/',
                   'coscomp$':rootdir+'comp/cos/',
                   'crwave$':rootdir+'crwave/',
                   'crwfpccomp$':rootdir+'comp/wfpc/',

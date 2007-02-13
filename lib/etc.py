@@ -88,6 +88,13 @@ class SpecSourcerateSpec(Countrate):
         Countrate.__init__(self, parameters)
 
     def run(self):
+
+        if self._spectrum == ""      or \
+           self._spectrum == "null"  or \
+           self._obsmode  == ""      or \
+           self._obsmode  == "null":
+            return "NaN;"
+
         t1 = time.time()
         ob = self._buildObservation()
         effstim = ob.calcphot(func='spec')
@@ -177,7 +184,7 @@ class Thermback(Countrate):
             print 'elapsed time in calcphot: ', str(t2-t1), 'sec.  obsmode is:', \
                   self._obsmode
 
-        return str(result) + ";"
+        return str(result)
 
 
 class RequestHandler(SocketServer.BaseRequestHandler):
