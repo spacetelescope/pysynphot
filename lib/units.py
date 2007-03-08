@@ -45,8 +45,7 @@ class _UnitsConverter(object):
         if self.Dispatch.has_key(TargetUnits):
             result = self.Dispatch[TargetUnits](wave, flux)
         else:
-            print 'Units ' + TargetUnits + ' not recognized'
-            raise KeyError
+            raise KeyError('Units %s  not recognized'%TargetUnits)
         return result
 
 class _ToInternalWaveUnitsConverter(_UnitsConverter):

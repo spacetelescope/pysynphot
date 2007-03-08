@@ -44,7 +44,7 @@ def renormalize(spectrum, band, flux, unit):
             mag = Magnitude(band.name,flux)
             return spectrum.setMagnitude(mag)
         else:
-            raise ValueError, unit+" not supported yet."
+            raise ValueError("%s not supported yet."%unit)
 
             sp = spectrum * band
             cntrate = sp.integrate(fluxunits=unit)
@@ -623,8 +623,7 @@ class CompositeSpectralElement(SpectralElement):
     def __init__(self, component1, component2):
         if (not isinstance(component1, SpectralElement) or
             not isinstance(component2, SpectralElement)):
-            print "Arguments must be SpectralElements"
-            raise TypeError
+            raise TypeError("Arguments must be SpectralElements")
         self.component1 = component1
         self.component2 = component2
 
