@@ -8,7 +8,7 @@ data_roots = {'win32':  'C:/specman/data/',
               'linux2': '/data/ra1/busko/specman/data/'}
 user_roots = {'win32':  'C:/specmandata/',
               'sunos5': '/data/ra1/busko/specmandata/',
-              'linux2': '/usr/stsci/APT/'}
+              'linux2': '/data/ra1/busko/specmandata/'}
 
 temp_roots = {'win32':  'C:/TEMP/',
               'sunos5': '/data/ra1/busko/tmp/',

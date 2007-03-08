@@ -1,5 +1,7 @@
-import numarray as N
-import numarray.ma as MA
+## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+
+import numpy as N
+from numpy import ma as MA
 import pyfits
 
 import spectrum
@@ -69,7 +71,7 @@ class Icat(spectrum.TabularSourceSpectrum):
     def _breakList(self, inList, index, parameter):
         par = float(parameter)
 
-        array = N.array(shape=[len(inList),],type='Float32')
+        array = N.empty(shape=[len(inList),],dtype=N.float32)
         i = 0
         for parameters in inList:
             array[i] = parameters[index]
@@ -88,9 +90,9 @@ class Icat(spectrum.TabularSourceSpectrum):
         lowerList = []
         i = 0
         for parameters in inList:
-            if upperArray.mask()[i]:
+            if upperArray.mask[i]:
                 upperList.append(parameters)
-            if lowerArray.mask()[i]:
+            if lowerArray.mask[i]:
                 lowerList.append(parameters)
             i = i + 1
 

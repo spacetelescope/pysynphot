@@ -1,6 +1,8 @@
+## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+
 import math
 import string
-import numarray
+import numpy as N
 import spectrum   # circular import is required for vegamag transformation 
 import locations
 
@@ -24,8 +26,8 @@ def Units(units):
 def _getDeltaWave(wave):
     last = wave.shape[0]-1
 
-    hold1 = numarray.array(shape=wave.shape, type='Float64')
-    hold2 = numarray.array(shape=wave.shape, type='Float64')
+    hold1 = N.empty(shape=wave.shape, dtype=N.float64)
+    hold2 = N.empty(shape=wave.shape, dtype=N.float64)
 
     hold1[1::] = wave[0:last]
     hold2[0:last] = wave[1::]
@@ -109,22 +111,22 @@ class Photlam(_ToExternalFluxUnitsConverter):
     
     def ToABMag(self, wave, flux):
         arg = H * flux * wave
-        return -1.085736 * numarray.log(arg) + ABZERO
+        return -1.085736 * N.log(arg) + ABZERO
     
     def ToSTMag(self, wave, flux):
         arg = H * C* flux / wave
-        return -1.085736 * numarray.log(arg) + STZERO
+        return -1.085736 * N.log(arg) + STZERO
     
     def ToOBMag(self, wave, flux):
         dw = _getDeltaWave(wave)
         arg = flux * dw * HSTAREA
-        return -1.085736 * numarray.log(arg)
+        return -1.085736 * N.log(arg)
 
     def ToVegaMag(self, wave, flux):
         vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
         resampled = vegaspec.resample(wave)
         normalized = flux / resampled._fluxtable
-        return -2.5 * numarray.log10(normalized)
+        return -2.5 * N.log10(normalized)
 
     def ToCounts(self, wave, flux):
         return flux * _getDeltaWave(wave) * HSTAREA

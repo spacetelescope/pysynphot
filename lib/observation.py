@@ -1,6 +1,8 @@
+## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+
 import string
 import math
-import numarray
+import numpy as N
 import observationmode
 import spectrum
 import units
@@ -21,7 +23,7 @@ class Spectrogram(spectrum.TabularSourceSpectrum):
         '''
         # compute endpoints of each summation bin.
         midpoints = (wave[1:] + wave[:-1]) / 2.0
-        endpoints = numarray.array(shape=[len(midpoints)+2,],type='Float64')
+        endpoints = N.empty(shape=[len(midpoints)+2,],dtype=N.float64)
         endpoints[1:-1] = midpoints
         endpoints[0]  = wave[0] - (midpoints[0] - wave[0])
         endpoints[-1] = wave[-1] + (wave[-1] - midpoints[-1])
@@ -31,7 +33,7 @@ class Spectrogram(spectrum.TabularSourceSpectrum):
         spwave = spectrum.MergeWaveSets(spwave, wave)
 
         # compute indices associated to each endpoint.
-        indices = numarray.searchsorted(spwave, endpoints)
+        indices = N.searchsorted(spwave, endpoints)
         diff = indices[1:] - indices[:-1]
         indices = indices[:-1]
         indices_last = indices + diff 
@@ -42,7 +44,7 @@ class Spectrogram(spectrum.TabularSourceSpectrum):
         deltaw = spwave[1:] - spwave[:-1]
 
         # sum over each bin.
-        nflux = numarray.array(shape=wave.shape,type='Float64')
+        nflux = N.empty(shape=wave.shape,dtype=N.float64)
         for i in range(len(indices)):
             first = indices[i]
             last = indices_last[i]

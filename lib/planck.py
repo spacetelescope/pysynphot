@@ -1,5 +1,7 @@
+## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+
 import math
-import numarray as N
+import numpy as N
 
 
 H  = 6.6262E-27                # Planck's constant in cgs units
@@ -27,7 +29,7 @@ def bbfunc(wave, temperature):
     mask = N.where(x > 0.0, 1, 0)
     x = N.where(mask==1, 1.43883E8 / x, 0.0)
 
-    factor = N.zeros(wave.shape, type='Float32')
+    factor = N.zeros(wave.shape, dtype=N.float32)
 
     mask1 = N.where(x < LOWER, 0, 1)
     factor = N.where(mask1 == 0, 2.0 / (x * (x + 2.0)), factor)
@@ -50,7 +52,7 @@ def llam_SI(wave, temperature):
     '''
     exponent = C2 / (wave * temperature)
 
-    result = N.zeros(wave.shape, type='Float32')
+    result = N.zeros(wave.shape, dtype=N.float32)
 
     mask1 = N.where(exponent <= LOWER, 0, 1)
     result = N.where(mask1==0, (2.0 * C1 * (wave**-5.0)) / (exponent * (exponent + 2.0)), result)

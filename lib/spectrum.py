@@ -1,8 +1,10 @@
+## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+
 import string
 import re
 import pyfits
-import numarray
-import numarray.ma as MA
+import numpy as N
+from numpy import ma as MA
 import math
 import units
 import observationmode
@@ -65,7 +67,7 @@ def _computeDefaultWaveset():
     w1 = math.log10(minwave)
     w2 = math.log10(maxwave)
 
-    result = numarray.zeros(shape=[lenwave,],type='Float64')
+    result = N.zeros(shape=[lenwave,],dtype=N.float64)
 
     for i in range(lenwave):
         frac = float(i) / lenwave
@@ -87,9 +89,9 @@ def MergeWaveSets(waveset1, waveset2):
     elif waveset1 is None and Waveset2 is None:
         MergedWaveSet = None
     else:
-        MergedWaveSet = numarray.concatenate((waveset1, waveset2))
-        MergedWaveSet = numarray.sort(MergedWaveSet, 1)
-        MergedWaveSet = numarray.compress(MergedWaveSet[:-1] !=
+        MergedWaveSet = N.concatenate((waveset1, waveset2))
+        MergedWaveSet = N.sort(MergedWaveSet, 0)
+        MergedWaveSet = N.compress(MergedWaveSet[:-1] !=
                                           MergedWaveSet[1:], MergedWaveSet)
     return MergedWaveSet
 
@@ -100,11 +102,11 @@ def trimSpectrum(sp, minw, maxw):
     wave = sp.GetWaveSet()
     flux = sp(wave)
 
-    new_wave = numarray.compress(wave >= minw, wave)
-    new_flux = numarray.compress(wave >= minw, flux)
+    new_wave = N.compress(wave >= minw, wave)
+    new_flux = N.compress(wave >= minw, flux)
 
-    new_wave = numarray.compress(new_wave <= maxw, new_wave)
-    new_flux = numarray.compress(new_wave <= maxw, new_flux)
+    new_wave = N.compress(new_wave <= maxw, new_wave)
+    new_flux = N.compress(new_wave <= maxw, new_flux)
 
     result = TabularSourceSpectrum()
 
@@ -121,8 +123,8 @@ class Integrator(object):
     ''' Integrator engine.
     '''
     def trapezoidIntegration(self,x,y):
-        npoints = x.nelements()
-        indices = numarray.arange(npoints)[:-1]
+        npoints = x.size
+        indices = N.arange(npoints)[:-1]
         deltas = x[indices+1] - x[indices]
         integrand = 0.5*(y[indices+1] + y[indices])*deltas
 
@@ -137,8 +139,7 @@ class SourceSpectrum(Integrator):
         CompositeSourceSpectrum class.
         '''
         if not isinstance(other, SourceSpectrum):
-            print "Can only add two SourceSpectrum objects"
-            raise TypeError
+            raise TypeError("Can only add two SourceSpectrum objects")
 
         return CompositeSourceSpectrum(self, other, 'add')
 
@@ -146,12 +147,12 @@ class SourceSpectrum(Integrator):
         '''Source Spectra can be multiplied, by constants or by
         SpectralElement objects.
         '''
-        if type(other) in [type(1), type(1.0)]:
+        #Ack!! There has to be a better way to do this
+        if type(other) in [type(1), type(1.0),N.float64]:
             other = UniformTransmission(other)
         if not isinstance(other, SpectralElement):
-            print "SourceSpectrum objects can only be multiplied by' + \
-            'SpectralElement objects or constants"
-            raise TypeError
+            raise TypeError("SourceSpectrum objects can only be multiplied by SpectralElement objects or constants; %s type detected"%type(other))
+
 
         ## Delegate the work of multiplying to CompositeSourceSpectrum
 
@@ -309,8 +310,8 @@ class TabularSourceSpectrum(SourceSpectrum):
         fs = open(filename,mode='r')
         lines = fs.readlines()
 
-        self._wavetable = numarray.ones(shape=[len(lines),],type='Float64')
-        self._fluxtable = numarray.ones(shape=[len(lines),],type='Float32')
+        self._wavetable = N.ones(shape=[len(lines),],dtype=N.float64)
+        self._fluxtable = N.ones(shape=[len(lines),],dtype=N.float32)
 
         regx = re.compile(r'\S+', re.IGNORECASE)
         i = 0
@@ -339,8 +340,8 @@ class TabularSourceSpectrum(SourceSpectrum):
         '''Taper the spectrum by adding zeros to each end.
         '''
         OutSpec = TabularSourceSpectrum()
-        wcopy = numarray.zeros(self._wavetable.nelements()+2,type='Float64')
-        fcopy = numarray.zeros(self._fluxtable.nelements()+2,type='Float32')
+        wcopy = N.zeros(self._wavetable.size+2,dtype=N.float64)
+        fcopy = N.zeros(self._fluxtable.size+2,dtype=N.float32)
         wcopy[1:-1] = self._wavetable
         fcopy[1:-1] = self._fluxtable
         fcopy[0] = 0.0
@@ -367,11 +368,11 @@ class TabularSourceSpectrum(SourceSpectrum):
         tapered = self.taper()
 
         ## Linear interpolations from the Python tutorial
-        indices = numarray.searchsorted(tapered._wavetable,resampledWaveTab)-1
+        indices = N.searchsorted(tapered._wavetable,resampledWaveTab)-1
 
         ## Make sure the indices containing the desired points don't go
         ## beyond the ends of the array
-        indices = numarray.clip(indices, 0, tapered._wavetable.nelements()-2)
+        indices = N.clip(indices, 0, tapered._wavetable.size-2)
 
         fraction = resampledWaveTab - tapered._wavetable[indices]
         fraction = fraction / (tapered._wavetable[indices+1] -
@@ -379,7 +380,7 @@ class TabularSourceSpectrum(SourceSpectrum):
 
         ## Make sure the fraction is calculated correctly for elements beyond
         ## the valid regions of the input spectrum
-        fraction = numarray.clip(fraction, 0.0, 1.0)
+        fraction = N.clip(fraction, 0.0, 1.0)
 
         resampled._fluxtable = tapered._fluxtable[indices] + \
                                fraction * (tapered._fluxtable[indices+1] - \
@@ -434,7 +435,7 @@ class GaussianSource(AnalyticSpectrum):
         sp.waveunits = self.waveunits
         sp.fluxunits = self.fluxunits
         sp._wavetable = wavelength
-        sp._fluxtable = self.factor * numarray.exp( \
+        sp._fluxtable = self.factor * N.exp( \
             -0.5 *((wavelength - self.center)/ self.sigma)**2)
         sp.ToInternal()
 
@@ -449,7 +450,7 @@ class GaussianSource(AnalyticSpectrum):
         increment = 0.1*self.sigma
         first = self.center - 50.0*increment
         last = self.center + 50.0*increment
-        return numarray.arange(first, last, increment)
+        return N.arange(first, last, increment)
 
 
 class UnitSpectrum(AnalyticSpectrum):
@@ -464,7 +465,7 @@ class UnitSpectrum(AnalyticSpectrum):
         sp.waveunits = self.waveunits
         sp.fluxunits = self.fluxunits
         sp._wavetable = wavelength
-        sp._fluxtable = numarray.ones(sp._wavetable.shape, type='Float32') * \
+        sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float32) * \
                         self._fluxdensity
         sp.ToInternal()
 
@@ -484,7 +485,7 @@ class Powerlaw(AnalyticSpectrum):
         sp.waveunits = self.waveunits
         sp.fluxunits = self.fluxunits
         sp._wavetable = wavelength
-        sp._fluxtable = numarray.ones(sp._wavetable.shape, type='Float32')
+        sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float32)
 
         for i in range(len(sp._fluxtable)):
             sp._fluxtable[i] = (sp._wavetable[i] / self._refwave) ** self._index
@@ -555,8 +556,8 @@ class SpectralElement(Integrator):
         '''
         OutElement = TabularSpectralElement()
 
-        wcopy = numarray.zeros(self.wavetable.nelements()+2,type='Float64')
-        fcopy = numarray.zeros(self.throughputtable.nelements()+2,type='Float32')
+        wcopy = N.zeros(self.wavetable.size+2,dtype=N.float64)
+        fcopy = N.zeros(self.throughputtable.size+2,dtype=N.float32)
 
         wcopy[1:-1] = self.wavetable
         fcopy[1:-1] = self.throughputtable
@@ -585,18 +586,18 @@ class SpectralElement(Integrator):
         tapered = self.taper()
 
         ## Linear interpolations from the Python tutorial
-        indices = numarray.searchsorted(tapered.wavetable, resampledWaveTab)-1
+        indices = N.searchsorted(tapered.wavetable, resampledWaveTab)-1
 
         ## Make sure the indices containing the desired points don't go
         ## beyond the ends of the array
-        indices = numarray.clip(indices, 0, tapered.wavetable.nelements()-2)
+        indices = N.clip(indices, 0, tapered.wavetable.size-2)
         fraction = resampledWaveTab - tapered.wavetable[indices]
         fraction = fraction / (tapered.wavetable[indices+1] -
                                tapered.wavetable[indices])
 
         ## Make sure the fraction is calculated correctly for elements beyond
         ## the valid regions of the input spectrum
-        fraction = numarray.clip(fraction, 0.0, 1.0)
+        fraction = N.clip(fraction, 0.0, 1.0)
         resampled.throughputtable = tapered.throughputtable[indices] + \
                                     fraction*(tapered.throughputtable[indices+1] - \
                                               tapered.throughputtable[indices])
@@ -772,15 +773,15 @@ class Box(SpectralElement):
         step = 0.05                     # fixed step for now (in A)
 
         nwaves = int(((upper - lower) / step)) + 2
-        self.wavetable = numarray.zeros(shape=[nwaves,], type='Float64')
+        self.wavetable = N.zeros(shape=[nwaves,], dtype=N.float64)
         for i in range(nwaves):
             self.wavetable[i] = lower + step * i
 
         self.wavetable[0]  = self.wavetable[1]  - step
         self.wavetable[-1] = self.wavetable[-2] + step
         
-        self.throughputtable = numarray.ones(shape=self.wavetable.shape, \
-                                        type='Float32')
+        self.throughputtable = N.ones(shape=self.wavetable.shape, \
+                                        dtype=N.float32)
         self.throughputtable[0]  = 0.0
         self.throughputtable[-1] = 0.0
         

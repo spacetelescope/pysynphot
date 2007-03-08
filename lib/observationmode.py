@@ -1,7 +1,9 @@
+## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+
 import string
 import glob
 import re
-import numarray
+import numpy as N
 import pyfits
 
 import spectrum
@@ -109,7 +111,7 @@ class CompTable(object):
         self.compnames = cp[1].data.field('compname')
         self.filenames = cp[1].data.field('filename')
         compdict = {}
-        for i in range(self.compnames.nelements()):
+        for i in range(len(self.compnames)):
             compdict[self.compnames[i]] = self.filenames[i]
 
         cp.close()
@@ -165,17 +167,17 @@ class GraphTable(object):
         the modes list, starting at the given innode.
         This method isnt actually used, its just a helper method for
         debugging purposes'''
-        nodes = numarray.where(self.innodes == innode)
+        nodes = N.where(self.innodes == innode)
 
         ## If there's no entry for the given innode, return -1
-        if nodes[0].nelements() == 0:
+        if nodes[0].size == 0:
             return -1
 
         ## If we don't match anything in the modes list, we find the
         ## outnode corresponding the the string 'default'
-        defaultindex = self.keywords[nodes].match('default')[0]
+        defaultindex = N.where(self.keywords[nodes] == 'default')
 
-        if defaultindex.nelements() != 0:
+        if len(defaultindex[0]) != 0:
             outnode = self.outnodes[nodes[0][defaultindex[0]]]
 
         ## Now try and match one of the strings in the modes list with
@@ -184,7 +186,7 @@ class GraphTable(object):
         for mode in modes:
             result = self.keywords[nodes].count(mode)
             if result != 0:
-                index = self.keywords[nodes].match(mode)[0]
+                index = N.where(self.keywords[nodes]==mode)
                 outnode = self.outnodes[nodes[0][index[0]]]
                 
 
@@ -207,25 +209,26 @@ class GraphTable(object):
 
             previous_outnode = outnode
 
-            nodes = numarray.where(self.innodes == innode)
+            nodes = N.where(self.innodes == innode)
 ##            print
 ##            print "innode: ", innode, " nodes: ", nodes
 
             # If there are no entries with this innode, we're done
-            if nodes[0].nelements() == 0:
+            if nodes[0].size == 0:
                 return (components,thcomponents)
 
             # Find the entry corresponding to the component named
             # 'default', bacause thats the one we'll use if we don't
             # match anything in the modes list
-            defaultindex = self.keywords[nodes].match('default')[0]
+            defaultindex = N.where(self.keywords[nodes] =='default')
 ##            print "default index is: ", defaultindex
 
-            if defaultindex.nelements() != 0:
-                outnode = self.outnodes[nodes[0][defaultindex[0]]]
-                component = self.compnames[nodes[0][defaultindex[0]]]
+            if 'default' in self.keywords[nodes]:
+                dfi=N.where(self.keywords[nodes] == 'default')[0][0]
+                outnode = self.outnodes[nodes[0][dfi]]
+                component = self.compnames[nodes[0][dfi]]
 ##                print "component: ", component, " outnode: ", outnode
-                thcomponent = self.thcompnames[nodes[0][defaultindex[0]]]
+                thcomponent = self.thcompnames[nodes[0][dfi]]
 
             # Now try and match something from the modes list
             for mode in modes:
@@ -237,13 +240,14 @@ class GraphTable(object):
                     mode = modeFields[0] + '#'
                     self.rampFilterWavelength = float(modeFields[1])
 
-                result = self.keywords[nodes].count(mode)
-
-                if result != 0:
-                    index = self.keywords[nodes].match(mode)[0]
-                    component = self.compnames[nodes[0][index[0]]]
-                    thcomponent = self.thcompnames[nodes[0][index[0]]]
-                    outnode = self.outnodes[nodes[0][index[0]]]
+                #result = self.keywords[nodes].count(mode)
+                #if result != 0:
+                if mode in self.keywords[nodes]:
+                    index = N.where(self.keywords[nodes]==mode)
+                    idx=index[0][0]
+                    component = self.compnames[nodes[0][idx]]
+                    thcomponent = self.thcompnames[nodes[0][idx]]
+                    outnode = self.outnodes[nodes[0][idx]]
 ##                    print "from modes list:  index: ", index, "  component: ", component, " outnode: ", outnode
                     
             components.append(component)
@@ -286,7 +290,7 @@ class BaseObservationMode(object):
         files = []
         for compname in compnames:
             if compname != None and compname != '' and compname != CLEAR:
-                index = numarray.where(comptable.compnames == compname)
+                index = N.where(comptable.compnames == compname)
                 try:
                     iraffilename = comptable.filenames[index[0][0]]
                     filename = irafconvert(iraffilename)
@@ -348,7 +352,7 @@ class BaseObservationMode(object):
     def _computeBandwave(self, coeff):
         (a,b,c,nwave) = self._computeQuadraticCoefficients(coeff)
 
-        result = numarray.zeros(shape=[nwave,], type='Float64')
+        result = N.zeros(shape=[nwave,], dtype=N.float64)
 
         for i in range(nwave):
             result[i] = ((a * i) + b) * i + c
@@ -388,7 +392,7 @@ class BaseObservationMode(object):
                 token = line.split('\n')[0]
                 tokens.append(string.atof(token))
 
-        return numarray.array(tokens)
+        return N.array(tokens)
 
 
 class ObservationMode(BaseObservationMode):
@@ -527,7 +531,7 @@ class _ThermalObservationMode(BaseObservationMode):
     def _getSpectrum(self):
         sp = spectrum.TabularSourceSpectrum()
         sp._wavetable = self._getWavesetIntersection()
-        sp._fluxtable = numarray.zeros(shape=sp._wavetable.shape,type='Float32')
+        sp._fluxtable = N.zeros(shape=sp._wavetable.shape,dtype=N.float32)
 
         sp.waveunits = units.Units('angstrom')
         sp.fluxunits = units.Units('photlam')
@@ -568,14 +572,14 @@ class _ThermalObservationMode(BaseObservationMode):
 
         result = self._mergeEmissivityWavesets()
 
-        result = numarray.compress(result > minw, result)
-        result = numarray.compress(result < maxw, result)
+        result = N.compress(result > minw, result)
+        result = N.compress(result < maxw, result)
 
         # intersection with vega spectrum (why???)
         vegasp = spectrum.TabularSourceSpectrum(locations.VegaFile)
         vegaws = vegasp.GetWaveSet()
-        result = numarray.compress(result > vegaws[0], result)
-        result = numarray.compress(result < vegaws[-1], result)
+        result = N.compress(result > vegaws[0], result)
+        result = N.compress(result < vegaws[-1], result)
 
         return result
 
