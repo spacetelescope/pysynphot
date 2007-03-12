@@ -12,6 +12,13 @@ import units
 import etc
 import planck
 
+#Places used by test code
+user_roots = {'win32':  'C:/specmandata/',
+              'sunos5': '/data/ra1/busko/specmandata/',
+              'linux2': '/data/gaudete1/laidler/ssb/astrolib_aux/specman_userdata/'}
+userdir   = user_roots[sys.platform]
+testdata  = locations.rootdir + 'calspec/feige66_002.fits'
+
 
 accuracy = 1.0e-5    # floating point comparison accuracy
 etc.debug = 0        # supress messages from ETC-support tasks
@@ -126,7 +133,7 @@ class TestSetUp(unittest.TestCase):
         machinery in the spectrum.TabularSourceSpectrum class.
     '''
     def setUp(self):
-        self.sp = spectrum.TabularSourceSpectrum(locations.testdata)
+        self.sp = spectrum.TabularSourceSpectrum(testdata)
 
         assert self.sp != None, 'cannot build spectrum object'
 
@@ -520,20 +527,20 @@ class ParserTestCase(TestSetUp):
         wave = sp.GetWaveSet()
         flux = sp(wave)
         self.assertEqualFP(flux[50], 2.17656E-4)
-
-        expr = "spec(userFiles$vb8.inr.2a)"
+        
+        expr = "spec(%s/vb8.inr.2a)"%userdir
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
         self.assertEqualFP(flux[5000], 8.15545E-3)
-
+ 
         expr = "rn(unit(1,flam)*ebmvx(0.1,gal1),box(5500.0,1),1.0E-18,flam)"
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
         self.assertEqualFP(flux[5000], 1.53329E-7)
 
-        expr = "spec(userFiles$test.dat)"
+        expr = "spec(%stest.dat)"%userdir
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
@@ -959,7 +966,7 @@ class WriterTestCase(TestSetUp):
         writer = etc.SpectrumWriter(filename, sp);
         writer.write()
 
-        sp = spectrum.TabularSourceSpectrum(locations.testdata)
+        sp = spectrum.TabularSourceSpectrum(testdata)
 
         (wave, flux) = sp.getArrays()
         i = len(flux)/3
@@ -969,7 +976,8 @@ class WriterTestCase(TestSetUp):
 
 
 
-
+if __name__ == '__main__':
+    testAll()
 
 
 

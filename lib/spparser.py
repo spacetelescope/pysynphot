@@ -95,7 +95,7 @@ class BaseScanner(GenericScanner):
         r' \d+ '
         self.rv.append(Token(type='INTEGER', attr=s))
     def t_identifier(self, s):
-        r' [a-z_A-Z][\w/\.\$]*'
+        r' [a-z_A-Z/\//][\w/\.\$]*'
         self.rv.append(Token(type='IDENTIFIER', attr=s))
     def t_filelist(self, s):
         r' @\w+'
@@ -218,7 +218,7 @@ class Interpreter(GenericASTMatcher):
                 tree.value = spectrum.Box(args[0],args[1])
             elif fname == 'spec':
                 # spectrum from reference file (for now....)
-                name = getName(args[0])
+                name = args[0]
                 tree.value = spectrum.TabularSourceSpectrum(_handleIRAFName(name))
             elif fname == 'band':
                 # passband
@@ -233,7 +233,8 @@ class Interpreter(GenericASTMatcher):
                 # renormalize
                 sp = args[0]
                 if not isinstance(sp,spectrum.SourceSpectrum):
-                    sp = spectrum.TabularSourceSpectrum(getName(args[0]))
+                    name=_handleIRAFName(args[0])
+                    sp = spectrum.TabularSourceSpectrum(name)
                 tree.value = spectrum.renormalize(sp,args[1],args[2],args[3])
             elif fname == 'z':
                 # redshift
@@ -242,9 +243,9 @@ class Interpreter(GenericASTMatcher):
                         tree.value = args[0].redshift(args[1])
                     except AttributeError:
                         try:
-                            name = getName(args[0])
+                            #name = getName(args[0])
                             sp = spectrum.TabularSourceSpectrum( \
-                                 _handleIRAFName(name))
+                                 _handleIRAFName(args[0]))
                             tree.value = sp.redshift(args[1])
                         except AttributeError:
                             tree.value = spectrum.UnitSpectrum(1.0)
@@ -292,16 +293,16 @@ def ptokens(tlist):
     for token in tlist:
         print token.type, token.attr
 
-def getName(iname):
-    try:
-        return locations.specdir+iname
-    except KeyError:
-        return observationmode.irafconvert(iname)
 
 def _handleIRAFName(name):
+    """ If there's a $, call irafconvert; if there's a / or a \\, just
+    return what you got; otherwise prepend locations.specdir.
+    This should be replaced by one of the many IRAF filename conversion
+    utilities floating around in our system. """
+    
     if name.rfind('$') > -1:
-        return observationmode.irafconvert(name.split('/')[-1])
-    elif name.rfind('/') > -1 or name.rfind('\\') > -1: 
+        return locations.irafconvert(name.split('/')[-1])
+    elif name.rfind('/') > -1 or name.rfind('\\') > -1:
         return name
     else:
         return locations.specdir + name
