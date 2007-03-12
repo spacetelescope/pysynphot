@@ -37,7 +37,7 @@ tpmsrc.extend(['src/blackbox.c','src/pytpm_wrap.c'])
         
 def dosetup():
     r = setup(name = "specman",
-              version = "0.1",
+              version = "0.2",
               description  = 'Python Spectrum Manipulation Utilities',
               fullname     = 'AstroLib Specman',
               license      = 'BSD',
