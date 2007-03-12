@@ -321,7 +321,7 @@ class ObsmodeTestCase(TestSetUp):
         obsmode = observationmode.ObservationMode("stis,nuvmama,e230h,c2263,s02x02")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
-        self.assertEqualFP(throughput[1500], 0.004894058)
+        self.assertEqualFP(throughput[1500], 0.0048806)
 
 
 class ObsmodeWFC3TestCase(TestSetUp):
@@ -716,7 +716,7 @@ class ETCTestCase_Imag2(TestSetUp):
         obsmode = "obsmode=wfc3,ir,f110w"
         calculator = etc.Thermback([obsmode])
         countrate = calculator.run()
-        self.assertEqualFP(float(countrate), 0.0290797241317)
+        self.assertEqualFP(float(countrate), 0.0304316)
 
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=acs,sbc,F140LP"
@@ -751,7 +751,7 @@ class ETCTestCase_Imag2(TestSetUp):
         parameters = [spectrum, instrument]
         calculator = etc.Countrate(parameters)
         countrate = calculator.run()
-        self.assertEqualFP(float(countrate[0]), 133885.81)
+        self.assertEqualFP(float(countrate[0]), 150782.11)
 
         spectrum = "spectrum=rn(bb(5000.0),band(johnson,v),28.0,vegamag)"
         instrument = "instrument=wfc3,uvis1,F606W"
@@ -841,8 +841,8 @@ class ETCTestCase_Spec2(TestSetUp):
         countrate = calculator.run()
         sp = calculator.observed_spectrum
         (wave, flux) = sp.getArrays()
-        self.assertEqualFP(float(flux[500]), 1.19061)
-        self.assertEqualFP(float(countrate.split(';')[0]), 35575.0)
+        self.assertEqualFP(float(flux[500]), 1.18726)
+        self.assertEqualFP(float(countrate.split(';')[0]), 35476.8)
 
         spectrum = "spectrum=rn((spec(crcalspec$bd_28d4211_stis_001.fits)),box(2000.0,1),1.0E-12,flam)"
         instrument = "instrument=stis,nuvmama,e230h,c2263,s02x02"
@@ -851,8 +851,8 @@ class ETCTestCase_Spec2(TestSetUp):
         countrate = calculator.run()
         sp = calculator.observed_spectrum
         (wave, flux) = sp.getArrays()
-        self.assertEqualFP(float(flux[500]), 0.143728)
-        self.assertEqualFP(float(countrate.split(';')[0]), 4233.16)
+        self.assertEqualFP(float(flux[500]), 0.143323)
+        self.assertEqualFP(float(countrate.split(';')[0]), 4221.47)
 
         spectrum = "spectrum=(spec(crcalspec$agk_81d266_stis_001.fits))"
         instrument = "instrument=stis,ccd,g230lb,c2375,s52x2"
