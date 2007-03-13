@@ -241,6 +241,12 @@ class BaseObservationMode(object):
     def GetFileNames(self):
         return self._throughput_filenames
 
+    def showfiles(self):
+        """ Duplicate synphot showfiles behavior"""
+        for name in self._throughput_filenames:
+            if name != 'clear':
+                print name
+
     def bandWave(self):
         """ Return the binned waveset most appropriate for the obsmode,
         as defined by the wavecat.dat file. """
@@ -326,6 +332,10 @@ class ObservationMode(BaseObservationMode):
         self._throughput_filenames = self._getFileNames(ct, self.compnames)
 
         self.components = self._getOpticalComponents(self._throughput_filenames)
+    def __str__(self):
+        return self._obsmode
+
+
 
     def _getOpticalComponents(self, throughput_filenames):
         components = []
