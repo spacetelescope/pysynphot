@@ -242,48 +242,33 @@ class BaseObservationMode(object):
         return self._throughput_filenames
 
     def bandWave(self):
+        """ Return the binned waveset most appropriate for the obsmode,
+        as defined by the wavecat.dat file. """
+        
+        obm=self._obsmode.lower()
 
-        # ETC-generated obsmodes for STIS must be massaged
-        # before looking up in the wavetable. Ugly code below
-        # begs for refactoring....
-
-        obmlist = self._obsmode.lower().split(',')
-        if ('ccd','fuvmama','nuvmama').__contains__(obmlist[1]):
-            obmlist = [obmlist[0]] + obmlist[2:]
-
-        if obmlist[0] == 'stis':            
-            for element in obmlist[1:]:
-                if element.startswith('s'):
-                    obmlist.remove(element)
-
-        obm = ""
-        for element in obmlist:
-            obm = obm + ',' + element
-        obm = obm[1:]
         try:
             coeff = wavetable.wavetable[obm]
-            if coeff.startswith('('):
-                return self._computeBandwave(coeff)
-            else:
-                return self._getBandwaveFomFile(coeff)
-        except KeyError:
-            if obm.startswith('stis'):
-                obm = ""
-                for element in obmlist[:-1]:
-                    obm = obm + ',' + element
-                obm = obm[1:]
-
-                try:
-                    coeff = wavetable.wavetable[obm]
-
-                    if coeff.startswith('('):
-                        return self._computeBandwave(coeff)
-                    else:
-                        return self._getBandwaveFomFile(coeff)
-                except KeyError:
-                    return None
-            else:
+        except KeyError,e:
+            #The wavetable has a reasonably smart greedy lookup. It
+            #will pick up cases where the wavetable key is contained
+            # in the input key, or vice versa; but if there is a keyword
+            # in the middle of the input obsmode not included in the
+            # wavetable keys, it will still fail. The following code handles
+            # the known existing special cases where this occurs; it would
+            # be better to make wavetable.__getitem__ smarter.
+            try:
+                camera=obm.split(',')[1]
+                if camera in ('ccd','fuvmama','nuvmama'):
+                    coeff=wavetable.wavetable[obm.replace("%s,"%camera,"")]
+            except KeyError,e:
+                print "Warning, %s"%str(e)
                 return None
+
+        if coeff.startswith('('):
+            return self._computeBandwave(coeff)
+        else:
+            return self._getBandwaveFomFile(coeff)
 
     def _computeBandwave(self, coeff):
         (a,b,c,nwave) = self._computeQuadraticCoefficients(coeff)

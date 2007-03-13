@@ -30,18 +30,30 @@ class Wavetable(object):
 
 
     def __getitem__(self, key):
-        """ Vaguely smart lookup: if no exact key match, try defaulting.
-        Needs smarter algorithm!"""
+        """Fairly smart lookup: if no exact match, find the most complete
+        match.
+        @todo: Add set-intersection logic to cover cases such as
+          inputkey = stis,ccd,g140m
+          correct match = stis,g140m
+        """
+
         ans=None
         try:
             ans = self.lookup[key]
         except KeyError:
+            #Try input key partially contained in a table key, or
+            #vice-versa
+            subset=[]
             for k in self.lookup.keys():
-                if key.startswith(k):
-                    ans=self.lookup[k]
-                    break
+                if k in key or key in k:
+                    subset.append(k)
+            subset.sort()
+            try:
+                ans=self.lookup[subset[-1]]
+            except IndexError:
+                ans=None
         if ans is None:
-            raise KeyError("%s not found in %s"%(key,self.file))
+            raise KeyError("%s not found in %s; candidates:%s"%(key,self.file,str(subset)))
         
         return ans
 
