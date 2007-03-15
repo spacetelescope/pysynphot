@@ -63,7 +63,7 @@ class Spectrogram(spectrum.TabularSourceSpectrum):
         is ignored for the flux array, but can still take place on the
         wavelength array.
         '''
-        wave = units.Angstrom().Convert(self._wavetable, None, \
+        wave = units.Angstrom().Convert(self._wavetable, \
                                         self.waveunits.name)
         return (wave, self._fluxtable)
         

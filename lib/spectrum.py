@@ -170,7 +170,7 @@ class SourceSpectrum(Integrator):
         flux = self(wave)
 
         flux = units.Photlam().Convert(wave, flux, self.fluxunits.name)
-        wave = units.Angstrom().Convert(wave, None, self.waveunits.name)
+        wave = units.Angstrom().Convert(wave, self.waveunits.name)
 
         return (wave, flux)
 
@@ -420,13 +420,12 @@ class TabularSourceSpectrum(SourceSpectrum):
         '''
         savewunits = self.waveunits
         savefunits = self.fluxunits
-        angwave = self.waveunits.Convert(self.GetWaveSet(), None, 'angstrom')
+        angwave = self.waveunits.Convert(self.GetWaveSet(), 'angstrom')
         phoflux = self.fluxunits.Convert(angwave, self._fluxtable, 'photlam')
         self._wavetable = angwave.copy()
         self._fluxtable = phoflux.copy()
         self.waveunits = savewunits
         self.fluxunits = savefunits
-        return None
 
 class AnalyticSpectrum(SourceSpectrum):
     ''' Base class for analytic functions. These are spectral forms
