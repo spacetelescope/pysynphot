@@ -278,7 +278,7 @@ class TabularSourceSpectrum(SourceSpectrum):
     def __init__(self, filename=None, fluxname=None):
         if filename:
             self._readSpectrumFile(filename, fluxname)
-
+            self.filename=filename
             self.ToInternal()
 
         else:
@@ -286,6 +286,10 @@ class TabularSourceSpectrum(SourceSpectrum):
             self._fluxtable = None
             self.waveunits = None
             self.fluxunits = None
+            self.filename = None
+
+    def __str__(self):
+        return self.filename
 
     def _readSpectrumFile(self, filename, fluxname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
