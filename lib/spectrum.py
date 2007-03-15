@@ -647,6 +647,13 @@ class SpectralElement(Integrator):
     def GetWaveSet(self):
         return self.wavetable
 
+    def GetThroughput(self):
+        """Return the throughput for the internal wavetable"""
+        return self.__call__(self.wave)
+    
+    wave = property(GetWaveSet, doc='Waveset for bandpass')
+    throughput = property(GetThroughput, doc='Throughput for bandpass')
+
 
 class CompositeSpectralElement(SpectralElement):
     '''CompositeSpectralElement Class, which knows how to calculate
@@ -721,6 +728,9 @@ class TabularSpectralElement(SpectralElement):
             self.throughputtable = None
             self.waveunits = None
             self.throughputunits = None
+
+    def __str__(self):
+        return self.name
 
     def getHeaderKeywords(self, header):
         ''' This is a placeholder for subclasses to get header keywords without
