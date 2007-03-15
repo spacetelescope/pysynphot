@@ -134,6 +134,7 @@ class Integrator(object):
 class SourceSpectrum(Integrator):
     '''Base class for the Source Spectrum object.
     '''
+    
     def __add__(self, other):
         '''Source Spectra can be added.  Delegate the work to the
         CompositeSourceSpectrum class.
@@ -172,6 +173,18 @@ class SourceSpectrum(Integrator):
         wave = units.Angstrom().Convert(wave, None, self.waveunits.name)
 
         return (wave, flux)
+
+    #Define properties for consistent UI
+    def _getWaveProp(self):
+        wave,flux=self.getArrays()
+        return wave
+
+    def _getFluxProp(self):
+        wave,flux=self.getArrays()
+        return flux
+
+    wave=property(_getWaveProp,doc="Wavelength property")
+    flux=property(_getFluxProp,doc="Flux property")
     
     def integrate(self,fluxunits=None):
         wavelengths = self.GetWaveSet()
@@ -287,6 +300,7 @@ class TabularSourceSpectrum(SourceSpectrum):
             self.waveunits = None
             self.fluxunits = None
             self.filename = None
+        
 
     def __str__(self):
         return self.filename

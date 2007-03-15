@@ -26,6 +26,19 @@ Astrolib Specman version 0.3d1
 >>> vega=S.FileSpectrum('alpha_lyr_stis_003.fits')
 >>> print vega
 alpha_lyr_stis_003.fits
+>>> vega.wave
+array([  9.00452026e+02,   9.01354004e+02,   9.02257996e+02, ...,
+         2.99353200e+06,   2.99653275e+06,   2.99953700e+06], dtype=float32)
+>>> vega.flux
+array([  1.23810534e-17,   1.67559564e-17,   1.78002369e-17, ...,
+         1.40140738e-19,   1.38734357e-19,   1.26490663e-19])
+>>> bb=S.BlackBody(40000)
+>>> print bb.wave
+[   500.            500.19760122    500.39528054 ...,  25969.1985582
+  25979.46164894  25989.72879567]
+>>> print bb.flux
+[ 1.15230179  1.15375888  1.15521646 ...,  0.00141824  0.0014166
+  0.00141496]
 
 """
 
@@ -50,4 +63,5 @@ def _test():
     doctest.testfile('__init__.py')
 
 if __name__ == '__main__':
+    #WARNING: doctest won't presently work except in the correct directory.
     _test()
