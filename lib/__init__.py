@@ -12,9 +12,9 @@ interface for interactive use.
 
 Dependencies:
 =============
-numpy 1.0 or greater
-pyfits 1.1 or greater
-spark (syntax parser) (included in package tho; really dependency?)
+- numpy 1.0 or greater
+- pyfits 1.1 or greater
+- spark (syntax parser) (included in package tho; really dependency?)
 
 Example
 =======
@@ -39,6 +39,23 @@ array([  1.23810534e-17,   1.67559564e-17,   1.78002369e-17, ...,
 >>> print bb.flux
 [ 1.15230179  1.15375888  1.15521646 ...,  0.00141824  0.0014166
   0.00141496]
+>>> print bb
+BlackBody(T=40000)
+
+>>> pl=S.PowerLaw(10000,-2)
+>>> print pl
+Power law: refwave 10000.000000, index -2.000000
+>>> print pl.wave
+[   500.            500.19760122    500.39528054 ...,  25969.1985582
+  25979.46164894  25989.72879567]
+>>> print pl.flux
+[  4.00000000e+02   3.99684021e+02   3.99368286e+02 ...,   1.48280114e-01
+   1.48162976e-01   1.48045942e-01]
+
+>>> g1=S.GaussianSource(18.3,18000,2000,fluxunits='abmag')
+>>> print g1
+Gaussian: mu=18000.000000,fwhm=2000.000000,flux=18.300000 abmag
+
 
 """
 

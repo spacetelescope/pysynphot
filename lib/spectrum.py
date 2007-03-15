@@ -441,11 +441,17 @@ class GaussianSource(AnalyticSpectrum):
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
                  fluxunits='flam'):
         self.center = center
+        self.input_fwhm = fwhm
+        self.input_flux = flux
+        self.input_units = fluxunits
         self.sigma = fwhm / math.sqrt(8.0 * math.log(2.0))
         self.factor = flux / (math.sqrt(2.0 * math.pi) * self.sigma)
 
         self.waveunits = units.Units(waveunits)
         self.fluxunits = units.Units(fluxunits)
+
+    def __str__(self):
+        return 'Gaussian: mu=%f,fwhm=%f,flux=%f %s'%(self.center,self.input_fwhm,self.input_flux,self.input_units)
 
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
@@ -476,7 +482,11 @@ class UnitSpectrum(AnalyticSpectrum):
         self.waveunits = units.Units(waveunits)
         self.fluxunits = units.Units(fluxunits)
         self._fluxdensity = fluxdensity
+        self._input_units = self.fluxunits
 
+    def __str__(self):
+        return "Unit spectrum of %f %s"%(self._fluxdensity,self._input_units)
+    
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
         sp.waveunits = self.waveunits
@@ -496,6 +506,9 @@ class Powerlaw(AnalyticSpectrum):
         self.fluxunits = units.Units(fluxunits)
         self._refwave = refwave
         self._index = index
+
+    def __str__(self):
+        return "Power law: refwave %f, index %f"%(self._refwave,self._index)
 
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
@@ -518,6 +531,9 @@ class BlackBody(AnalyticSpectrum):
         self.waveunits = units.Units('angstrom')
         self.fluxunits = units.Units('photlam')
         self.temperature = temperature
+
+    def __str__(self):
+        return 'BlackBody(T=%d)'%self.temperature
 
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
