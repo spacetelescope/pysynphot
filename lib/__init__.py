@@ -56,6 +56,10 @@ Power law: refwave 10000.000000, index -2.000000
 >>> print g1
 Gaussian: mu=18000.000000,fwhm=2000.000000,flux=18.300000 abmag
 
+>>> unitflux=S.UnitSpectrum(18,fluxunits='abmag')
+>>> print unitflux
+Unit spectrum of 18.000000 abmag
+
 
 """
 

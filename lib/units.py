@@ -39,7 +39,7 @@ class BaseUnit(object):
         return self.name
 
     def Convert(self,wave,flux,target_units):
-        """This signature is appropriate for fluxes, not waves"""
+        #This signature is appropriate for fluxes, not waves
         try:
             return self.Dispatch[target_units](wave,flux)
         except KeyError:
@@ -53,6 +53,7 @@ class WaveUnits(BaseUnit):
         self.Dispatch = {'angstrom' : self.ToAngstrom}
 
     def Convert(self,wave,target_units):
+        """WaveUnits only need a wavelength table to do a conversion."""
         try:
             return self.Dispatch[target_units](wave)
         except KeyError:
@@ -69,6 +70,7 @@ class FluxUnits(BaseUnit):
         self.Dispatch = {'photlam':self.ToPhotlam}
         
     def Convert(self,wave,flux,target_units):
+        """FluxUnits need both wavelength and flux tables to do a unit conversion."""
         try:
             return self.Dispatch[target_units](wave,flux)
         except KeyError:
