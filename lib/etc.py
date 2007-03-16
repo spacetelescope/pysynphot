@@ -87,6 +87,11 @@ class SpecSourcerateSpec(Countrate):
     def __init__(self, parameters):
         Countrate.__init__(self, parameters)
 
+        for parameter in parameters:
+             name,value = parameter.split('=')
+             if name == 'output':
+                 self._filename = value.strip('"').replace('\\','/')
+
     def run(self):
 
         if self._spectrum == ""      or \
@@ -106,13 +111,14 @@ class SpecSourcerateSpec(Countrate):
             print 'elapsed time: ', str(t2-t1), 'sec.  obsmode is:', \
                   self._obsmode
 
-        filename = locations.temporary + "obsp" + \
-                   str((self._spectrum + self._obsmode).__hash__()) + \
-                   ".fits"
-        writer = SpectrumWriter(filename, self.observed_spectrum);
+##        filename = locations.temporary + "obsp" + \
+##                   str((self._spectrum + self._obsmode).__hash__()) + \
+##                   ".fits"
+
+        writer = SpectrumWriter(self._filename, self.observed_spectrum);
         writer.write()
 
-        return str(effstim) + ';' + filename 
+        return str(effstim) + ';' + self._filename 
 
 
 class SpectrumWriter(object):
