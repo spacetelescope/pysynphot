@@ -220,7 +220,15 @@ class BaseObservationMode(object):
         self.compnames,self.thcompnames = gt.GetComponentsFromGT(modes,1)
         self._rampFilterWavelength = gt.rampFilterWavelength
 
+        self.components = None #Will be filled by subclasses
         self.pixscale = None
+
+    def __str__(self):
+        return self._obsmode
+
+
+    def __len__(self):
+        return len(self.components)
 
     def _getFileNames(self, comptable, compnames):
         files = []
@@ -332,9 +340,6 @@ class ObservationMode(BaseObservationMode):
         self._throughput_filenames = self._getFileNames(ct, self.compnames)
 
         self.components = self._getOpticalComponents(self._throughput_filenames)
-    def __str__(self):
-        return self._obsmode
-
 
 
     def _getOpticalComponents(self, throughput_filenames):
@@ -546,6 +551,9 @@ class _Component(object):
 
         self.throughput = self._buildThroughput(throughput_name, rampFilterWavelength)
 
+    def __str__(self):
+        return str(self.throughput)
+    
     def _buildThroughput(self, name, rampFilterWavelength):
         if name != CLEAR:
             if len(name.split('[')) == 1:
