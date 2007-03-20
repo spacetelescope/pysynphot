@@ -267,6 +267,10 @@ class CompositeSourceSpectrum(SourceSpectrum):
         self.fluxunits = source1.fluxunits
         self.waveunits = source1.waveunits
 
+    def __str__(self):
+        opdict = {'add':'+','multiply':'*'}
+        return "%s %s %s"%(str(self.component1),opdict[self.operation],str(self.component2))
+    
     def __call__(self, wavelength):
         '''Add or multiply components, delegating the function calculation
         to the individual objects.
@@ -666,7 +670,9 @@ class CompositeSpectralElement(SpectralElement):
             raise TypeError("Arguments must be SpectralElements")
         self.component1 = component1
         self.component2 = component2
-
+        self.waveunits = "probably angstroms"
+        self.throughputunits = None
+        
     def __call__(self, wavelength):
         '''This is where the throughput calculation is delegated.
         '''
@@ -680,6 +686,8 @@ class CompositeSpectralElement(SpectralElement):
         wave2 = self.component2.GetWaveSet()
 
         return MergeWaveSets(wave1, wave2)
+
+    wave = property(GetWaveSet,doc="wave for CompositeSpectralElement")
 
 
 class UniformTransmission(SpectralElement):
