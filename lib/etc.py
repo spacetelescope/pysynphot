@@ -91,6 +91,8 @@ class SpecSourcerateSpec(Countrate):
              name,value = parameter.split('=')
              if name == 'output':
                  self._filename = value.strip('"').replace('\\','/')
+             else:
+                 self._filename = None
 
     def run(self):
 
@@ -107,18 +109,21 @@ class SpecSourcerateSpec(Countrate):
 
         self.observed_spectrum = ob.observed_spectrum
 
-        if debug >= 1:
-            print 'elapsed time: ', str(t2-t1), 'sec.  obsmode is:', \
-                  self._obsmode
+        if self._filename != None:
+            if debug >= 1:
+                print 'elapsed time: ', str(t2-t1), 'sec.  obsmode is:', \
+                      self._obsmode
 
-##        filename = locations.temporary + "obsp" + \
-##                   str((self._spectrum + self._obsmode).__hash__()) + \
-##                   ".fits"
+    ##        filename = locations.temporary + "obsp" + \
+    ##                   str((self._spectrum + self._obsmode).__hash__()) + \
+    ##                   ".fits"
 
-        writer = SpectrumWriter(self._filename, self.observed_spectrum);
-        writer.write()
+            writer = SpectrumWriter(self._filename, self.observed_spectrum);
+            writer.write()
 
-        return str(effstim) + ';' + self._filename 
+            return str(effstim) + ';' + self._filename
+        else:
+            return str(effstim) + ';None'
 
 
 class SpectrumWriter(object):
@@ -238,6 +243,7 @@ class ServerDispatcher(threading.Thread):
         queueManager = QueueManager()
 
         srv = SocketServer.ThreadingTCPServer(('',8881),RequestHandler)
+        srv.allow_reuse_address = True
         print "Creating TCP server: " + str(srv)
         srv.serve_forever()
 
