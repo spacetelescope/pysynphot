@@ -87,12 +87,12 @@ class SpecSourcerateSpec(Countrate):
     def __init__(self, parameters):
         Countrate.__init__(self, parameters)
 
+        self._filename = None
+
         for parameter in parameters:
              name,value = parameter.split('=')
              if name == 'output':
                  self._filename = value.strip('"').replace('\\','/')
-             else:
-                 self._filename = None
 
     def run(self):
 
