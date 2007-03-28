@@ -2,10 +2,13 @@
 
 import string
 import re
+import os
+import math
+
 import pyfits
 import numpy as N
 from numpy import ma as MA
-import math
+
 import units
 import observationmode
 import locations
@@ -185,7 +188,44 @@ class SourceSpectrum(Integrator):
 
     wave=property(_getWaveProp,doc="Wavelength property")
     flux=property(_getFluxProp,doc="Flux property")
-    
+
+    def writefits(self, filename, clobber=True, trimzero=True):
+        """Write the spectrum to a FITS file."""
+
+        if clobber:
+            try:
+                os.remove(filename)
+            except OSError:
+                pass
+
+        first,last=0,len(self.flux)
+        if trimzero:
+            #Keep one zero at each end
+            nz = self.flux.nonzero()[0]
+            try:
+                first=max(nz[0]-1,first)
+                last=min(nz[-1]+2,last)
+            except IndexError:
+                pass
+
+        #Construct the columns and HDUlist
+        cw = pyfits.Column(name='WAVELENGTH',
+                           array=self.wave[first:last],
+                           unit=self.waveunits.name,
+                           format='E')
+        cf = pyfits.Column(name='FLUX',
+                           array=self.flux[first:last],
+                           unit=self.fluxunits.name,
+                           format='E')
+        hdu = pyfits.PrimaryHDU()
+        hdulist = pyfits.HDUList([hdu])
+
+        #Write the file
+        cols = pyfits.ColDefs([cw, cf])
+        hdu = pyfits.new_table(cols)
+        hdulist.append(hdu)
+        hdu.writeto(filename)
+                                                 
     def integrate(self,fluxunits=None):
         wavelengths = self.GetWaveSet()
         fluxes = self(wavelengths)
@@ -241,7 +281,7 @@ class SourceSpectrum(Integrator):
 
     def setMagnitude(self, mag):
         '''Makes the magnitude of the source equal to mag.
-        mag is a magnitudes.Magnitude object.
+        mag is a Magnitude object.
         '''
         objectFlux = mag.calcTotalFlux(self)
         vegaFlux = mag.calcVegaFlux()

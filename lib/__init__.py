@@ -114,6 +114,7 @@ from spectrum import TabularSpectralElement as FileBandpass
 from observationmode import ObservationMode as Obsmode
 from obsbandpass import ObsBandpass
 
+from numpy import arange as Waveset
 
 print "Astrolib Specman version %s"%__version__
 

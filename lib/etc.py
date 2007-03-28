@@ -118,9 +118,8 @@ class SpecSourcerateSpec(Countrate):
     ##                   str((self._spectrum + self._obsmode).__hash__()) + \
     ##                   ".fits"
 
-            writer = SpectrumWriter(self._filename, self.observed_spectrum);
-            writer.write()
 
+            self.observed_spectrum.writeto(self._filename)
             return str(effstim) + ';' + self._filename
         else:
             return str(effstim) + ';None'

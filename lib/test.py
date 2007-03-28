@@ -963,9 +963,8 @@ class WriterTestCase(TestSetUp):
         sp = P.interpret(P.parse(P.scan("icat(k93models,5750,0.0,4.5)")))
 
         filename = locations.temporary + "resampler.fits"
-        writer = etc.SpectrumWriter(filename, sp);
-        writer.write()
-
+        sp.writefits(filename)
+        
         sp = spectrum.TabularSourceSpectrum(testdata)
 
         (wave, flux) = sp.getArrays()
