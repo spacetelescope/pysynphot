@@ -58,6 +58,87 @@ class FileTestCase(testutil.FPTestCase):
     def tearDown(self):
         self.openfits.close()
 
+class TabTestCase(testutil.FPTestCase):
+    def setUp(self):
+        self.fname = locations.rootdir + 'calspec/feige66_002.fits'
+        self.old_sp = spectrum.TabularSourceSpectrum(self.fname)
+        self.openfits = pyfits.open(self.fname)
+        fdata=self.openfits[1].data
+        self.new_sp = spectrum.NewTabularSpectrum(wave=fdata.field('wavelength'),
+                                             flux=fdata.field('flux'),
+                                             waveunits=self.openfits[1].header['tunit1'],
+                                             fluxunits=self.openfits[1].header['tunit2'],
+                                             name='table from feige66')
+
+
+    def testwave(self):
+        "ui_test.TabTestCase('testwave'): .wave equal"
+        self.assertEqualNumpy(self.new_sp.wave, self.old_sp.wave)
+
+    def testflux(self):
+        "ui_test.TabTestCase('testflux'): .flux equal"
+        self.assertEqualNumpy(self.new_sp.flux, self.old_sp.flux)
+
+    def testwaveunits(self):
+        "ui_test.TabTestCase('testwaveunits'): waveunits equal"
+        self.assert_(type(self.new_sp.waveunits) == type(self.old_sp.waveunits))
+
+    def testfluxunits(self):
+        "ui_test.TabTestCase('testfluxunits'): fluxunits equal"
+        self.assert_(type(self.new_sp.fluxunits) == type(self.old_sp.fluxunits))
+    def testinternalwave(self):
+        self.assertEqualNumpy(self.new_sp._wavetable, self.old_sp._wavetable)
+    def testinternalflux(self):
+        "ui_test.TabTestCase('testinternalflux)'): int. flux equal"
+        self.assertEqualNumpy(self.new_sp._fluxtable, self.old_sp._fluxtable\
+                                      )
+                
+    def testconvertflux(self):
+        "ui_test.TabTestCase('testconvertflux'): convert the same way"
+        self.old_sp.convert('vegamag')
+        self.new_sp.convert('vegamag')
+        self.assertEqualNumpy(self.new_sp.flux,self.old_sp.flux)
+
+                            
+    def tearDown(self):
+        self.openfits.close()
+
+class FSSTestCase(testutil.FPTestCase):
+    def setUp(self):
+        self.fname = locations.rootdir + 'calspec/feige66_002.fits'
+        self.old_sp = spectrum.TabularSourceSpectrum(self.fname)
+        self.new_sp = spectrum.FileSourceSpectrum(self.fname)
+
+    def testwave(self):
+        "ui_test.FSSTestCase('testwave'): .wave equal"
+        self.assertEqualNumpy(self.new_sp.wave, self.old_sp.wave)
+        
+    def testflux(self):
+        "ui_test.FSSTestCase('testflux'): .flux equal"
+        self.assertEqualNumpy(self.new_sp.flux, self.old_sp.flux)
+
+    def testwaveunits(self):
+        "ui_test.FSSTestCase('testwaveunits'): waveunits equal"
+        self.assert_(type(self.new_sp.waveunits) == type(self.old_sp.waveunits))
+
+    def testfluxunits(self):
+        "ui_test.FSSTestCase('testfluxunits'): fluxunits equal"
+        self.assert_(type(self.new_sp.fluxunits) == type(self.old_sp.fluxunits))
+
+    def testinternalwave(self):
+        self.assertEqualNumpy(self.new_sp._wavetable, self.old_sp._wavetable)
+
+    def testinternalflux(self):
+        "ui_test.FSSTestCase('testinternalflux)'): int. flux equal"
+        self.assertEqualNumpy(self.new_sp._fluxtable, self.old_sp._fluxtable)
+        
+    def testconvertflux(self):
+        "ui_test.FSSTestCase('testconvertflux'): convert the same way"
+        self.old_sp.convert('vegamag')
+        self.new_sp.convert('vegamag')
+        self.assertEqualNumpy(self.new_sp.flux,self.old_sp.flux)
+
+                                                                        
 class BandTestCase(testutil.FPTestCase):
     def testomfail(self):
         "ui_test.BandTestCase('testomfail'): Tests #30"

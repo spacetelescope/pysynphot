@@ -471,6 +471,68 @@ class TabularSourceSpectrum(SourceSpectrum):
         self.waveunits = savewunits
         self.fluxunits = savefunits
 
+class NewTabularSpectrum(TabularSourceSpectrum):
+    """ Replacement class """
+    def __init__(self, wave=None, flux=None,
+                 waveunits='angstrom', fluxunits='photlam',
+                 name='TabularSourceSpectrum'):
+        self._wavetable=wave
+        self._fluxtable=flux
+        self.waveunits=units.Units(waveunits)
+        self.fluxunits=units.Units(fluxunits)
+        self.name=name
+        
+        self.ToInternal()
+
+class FileSourceSpectrum(TabularSourceSpectrum):
+    '''Class for a source spectrum that is read in from a table.'''
+    def __init__(self, filename, fluxname=None):
+        self._readSpectrumFile(filename, fluxname)
+        self.name=filename
+        self.ToInternal()
+
+    def _readSpectrumFile(self, filename, fluxname):
+        if filename.endswith('.fits') or filename.endswith('.fit'):
+            self._readFITS(filename, fluxname)
+        else:
+            self._readASCII(filename)
+
+    def _readFITS(self, filename, fluxname):
+        fs = pyfits.open(filename)
+        
+        self._wavetable = fs[1].data.field('wavelength')
+        if fluxname == None:
+            fluxname = 'flux'
+            self._fluxtable = fs[1].data.field(fluxname)
+            self.waveunits = units.Units(fs[1].header['tunit1'].lower())
+            self.fluxunits = units.Units(fs[1].header['tunit2'].lower())
+            fs.close()
+
+    def _readASCII(self, filename):
+        fs = open(filename,mode='r')
+        lines = fs.readlines()
+        
+        self._wavetable = N.ones(shape=[len(lines),],dtype=N.float64)
+        self._fluxtable = N.ones(shape=[len(lines),],dtype=N.float32)
+        
+        regx = re.compile(r'\S+', re.IGNORECASE)
+        i = 0
+        for line in lines:
+            try:
+                [w,f] = regx.findall(line)
+                self._wavetable[i] = float(w)
+                self._fluxtable[i] = float(f)
+                i = i + 1
+            except:
+                pass
+            
+        self.waveunits = units.Units('angstrom')
+        self.fluxunits = units.Units('flam')
+                            
+        fs.close()
+            
+                                
+                                                        
 class AnalyticSpectrum(SourceSpectrum):
     ''' Base class for analytic functions. These are spectral forms
     which are defined, by default, on top of the default synphot
