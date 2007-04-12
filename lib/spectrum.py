@@ -416,6 +416,8 @@ class TabularSourceSpectrum(SourceSpectrum):
 
         OutSpec._wavetable = wcopy
         OutSpec._fluxtable = fcopy
+        OutSpec.waveunits = units.Units(str(self.waveunits))
+        OutSpec.fluxunits = units.Units(str(self.fluxunits))
 
         return OutSpec
         
@@ -449,6 +451,8 @@ class TabularSourceSpectrum(SourceSpectrum):
                                            tapered._fluxtable[indices])
 
         resampled._wavetable = resampledWaveTab.copy()
+        resampled.waveunits = units.Units(str(self.waveunits))
+        resampled.fluxunits = units.Units(str(self.fluxunits))
 
         return resampled
 

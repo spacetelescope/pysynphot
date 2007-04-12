@@ -24,7 +24,10 @@ def Units(uname):
     try:
         return factory(uname)
     except KeyError:
-        raise ValueError("Unknown units %s"%uname)
+        if uname == str(None):
+            return None
+        else:
+            raise ValueError("Unknown units %s"%uname)
 
 #......................................................................
 #Base classes
