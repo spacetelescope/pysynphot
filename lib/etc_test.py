@@ -31,7 +31,7 @@ def test():
     cl3.start()
 
     cl4 = Client ('localhost',\
-        'SpecSourcerateSpec&spectrum="rn(unit(1.0,flam),band(johnson,v),15,vegamag)"&instrument="wfc3,uvis1,g280"&output="C:\TEMP\2007\001\specOB1.fits"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"')
+        'SpecSourcerateSpec&spectrum="rn(unit(1.0,flam),band(johnson,v),15,vegamag)"&instrument="wfc3,uvis1,g280"&output="C:/TEMP/2007/001/specOB1.fits"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"')
     cl4.start()
 
 
