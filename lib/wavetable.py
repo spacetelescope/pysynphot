@@ -15,6 +15,7 @@ class Wavetable(object):
         """ Instantiate a Wavetable from a file """
         self.file=fname
         self.lookup={}
+        self.setlookup={}
         fs = open(wavecat_file, mode='r')
         lines = fs.readlines()
         fs.close()
@@ -25,6 +26,7 @@ class Wavetable(object):
                 try:
                     [obm,coeff] = regx.findall(line)
                     self.lookup[obm] = coeff
+                    self.setlookup[frozenset(obm.split(','))] = coeff
                 except ValueError:
                     raise ValueError("Error processing line: %s"%line)
 
@@ -32,14 +34,13 @@ class Wavetable(object):
     def __getitem__(self, key):
         """Fairly smart lookup: if no exact match, find the most complete
         match.
-        @todo: Add set-intersection logic to cover cases such as
-          inputkey = stis,ccd,g140m
-          correct match = stis,g140m
         """
 
         ans=None
         try:
+            #Try an exact match
             ans = self.lookup[key]
+            
         except KeyError:
             #Try input key partially contained in a table key, or
             #vice-versa
@@ -52,8 +53,21 @@ class Wavetable(object):
                 ans=self.lookup[subset[-1]]
             except IndexError:
                 ans=None
+                
         if ans is None:
-            raise KeyError("%s not found in %s; candidates:%s"%(key,self.file,str(subset)))
+            #Try a setwise match.
+            #The correct key will be a subset of the input key.
+            setkey=set(key.split(','))
+            candidates=set()
+            for k in self.setlookup:
+                if k.issubset(setkey):
+                    candidates.add(k)
+            if len(candidates) == 1:
+                ans = self.setlookup[candidates.pop()]
+            elif len(candidates) == 0:
+                raise KeyError("%s not found in %s; candidates:%s"%(key,self.file,str(subset)))
+            elif len(candidates) > 1:
+                raise KeyError("Ambiguous key %s; candidates %s"%(setkey, candidates))
         
         return ans
 
