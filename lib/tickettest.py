@@ -31,10 +31,15 @@ class WavecatTestCase(testutil.FPTestCase):
         obs="acs,hrc,f550m"
         self.assertEqual(self.w[obs],self.w['acs,hrc'])
 
-    def testmiddle(self):
-        "tickettest.WavecatTestCase('testmiddle'): Ticket #37, stis,ccd,g750m"
+    def testmiddle1(self):
+        "tickettest.WavecatTestCase('testmiddle1'): Ticket #37, stis,ccd,g750m"
         obs='stis,ccd,g750m'
         self.assertEqual(self.w[obs],self.w['stis,g750m'])
+
+    def testmiddle2(self):
+        "tickettest.WavecatTestCase('testmiddle2'): Ticket #37, stis,fuvmama,g140l,s52x2"
+        obs='stis,fuvmama,g140l,s52x2'
+        self.assertEqual(self.w[obs],self.w['stis,g140l'])
 
     def testmissing(self):
         "tickettest.WavecatTestCase('testmissing'): #37, stis,ccd"

@@ -264,20 +264,8 @@ class BaseObservationMode(object):
         try:
             coeff = wavetable.wavetable[obm]
         except KeyError,e:
-            #The wavetable has a reasonably smart greedy lookup. It
-            #will pick up cases where the wavetable key is contained
-            # in the input key, or vice versa; but if there is a keyword
-            # in the middle of the input obsmode not included in the
-            # wavetable keys, it will still fail. The following code handles
-            # the known existing special cases where this occurs; it would
-            # be better to make wavetable.__getitem__ smarter.
-            try:
-                camera=obm.split(',')[1]
-                if camera in ('ccd','fuvmama','nuvmama'):
-                    coeff=wavetable.wavetable[obm.replace("%s,"%camera,"")]
-            except KeyError,e:
-                print "Warning, %s"%str(e)
-                return None
+            print "Warning, %s"%str(e)
+            return None
 
         if coeff.startswith('('):
             return self._computeBandwave(coeff)
