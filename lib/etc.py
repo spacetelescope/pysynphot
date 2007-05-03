@@ -249,7 +249,7 @@ class ServerDispatcher(threading.Thread):
 
 tasks = {'calcphot':           Calcphot,
          'countrate':          Countrate,
-         'SpecSourcerateSpec': SpecSourcerateSpec,
+         'calcspec':           SpecSourcerateSpec,
          'thermback':          Thermback}
 
 def factory(task, *args, **kwargs):
