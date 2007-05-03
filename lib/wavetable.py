@@ -4,6 +4,7 @@ set for a given obsmode. """
 
 import re
 import os
+import numpy as N
 
 
 class Wavetable(object):
@@ -40,55 +41,38 @@ class Wavetable(object):
         try:
             #Try an exact match
             ans = self.lookup[key]
-            
+
+
         except KeyError:
-            #Try input key partially contained in a table key, or
-            #vice-versa
-            subset=[]
-            for k in self.lookup.keys():
-                if k in key or key in k:
-                    subset.append(k)
-            subset.sort()
-            try:
-                ans=self.lookup[subset[-1]]
-            except IndexError:
-                ans=None
-                
-        if ans is None:
+            ans=None
             #Try a setwise match.
             #The correct key will be a subset of the input key.
             setkey=set(key.split(','))
-            candidates=set()
+            candidates=[]
             for k in self.setlookup:
                 if k.issubset(setkey):
-                    candidates.add(k)
+                    candidates.append(k)
+            #We may have 1, 0, or >1 candidates.
             if len(candidates) == 1:
-                ans = self.setlookup[candidates.pop()]
+                ans = self.setlookup[candidates[0]]
+
             elif len(candidates) == 0:
-                raise KeyError("%s not found in %s; candidates:%s"%(key,self.file,str(subset)))
+                raise KeyError("%s not found in %s; candidates:%s"%(setkey,self.file,str(candidates)))
+
             elif len(candidates) > 1:
-                raise KeyError("Ambiguous key %s; candidates %s"%(setkey, candidates))
-        
+                setlens=N.array([len(k) for k in candidates])
+                srtlen=setlens.argsort()
+                k,j=srtlen[-2:]
+                if setlens[k] == setlens[j]:
+                    #It's really ambiguous
+                    raise KeyError("Ambiguous key %s; candidates %s"%(setkey, candidates))
+                else:
+                    #We have a winner
+                    k=candidates[srtlen[-1]]
+                    ans=self.setlookup[k]
         return ans
 
 
 wavecat_file = "%s/data/wavecat/data/wavecat.dat"%os.path.dirname(__file__)
 wavetable=Wavetable(wavecat_file)
 
-##--------------------------------------------------------------
-## Original implementation as simple dict
-##--------------------------------------------------------------
-## wavetable = {}
-## wavecat_file = "%s/data/wavecat/data/wavecat.dat"%os.path.dirname(__file__)
-## fs = open(wavecat_file, mode='r')
-## lines = fs.readlines()
-## fs.close()
-
-## regx = re.compile(r'\S+', re.IGNORECASE)
-## for line in lines:
-##     if not line.startswith("#"):
-##         try:
-##             [obm,coeff] = regx.findall(line)
-##             wavetable[obm] = coeff
-##         except ValueError:
-##             print "Error processing line: %s"%line

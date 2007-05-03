@@ -36,6 +36,17 @@ class WavecatTestCase(testutil.FPTestCase):
         obs='stis,ccd,g750m'
         self.assertEqual(self.w[obs],self.w['stis,g750m'])
 
+    def testmissing(self):
+        "tickettest.WavecatTestCase('testmissing'): #37, stis,ccd"
+        obs='stis,ccd'
+        self.assertEqual(self.w[obs],self.w['stis'])
+
+    def testambig(self):
+        "tickettest.WavecatTestCase('testambig'): #37, stis,nuvmama,e230h,c2263,s02x02"
+        obs="stis,nuvmama,e230h,c2263,s02x02"
+        self.assertEqual(self.w[obs],self.w['stis,e230h,c2263'])
+            
+
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:
