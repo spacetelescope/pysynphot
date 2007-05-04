@@ -726,7 +726,7 @@ class ETCTestCase_Imag2(TestSetUp):
         obsmode = "obsmode=wfc3,ir,f110w"
         calculator = etc.Thermback([obsmode])
         countrate = calculator.run()
-        self.assertEqualFP(float(countrate), 0.0304316)
+        self.assertEqualFP(float(countrate), 0.0290797241317)
 
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=acs,sbc,F140LP"
@@ -761,7 +761,7 @@ class ETCTestCase_Imag2(TestSetUp):
         parameters = [spectrum, instrument]
         calculator = etc.Countrate(parameters)
         countrate = calculator.run()
-        self.assertEqualFP(float(countrate[0]), 150782.11)
+        self.assertEqualFP(float(countrate[0]), 133885.81)
 
         spectrum = "spectrum=rn(bb(5000.0),band(johnson,v),28.0,vegamag)"
         instrument = "instrument=wfc3,uvis1,F606W"
