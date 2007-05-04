@@ -1,11 +1,21 @@
 from distutils.core import setup, Extension
 import sys, os.path, string, shutil, glob, os, re
 from distutils.command.install_data import install_data
-
+import glob
 
 
 ver = sys.version_info
 python_exec = 'python' + str(ver[0]) + '.' + str(ver[1])
+
+DATA_FILES = glob.glob(os.path.join('data', 'generic', '*'))
+WAVECAT_FILES = glob.glob(os.path.join('data', 'wavecat', '*'))
+
+
+DATA_FILES_DIR = os.path.join('pysynphot', 'data')
+
+
+PYSYNPHOT_DATA_FILES = [(DATA_FILES_DIR,DATA_FILES), (DATA_FILES_DIR, WAVECAT_FILES)]
+
 
 
 def dolocal():
@@ -20,7 +30,6 @@ def dolocal():
             dir =  os.path.abspath(a.split("=")[1])
             sys.argv.extend([
                 "--install-lib="+dir,
-                "--install-data="+os.path.join(dir,"pysynphot")
                 ])
             sys.argv.remove(a)
 
@@ -45,14 +54,11 @@ def dosetup():
               author = "Robert Jedrzejewski, Ivo Busko, Vicki Laidler",
               author_email = "help@stsci.edu",
               url = "http://projects.scipy.org/astropy/astrolib",
-              platforms = ["Linux","Solaris","Mac OS X"],
+              platforms = ["Linux","Solaris","Mac OS X", "Win"],
               packages=['pysynphot'],
               package_dir={'pysynphot':'lib'},
-              #py_modules=['spectrum','observationmode','observation']
-              #cmdclass = {'install_data':smart_install_data},
-	      #data_files = [('pysynphot/data',['pysynphot/data/*.fits',
-              #                    '../data/*.dat',
-              #                     'data/wavecat/data'])]
+              cmdclass = {'install_data':smart_install_data},
+              data_files = PYSYNPHOT_DATA_FILES
               )
 
     return r
