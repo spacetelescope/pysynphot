@@ -1,5 +1,7 @@
 import sys
+import os
 import math
+import tempfile
 import unittest
 import pylab
 
@@ -13,11 +15,8 @@ import etc
 import planck
 
 #Places used by test code
-user_roots = {'win32':  'C:/pysynphotdata/',
-              'sunos5': '/data/ra1/busko/pysynphotdata/',
-              'linux2': '/data/gaudete1/laidler/ssb/astrolib_aux/pysynphot_userdata/'}
-userdir   = user_roots[sys.platform]
-testdata  = locations.rootdir + 'calspec/feige66_002.fits'
+userdir   = os.environ['PYSYN_USERDATA']
+testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 
 
 accuracy = 1.0e-5    # floating point comparison accuracy
@@ -962,7 +961,7 @@ class WriterTestCase(TestSetUp):
     def runTest(self):
         sp = P.interpret(P.parse(P.scan("icat(k93models,5750,0.0,4.5)")))
 
-        filename = locations.temporary + "resampler.fits"
+        filename = os.path.join(tempfile.gettempdir(),"resampler.fits")
         sp.writefits(filename)
         
         sp = spectrum.TabularSourceSpectrum(testdata)

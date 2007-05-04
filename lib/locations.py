@@ -1,43 +1,30 @@
-import sys
+import os
 
-cdbs_roots = {'win32':  'C:/cdbs/',
-              'sunos5': '/data/cdbs1/',
-              'linux2': '/data/cdbs1/'}
-data_roots = {'win32':  'C:/pysynphot/data/',
-              'sunos5': '/data/ra1/busko/pysynphot/data/',
-              'linux2': '/data/ra1/busko/pysynphot/data/'}
+    
+#Replace cdbs_roots lookup with an environment variable
+rootdir   = os.environ['PYSYN_CDBS']
 
-temp_roots = {'win32':  'C:/TEMP/',
-              'sunos5': '/data/ra1/busko/tmp/',
-              'linux2': '/tmp/'}
+#Data directory is now installed locally
+specdir   = os.path.join(os.path.dirname(__file__),'data')+os.path.sep
 
-rootdir   = cdbs_roots[sys.platform]
+#Eliminate use of temporary directory; use python tmpfile utilities instead
 
-specdir   = data_roots[sys.platform]
-wavecat   = specdir + 'wavecat/'
-
-temporary = temp_roots[sys.platform]
+CAT_TEMPLATE = os.path.join(rootdir,'grid','*','catalog.fits')
+KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
 
 
-CAT_TEMPLATE = cdbs_roots[sys.platform] + 'grid/*/catalog.fits'
-KUR_TEMPLATE = cdbs_roots[sys.platform] + 'grid/*'
-
-##pat = '/../data/'
-##for p in sys.path:
-##    filename = p + pat + 'vega.fits'
-##    if os.path.exists(filename):
-##        specdir = p + pat
-
-VegaFile = specdir + 'vega.fits'
+VegaFile = os.path.join(specdir,'vega.fits')
 
 # There are throughput files mixed with spectrum files (the ETC mixes
 # then together in spectral expressions); the throughput files must
 # be explictly listed here.
-throughputfiles = [specdir+'thru.fits'] 
+throughputfiles = [os.path.join(specdir,'thru.fits')] 
 
+#Define wavecat file explicitly
+wavecat = os.path.join(specdir,'wavecat.dat')
 
 def getBandFileName(band):
-    return specdir + band.replace(',','_') + '.fits'
+    return os.path.join(specdir,band.replace(',','_')+'.fits')
 
 def irafconvert(iraffilename):
     '''Convert the IRAF file name (in directory$file format) to its
@@ -89,7 +76,7 @@ def irafconvert(iraffilename):
                   'crgridagn$':rootdir+'grid/agn/',
                   'crgridgalactic$':rootdir+'grid/galactic/',
                   'crgridkc96$':rootdir+'grid/kc96/',
-                  'synphot$': wavecat}
+                  'synphot$': os.path.dirname(__file__)+os.path.sep}
 
     ## If no $ sign found, just return the filename unchanged
     unixfilename = iraffilename

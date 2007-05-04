@@ -6,6 +6,7 @@ import observationmode
 import locations
 import etc
 import catalog
+import os
 
 syfunctions = [
     'spec',
@@ -305,7 +306,7 @@ def _handleIRAFName(name):
     elif name.rfind('/') > -1 or name.rfind('\\') > -1:
         return name
     else:
-        return locations.specdir + name
+        return os.path.join(locations.specdir,name)
 
 def _handleThroughputFiles(name):
     # if name is listed as a special throughput file, return a

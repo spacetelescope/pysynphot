@@ -5,6 +5,7 @@ set for a given obsmode. """
 import re
 import os
 import numpy as N
+import locations
 
 
 class Wavetable(object):
@@ -72,7 +73,6 @@ class Wavetable(object):
                     ans=self.setlookup[k]
         return ans
 
-
-wavecat_file = "%s/data/wavecat/data/wavecat.dat"%os.path.dirname(__file__)
+wavecat_file=locations.wavecat
 wavetable=Wavetable(wavecat_file)
 

@@ -16,6 +16,10 @@ Dependencies:
 - pyfits 1.1 or greater
 - spark (syntax parser) (included in package tho; really dependency?)
 
+Environment:
+===========
+The environment variable PYSYN_CDBS must be set.
+
 Example
 =======
 
@@ -117,7 +121,6 @@ from obsbandpass import ObsBandpass
 from numpy import arange as Waveset
 
 print "Astrolib Pysynphot version %s"%__version__
-
 
 
 def _test():
