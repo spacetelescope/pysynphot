@@ -13,9 +13,9 @@ import etc
 import planck
 
 #Places used by test code
-user_roots = {'win32':  'C:/specmandata/',
-              'sunos5': '/data/ra1/busko/specmandata/',
-              'linux2': '/data/gaudete1/laidler/ssb/astrolib_aux/specman_userdata/'}
+user_roots = {'win32':  'C:/pysynphotdata/',
+              'sunos5': '/data/ra1/busko/pysynphotdata/',
+              'linux2': '/data/gaudete1/laidler/ssb/astrolib_aux/pysynphot_userdata/'}
 userdir   = user_roots[sys.platform]
 testdata  = locations.rootdir + 'calspec/feige66_002.fits'
 

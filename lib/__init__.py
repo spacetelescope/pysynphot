@@ -1,5 +1,5 @@
 """
-Package:  Astrolib Specman
+Package:  Astrolib Pysynphot
 
 Purpose:
 ========
@@ -19,11 +19,11 @@ Dependencies:
 Example
 =======
 
->>> import specman as S
-Astrolib Specman version 0.3d2
+>>> import pysynphot as P
+Astrolib Pysynphot version 0.3d2
 
 >>> #Read a spectrum from a file
->>> vega=S.FileSpectrum('alpha_lyr_stis_003.fits')
+>>> vega=P.FileSpectrum('alpha_lyr_stis_003.fits')
 >>> print vega
 alpha_lyr_stis_003.fits
 >>> vega.wave
@@ -32,7 +32,7 @@ array([  9.00452026e+02,   9.01354004e+02,   9.02257996e+02, ...,
 >>> vega.flux
 array([  1.23810534e-17,   1.67559564e-17,   1.78002369e-17, ...,
          1.40140738e-19,   1.38734357e-19,   1.26490663e-19])
->>> bb=S.BlackBody(40000)
+>>> bb=P.BlackBody(40000)
 >>> print bb.wave
 [   500.            500.19760122    500.39528054 ...,  25969.1985582
   25979.46164894  25989.72879567]
@@ -42,7 +42,7 @@ array([  1.23810534e-17,   1.67559564e-17,   1.78002369e-17, ...,
 >>> print bb
 BlackBody(T=40000)
 
->>> pl=S.PowerLaw(10000,-2)
+>>> pl=P.PowerLaw(10000,-2)
 >>> print pl
 Power law: refwave 10000.000000, index -2.000000
 >>> print pl.wave
@@ -52,15 +52,15 @@ Power law: refwave 10000.000000, index -2.000000
 [  4.00000000e+02   3.99684021e+02   3.99368286e+02 ...,   1.48280114e-01
    1.48162976e-01   1.48045942e-01]
 
->>> g1=S.GaussianSource(18.3,18000,2000,fluxunits='abmag')
+>>> g1=P.GaussianSource(18.3,18000,2000,fluxunits='abmag')
 >>> print g1
 Gaussian: mu=18000.000000,fwhm=2000.000000,flux=18.300000 abmag
 
->>> unitflux=S.UnitSpectrum(18,fluxunits='abmag')
+>>> unitflux=P.UnitSpectrum(18,fluxunits='abmag')
 >>> print unitflux
 Unit spectrum of 18.000000 abmag
 
->>> bp1=S.ObsBandpass('acs,hrc,f555w')
+>>> bp1=P.ObsBandpass('acs,hrc,f555w')
 >>> print bp1
 acs,hrc,f555w
 >>> print bp1.wave
@@ -77,7 +77,7 @@ acs,hrc,f555w
 >>> len(bp1)
 6
 
->>> sp1=S.FileSpectrum('/data/cdbs1/calspec/feige66_002.fits')
+>>> sp1=P.FileSpectrum('/data/cdbs1/calspec/feige66_002.fits')
 >>> print bp1.waveunits
 probably angstroms
 >>> print sp1.waveunits
@@ -92,7 +92,7 @@ angstrom
 >>> print obs1.flux.argmax()
 6924
 
->>> sp2=S.FileSpectrum('/data/cdbs1/calspec/feige66_002.fits')*S.ObsBandpass('acs,hrc,f555w')
+>>> sp2=P.FileSpectrum('/data/cdbs1/calspec/feige66_002.fits')*P.ObsBandpass('acs,hrc,f555w')
 >>> print sp2
 /data/cdbs1/calspec/feige66_002.fits * acs,hrc,f555w
 >>> print sp2.waveunits
@@ -116,7 +116,7 @@ from obsbandpass import ObsBandpass
 
 from numpy import arange as Waveset
 
-print "Astrolib Specman version %s"%__version__
+print "Astrolib Pysynphot version %s"%__version__
 
 
 

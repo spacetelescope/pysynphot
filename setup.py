@@ -20,7 +20,7 @@ def dolocal():
             dir =  os.path.abspath(a.split("=")[1])
             sys.argv.extend([
                 "--install-lib="+dir,
-                "--install-data="+os.path.join(dir,"coords")
+                "--install-data="+os.path.join(dir,"pysynphot")
                 ])
             sys.argv.remove(a)
 
@@ -36,20 +36,23 @@ tpmsrc.extend(['src/blackbox.c','src/pytpm_wrap.c'])
 
         
 def dosetup():
-    r = setup(name = "specman",
-              version = "0.2",
-              description  = 'Python Spectrum Manipulation Utilities',
-              fullname     = 'AstroLib Specman',
+    print sys.prefix
+    r = setup(name = "pysynphot",
+              version = "0.21dev",
+              description  = 'Python Synthetic Photometry Utilities',
+              fullname     = 'AstroLib Pysynphot',
               license      = 'BSD',
               author = "Robert Jedrzejewski, Ivo Busko, Vicki Laidler",
               author_email = "help@stsci.edu",
               url = "http://projects.scipy.org/astropy/astrolib",
               platforms = ["Linux","Solaris","Mac OS X"],
-              packages=['specman'],
-              package_dir={'specman':'lib'}
+              packages=['pysynphot'],
+              package_dir={'pysynphot':'lib'},
               #py_modules=['spectrum','observationmode','observation']
               #cmdclass = {'install_data':smart_install_data},
-	      #data_files = [('coords',['lib/LICENSE.txt','src/tpm/TPM_LICENSE.txt'])]
+	      #data_files = [('pysynphot/data',['pysynphot/data/*.fits',
+              #                    '../data/*.dat',
+              #                     'data/wavecat/data'])]
               )
 
     return r
@@ -64,14 +67,3 @@ if __name__ == "__main__":
     main()
 
 
-
-
-## from distutils.core import setup
-## setup(name='specman',
-##       version='0.1',
-##       description='Python Spectrum Manipulation Utilities',
-##       author='Robert Jedrzejewski',
-##       author_email='help@stsci.edu',
-##       url='http://astropy.scipy.org/svn/astropy/',
-##       py_modules=['spectrum','observationmode','observation'],
-##      )

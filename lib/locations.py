@@ -3,9 +3,9 @@ import sys
 cdbs_roots = {'win32':  'C:/cdbs/',
               'sunos5': '/data/cdbs1/',
               'linux2': '/data/cdbs1/'}
-data_roots = {'win32':  'C:/specman/data/',
-              'sunos5': '/data/ra1/busko/specman/data/',
-              'linux2': '/data/ra1/busko/specman/data/'}
+data_roots = {'win32':  'C:/pysynphot/data/',
+              'sunos5': '/data/ra1/busko/pysynphot/data/',
+              'linux2': '/data/ra1/busko/pysynphot/data/'}
 
 temp_roots = {'win32':  'C:/TEMP/',
               'sunos5': '/data/ra1/busko/tmp/',
