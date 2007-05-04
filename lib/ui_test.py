@@ -140,6 +140,10 @@ class FSSTestCase(testutil.FPTestCase):
 
                                                                         
 class BandTestCase(testutil.FPTestCase):
+    def setUp(self):
+        import observationmode
+        observationmode.COMPTABLE = observationmode._refTable('mtab/r1j2146sm_tmc.fits')
+        print "tests are being run with comptable",observationmode.COMPTABLE
     def testomfail(self):
         "ui_test.BandTestCase('testomfail'): Tests #30"
         bp1=ObsBandpass('johnson,v')

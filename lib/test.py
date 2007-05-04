@@ -18,6 +18,10 @@ import planck
 userdir   = os.environ['PYSYN_USERDATA']
 testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 
+#Freeze the version of the comptable so tests are not susceptible to
+# updates to CDBS
+observationmode.COMPTABLE = observationmode._refTable('mtab/r1j2146sm_tmc.fits')
+print "Tests are being run with %s"%observationmode.COMPTABLE
 
 accuracy = 1.0e-5    # floating point comparison accuracy
 etc.debug = 0        # supress messages from ETC-support tasks
