@@ -59,7 +59,8 @@ class CalcspecTestCase(testutil.FPTestCase):
     task calcspec."""
     def setUp(self):
         self.userdir   = os.environ['PYSYN_USERDATA']
-
+        etc.debug = 0
+        
     def test1(self):
         "tickettest.CalcspecTestCase('test1'): #38, rn(pl(4000.0,-1.0,flam),box(1500,1.0),1.00e-14,flam)"
         sp = 'spectrum="rn(pl(4000.0,-1.0,flam),box(1500,1.0),1.00E-14,flam)"'
