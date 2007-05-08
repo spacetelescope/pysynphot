@@ -3,6 +3,7 @@ behaviors."""
 
 import sys
 import math
+import os
 
 import numpy as N
 import pyfits
@@ -12,6 +13,7 @@ import units
 import locations
 
 import wavetable
+import etc,spectrum
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
 ## import tickettest
@@ -51,7 +53,23 @@ class WavecatTestCase(testutil.FPTestCase):
         obs="stis,nuvmama,e230h,c2263,s02x02"
         self.assertEqual(self.w[obs],self.w['stis,e230h,c2263'])
             
+class CalcspecTestCase(testutil.FPTestCase):
+    """This is a stripped-down, for-ETC-use-only task that constructs
+    a spectrum & writes it to a file. This is not equivalent to the synphot
+    task calcspec."""
+    def setUp(self):
+        self.userdir   = os.environ['PYSYN_USERDATA']
 
+    def test1(self):
+        "tickettest.CalcspecTestCase('test1'): #38, rn(pl(4000.0,-1.0,flam),box(1500,1.0),1.00e-14,flam)"
+        sp = 'spectrum="rn(pl(4000.0,-1.0,flam),box(1500,1.0),1.00E-14,flam)"'
+        out = "output=%s"%os.path.join(self.userdir,'ticket38.fits')
+        calculator = etc.Calcspec([sp,out])
+        tst = calculator.run()
+        
+        ref = spectrum.TabularSourceSpectrum(os.path.join(self.userdir,'ticket38_ref.fits'))
+        self.assertApproxNumpy(ref.wave, tst.wave)
+        self.assertApproxNumpy(ref.flux, tst.flux)
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:

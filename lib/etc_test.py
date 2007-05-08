@@ -34,6 +34,9 @@ def test():
         'SpecSourcerateSpec&spectrum="rn(unit(1.0,flam),band(johnson,v),15,vegamag)"&instrument="wfc3,uvis1,g280"&output="C:/TEMP/2007/001/specOB1.fits"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"')
     cl4.start()
 
+    cl5 = Client ('localhost',\
+                  'calcspec&spectrum="rn(pl(4000.0,-1.0,flam),box(1500,1.0),1.00E-14,flam)"&output="/Users/dmclean/IdeaProjects/ETC17.1/JUNIT/testFiles/specResults/2007/001/specAV1.fits"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"')
+    cl5.start()
 
 class Client(threading.Thread):
     def __init__(self, url, line):

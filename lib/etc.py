@@ -1,5 +1,6 @@
 import os
 import time
+import traceback
 import threading, Queue
 import SocketServer
 import pyfits
@@ -12,6 +13,35 @@ import observation
 import spparser as P
 
 debug = 1
+
+class Calcspec(object):
+
+    def __init__(self, parameters):
+        for parameter in parameters:
+             name,value = parameter.split('=')
+             if name == 'spectrum':
+                 self._spectrum = value.strip('"')
+             elif name == 'output':
+                 self._output = value.strip('"')
+
+    def run(self):
+
+        if self._spectrum == ""      or \
+           self._spectrum == "null"  or \
+           self._output   == ""      or \
+           self._output   == "null":
+            return "NaN"
+
+        t1 = time.time()
+        sp = P.interpret(P.parse(P.scan(self._spectrum)))
+        t2 = time.time()
+
+        if debug >= 1:
+            print 'elapsed time in calcspec: ', str(t2-t1), 'sec.  spectrum is:', \
+                  self._spectrum
+
+        sp.writefits(self._output)
+        return sp
 
 class Calcphot(object):
 
@@ -119,52 +149,10 @@ class SpecSourcerateSpec(Countrate):
     ##                   ".fits"
 
 
-            self.observed_spectrum.writeto(self._filename)
+            self.observed_spectrum.writefits(self._filename)
             return str(effstim) + ';' + self._filename
         else:
             return str(effstim) + ';None'
-
-
-class SpectrumWriter(object):
-
-    def __init__(self, filename, spectrum):
-        self._filename = filename
-        self._spectrum = spectrum
-
-    def write(self):
-        try:
-            os.remove(self._filename)
-        except OSError:
-            pass
-
-        (wave, flux) = self._spectrum.getArrays()
-
-        waveunits = self._spectrum.waveunits
-        fluxunits = self._spectrum.fluxunits
-
-        # Get rid of zeros at both ends. However, leave one zero at each
-        # end, the ETC requires it.....
-        nz = flux.nonzero()[0]
-        if len(nz) > 1:
-            first = nz[0]
-            last = nz[-1]
-            if first > 0:
-                first -= 1
-            if last < len(wave)-1:
-                last += 1
-            wave = wave[first:last+1]
-            flux = flux[first:last+1]
-
-        cw = pyfits.Column(name='WAVELENGTH', array=wave, unit=waveunits.name, format='E')
-        cf = pyfits.Column(name='FLUX', array=flux, unit=fluxunits.name, format='E')
-        
-        hdu = pyfits.PrimaryHDU()
-        hdulist = pyfits.HDUList([hdu])
-
-        cols = pyfits.ColDefs([cw, cf])
-        hdu = pyfits.new_table(cols)
-        hdulist.append(hdu)
-        hdu.writeto(self._filename)
 
 
 class Thermback(Countrate):
@@ -230,10 +218,14 @@ class QueueManager(threading.Thread):
 
     def run(self):
         while True:
-            requestString = self._requestQueue.get()
-            tokens = requestString.split('&')
-            task = factory(tokens[0], tokens[1:])
-            self._resultQueue.put(str(task.run()))
+            try:
+                requestString = self._requestQueue.get()
+                tokens = requestString.split('&')
+                task = factory(tokens[0], tokens[1:])
+                self._resultQueue.put(str(task.run()))
+            except Exception:
+                self._resultQueue.put("ERROR")
+                traceback.print_exc()
 
 
 class ServerDispatcher(threading.Thread):
@@ -248,8 +240,9 @@ class ServerDispatcher(threading.Thread):
 
 
 tasks = {'calcphot':           Calcphot,
+         'calcspec':           Calcspec,
          'countrate':          Countrate,
-         'calcspec':           SpecSourcerateSpec,
+         'SpecSourcerateSpec': SpecSourcerateSpec,
          'thermback':          Thermback}
 
 def factory(task, *args, **kwargs):
