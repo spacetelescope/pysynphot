@@ -46,7 +46,7 @@ class WavecatTestCase(testutil.FPTestCase):
     def testmissing(self):
         "tickettest.WavecatTestCase('testmissing'): #37, stis,ccd"
         obs='stis,ccd'
-        self.assertEqual(self.w[obs],self.w['stis'])
+        self.assertRaises(KeyError,self.w.__getitem__,obs)
 
     def testambig(self):
         "tickettest.WavecatTestCase('testambig'): #37, stis,nuvmama,e230h,c2263,s02x02"
