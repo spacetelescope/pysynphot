@@ -15,6 +15,8 @@ import locations
 import wavetable
 import etc,spectrum
 
+import pysynphot as S
+
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
 ## import tickettest
 ## tickettest.FileTestCase('testwave').debug()
@@ -71,6 +73,22 @@ class CalcspecTestCase(testutil.FPTestCase):
         ref = spectrum.TabularSourceSpectrum(os.path.join(self.userdir,'ticket38_ref.fits'))
         self.assertApproxNumpy(ref.wave, tst.wave)
         self.assertApproxNumpy(ref.flux, tst.flux)
+
+class ObservationTestCase(testutil.FPTestCase):
+    """These test cases will be used to test implementation of Ticket #33"""
+    def setUp(self):
+        self.userdir = os.environ['PYSYN_USERDATA']
+        self.sp = S.FileSpectrum(os.path.join(self.userdir,'alpha_lyr_stis_003.fits'))
+        self.bp = S.ObsBandpass('acs,hrc,f555w')
+        
+    def testobs1(self):
+        "tickettest.ObservationTestCase('testobs1'): #30, (acs,hrc,f555w)*vega"
+        tst=self.bp.observe(self.sp)
+        ref=S.FileSpectrum(os.path.join(self.userdir,'testobs1.fits'))
+        self.assertEqualNumpy(tst.wave, ref.wave)
+        self.assertEqualNumpy(tst.flux, ref.flux)
+                           
+                                 
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:
