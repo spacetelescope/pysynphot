@@ -3,6 +3,7 @@
 import string
 import glob
 import re
+import os
 import numpy as N
 import pyfits
 
@@ -19,7 +20,7 @@ wavecat = locations.wavecat
 
 # Component tables are defined here.
 def _refTable(template):
-    names = glob.glob(rootdir + template)
+    names = glob.glob(os.path.join(rootdir,template))
     names.sort()
     return names[-1]
 
@@ -412,7 +413,7 @@ class _ThermalObservationMode(BaseObservationMode):
         obsmode = self._obsmode.split(',')
         obsmode = str(obsmode[0]) + ',' + str(obsmode[1])
 
-        fs = open(locations.specdir + 'detectors.dat',mode='r')
+        fs = open(os.path.join(locations.specdir,'detectors.dat'),mode='r')
         lines = fs.readlines()
 
         regx = re.compile(r'\S+', re.IGNORECASE)
