@@ -959,7 +959,7 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
 
 
 class IcatTestCase(testutil.FPTestCase):
-    def runTest(self):
+    def test1(self):
         testValues = \
             [["icat(k93models,30000,0.0,4.0)",  2.1486855e+20],
              ["icat(k93models,25400,0.0,3.9)",  1.5501771e+20],
