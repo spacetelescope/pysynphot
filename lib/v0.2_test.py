@@ -1,9 +1,6 @@
 import sys
 import os
-import math
 import tempfile
-import unittest
-import pylab
 
 import spectrum
 import observation
@@ -15,9 +12,10 @@ import etc
 import planck
 
 import testutil #from pytools
+
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
-## import test_etc_cases
-## test_etc_cases.FileTestCase('testwave').debug()
+## import v0.2_test
+## v0.2_test.FileTestCase('testwave').debug()
 
 
 
@@ -241,9 +239,6 @@ class ObsmodeTestCase(testutil.FPTestCase):
 
     def test2(self):
         obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
-##        files = obsmode.GetFiles()
-##        for f in files:
-##            print f
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
         self.assertApproxFP(throughput[5000], 2.8632756E-007)
@@ -671,29 +666,34 @@ class ParserTestCase(testutil.FPTestCase):
 
 
 class ETCTestCase_Imag1(testutil.FPTestCase):
-    def runTest(self):
 
-        expr = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
-        sp = P.interpret(P.parse(P.scan(expr)))
+    def setUp(self):
+        self.expr = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
+
+    def test1(self):
+        sp = P.interpret(P.parse(P.scan(self.expr)))
         obsmode = observationmode.ObservationMode('acs,hrc,f220w')
         obs = observation.Observation(sp, obsmode)
         countrate = obs.calcphot()
         self.assertApproxFP(countrate[0], 1.15585E-01)
-        
-        spectrum = "spectrum=" + expr
+
+    def test2(self):
+        spectrum = "spectrum=" + self.expr
         obsmode = "obsmode=acs,hrc,f220w"
         parameters = [spectrum, obsmode]
         calculator = etc.Calcphot(parameters)
         efflam = calculator.run()
         self.assertApproxFP(efflam, 2.56492E+03)
 
-        spectrum = "spectrum=" + expr
+    def test3(self):
+        spectrum = "spectrum=" + self.expr
         instrument = "instrument=acs,hrc,f220w"
         parameters = [spectrum, instrument]
         calculator = etc.Countrate(parameters)
         countrate = calculator.run()
         self.assertApproxFP(countrate[0], 1.15585E-01)
 
+    def test4(self):
         spectrum = "spectrum=em(3880.0,10.0,1.0000000168623835E-16,flam)"
         instrument = "instrument=acs,wfc1,FR388N#3880"
         parameters = [spectrum, instrument]
@@ -701,6 +701,7 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(countrate[0], 1.25658E-01)
 
+    def test4(self):
         spectrum = "spectrum=rn(pl(4000,1.0,jy),box(5500.0,1),1e-18,flam)"
         instrument = "instrument=acs,sbc,F150LP"
         parameters = [spectrum, instrument]
@@ -708,6 +709,7 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(countrate[0], 7.73334E-02)
 
+    def test5(self):
         spectrum = "spectrum=rn(icat(k93models,5770,0.0,4.5),band(johnson,v),20.0,vegamag)"
         instrument = "instrument=acs,sbc,F125LP"
         parameters = [spectrum, instrument]
@@ -719,33 +721,39 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         flux = sp(wave)
 
 class ETCTestCase_Imag2(testutil.FPTestCase):
-    def runTest(self):
+    def test1(self):
 
         obsmode = "obsmode="
         calculator = etc.Thermback([obsmode])
         countrate = calculator.run()
         self.assertEqual(countrate,'NaN')
 
+    def test2(self):
         obsmode = "obsmode=null"
         calculator = etc.Thermback([obsmode])
         countrate = calculator.run()
         self.assertEqual(countrate,'NaN')
 
+    def test3(self):
         obsmode = "obsmode=nicmos,1,F090M"
         calculator = etc.Thermback([obsmode])
         countrate = calculator.run()
         self.assertApproxFP(float(countrate), 1.985199e-12)
 
+    def test4(self):
         obsmode = "obsmode=nicmos,1,f190n"
         calculator = etc.Thermback([obsmode])
         countrate = calculator.run()
         self.assertApproxFP(float(countrate), 0.01421824)
 
+    def test5(self):
         obsmode = "obsmode=wfc3,ir,f110w"
         calculator = etc.Thermback([obsmode])
         countrate = calculator.run()
         self.assertApproxFP(float(countrate), 0.0290797241317)
 
+        
+    def test6(self):
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=acs,sbc,F140LP"
         parameters = [spectrum, instrument]
@@ -753,6 +761,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(float(countrate[0]), 0.0830771)
 
+    def test7(self):
         spectrum = "spectrum=rn(icat(k93models,3500,0.0,4.6),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=acs,hrc,FR388N#3880"
         parameters = [spectrum, instrument]
@@ -760,6 +769,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(float(countrate[0]), 28.0668)
 
+    def test8(self):
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))*thru.fits"
         instrument = "instrument=stis,ccd"
         parameters = [spectrum, instrument]
@@ -767,6 +777,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(float(countrate[0]), 34.1703)
 
+    def test9(self):
         spectrum = "spectrum= rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=stis,ccd"
         parameters = [spectrum, instrument]
@@ -774,6 +785,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(float(countrate[0]), 35877.397)
 
+    def test10(self):
         spectrum = "spectrum=rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=wfc3,ir,F110W"
         parameters = [spectrum, instrument]
@@ -781,6 +793,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(float(countrate[0]), 133885.81)
 
+    def test11(self):
         spectrum = "spectrum=rn(bb(5000.0),band(johnson,v),28.0,vegamag)"
         instrument = "instrument=wfc3,uvis1,F606W"
         parameters = [spectrum, instrument]
@@ -788,6 +801,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(float(countrate[0]), 0.1743102)
 
+    def test12(self):
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=wfc3,uvis1,F606W"
         parameters = [spectrum, instrument]
@@ -797,8 +811,8 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
 
 
 class ETCTestCase_Spec1(testutil.FPTestCase):
-    def runTest(self):
 
+    def test1(self):
         spectrum = "spectrum=(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)"
         instrument = "instrument=acs,hrc,PR200L"
         parameters = [spectrum, instrument]
@@ -809,6 +823,7 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
         self.assertApproxFP(float(flux[-1]), 4.99529)
         self.assertApproxFP(float(countrate.split(';')[0]), 13.7193)
 
+    def test2(self):
         spectrum = "spectrum=rn((unit(1,flam)),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=acs,wfc1,G800L"
         parameters = [spectrum, instrument]
@@ -819,6 +834,7 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
         self.assertApproxFP(float(flux[50]), 908.781)
         self.assertApproxFP(float(countrate.split(';')[0]), 73252.6)
 
+    def test3(self):
         spectrum = "spectrum=em(4000.0,10.0,1.0000000168623835E-16,flam)"
         instrument = "instrument=acs,hrc,PR200L"
         parameters = [spectrum, instrument]
@@ -828,6 +844,7 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
         (wave, flux) = sp.getArrays()
         self.assertApproxFP(float(countrate.split(';')[0]), 0.163706)
 
+    def test4(self):
         spectrum = "spectrum=rn((unit(1,flam)),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=acs,hrc,PR200L"
         parameters = [spectrum, instrument]
@@ -838,6 +855,7 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
         self.assertApproxFP(float(flux[80]), 79.2963)
         self.assertApproxFP(float(countrate.split(';')[0]), 15548.76)
 
+    def test5(self):
         spectrum = "spectrum=rn((spec(crcalspec$gd71_mod_005.fits))*ebmvx(0.1,gal1),box(5500.0,1),1.0E-16,flam)"
         instrument = "instrument=acs,hrc,PR200L"
         parameters = [spectrum, instrument]
@@ -850,8 +868,7 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
 
 
 class ETCTestCase_Spec2(testutil.FPTestCase):
-    def runTest(self):
-
+    def test1(self):
         spectrum = "spectrum=(spec(crcalspec$grw_70d5824_stis_001.fits))"
         instrument = "instrument=stis,fuvmama,g140l,s52x2"
         parameters = [spectrum, instrument]
@@ -862,6 +879,7 @@ class ETCTestCase_Spec2(testutil.FPTestCase):
         self.assertApproxFP(float(flux[500]), 35.5329)
         self.assertApproxFP(float(countrate.split(';')[0]), 28935.7)
 
+    def test2(self):
         spectrum = "spectrum=rn((icat(k93models,44500,0.0,5.0)),band(johnson,v),10.516,vegamag)"
         instrument = "instrument=stis,nuvmama,e230h,c2263,s02x02"
         parameters = [spectrum, instrument]
@@ -872,6 +890,7 @@ class ETCTestCase_Spec2(testutil.FPTestCase):
         self.assertApproxFP(float(flux[500]), 1.18726)
         self.assertApproxFP(float(countrate.split(';')[0]), 35476.8)
 
+    def test3(self):
         spectrum = "spectrum=rn((spec(crcalspec$bd_28d4211_stis_001.fits)),box(2000.0,1),1.0E-12,flam)"
         instrument = "instrument=stis,nuvmama,e230h,c2263,s02x02"
         parameters = [spectrum, instrument]
@@ -882,6 +901,7 @@ class ETCTestCase_Spec2(testutil.FPTestCase):
         self.assertApproxFP(float(flux[500]), 0.143323)
         self.assertApproxFP(float(countrate.split(';')[0]), 4221.47)
 
+    def test4(self):
         spectrum = "spectrum=(spec(crcalspec$agk_81d266_stis_001.fits))"
         instrument = "instrument=stis,ccd,g230lb,c2375,s52x2"
         parameters = [spectrum, instrument]
@@ -893,8 +913,8 @@ class ETCTestCase_Spec2(testutil.FPTestCase):
         self.assertApproxFP(float(countrate.split(';')[0]), 183608.)
 
 class ETCTestCase_Spec3(testutil.FPTestCase):
-    def runTest(self):
-
+    
+    def test1(self):
         spectrum = "spectrum=em(4300.0,1.0,9.999999960041972E-13,flam)"
         instrument = "instrument=stis,ccd,g430l"
         parameters = [spectrum, instrument]
@@ -904,6 +924,7 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
         (wave, flux) = sp.getArrays()
         self.assertApproxFP(float(countrate.split(';')[0]), 924.085)
 
+    def test2(self):
         spectrum = "spectrum=rn((icat(k93models,5770,0.0,4.5)),band(johnson,v),20.0,vegamag)"
         instrument = "instrument=acs,hrc,PR200L"
         parameters = [spectrum, instrument]
@@ -913,6 +934,7 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
         (wave, flux) = sp.getArrays()
         self.assertApproxFP(float(countrate.split(';')[0]), 119.709)
 
+    def test3(self):
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=stis,fuvmama,g140l"
         parameters = [spectrum, instrument]
@@ -925,6 +947,7 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
         (wave, flux) = sp.getArrays()
         self.assertApproxFP(float(countrate.split(';')[0]), 11.68605)
 
+    def test4(self):
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=cos,fuv,g130m,c1309"
         parameters = [spectrum, instrument]
@@ -933,12 +956,6 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
         sp = calculator.observed_spectrum
         (wave, flux) = sp.getArrays()
         self.assertApproxFP(float(countrate.split(';')[0]), 26.5409)
-
-##        pylab.ion()
-##        pylab.clf()
-##        pylab.scatter(wave,flux)
-##        pylab.xlim(1000.0,6000.0)
-##        pylab.ylim(-1.E-6,1.E-5)
 
 
 class IcatTestCase(testutil.FPTestCase):
@@ -980,7 +997,7 @@ class IcatTestCase(testutil.FPTestCase):
 
 
 class WriterTestCase(testutil.FPTestCase):
-    def runTest(self):
+    def test1(self):
         sp = P.interpret(P.parse(P.scan("icat(k93models,5750,0.0,4.5)")))
 
         filename = os.path.join(tempfile.gettempdir(),"resampler.fits")
