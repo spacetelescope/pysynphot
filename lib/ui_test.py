@@ -1,4 +1,5 @@
 import sys
+import os
 import math
 
 import numpy as N
@@ -18,7 +19,7 @@ from obsbandpass import ObsBandpass
 
 class FileTestCase(testutil.FPTestCase):
     def setUp(self):
-        self.fname = locations.rootdir + 'calspec/feige66_002.fits'
+        self.fname = os.path.join(locations.rootdir,'calspec/feige66_002.fits')
         self.sp = spectrum.TabularSourceSpectrum(self.fname)
         self.openfits = pyfits.open(self.fname)
 
@@ -60,7 +61,7 @@ class FileTestCase(testutil.FPTestCase):
 
 class TabTestCase(testutil.FPTestCase):
     def setUp(self):
-        self.fname = locations.rootdir + 'calspec/feige66_002.fits'
+        self.fname = os.path.join(locations.rootdir,'calspec/feige66_002.fits')
         self.old_sp = spectrum.TabularSourceSpectrum(self.fname)
         self.openfits = pyfits.open(self.fname)
         fdata=self.openfits[1].data
@@ -86,8 +87,11 @@ class TabTestCase(testutil.FPTestCase):
     def testfluxunits(self):
         "ui_test.TabTestCase('testfluxunits'): fluxunits equal"
         self.assert_(type(self.new_sp.fluxunits) == type(self.old_sp.fluxunits))
+
     def testinternalwave(self):
+        "ui_test.TabTetstCase('testinternalwave'): wavetabs equal"
         self.assertEqualNumpy(self.new_sp._wavetable, self.old_sp._wavetable)
+        
     def testinternalflux(self):
         "ui_test.TabTestCase('testinternalflux)'): int. flux equal"
         self.assertEqualNumpy(self.new_sp._fluxtable, self.old_sp._fluxtable\
@@ -104,8 +108,9 @@ class TabTestCase(testutil.FPTestCase):
         self.openfits.close()
 
 class FSSTestCase(testutil.FPTestCase):
+    "Test operations on a FileSourceSpectrum"
     def setUp(self):
-        self.fname = locations.rootdir + 'calspec/feige66_002.fits'
+        self.fname = os.path.join(locations.rootdir,'calspec/feige66_002.fits')
         self.old_sp = spectrum.TabularSourceSpectrum(self.fname)
         self.new_sp = spectrum.FileSourceSpectrum(self.fname)
 
@@ -126,6 +131,7 @@ class FSSTestCase(testutil.FPTestCase):
         self.assert_(type(self.new_sp.fluxunits) == type(self.old_sp.fluxunits))
 
     def testinternalwave(self):
+        "ui_test.FSSTestCase('testinternalwave'): waveteable equal"
         self.assertEqualNumpy(self.new_sp._wavetable, self.old_sp._wavetable)
 
     def testinternalflux(self):
