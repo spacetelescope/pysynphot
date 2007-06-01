@@ -85,6 +85,8 @@ default_waveset = _computeDefaultWaveset()
 
 
 def MergeWaveSets(waveset1, waveset2):
+    """Return the union of the two wavesets, unless one or
+    both of them is None."""
     if waveset1 is None and waveset2 is not None:
         MergedWaveSet = waveset2
     elif waveset2 is None and waveset1 is not None:
@@ -92,10 +94,8 @@ def MergeWaveSets(waveset1, waveset2):
     elif waveset1 is None and Waveset2 is None:
         MergedWaveSet = None
     else:
-        MergedWaveSet = N.concatenate((waveset1, waveset2))
-        MergedWaveSet = N.sort(MergedWaveSet, 0)
-        MergedWaveSet = N.compress(MergedWaveSet[:-1] !=
-                                          MergedWaveSet[1:], MergedWaveSet)
+        MergedWaveSet = N.sort(N.union1d(waveset1, waveset2))
+
     return MergedWaveSet
 
 
