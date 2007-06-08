@@ -1,4 +1,3 @@
-
 """
 
 At present, this test suite does not compare results to reference values.
@@ -98,6 +97,7 @@ import os
 import socket
 import threading
 import SocketServer
+from client import Client
 
 #Places used by test code
 userdir   = os.environ['PYSYN_USERDATA']
@@ -128,25 +128,6 @@ def test():
     cl5 = Client ('localhost',\
                   'calcspec&spectrum="rn(pl(4000.0,-1.0,flam),box(1500,1.0),1.00E-14,flam)"&output="%s"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"'%outfile)
     cl5.start()
-
-class Client(threading.Thread):
-    def __init__(self, url, line):
-        self._url = url
-        self._line = line
-
-        threading.Thread.__init__(self)
-
-    def run(self):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((self._url,8881))
-        hr= "\n==============================================\n"
-        print hr,"Client connected to server.  "
-        sock.sendall(self._line)
-        print "Client sent:  ", self._line
-        response = sock.recv(8192)
-        print "%s Client sent: %s \n Client received: %s"%(hr,self._line, response)
-        sock.close()
-
     
 if __name__ == '__main__':
     test()

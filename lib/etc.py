@@ -1,8 +1,17 @@
+"""This module defines the ETC interface for pysynphot.
+Although the names of the classes defined here are identical to the
+names of synphot tasks, they do NOT correspond to those tasks. They
+perform a strictly limited subset of the functionality available in
+those tasks.
+
+The tasks in the dictionary at the end of this module map the
+task names provided by the ETC to the classes that perform the
+relevant calculations. It is included by server.py to instantiate
+an ETC server."""
+
 import os
 import time
-import traceback
-import threading, Queue
-import SocketServer
+
 import pyfits
 
 import spectrum
@@ -144,10 +153,6 @@ class SpecSourcerateSpec(Countrate):
                 print 'elapsed time: ', str(t2-t1), 'sec.  obsmode is:', \
                       self._obsmode
 
-    ##        filename = locations.temporary + "obsp" + \
-    ##                   str((self._spectrum + self._obsmode).__hash__()) + \
-    ##                   ".fits"
-
 
             self.observed_spectrum.writefits(self._filename)
             return str(effstim) + ';' + self._filename
@@ -185,67 +190,10 @@ class Thermback(Countrate):
         return str(result)
 
 
-class RequestHandler(SocketServer.BaseRequestHandler):
-    def handle(self):
-        print "Server connected from " + str(self.client_address)
-        while True:
-            receivedData = self.request.recv(8192)
-            if not receivedData:
-                break
-            if debug >= 2:
-                print "Server received: " + receivedData
-
-            result = queueManager.processRequest(receivedData)
-
-            self.request.sendall(result)
-
-        self.request.close()
-        print "Server disconnected from " + str(self.client_address)
-
-
-class QueueManager(threading.Thread):
-
-    def __init__(self):
-        threading.Thread.__init__(self)
-        self.setDaemon(True)
-        self._requestQueue = Queue.Queue()
-        self._resultQueue = Queue.Queue()
-        self.start()
-
-    def processRequest(self, requestString):
-        self._requestQueue.put(requestString)
-        return self._resultQueue.get()
-
-    def run(self):
-        while True:
-            try:
-                requestString = self._requestQueue.get()
-                tokens = requestString.split('&')
-                task = factory(tokens[0], tokens[1:])
-                self._resultQueue.put(str(task.run()))
-            except Exception:
-                self._resultQueue.put("ERROR")
-                traceback.print_exc()
-
-
-class ServerDispatcher(threading.Thread):
-    def run(self):
-        global queueManager
-        queueManager = QueueManager()
-
-        srv = SocketServer.ThreadingTCPServer(('',8881),RequestHandler)
-        srv.allow_reuse_address = True
-        print "Creating TCP server: " + str(srv)
-        srv.serve_forever()
-
-
+#This defines the set of tasks available for the ETC server to perform.
 tasks = {'calcphot':           Calcphot,
          'calcspec':           Calcspec,
          'countrate':          Countrate,
          'SpecSourcerateSpec': SpecSourcerateSpec,
          'thermback':          Thermback}
-
-def factory(task, *args, **kwargs):
-    return apply(tasks[task], args, kwargs)
-
 
