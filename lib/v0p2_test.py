@@ -961,51 +961,49 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
 
 class IcatTestCase(testutil.FPTestCase):
     def setUp(self):
+
         self.testValues = \
-            [["icat(k93models,30000,0.0,4.0)",  2.1486855e+20],
-             ["icat(k93models,25400,0.0,3.9)",  1.5501771e+20],
-             ["icat(k93models,18700,0.0,3.9)",  8.7123058e+19],
-             ["icat(k93models,15400,0.0,3.9)",  6.1933150e+19],
-             ["icat(k93models,11900,0.0,4.0)",  3.8388731e+19],
-             ["icat(k93models,9230,0.0,4.1)",   2.1363460e+19],
-             ["icat(k93models,8720,0.0,4.2)",   1.7682054e+19],
-             ["icat(k93models,8200,0.0,4.3)",   1.3512093e+19],
-             ["icat(k93models,7700,0.0,1.7)",   1.1607616e+19],
-             ["icat(k93models,7200,0.0,4.3)",   6.8040033e+18],
-             ["icat(k93models,6890,0.0,4.3)",   5.4028874e+18],
-             ["icat(k93models,6440,0.0,4.3)",   3.7663594e+18],
-             ["icat(k93models,6200,0.0,4.4)",   3.0581503e+18],
-             ["icat(k93models,5860,0.0,4.4)",   2.2302826e+18],
-             ["icat(k93models,4850,0.0,1.1)",   5.9987856e+17],
-             ["icat(k93models,5770,0.0,4.5)",   2.0318679e+18],
-             ["icat(k93models,5570,0.0,4.5)",   1.6494994e+18],
-             ["icat(k93models,5250,0.0,4.5)",   1.2888412e+18],
-             ["icat(k93models,4560,0.0,4.5)",   4.1022782e+17],
-             ["icat(k93models,4060,0.0,4.5)",   1.5154204e+17],
-             ["icat(k93models,3500,0.0,4.6)",   3.9988099e+16],
-             ["icat(k93models,44500,0.0,5.0)",  3.9595035e+20],
-             ["icat(k93models,38000.,0.0,4.5)", 3.2685556e+20],
-             ["icat(k93models,33000.,0.0,4.0)", 2.5947967e+20]]
+            [["icat(k93models,30000,0.0,4.0)", 407,  2.1486855e+20],
+             ["icat(k93models,25400,0.0,3.9)", 406,  1.5501771e+20],
+             ["icat(k93models,18700,0.0,3.9)", 406,  8.7123058e+19],
+             ["icat(k93models,15400,0.0,3.9)", 406,  6.1933150e+19],
+             ["icat(k93models,11900,0.0,4.0)", 406,  3.8388731e+19],
+             ["icat(k93models,9230,0.0,4.1)",  406,  2.1363460e+19],
+             ["icat(k93models,8720,0.0,4.2)",  406,  1.7682054e+19],
+             ["icat(k93models,8200,0.0,4.3)",  406,  1.3512093e+19],
+             ["icat(k93models,7700,0.0,1.7)",  406,  1.1607616e+19],
+             ["icat(k93models,7200,0.0,4.3)",  406,  6.8040033e+18],
+             ["icat(k93models,6890,0.0,4.3)",  406,  5.4028874e+18],
+             ["icat(k93models,6440,0.0,4.3)",  406,  3.7663594e+18],
+             ["icat(k93models,6200,0.0,4.4)",  406,  3.0581503e+18],
+             ["icat(k93models,5860,0.0,4.4)",  406,  2.2302826e+18],
+             ["icat(k93models,4850,0.0,1.1)",  406,  5.9987856e+17],
+             ["icat(k93models,5770,0.0,4.5)",  406,  2.0318679e+18],
+             ["icat(k93models,5570,0.0,4.5)",  406,  1.6494994e+18],
+             ["icat(k93models,5250,0.0,4.5)",  407,  1.2888412e+18],
+             ["icat(k93models,4560,0.0,4.5)",  406,  4.1022782e+17],
+             ["icat(k93models,4060,0.0,4.5)",  406,  1.5154204e+17],
+             ["icat(k93models,3500,0.0,4.6)",  406,  3.9988099e+16],
+             ["icat(k93models,44500,0.0,5.0)", 406,  3.9595035e+20],
+             ["icat(k93models,38000.,0.0,4.5)", 406,  3.2685556e+20],
+             ["icat(k93models,33000.,0.0,4.0)", 407, 2.5947967e+20]]
 
     def compute(self,expr):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        return flux
+        return wave, flux
 
     def test1(self):
         failed=[]
-        for testdata in self.testValues:
-            expr = testdata[0]
-            ref  = testdata[1]
-            flux = self.compute(expr)
-            i = len(flux)/3
+        for (expr,i,ref) in self.testValues:
+            wave,flux = self.compute(expr)
             try:
                 self.assertApproxFP(flux[i], ref)
             except AssertionError:
                 failed.append("%30s   %10.9g   %10.9g\n"%(expr,ref,flux[i]))
 
-        msg="\n"+ "".join(failed)+ "Summary: %d/%d failed"%(len(failed),len(self.testValues))
+        msg="%15s   %10s   %10s\n"%('expr','ref','test')+ "".join(failed)+ "Summary: %d/%d failed"%(len(failed),len(self.testValues))
         self.failUnless(len(failed) == 0,msg)
 
 class WritefitsTestCase(testutil.FPTestCase):
