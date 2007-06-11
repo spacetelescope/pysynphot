@@ -222,7 +222,6 @@ class SpectrumTestCase(testutil.FPTestCase):
         (dummy, fluxes) = sp2.getArrays()
         self.assertApproxFP(fluxes[testindex], values['v=5.0'])
 
-
 class PlanckTestCase(testutil.FPTestCase):
     def testbb(self):
         flux = planck.bb_photlam_arcsec(spectrum.default_waveset, 1000.)
@@ -234,8 +233,8 @@ class ObsmodeTestCase(testutil.FPTestCase):
         obsmode = observationmode.ObservationMode(values['obsmode'])
         self.assertApproxFP(obsmode.area, values['hstarea'])
         throughput = obsmode.Throughput().throughputtable
-        self.assertApproxFP(len(throughput), values['thru_npoints'])
-        self.assertApproxFP(throughput[5000], values['thru_5000'])
+        self.assertEqual(len(throughput), 11003)
+        self.assertApproxFP(throughput[5000], 0.12232652011958853)
 
     def test2(self):
         obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
@@ -727,7 +726,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertEqual(countrate,'NaN')
 
-    def therback2(self):
+    def thermback2(self):
         obsmode = "obsmode=null"
         calculator = etc.Thermback([obsmode])
         countrate = calculator.run()
