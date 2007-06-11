@@ -960,8 +960,8 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
 
 
 class IcatTestCase(testutil.FPTestCase):
-    def test1(self):
-        testValues = \
+    def setUp(self):
+        self.testValues = \
             [["icat(k93models,30000,0.0,4.0)",  2.1486855e+20],
              ["icat(k93models,25400,0.0,3.9)",  1.5501771e+20],
              ["icat(k93models,18700,0.0,3.9)",  8.7123058e+19],
@@ -987,17 +987,28 @@ class IcatTestCase(testutil.FPTestCase):
              ["icat(k93models,38000.,0.0,4.5)", 3.2685556e+20],
              ["icat(k93models,33000.,0.0,4.0)", 2.5947967e+20]]
 
-        for testdata in testValues:
+    def compute(self,expr):
+        sp = P.interpret(P.parse(P.scan(expr)))
+        wave = sp.GetWaveSet()
+        flux = sp(wave)
+        return flux
+
+    def test1(self):
+        failed=[]
+        for testdata in self.testValues:
             expr = testdata[0]
-            sp = P.interpret(P.parse(P.scan(expr)))
-
-            wave = sp.GetWaveSet()
-            flux = sp(wave)
+            ref  = testdata[1]
+            flux = self.compute(expr)
             i = len(flux)/3
-            self.assertApproxFP(flux[i], testdata[1])
+            try:
+                self.assertApproxFP(flux[i], ref)
+            except AssertionError:
+                failed.append("%30s   %10.9g   %10.9g\n"%(expr,ref,flux[i]))
 
+        msg="\n"+ "".join(failed)+ "Summary: %d/%d failed"%(len(failed),len(self.testValues))
+        self.failUnless(len(failed) == 0,msg)
 
-class WriterTestCase(testutil.FPTestCase):
+class WritefitsTestCase(testutil.FPTestCase):
     def test1(self):
         sp = P.interpret(P.parse(P.scan("icat(k93models,5750,0.0,4.5)")))
 
