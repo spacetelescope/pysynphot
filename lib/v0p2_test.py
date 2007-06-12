@@ -25,10 +25,11 @@ testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 
 #Freeze the version of the comptable so tests are not susceptible to
 # updates to CDBS
-observationmode.COMPTABLE = observationmode._refTable('mtab/r1j2146sm_tmc.fits')
+cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
+observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
 print "Tests are being run with %s"%observationmode.COMPTABLE
 print "Synphot comparison results were computed with r1j2146sm_tmc.fits"
-
+#Synphot comparison results are identified with the varname synphot_ref.
 
 accuracy = 1.0e-5    # default floating point comparison accuracy
 etc.debug = 0        # supress messages from ETC-support tasks
@@ -524,7 +525,7 @@ class ParserTestCase(testutil.FPTestCase):
         self.assertApproxFP(flux[50], 2.17656E-4)
 
     def testuserdir1(self):
-        expr = "spec(%s/vb8.inr.2a)"%userdir
+        expr = "spec(%s)"%os.path.join(userdir,'vb8.inr.2a')
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)

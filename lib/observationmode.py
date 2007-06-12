@@ -24,9 +24,9 @@ def _refTable(template):
     names.sort()
     return names[-1]
 
-GRAPHTABLE = _refTable('mtab/*_tmg.fits')
-COMPTABLE  = _refTable('mtab/*_tmc.fits') 
-THERMTABLE = _refTable('mtab/*_tmt.fits')
+GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
+COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
+THERMTABLE = _refTable(os.path.join('mtab','*_tmt.fits'))
 CLEAR = 'clear'
 
 

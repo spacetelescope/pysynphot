@@ -19,7 +19,7 @@ from obsbandpass import ObsBandpass
 
 class FileTestCase(testutil.FPTestCase):
     def setUp(self):
-        self.fname = os.path.join(locations.rootdir,'calspec/feige66_002.fits')
+        self.fname = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
         self.sp = spectrum.TabularSourceSpectrum(self.fname)
         self.openfits = pyfits.open(self.fname)
 
@@ -61,7 +61,7 @@ class FileTestCase(testutil.FPTestCase):
 
 class TabTestCase(testutil.FPTestCase):
     def setUp(self):
-        self.fname = os.path.join(locations.rootdir,'calspec/feige66_002.fits')
+        self.fname = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
         self.old_sp = spectrum.TabularSourceSpectrum(self.fname)
         self.openfits = pyfits.open(self.fname)
         fdata=self.openfits[1].data
@@ -110,7 +110,7 @@ class TabTestCase(testutil.FPTestCase):
 class FSSTestCase(testutil.FPTestCase):
     "Test operations on a FileSourceSpectrum"
     def setUp(self):
-        self.fname = os.path.join(locations.rootdir,'calspec/feige66_002.fits')
+        self.fname = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
         self.old_sp = spectrum.TabularSourceSpectrum(self.fname)
         self.new_sp = spectrum.FileSourceSpectrum(self.fname)
 
@@ -148,7 +148,8 @@ class FSSTestCase(testutil.FPTestCase):
 class BandTestCase(testutil.FPTestCase):
     def setUp(self):
         import observationmode
-        observationmode.COMPTABLE = observationmode._refTable('mtab/r1j2146sm_tmc.fits')
+        cmptb_name=os.path.join('mtab','r1j2146sm_tmc.fits')
+        observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
         print "tests are being run with comptable",observationmode.COMPTABLE
     def testomfail(self):
         "ui_test.BandTestCase('testomfail'): Tests #30"

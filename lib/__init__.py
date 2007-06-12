@@ -68,7 +68,7 @@ Unit spectrum of 18.000000 abmag
 >>> print bp1
 acs,hrc,f555w
 >>> print bp1.wave
-[   500.   1000.   1001. ...,  11996.  11997.  11998.]
+[   500.   1000.   1001. ...,  11999.  30000.  30010.]
 >>> print bp1.throughput
 [ 0.  0.  0. ...,  0.  0.  0.]
 >>> bp1.showfiles()
@@ -90,7 +90,7 @@ angstrom
 >>> print obs1
 /data/cdbs1/calspec/feige66_002.fits * acs,hrc,f555w
 >>> print obs1.wave
-[   500.   1000.   1001. ...,  11995.  11996.  11997.]
+[   500.   1000.   1001. ...,  11999.  30000.  30010.]
 >>> print obs1.flux.max()
 7.83239729665e-14
 >>> print obs1.flux.argmax()

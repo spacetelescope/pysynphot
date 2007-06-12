@@ -1,5 +1,5 @@
 ## Automatically adapted for numpy.numarray Mar 05, 2007 by 
-
+import os
 import numpy as N
 from numpy import ma as MA
 import pyfits
@@ -104,8 +104,8 @@ class Icat(spectrum.TabularSourceSpectrum):
         filename = name.split('[')[0]
         column = name.split('[')[1][:-1]
 
-        filename = locations.KUR_TEMPLATE.replace('*',basename + '/' + filename)
-
+        filename = locations.KUR_TEMPLATE.replace('*',
+                                                  os.path.join(basename,filename))
         sp = spectrum.TabularSourceSpectrum(filename, fluxname=column)
 
         result = []
