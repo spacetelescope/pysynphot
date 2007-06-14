@@ -16,7 +16,8 @@ import wavetable
 import etc,spectrum
 
 import pysynphot as S
-from pysynphot.newobservation import Observation
+from pysynphot.newobservation import Observation as NewObservation
+from pysynphot.observation import Observation as OldObservation
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
 ## import tickettest
@@ -75,6 +76,17 @@ class CalcspecTestCase(testutil.FPTestCase):
         self.assertApproxNumpy(ref.wave, tst.wave)
         self.assertApproxNumpy(ref.flux, tst.flux)
 
+class MergeTestCase(testutil.FPTestCase):
+    """Demonstrate the problem described in ticket #34:
+    Adding two identical tabular spectra loses a pixel in the resulting
+    spectrum's table."""
+
+    def testwave(self):
+        """tickettest.MergeTestCase('testwave'): merge simple identical wavesets: #34"""
+        foo=N.array(range(10,20),dtype=N.float64)
+        x=spectrum.MergeWaveSets(foo,foo)
+        self.assertEqualNumpy(foo,x)
+            
 class ObservationTestCase(testutil.FPTestCase):
     """These test cases will be used to test implementation of Ticket #33"""
     def setUp(self):
@@ -82,39 +94,17 @@ class ObservationTestCase(testutil.FPTestCase):
         self.cdbs = locations.rootdir
         self.sp = S.FileSpectrum(os.path.join(self.cdbs,'calspec','gd71_mod_005.fits'))
         self.bp = S.ObsBandpass('acs,hrc,f555w')
+        self.oldobs=OldObservation(self.sp,self.bp.obsmode)
+        self.ref_specval=self.oldobs.calcphot('spec')
+        self.ref=self.oldobs.observed_spectrum
         
     def testobs1(self):
         "tickettest.ObservationTestCase('testobs1'): (acs,hrc,f555w)*gd71"
-        tst=Observation(self.sp,self.bp)
-        ref=S.FileSpectrum(os.path.join(self.userdir,'testobs1.fits'))
-        self.assertApproxNumpy(tst.binwave, ref.wave)
-        self.assertApproxNumpy(tst.binflux, ref.flux)
-## (Pdb) diffw=tst.binwave-ref.wave
-## (Pdb) diffw.max()
-## 2.3437500203726813e-05
-## (Pdb) diffw.min()
-## -2.3437500203726813e-05
-## (Pdb) difff=tst.binflux-ref.flux
-## (Pdb) difff.min()
-## 0.0
-## (Pdb) difff.max()
-## 3.4380800243254482e-16
-##  (Pdb) ratw=tst.binwave/ref.wave
-## (Pdb) ratw.min()
-## 0.99999999722600275
-## (Pdb) ratw.max()
-## 1.0000000027733402
-## (Pdb) ratf=tst.binflux/ref.flux
-## Warning: divide by zero encountered in divide
-                          
-##   Pdb) idx=N.nonzero(ref.flux)
-## (Pdb) ratf=tst.binflux[idx]/ref.flux[idx]
-## (Pdb) ratf.min()
-## 1.0397815862058657
-## (Pdb) ratf.max()
-## 1.0698112976935692
-                               
-
+        tst=NewObservation(self.sp,self.bp)
+        tst.convert('counts')
+        self.assertApproxNumpy(tst.binwave, self.ref.wave)
+        self.assertApproxNumpy(tst.binflux, self.ref.flux)
+        
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)

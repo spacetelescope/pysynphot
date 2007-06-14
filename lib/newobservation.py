@@ -50,16 +50,19 @@ class Observation(spectrum.CompositeSourceSpectrum):
         endpoints[1:-1] = midpoints
         endpoints[0]  = self.binwave[0] - (midpoints[0] - self.binwave[0])
         endpoints[-1] = self.binwave[-1] + (self.binwave[-1] - midpoints[-1])
-        
+
+        # merge the endpoints in with the natural waveset of SPECTRUM only
+        spwave = spectrum.MergeWaveSets(self.wave, endpoints)
+
         # compute indices associated to each endpoint.
-        indices = N.searchsorted(self.wave, endpoints)
+        indices = N.searchsorted(spwave, endpoints)
         diff = indices[1:] - indices[:-1]
         self._indices = indices[:-1]
         self._indices_last = self._indices + diff 
 
         # prepare integration variables.
-        self._deltaw = self.binwave[1:] - self.binwave[:-1]
-        flux = self.spectrum(self.binwave)
+        self._deltaw = spwave[1:] - spwave[:-1]
+        flux = self(spwave) 
         avflux = (flux[1:] + flux[:-1]) / 2.0
         
         # sum over each bin.
