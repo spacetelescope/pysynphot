@@ -24,7 +24,7 @@ Example
 =======
 
 >>> import pysynphot as P
-Astrolib Pysynphot version 0.3d2
+Astrolib Pysynphot version 0.3d3
 
 >>> #Read a spectrum from a file
 >>> vega=P.FileSpectrum('alpha_lyr_stis_003.fits')
@@ -92,7 +92,7 @@ angstrom
 >>> print obs1.wave
 [   500.   1000.   1001. ...,  11999.  30000.  30010.]
 >>> print obs1.flux.max()
-7.83239729665e-14
+7.47814099194e-14
 >>> print obs1.flux.argmax()
 6924
 
@@ -107,7 +107,7 @@ flam
 """
 
 
-__version__ = '0.3d2'
+__version__ = '0.3d3'
 
 #UI:
 from spectrum import BlackBody, GaussianSource, UnitSpectrum

@@ -27,11 +27,13 @@ class ObsModeBandpass(CompositeSpectralElement):
         
         #Chain the individual components
         chain=ob.components[0].throughput*ob.components[1].throughput
-        for i in range(2,len(ob)-2):
+        
+        for i in range(2,len(ob)-1):
             chain = chain*ob.components[i].throughput
-
+        
         CompositeSpectralElement.__init__(self,chain,
                                           ob.components[-1].throughput)
+        
             
         self.obsmode=ob
 
