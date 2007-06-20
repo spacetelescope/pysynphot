@@ -6,6 +6,7 @@ certain other methods."""
 import spectrum
 import units
 import numpy as N
+import math
 
 class Observation(spectrum.CompositeSourceSpectrum):
     """An Observation is the end point of a chain of spectral manipulation.
@@ -51,8 +52,9 @@ class Observation(spectrum.CompositeSourceSpectrum):
         endpoints[0]  = self.binwave[0] - (midpoints[0] - self.binwave[0])
         endpoints[-1] = self.binwave[-1] + (self.binwave[-1] - midpoints[-1])
 
-        # merge the endpoints in with the natural waveset of SPECTRUM only
+        # merge the endpoints in with the natural waveset 
         spwave = spectrum.MergeWaveSets(self.wave, endpoints)
+        #spwave = spectrum.MergeWaveSets(spwave,self.binwave)
 
         # compute indices associated to each endpoint.
         indices = N.searchsorted(spwave, endpoints)
@@ -61,16 +63,16 @@ class Observation(spectrum.CompositeSourceSpectrum):
         self._indices_last = self._indices + diff 
 
         # prepare integration variables.
-        self._deltaw = spwave[1:] - spwave[:-1]
         flux = self(spwave) 
         avflux = (flux[1:] + flux[:-1]) / 2.0
+        self._deltaw = spwave[1:] - spwave[:-1]
         
         # sum over each bin.
         self._binflux = N.empty(shape=self.binwave.shape,dtype=N.float64)
         for i in range(len(self._indices)):
             first = self._indices[i]
             last = self._indices_last[i]
-            self._binflux[i]=(avflux[first:last]*self._deltaw[first:last]).sum() 
+            self._binflux[i]=(avflux[first:last]*self._deltaw[first:last]).sum()/self._deltaw[first:last].sum()
 
     def _getBinfluxProp(self):
         binflux = units.Photlam().Convert(self.binwave,
@@ -91,3 +93,25 @@ class Observation(spectrum.CompositeSourceSpectrum):
         raise NotImplementedError('Observations cannot be added')
     def redshift(self,z):
         raise NotImplementedError('Observations cannot be redshifted')
+
+    #Add methods to support ETCs
+    def countrate(self):
+        myfluxunits = self.fluxunits.name
+        self.convert('counts')
+        ans = self.trapezoidIntegration(self.wave, self.flux)
+        ans*=self.bandpass.obsmode.area
+        self.convert(myfluxunits)
+        return ans
+
+    def pivot(self):
+        """Does this need to be calculated on binned waveset, or may
+        it be calculated on native waveset?"""
+        wave = self.wave
+
+        countmulwave = self(wave)*wave
+        countdivwave = self(wave)/wave
+
+        num = self.trapezoidIntegration(wave,countmulwave)
+        den = self.trapezoidIntegration(wave,countdivwave)
+
+        return math.sqrt(num/den)
