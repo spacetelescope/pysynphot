@@ -251,6 +251,13 @@ cos,fuv,g130m,c1300    synphot$data/cos_fuv_g130m_1300.txt
 cos,fuv,g130m,c1309    synphot$data/cos_fuv_g130m_1309.txt
 cos,fuv,g130m,c1318    synphot$data/cos_fuv_g130m_1318.txt
 cos,fuv,g130m,c1327    synphot$data/cos_fuv_g130m_1327.txt
+cos,fuv,g140l,c1230    synphot$data/cos_fuv_g140l_1230.txt
+cos,fuv,g140l,c1105    synphot$data/cos_fuv_g140l_1105.txt
+cos,fuv,g160m,c1577    synphot$data/cos_fuv_g160m_1577.txt
+cos,fuv,g160m,c1589    synphot$data/cos_fuv_g160m_1589.txt
+cos,fuv,g160m,c1600    synphot$data/cos_fuv_g160m_1600.txt
+cos,fuv,g160m,c1611    synphot$data/cos_fuv_g160m_1611.txt
+cos,fuv,g160m,c1623    synphot$data/cos_fuv_g160m_1623.txt
 cos,nuv,g185m,c1786    synphot$data/cos_nuv_g185m_1786.txt
 cos,nuv,g185m,c1817    synphot$data/cos_nuv_g185m_1817.txt
 cos,nuv,g185m,c1835    synphot$data/cos_nuv_g185m_1835.txt
