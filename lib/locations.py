@@ -15,10 +15,6 @@ KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
 
 VegaFile = os.path.join(specdir,'vega.fits')
 
-# There are throughput files mixed with spectrum files (the ETC mixes
-# then together in spectral expressions); the throughput files must
-# be explictly listed here.
-throughputfiles = [os.path.join(specdir,'thru.fits')] 
 
 #Define wavecat file explicitly
 wavecat = os.path.join(specdir,'wavecat.dat')
@@ -38,52 +34,51 @@ def irafconvert(iraffilename):
     ## This dictionary maps IRAF-specific directory names for synphot
     ## directories into their Unix equivalents.
 
-    convertdic = {'crrefer$':rootdir,
-                  'crotacomp$':os.path.join(rootdir,'comp','ota'),
-                  'cracscomp$':os.path.join(rootdir,'comp','acs'),
-                  'crcalobs$':os.path.join(rootdir,'calobs'),
-                  'crcalspec$':os.path.join(rootdir,'calspec'),
-                  'croldcalspec$':os.path.join(rootdir,'oldcalspec'),
-                  'crcomp$':os.path.join(rootdir,'comp'),
-                  'crfgs$':os.path.join(rootdir,'fgs'),
-                  'crfields$':os.path.join(rootdir,'fields'),
-                  'crmodewave$':os.path.join(rootdir,'modewave'),
-                  'crcostarcomp$':os.path.join(rootdir,'comp','costar'),
-                  'cracscomp$':os.path.join(rootdir,'comp','acs'),
-                  'crfoccomp$':os.path.join(rootdir,'comp','foc'),
-                  'crfoscomp$':os.path.join(rootdir,'comp','fos'),
-                  'crfgscomp$':os.path.join(rootdir,'comp','fgs'),
-                  'crhrscomp$':os.path.join(rootdir,'comp','hrs'),
-                  'crhspcomp$':os.path.join(rootdir,'comp','hsp'),
-                  'crotacomp$':os.path.join(rootdir,'comp','ota'),
-                  'crnicmoscomp$':os.path.join(rootdir,'comp','nicmos'),
-                  'crnonhstcomp$':os.path.join(rootdir,'comp','nonhst'),
-                  'crstiscomp$':os.path.join(rootdir,'comp','stis'),
-                  'crstiscomp$':os.path.join(rootdir,'comp','stis'),
-                  'crwfc3comp$':os.path.join(rootdir,'comp','wfc3'),
-                  'crcoscomp$':os.path.join(rootdir,'comp','cos'),
-                  'coscomp$':os.path.join(rootdir,'comp','cos'),
-                  'crwave$':os.path.join(rootdir,'crwave'),
-                  'crwfpccomp$':os.path.join(rootdir,'comp','wfpc'),
-                  'crwfpc2comp$':os.path.join(rootdir,'comp','wfpc2'),
-                  'crgrid$':os.path.join(rootdir,'grid'),
-                  'crgridbz77$':os.path.join(rootdir,'grid','bz77'),
-                  'crgridgs$':os.path.join(rootdir,'grid','gunnstryker'),
-                  'crgridjac$':os.path.join(rootdir,'grid','jacobi'),
-                  'crgridbpgs$':os.path.join(rootdir,'grid','bpgs'),
-                  'crgridbk$':os.path.join(rootdir,'grid','bkmodels'),
-                  'crgridk93$':os.path.join(rootdir,'grid','k93models'),
-                  'crgridagn$':os.path.join(rootdir,'grid','agn'),
-                  'crgridgalactic$':os.path.join(rootdir,'grid','galactic'),
-                  'crgridkc96$':os.path.join(rootdir,'grid','kc96'),
-                  'synphot$': os.path.dirname(__file__)+os.path.sep}
+    convertdic = {'crrefer':rootdir,
+                  'crotacomp':os.path.join(rootdir,'comp','ota'),
+                  'cracscomp':os.path.join(rootdir,'comp','acs'),
+                  'crcalobs':os.path.join(rootdir,'calobs'),
+                  'crcalspec':os.path.join(rootdir,'calspec'),
+                  'croldcalspec':os.path.join(rootdir,'oldcalspec'),
+                  'crcomp':os.path.join(rootdir,'comp'),
+                  'crfgs':os.path.join(rootdir,'fgs'),
+                  'crfields':os.path.join(rootdir,'fields'),
+                  'crmodewave':os.path.join(rootdir,'modewave'),
+                  'crcostarcomp':os.path.join(rootdir,'comp','costar'),
+                  'cracscomp':os.path.join(rootdir,'comp','acs'),
+                  'crfoccomp':os.path.join(rootdir,'comp','foc'),
+                  'crfoscomp':os.path.join(rootdir,'comp','fos'),
+                  'crfgscomp':os.path.join(rootdir,'comp','fgs'),
+                  'crhrscomp':os.path.join(rootdir,'comp','hrs'),
+                  'crhspcomp':os.path.join(rootdir,'comp','hsp'),
+                  'crotacomp':os.path.join(rootdir,'comp','ota'),
+                  'crnicmoscomp':os.path.join(rootdir,'comp','nicmos'),
+                  'crnonhstcomp':os.path.join(rootdir,'comp','nonhst'),
+                  'crstiscomp':os.path.join(rootdir,'comp','stis'),
+                  'crstiscomp':os.path.join(rootdir,'comp','stis'),
+                  'crwfc3comp':os.path.join(rootdir,'comp','wfc3'),
+                  'crcoscomp':os.path.join(rootdir,'comp','cos'),
+                  'coscomp':os.path.join(rootdir,'comp','cos'),
+                  'crwave':os.path.join(rootdir,'crwave'),
+                  'crwfpccomp':os.path.join(rootdir,'comp','wfpc'),
+                  'crwfpc2comp':os.path.join(rootdir,'comp','wfpc2'),
+                  'crgrid':os.path.join(rootdir,'grid'),
+                  'crgridbz77':os.path.join(rootdir,'grid','bz77'),
+                  'crgridgs':os.path.join(rootdir,'grid','gunnstryker'),
+                  'crgridjac':os.path.join(rootdir,'grid','jacobi'),
+                  'crgridbpgs':os.path.join(rootdir,'grid','bpgs'),
+                  'crgridbk':os.path.join(rootdir,'grid','bkmodels'),
+                  'crgridk93':os.path.join(rootdir,'grid','k93models'),
+                  'crgridagn':os.path.join(rootdir,'grid','agn'),
+                  'crgridgalactic':os.path.join(rootdir,'grid','galactic'),
+                  'crgridkc96':os.path.join(rootdir,'grid','kc96'),
+                  'synphot': os.path.dirname(__file__)+os.path.sep}
 
     ## If no $ sign found, just return the filename unchanged
-    unixfilename = iraffilename
-    dollarpos = iraffilename.find('$')
-    if dollarpos != -1:
-        irafdir = iraffilename[:dollarpos+1].lstrip()
+    if '$' in iraffilename:
+        irafdir,basename=iraffilename.split('$')
         unixdir=convertdic[irafdir]
-        unixfilename=iraffilename.replace(irafdir,unixdir+os.path.sep)
-
-    return unixfilename
+        unixfilename=os.path.join(unixdir,basename)
+        return unixfilename
+    else:
+        return iraffilename

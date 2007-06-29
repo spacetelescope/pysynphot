@@ -306,15 +306,13 @@ def _handleIRAFName(name):
     elif name.rfind('/') > -1 or name.rfind('\\') > -1:
         return name
     else:
-        return os.path.join(locations.specdir,name)
+        return name
 
 def _handleThroughputFiles(name):
-    # if name is listed as a special throughput file, return a
-    # SpectralElement; if not, return a SourceSpectrum.
+    #Most files will be spectrum files, but some will be throughput files.
     try:
-        locations.throughputfiles.index(name)
-        return spectrum.TabularSpectralElement(_handleIRAFName(name))
-    except ValueError:
+        return spectrum.TabularSourceSpectrum(_handleIRAFName(name))
+    except NameError:
         return spectrum.TabularSourceSpectrum(_handleIRAFName(name))
 
 

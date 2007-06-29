@@ -230,6 +230,7 @@ class PlanckTestCase(testutil.FPTestCase):
 
 
 class ObsmodeTestCase(testutil.FPTestCase):
+
     def test1(self):
         obsmode = observationmode.ObservationMode(values['obsmode'])
         self.assertApproxFP(obsmode.area, values['hstarea'])
@@ -280,7 +281,6 @@ class ObsmodeTestCase(testutil.FPTestCase):
         wave = obsmode.bandWave()
         throughput = obsmode.Throughput().throughputtable
         self.assertApproxFP(throughput[7500], 0.0681207)
-
 
     def test9(self):
         obsmode = observationmode.ObservationMode("stis,fuvmama,g140l,s52x2")
@@ -771,13 +771,8 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = calculator.run()
         self.assertApproxFP(float(countrate[0]), 28.0668)
 
-    def test8(self):
-        spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))*thru.fits"
-        instrument = "instrument=stis,ccd"
-        parameters = [spectrum, instrument]
-        calculator = etc.Countrate(parameters)
-        countrate = calculator.run()
-        self.assertApproxFP(float(countrate[0]), 34.1703)
+    #Deleted test8: it's an obsolete case.
+    
 
     def test9(self):
         spectrum = "spectrum= rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
