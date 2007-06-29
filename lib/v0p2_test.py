@@ -370,10 +370,13 @@ class FunctionTestCase(testutil.FPTestCase):
 
 
 class ParserTestCase(testutil.FPTestCase):
-##     def setUp(self):
-##         an = spectrum.AnalyticSpectrum()
-##         self.wave = an.GetWaveSet()
-
+    def setUp(self):
+        self.oldpath=os.path.abspath(os.curdir)
+        os.chdir(locations.specdir)
+        
+    def tearDown(self):
+        os.chdir(self.oldpath)
+       
     def testunit1(self):
         expr = "unit(1,photlam)"
         sp = P.interpret(P.parse(P.scan(expr)))
@@ -668,7 +671,12 @@ class ParserTestCase(testutil.FPTestCase):
 class ETCTestCase_Imag1(testutil.FPTestCase):
 
     def setUp(self):
+        self.oldpath=os.path.abspath(os.curdir)
         self.expr = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
+        os.chdir(locations.specdir)
+       
+    def tearDown(self):
+        os.chdir(self.oldpath)
 
     def test1(self):
         sp = P.interpret(P.parse(P.scan(self.expr)))
@@ -721,6 +729,14 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         flux = sp(wave)
 
 class ETCTestCase_Imag2(testutil.FPTestCase):
+    
+    def setUp(self):
+        self.oldpath=os.path.abspath(os.curdir)
+        os.chdir(locations.specdir)
+       
+    def tearDown(self):
+        os.chdir(self.oldpath)
+
     def thermback1(self):
         obsmode = "obsmode="
         calculator = etc.Thermback([obsmode])
@@ -808,6 +824,13 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
 
 
 class ETCTestCase_Spec1(testutil.FPTestCase):
+
+    def setUp(self):
+        self.oldpath=os.path.abspath(os.curdir)
+        os.chdir(locations.specdir)
+       
+    def tearDown(self):
+        os.chdir(self.oldpath)
 
     def test1(self):
         spectrum = "spectrum=(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)"
@@ -910,6 +933,12 @@ class ETCTestCase_Spec2(testutil.FPTestCase):
         self.assertApproxFP(float(countrate.split(';')[0]), 183608.)
 
 class ETCTestCase_Spec3(testutil.FPTestCase):
+    def setUp(self):
+        self.oldpath=os.path.abspath(os.curdir)
+        os.chdir(locations.specdir)
+        
+    def tearDown(self):
+        os.chdir(self.oldpath)
     
     def test1(self):
         spectrum = "spectrum=em(4300.0,1.0,9.999999960041972E-13,flam)"
