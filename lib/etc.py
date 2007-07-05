@@ -189,11 +189,16 @@ class Thermback(Countrate):
 
         return str(result)
 
+def Suicide(dummy):
+    """Kill this process"""
+    mypid=os.getpid()
+    os.kill(mypid,9)
 
 #This defines the set of tasks available for the ETC server to perform.
 tasks = {'calcphot':           Calcphot,
          'calcspec':           Calcspec,
          'countrate':          Countrate,
          'SpecSourcerateSpec': SpecSourcerateSpec,
-         'thermback':          Thermback}
+         'thermback':          Thermback,
+         'quit':               Suicide}
 
