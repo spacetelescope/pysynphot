@@ -189,7 +189,8 @@ class SourceSpectrum(Integrator):
     wave=property(_getWaveProp,doc="Wavelength property")
     flux=property(_getFluxProp,doc="Flux property")
 
-    def writefits(self, filename, clobber=True, trimzero=True):
+    def writefits(self, filename, clobber=True, trimzero=True,
+                  binned=False):
         """Write the spectrum to a FITS file."""
 
         if clobber:
@@ -198,10 +199,17 @@ class SourceSpectrum(Integrator):
             except OSError:
                 pass
 
-        first,last=0,len(self.flux)
+        if binned:
+            wave=self.binwave
+            flux=self.binflux
+        else:
+            wave=self.wave
+            flux=self.flux
+            
+        first,last=0,len(flux)
         if trimzero:
             #Keep one zero at each end
-            nz = self.flux.nonzero()[0]
+            nz = flux.nonzero()[0]
             try:
                 first=max(nz[0]-1,first)
                 last=min(nz[-1]+2,last)
@@ -210,11 +218,11 @@ class SourceSpectrum(Integrator):
 
         #Construct the columns and HDUlist
         cw = pyfits.Column(name='WAVELENGTH',
-                           array=self.wave[first:last],
+                           array=wave[first:last],
                            unit=self.waveunits.name,
                            format='E')
         cf = pyfits.Column(name='FLUX',
-                           array=self.flux[first:last],
+                           array=flux[first:last],
                            unit=self.fluxunits.name,
                            format='E')
         hdu = pyfits.PrimaryHDU()

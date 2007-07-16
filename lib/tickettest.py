@@ -18,6 +18,7 @@ import etc,spectrum
 import pysynphot as S
 from pysynphot.newobservation import Observation as NewObservation
 from pysynphot.observation import Observation as OldObservation
+import tempfile
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
 ## import tickettest
@@ -125,6 +126,7 @@ class ObservationTestCase(testutil.FPTestCase):
         self.idx = self.ref.flux.nonzero()[0]
         self.lx=30
         self.ux=-110
+
         
     def testobsmost(self):
         "tickettest.ObservationTestCase('testobsmost'): (acs,hrc,f555w)*gd71"
@@ -167,6 +169,15 @@ class ObservationTestCase(testutil.FPTestCase):
         ans=tst.efflam()
         self.assertApproxFP(self.efflam,ans)
 
+    def testwrite(self):
+        "tickettest.ObservationTestCase('testwrite'):"
+        tst=NewObservation(self.sp,self.bp)
+        tst.convert('counts')
+        fname=os.path.join(tempfile.gettempdir(),'newobs_tstwrite.fits')
+        tst.writefits(fname,trimzero=False,clobber=True)
+        out=S.FileSpectrum(fname)
+        self.assertApproxNumpy(tst.binflux,out.flux)
+            
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)

@@ -8,6 +8,7 @@ import units
 import numpy as N
 import math
 
+
 class Observation(spectrum.CompositeSourceSpectrum):
     """An Observation is the end point of a chain of spectral manipulation.
     The normal means of creating an Observation is by means of the .observe
@@ -94,17 +95,13 @@ class Observation(spectrum.CompositeSourceSpectrum):
     def redshift(self,z):
         raise NotImplementedError('Observations cannot be redshifted')
 
-    #Add methods to support ETCs
-    #The SpecSourcerateSpec call:
-    #   wants the sum of the binned fluxtable
-    #   may provide a filename: in which case, writebinnedspec
-
-    def writefits(self,fname,binned=False):
-        """Bother. THis is annoying."""
-        if binned:
-            make_something_up
-        else:
-            spectrum.writefits(self,fname)
+    def writefits(self,fname,clobber=True, trimzero=True, binned=True):
+        """All we really want to do here is flip the default value of
+        'binned' from the vanilla spectrum case."""
+        spectrum.CompositeSourceSpectrum.writefits(self,fname,
+                                                   clobber=clobber,
+                                                   trimzero=trimzero,
+                                                   binned=binned)
             
     def countrate(self,binned=True):
         """This is the calculation performed when the ETC invokes countrate.
