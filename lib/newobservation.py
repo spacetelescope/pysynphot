@@ -95,16 +95,35 @@ class Observation(spectrum.CompositeSourceSpectrum):
         raise NotImplementedError('Observations cannot be redshifted')
 
     #Add methods to support ETCs
-    def countrate(self):
+    #The SpecSourcerateSpec call:
+    #   wants the sum of the binned fluxtable
+    #   may provide a filename: in which case, writebinnedspec
+
+    def writefits(self,fname,binned=False):
+        """Bother. THis is annoying."""
+        if binned:
+            make_something_up
+        else:
+            spectrum.writefits(self,fname)
+            
+    def countrate(self,binned=True):
+        """This is the calculation performed when the ETC invokes countrate.
+        Essentially it wants the effstim in counts.
+        However, it also wants the pivot wavelength returned to it in
+        the same call."""
+
         myfluxunits = self.fluxunits.name
         self.convert('counts')
-        ans = self.trapezoidIntegration(self.wave, self.flux)
-        ans*=self.bandpass.obsmode.area
+        if binned:
+            ans = self.trapezoidIntegration(self.binwave, self.binflux)
+        else:
+            ans = self.trapezoidIntegration(self.wave,self.flux)
         self.convert(myfluxunits)
         return ans
 
     def pivot(self):
-        """Does this need to be calculated on binned waveset, or may
+        """This is the calculation performed when the ETC invokes calcphot.
+        Does this need to be calculated on binned waveset, or may
         it be calculated on native waveset?"""
         wave = self.wave
 
@@ -115,3 +134,18 @@ class Observation(spectrum.CompositeSourceSpectrum):
         den = self.trapezoidIntegration(wave,countdivwave)
 
         return math.sqrt(num/den)
+
+
+    def efflam(self):
+        """Calculation performed based on observation.py
+        _EfflamCalculator, which produces EFFLPHOT results!."""
+
+        myfluxunits=self.fluxunits.name
+        self.convert('flam')
+        wave=self.binwave
+        flux=self.binflux
+
+        num = self.trapezoidIntegration(wave,flux*wave*wave)
+        den = self.trapezoidIntegration(wave,flux*wave)
+        self.convert(myfluxunits)
+        return num/den

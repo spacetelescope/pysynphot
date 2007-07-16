@@ -96,15 +96,77 @@ class ObservationTestCase(testutil.FPTestCase):
         self.bp = S.ObsBandpass('acs,hrc,f555w')
         self.oldobs=OldObservation(self.sp,self.bp.obsmode)
         self.ref_specval=self.oldobs.calcphot('spec')
+
         self.ref=self.oldobs.observed_spectrum
+        self.effstim,self.pivot = self.oldobs.calcphot()
+
+        calculator = etc.Countrate(['spectrum=%s'%self.sp,
+                                    'instrument=acs,hrc,f555w'])
+        self.countrate,self.pivot = calculator.run()
+#.........................................................................
+        #Effective wavelength calculation is tested against synphot,
+        #not old pysynphot observation.calcphot('efflam')
+##       --> calcphot acs,hrc,f555w crcalspec$gd71_mod_005.fits flam func=efflerg
+##     Mode = band(acs,hrc,f555w)
+##        Pivot       Equiv Gaussian
+##      Wavelength         FWHM
+##       5355.947        841.1204    band(acs,hrc,f555w)
+##     Spectrum:  crcalspec$gd71_mod_005.fits
+##         VZERO            EFFLERG     Mode: band(acs,hrc,f555w)
+##            0.           5309.066
+##     --> lpar refdata
+##             (area = 45238.93416)    Telescope area in cm^2
+##            (grtbl = "mtab$*_tmg.fits") Instrument graph table
+##           (cmptbl = "mtab$r1j2146sm_tmc.fits") Instrument component table
+##             (mode = "a")
+      
+        self.efflam = 5309.066
+#.........................................................................
+        self.idx = self.ref.flux.nonzero()[0]
+        self.lx=30
+        self.ux=-110
         
-    def testobs1(self):
-        "tickettest.ObservationTestCase('testobs1'): (acs,hrc,f555w)*gd71"
+    def testobsmost(self):
+        "tickettest.ObservationTestCase('testobsmost'): (acs,hrc,f555w)*gd71"
         tst=NewObservation(self.sp,self.bp)
         tst.convert('counts')
         self.assertApproxNumpy(tst.binwave, self.ref.wave)
-        self.assertApproxNumpy(tst.binflux, self.ref.flux)
+        self.assertApproxNumpy(tst.binflux[self.idx[self.lx:self.ux]],
+                               self.ref.flux[self.idx[self.lx:self.ux]])
+
+    def testlowedge(self):
+        "tickettest.ObservationTestCase('testlowedge'): (acs,hrc,f555w)*gd71"
+        tst=NewObservation(self.sp,self.bp)
+        tst.convert('counts')
+        self.assertApproxNumpy(tst.binflux[self.idx[0:self.lx]],
+                               self.ref.flux[self.idx[0:self.lx]])
+ 
+    def testhighedge(self):
+        "tickettest.ObservationTestCase('testhighedge'): (acs,hrc,f555w)*gd71"
+        tst=NewObservation(self.sp,self.bp)
+        tst.convert('counts')
+        self.assertApproxNumpy(tst.binflux[self.idx[self.ux:]],
+                               self.ref.flux[self.idx[self.ux:]])
         
+    def testpivot(self):
+        "tickettest.ObservationTestCase('testpivot'):"
+        tst=NewObservation(self.sp,self.bp)
+        ans=tst.pivot()
+        self.effstim,self.pivot = self.oldobs.calcphot()
+        self.assertApproxFP(self.pivot,ans)
+
+    def testcountrate(self):
+        "tickettest.ObservationTestCase('testcountrate'):"
+        tst=NewObservation(self.sp,self.bp)
+        ans=tst.countrate()
+        self.assertApproxFP(self.countrate,ans)
+
+    def testefflam(self):
+        "tickettest.ObservationTestCase('testefflam'):"
+        tst=NewObservation(self.sp,self.bp)
+        ans=tst.efflam()
+        self.assertApproxFP(self.efflam,ans)
+
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
