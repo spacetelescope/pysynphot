@@ -54,8 +54,7 @@ class QueueManager(threading.Thread):
             try:
                 requestString = self._requestQueue.get()
                 tokens = requestString.split('&')
-                task = self.factory(tokens[0], tokens[1:])
-                self._resultQueue.put(str(task.run()))
+                self._resultQueue.put( self.factory(tokens[0], tokens[1:]) )
             except Exception:
                 self._resultQueue.put("ERROR")
                 traceback.print_exc()
@@ -65,9 +64,10 @@ class QueueManager(threading.Thread):
         Eventually, pysynphot servers that support more than just the
         ETC functionality might be desired, and we could probably
         refactor and make specialized subclasses."""
+##         import newetc as etc
+##         return str(apply(etc.tasks[taskname], args, kwargs))
         import etc
-        return apply(etc.tasks[taskname], args, kwargs)
-
+        return str(apply(etc.tasks[taskname],args,kwargs).run())
     
 class ServerDispatcher(threading.Thread):
     def run(self):
