@@ -31,13 +31,7 @@ def calcphot(parlist):
    # obs=bp.observe(sp)
     obs=Observation(sp,bp)
     obs.convert('counts')
-
-    if d['func'] == 'effstim':
-        ans=obs.countrate()
-    elif d['func'] == 'efflam':
-        ans=obs.efflam()
-    else:
-        raise NotImplementedError('%s function not supported'%d['func'])
+    ans=obs.efflam()
     
     return ans
 
@@ -60,19 +54,22 @@ def countrate(parlist):
     obs.convert('counts')
     piv=obs.pivot()
     ans=obs.countrate()
-    return piv,ans
+    return ans,piv
 
 def specrate(parlist):
     """Like countrate, but write the computed spectrum to a fits file
     and only return the countrate, not the pivot wavelength."""
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
-    bp=ObsBandpass(d['obsmode'])
+    bp=ObsBandpass(d['instrument'])
     # obs=bp.observe(sp)
     obs=Observation(sp,bp)
     obs.convert('counts')
-    obs.writefits(d['output'],binned=True)
-    return obs.countrate()
+    try:
+        obs.writefits(d['output'],binned=True)
+    except KeyError:
+        d['output']=None
+    return "%f;%s"%(obs.countrate(),d['output'])
 
 def thermback(parlist):
     """Return the thermal background rate for the obsmode"""
