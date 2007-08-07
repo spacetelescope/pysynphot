@@ -28,8 +28,11 @@ def calcphot(parlist):
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['obsmode'])
-   # obs=bp.observe(sp)
-    obs=Observation(sp,bp)
+    # obs=bp.observe(sp)
+    try:
+        obs=Observation(sp,bp)
+    except KeyError:
+        obs=Observation(sp,bp,bp.wave)
     obs.convert('counts')
     ans=obs.efflam()
     
@@ -45,25 +48,35 @@ def calcspec(parlist):
 
 def countrate(parlist):
     """Return the pivot wavelength and countrate of the spectrum as
-    observed through the obsmode using the appropriate binset"""
+    observed through the obsmode, but based on the native waveset"""
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['instrument'])
     # obs=bp.observe(sp)
-    obs=Observation(sp,bp)
+    try:
+        obs=Observation(sp,bp)
+    except KeyError:
+        obs=Observation(sp,bp,bp.wave)
+
     obs.convert('counts')
     piv=obs.pivot()
-    ans=obs.countrate()
+    ans=obs.countrate(binned=False)
     return ans,piv
 
 def specrate(parlist):
-    """Like countrate, but write the computed spectrum to a fits file
-    and only return the countrate, not the pivot wavelength."""
+    """Return the countrate of the spectrum as observed through the
+    obsmode, based on the binned wavelength set; and write the resulting
+    spectrum to a file, returning the filename."""
+
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['instrument'])
     # obs=bp.observe(sp)
-    obs=Observation(sp,bp)
+    try:
+        obs=Observation(sp,bp)
+    except KeyError:
+        obs=Observation(sp,bp,bp.wave)
+
     obs.convert('counts')
     try:
         obs.writefits(d['output'],binned=True)
