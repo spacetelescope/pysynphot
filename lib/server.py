@@ -64,10 +64,10 @@ class QueueManager(threading.Thread):
         Eventually, pysynphot servers that support more than just the
         ETC functionality might be desired, and we could probably
         refactor and make specialized subclasses."""
-##         import newetc as etc
-##         return str(apply(etc.tasks[taskname], args, kwargs))
-        import etc
-        return str(apply(etc.tasks[taskname],args,kwargs).run())
+        import newetc as etc
+        return str(apply(etc.tasks[taskname], args, kwargs))
+##         import etc
+##         return str(apply(etc.tasks[taskname],args,kwargs).run())
     
 class ServerDispatcher(threading.Thread):
     def run(self):
