@@ -115,9 +115,9 @@ class Observation(spectrum.CompositeSourceSpectrum):
         myfluxunits = self.fluxunits.name
         self.convert('counts')
         if binned:
-            ans = self.trapezoidIntegration(self.binwave, self.binflux)
+            ans = self.binflux.sum()
         else:
-            ans = self.trapezoidIntegration(self.wave,self.flux)
+            ans = self.flux.sum()
         self.convert(myfluxunits)
         return ans
 
