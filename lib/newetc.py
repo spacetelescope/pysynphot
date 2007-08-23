@@ -109,3 +109,19 @@ tasks = {'calcphot':           calcphot,
          'SpecSourcerateSpec': specrate,
          'thermback':          thermback,
          'quit':               Suicide}
+
+#Define an extra task for the IRAF user interface
+
+def etccalc(obsmode, spectrum, filename=None):
+    bp=ObsBandpass(obsmode)
+    sp=parse_spec(spectrum)
+    try:
+        obs=Observation(sp,bp)
+    except KeyError:
+        obs=Observation(sp,bp,bp.wave)
+
+    obs.convert('counts')
+    if (filename is not None):
+        obs.writefits(filename)
+
+    return obs.countrate(), obs.efflam(), obs.pivot()
