@@ -1,1 +1,1 @@
-C:\python24\python -c "import etcserver" 
+C:\python24\python -c "import server" 
