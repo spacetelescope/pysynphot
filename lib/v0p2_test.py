@@ -1,3 +1,13 @@
+"""As of changeset 248, this test file is obsolete. It has the following
+problems:
+   - four tests fail with unused keywords in the obsmode
+   - 27 tests fail because their answers were computed with the 003 versions
+   of the bessell h and johnson v files instead of the 004 versions in CDBS.
+
+   This test file is now being abandoned and will be replaced by files that
+   divide the tests necessary for the COS ETC release from the tests necessary
+   for the other ETC releases. """
+
 import sys
 import os
 import tempfile
@@ -212,14 +222,14 @@ class SpectrumTestCase(testutil.FPTestCase):
         self.assertApproxFP(integral, values['integral'])
 
     def testMagnitude0(self):
-        vmag = spectrum.Magnitude('johnson,v',0.0)
-        sp2 = self.sp.setMagnitude(vmag)
+        bp = spectrum.Band(('johnson','v'))
+        sp2 = self.sp.setMagnitude(bp,0.0)
         (dummy, fluxes) = sp2.getArrays()
         self.assertApproxFP(fluxes[testindex], values['v=0.0'])
 
     def testMagnitude5(self):
-        vmag = spectrum.Magnitude('johnson,v',5.0)
-        sp2 = self.sp.setMagnitude(vmag)
+        bp = spectrum.Band(('johnson','v'))
+        sp2 = self.sp.setMagnitude(bp,5.0)
         (dummy, fluxes) = sp2.getArrays()
         self.assertApproxFP(fluxes[testindex], values['v=5.0'])
 
@@ -923,7 +933,7 @@ class ETCTestCase_Spec2(testutil.FPTestCase):
 
     def test4(self):
         spectrum = "spectrum=(spec(crcalspec$agk_81d266_stis_001.fits))"
-        instrument = "instrument=stis,ccd,g230lb,c2375,s52x2"
+        instrument = "instrument=stis,ccd,g230lb,s52x2"
         parameters = [spectrum, instrument]
         calculator = etc.SpecSourcerateSpec(parameters)
         countrate = calculator.run()
