@@ -23,29 +23,11 @@ RADIAN = RSUN / PC /1000.
 RENORM = PI * RADIAN * RADIAN # Normalize to 1 solar radius @ 1 kpc
 
 
-class Magnitude(object):
-
-    def __init__(self, bandname, value):
-        self.value = value
-        self._throughputFile = locations.getBandFileName(bandname)
-        self._throughput = TabularSpectralElement(self._throughputFile)
-
-    def calcTotalFlux(self, inSpectrum):
-        filteredflux = inSpectrum * self._throughput
-        return filteredflux.integrate()
-    
-    def calcVegaFlux(self):
-        vegaspec = TabularSourceSpectrum(locations.VegaFile)
-        filteredvega = vegaspec * self._throughput
-        return filteredvega.integrate()
-
-
 def renormalize(spectrum, band, flux, unit):
     ''' renormalization function.'''
     if isinstance(band,Band):
         if unit.lower() == 'vegamag':
-            mag = Magnitude(band.name,flux)
-            return spectrum.setMagnitude(mag)
+            return spectrum.setMagnitude(band,flux)
         else:
             raise ValueError("%s not supported yet."%unit)
 
@@ -287,14 +269,14 @@ class SourceSpectrum(Integrator):
 
         return copy
 
-    def setMagnitude(self, mag):
-        '''Makes the magnitude of the source equal to mag.
-        mag is a Magnitude object.
+    def setMagnitude(self, band, value):
+        '''Makes the magnitude of the source in the band equal to value.
+        band is a SpectralElement.
         '''
-        objectFlux = mag.calcTotalFlux(self)
-        vegaFlux = mag.calcVegaFlux()
+        objectFlux = band.calcTotalFlux(self)
+        vegaFlux = band.calcVegaFlux()
         magDiff = -2.5*math.log10(objectFlux/vegaFlux)
-        factor = 10**(-0.4*(mag.value - magDiff))
+        factor = 10**(-0.4*(value - magDiff))
 
         '''Object returned is a CompositeSourceSpectrum'''
 
@@ -761,6 +743,21 @@ class SpectralElement(Integrator):
         wave = self.GetWaveSet()
         thru = self(wave)
         return 1.0 / self.trapezoidIntegration(wave,thru)
+
+    def calcTotalFlux(self,inSpectrum):
+        """Moved method from obsolete Magnitude class"""
+        filteredflux = inSpectrum * self
+        return filteredflux.integrate()
+
+    def calcVegaFlux(self):
+        """Moved method from obsolete Magnitude class.
+        Definitely need to fix up Vega handling here."""
+        vegaspec = TabularSourceSpectrum(locations.VegaFile)
+        filteredvega = vegaspec * self
+        return filteredvega.integrate()
+
+    
+        
 
     def GetWaveSet(self):
         return self.wavetable

@@ -14,6 +14,9 @@ from locations import irafconvert
 import planck
 import wavetable
 
+#Flag to control verbosity
+DEBUG = False
+
 rootdir = locations.rootdir
 datadir = locations.specdir
 wavecat = locations.wavecat
@@ -140,36 +143,43 @@ class GraphTable(object):
         thcomponents = []
         outnode = 0
         self.rampFilterWavelength = None
-
+        inmodes=set(modes)
+        used_modes=set()
         count = 0
-        while outnode != -1:
-
+        while outnode >= 0:
+            if (DEBUG and (outnode < 0)):
+                print "outnode == %d: stop condition"%outnode
+       
             previous_outnode = outnode
 
             nodes = N.where(self.innodes == innode)
-##            print
-##            print "innode: ", innode, " nodes: ", nodes
 
             # If there are no entries with this innode, we're done
             if nodes[0].size == 0:
-                return (components,thcomponents)
+                if DEBUG:
+                    print "no such innode %d: stop condition"%innode
+                #return (components,thcomponents)
+                break
 
             # Find the entry corresponding to the component named
             # 'default', bacause thats the one we'll use if we don't
             # match anything in the modes list
             defaultindex = N.where(self.keywords[nodes] =='default')
-##            print "default index is: ", defaultindex
 
             if 'default' in self.keywords[nodes]:
                 dfi=N.where(self.keywords[nodes] == 'default')[0][0]
                 outnode = self.outnodes[nodes[0][dfi]]
                 component = self.compnames[nodes[0][dfi]]
-##                print "component: ", component, " outnode: ", outnode
                 thcomponent = self.thcompnames[nodes[0][dfi]]
+                used_default=True
+            else:
+                #There's no default, so fail if you don't match anything
+                # in the keyword matching step.
+                outnode = -2
+                component = thcomponent = None
 
             # Now try and match something from the modes list
             for mode in modes:
-##                print "mode: ", mode
 
                 # handle #-separated ramp filter spec.
                 modeFields = mode.lower().split('#')
@@ -177,35 +187,56 @@ class GraphTable(object):
                     mode = modeFields[0] + '#'
                     self.rampFilterWavelength = float(modeFields[1])
 
-                #result = self.keywords[nodes].count(mode)
-                #if result != 0:
                 if mode in self.keywords[nodes]:
+                    used_modes.add(mode)
                     index = N.where(self.keywords[nodes]==mode)
+                    if len(index[0])>1:
+                        raise KeyError('%d matches found for %s'%(len(index[0]),mode))
                     idx=index[0][0]
                     component = self.compnames[nodes[0][idx]]
                     thcomponent = self.thcompnames[nodes[0][idx]]
                     outnode = self.outnodes[nodes[0][idx]]
-##                    print "from modes list:  index: ", index, "  component: ", component, " outnode: ", outnode
-                    
+                    used_default=False
+
+            if DEBUG:
+                print "Innode %d  Outnode %d  Compname %s"%(innode, outnode, component)
             components.append(component)
             thcomponents.append(thcomponent)
 
+
             innode = outnode
- 
+
             if outnode == previous_outnode:
+                if DEBUG:
+                    print "Innode: %d  Outnode:%d  Used default: %s"%(innode, outnode,used_default)
                 count += 1
                 if count > 3:
+                    if DEBUG:
+                        print "same outnode %d > 3 times: stop condition"%outnode
                     break
 
-        return (components,thcomponents)
+        if (outnode < 0):
+            if DEBUG:
+                print "outnode == %d: stop condition"%outnode
+            raise ValueError("Incomplete obsmode %s"%str(modes))
 
+        
+        #Check for unused modes
+        if inmodes != used_modes:
+            unused=str(inmodes.difference(used_modes))
+            raise ValueError("Warning: unused keywords %s"%unused)
+        
+        return (components,thcomponents)
 
 class BaseObservationMode(object):
     ''' Class that handles the graph table, common to both optical and
     thermal obsmodes.
     '''
     def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
-
+        #Strip "band()" syntax if present
+        tmatch=re.search(r'band\((.*?)\)',obsmode,re.IGNORECASE)
+        if tmatch:
+            obsmode=tmatch.group(1)
         self._obsmode = obsmode
 
         self.area = units.HSTAREA
