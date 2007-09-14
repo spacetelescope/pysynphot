@@ -12,9 +12,9 @@ python setup.py install
 The spectrum manipulation module spectrum.py will work
 standalone, whereas the observationmode.py module
 is designed to work with the HST synphot database, so
-won't be much use unless you also install synphot.
-
-You can get synphot from
+won't be much use unless you also install these files.
+(You don't need to install the synphot software; only its 
+datafiles.) You can get them from
 
 http://www.stsci.edu/resources/software_hardware/stsdas/synphot
 
