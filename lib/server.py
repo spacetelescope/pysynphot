@@ -55,8 +55,8 @@ class QueueManager(threading.Thread):
                 requestString = self._requestQueue.get()
                 tokens = requestString.split('&')
                 self._resultQueue.put( self.factory(tokens[0], tokens[1:]) )
-            except Exception:
-                self._resultQueue.put("ERROR")
+            except Exception, e:
+                self._resultQueue.put("Pysynphot ERROR: %s"%str(e))
                 traceback.print_exc()
 
     def factory(self, taskname, *args, **kwargs):
