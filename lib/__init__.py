@@ -17,11 +17,11 @@ Dependencies:
 - spark (syntax parser) (included in package tho; really dependency?)
 
 Environment:
-===========
+============
 The environment variable PYSYN_CDBS must be set.
 
-Example
-=======
+Example:
+========
 
 >>> import pysynphot as S
 >>> print S.__version__
