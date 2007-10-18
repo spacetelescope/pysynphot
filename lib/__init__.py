@@ -107,7 +107,8 @@ flam
 """
 
 
-__version__ = '0.3d3'
+__version__ = '0.3d4b'
+__revstring__  = '$Rev$'
 
 #UI:
 from spectrum import BlackBody, GaussianSource, UnitSpectrum
