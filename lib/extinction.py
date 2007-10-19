@@ -1,5 +1,3 @@
-## Automatically adapted for numpy Mar 05, 2007 by 
-
 import string
 import numpy as N
 import spectrum
@@ -15,16 +13,23 @@ _seatone = N.array([0., 1.36, 1.64, 1.84, 2.04, 2.24, 2.44, \
 _lmcx = N.array([0.00, 0.29, 0.45, 0.80, 1.11, 1.43, 1.83])
 _lmce = N.array([0.00, 0.16, 0.38, 0.87, 1.50, 2.32, 3.1])
 
+
+#Coefficients taken from Prevot et al, 1984, out to 1/lambda=7.84.
+#Additional coefficient & value to extrapolate to 1000 Angstroms,
+#and the value of R =3.1 necessary to return A_lambda/E(B-V) as all the
+#other extinction functions do, were provided by Scott Friedman
+#-- see ticket # 63.
 _smcx = N.array([ 0.00,  0.29,  0.45,  0.80,  1.11,  1.43,  1.82,  \
                          2.35,  2.70,  3.22,  3.34,  3.46,  3.60,  3.75,  \
                          3.92,  4.09,  4.28,  4.50,  4.73,  5.00,  5.24,  \
                          5.38,  5.52,  5.70,  5.88,  6.07,  6.27,  6.48,  \
-                         6.72,  6.98,  7.23,  7.52,  7.84 ])
+                         6.72,  6.98,  7.23,  7.52,  7.84, 10])
+
 _smce = N.array([-3.10, -2.94, -2.72, -2.23, -1.60, -0.78,  0.00,  \
                          1.00,  1.67,  2.29,  2.65,  3.00,  3.15,  3.49,  \
                          3.91,  4.24,  4.53,  5.30,  5.85,  6.38,  6.76,  \
                          6.90,  7.17,  7.71,  8.01,  8.49,  9.06,  9.28,  \
-                         9.84, 10.80, 11.51, 12.52, 13.54 ])
+                         9.84, 10.80, 11.51, 12.52, 13.54, 20.64]) + 3.1
 
 
 def _buildDefaultWaveset():
