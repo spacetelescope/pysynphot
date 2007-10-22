@@ -21,7 +21,7 @@ import units
 import etc
 import planck
 
-import testutil #from pytools
+from pytools import testutil #from pytools
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
 ## import v0.2_test

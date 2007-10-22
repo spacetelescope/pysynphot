@@ -4,8 +4,7 @@ import math
 
 import numpy as N
 import pyfits
-import testutil #from pytools
-
+from pytools import testutil 
 import units
 import locations
 import spectrum

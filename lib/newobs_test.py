@@ -13,7 +13,7 @@ import etc, newetc
 import planck
 import pysynphot as S
 
-import testutil #from pytools
+from pytools import testutil 
 
 etc.debug=0
 
