@@ -526,7 +526,7 @@ class ParserTestCase(testutil.FPTestCase):
         th = P.interpret(P.parse(P.scan(expr)))
         wave = th.GetWaveSet()
         throughput = th.throughputtable
-        self.assertApproxFP(throughput[1000], 3.64702691)
+        self.assertApproxFP(throughput[1000], 0.87486)
 
     def testcomp12(self):
         expr = "(spec(crcalspec$gd71_mod_005.fits))*ebmvx(0.1,gal1)"
@@ -547,7 +547,7 @@ class ParserTestCase(testutil.FPTestCase):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertApproxFP(flux[200], 5.49877e-05)
+        self.assertApproxFP(flux[200],2.09058e-06)
 
     def testcomp15(self):
         expr = "rn((icat(k93models,44500,0.0,5.0)),band(johnson,v),10.516,vegamag)"
