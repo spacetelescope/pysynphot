@@ -28,8 +28,6 @@ class SpecCase(testutil.FPTestCase):
         self.lx=100
         self.ux=100
 
-
-        self.oldrate=float(self.calculator.run()[0])
         self.oldobs = self.calculator.observed_spectrum
         self.oldwave, self.oldflux = self.calculator.observed_spectrum.getArrays()
         self.idx = self.oldflux.nonzero()[0]
@@ -81,7 +79,8 @@ class SpecCase(testutil.FPTestCase):
 class BinnedCase(SpecCase):
     def init_countrate(self):
         self.calculator=etc.SpecSourcerateSpec(self.params)
-        self.newrate=float(newetc.specrate(self.params)[0])
+        self.oldrate=float(self.calculator.run().split(';')[0])
+        self.newrate=float(newetc.specrate(self.params).split(';')[0])
 
     def testobsmost(self):
         self.obs.convert('counts')
@@ -92,6 +91,7 @@ class BinnedCase(SpecCase):
 class NativeCase(SpecCase):
     def init_countrate(self):
         self.calculator=etc.Countrate(self.params)
+        self.oldrate=float(self.calculator.run()[0])
         self.newrate=float(newetc.countrate(self.params)[0])
         
     def testobsmost(self):
