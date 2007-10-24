@@ -58,7 +58,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         # merge the endpoints in with the natural waveset 
         spwave = spectrum.MergeWaveSets(self.wave, endpoints)
-        #spwave = spectrum.MergeWaveSets(spwave,self.binwave)
+        spwave = spectrum.MergeWaveSets(spwave,self.binwave)
 
         # compute indices associated to each endpoint.
         indices = N.searchsorted(spwave, endpoints)
@@ -70,13 +70,16 @@ class Observation(spectrum.CompositeSourceSpectrum):
         flux = self(spwave) 
         avflux = (flux[1:] + flux[:-1]) / 2.0
         self._deltaw = spwave[1:] - spwave[:-1]
+
         
         # sum over each bin.
         self._binflux = N.empty(shape=self.binwave.shape,dtype=N.float64)
+        self._intwave = N.empty(shape=self.binwave.shape,dtype=N.float64)
         for i in range(len(self._indices)):
             first = self._indices[i]
             last = self._indices_last[i]
             self._binflux[i]=(avflux[first:last]*self._deltaw[first:last]).sum()/self._deltaw[first:last].sum()
+            self._intwave[i]=self._deltaw[first:last].sum()
 
     def _getBinfluxProp(self):
         binflux = units.Photlam().Convert(self.binwave,
