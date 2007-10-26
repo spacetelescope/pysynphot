@@ -2,12 +2,12 @@ import sys
 import os
 import tempfile
 
-from pysynphot import spectrum,observation, observationmode
+from pysynphot import spectrum, observationmode
 from pysynphot import locations
 from pysynphot import spparser as P
 from pysynphot import units, planck
 from pysynphot import newetc as etc
-
+from pysynphot.newobservation import Observation 
 from pytools import testutil 
 
 
@@ -610,6 +610,32 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
         parameters = [spectrum, instrument]
         countrate = etc.specrate(parameters)
         self.assertApproxFP(float(countrate.split(';')[0]), 26.5409)
+
+class ETCTestCase(testutil.FPTestCase):
+    """Base class for cases generated from the ETC test listings"""
+    def setUp(self):
+        self.oldpath=os.path.abspath(os.curdir)
+        os.chdir(locations.specdir)
+        self.setparms()
+        self.obs=Observation(self.sp,self.bp)
+        
+    def setparms(self):
+        self.sp=None
+        self.bp=None
+        self.ref_rate=None
+        self.file=None
+        self.cmd=None
+        
+    def tearDown(self):
+        os.chdir(self.oldpath)
+                                     
+    def testrate(self):
+        self.assertApproxFP(self.obs.countrate(),self.ref_rate)
+
+#    def testfile(self):
+#        """Need to figure out where to keep reference files"""
+#        pass
+
 
 
 class IcatTestCase(testutil.FPTestCase):
