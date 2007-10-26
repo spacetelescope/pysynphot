@@ -99,6 +99,14 @@ def Suicide(dummy):
     mypid=os.getpid()
     os.kill(mypid,9)
 
+def version(dummy):
+    """Return version string stashed in versioninfo.dat"""
+    from pysynphot.locations import vfname
+    f=open(vfname)
+    vstring=f.readline()
+    f.close()
+    return vstring.strip()
+
 #This defines the set of tasks available for the ETC server to perform.
 #Note that there are two distinct calls to calcphot that we might
 #want to actually discriminate by name, eventually.
@@ -108,6 +116,7 @@ tasks = {'calcphot':           calcphot,
          'countrate':          countrate,
          'SpecSourcerateSpec': specrate,
          'thermback':          thermback,
+         'version':            version,
          'quit':               Suicide}
 
 #Define an extra task for the IRAF user interface

@@ -7,6 +7,9 @@ rootdir   = os.environ['PYSYN_CDBS']
 #Data directory is now installed locally
 specdir   = os.path.join(os.path.dirname(__file__),'data')+os.path.sep
 
+#Locaion of filename containing version info
+vfname    = os.path.join(specdir,'versioninfo.dat')
+
 #Eliminate use of temporary directory; use python tmpfile utilities instead
 
 CAT_TEMPLATE = os.path.join(rootdir,'grid','*','catalog.fits')
