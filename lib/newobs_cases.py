@@ -9,12 +9,6 @@ class C1(newobs_test.NativeCase):
 302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
         self.obsmode = "acs,hrc,f220w"
 
-class C2(newobs_test.NativeCase):
-    def setparms(self):
-
-        self.spectrum = "em(3880.0,10.0,1.0000000168623835E-16,flam)"
-        self.obsmode = "acs,wfc1,FR388N#3880"
-
 class C3(newobs_test.NativeCase):
     def setparms(self):
 
@@ -33,17 +27,7 @@ class C5(newobs_test.NativeCase):
         self.spectrum = "((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         self.obsmode = "acs,sbc,F140LP"
 
-class C6(newobs_test.NativeCase):
-    def setparms(self):
 
-        self.spectrum = "rn(icat(k93models,3500,0.0,4.6),band(johnson,v),15.0,vegamag)"
-        self.obsmode = "acs,hrc,FR388N#3880"
-
-class C7(newobs_test.NativeCase):
-    def setparms(self):
-
-        self.spectrum = " rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
-        self.obsmode = "stis,ccd"
 
 
 class C8(newobs_test.NativeCase):
@@ -116,11 +100,6 @@ class C18(newobs_test.BinnedCase):
         self.spectrum = "rn((spec(crcalspec$bd_28d4211_stis_001.fits)),box(2000.0,1),1.0E-12,flam)"
         self.obsmode = "stis,nuvmama,e230h,c2263,s02x02"
 
-class C19(newobs_test.BinnedCase):
-    def setparms(self):
-
-        self.spectrum = "(spec(crcalspec$agk_81d266_stis_001.fits))"
-        self.obsmode = "stis,ccd,g230lb,c2375,s52x2"
 
 class C20(newobs_test.BinnedCase):
     def setparms(self):
