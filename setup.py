@@ -9,12 +9,14 @@ ver = sys.version_info
 python_exec = 'python' + str(ver[0]) + '.' + str(ver[1])
 
 #Determine, and save, the revision number
-revset=commands.getoutput('svnversion .')
+stat,revset=commands.getstatusoutput('svnversion .')
+if stat != 0:
+    revset='unavailable'
 vfname=os.path.join('data','generic','versioninfo.dat')
 f=open(vfname,'w')
 f.write(revset)
 f.close()
-if (revset.strip() == 'exported'):
+if ( (revset.strip() == 'exported') or (stat!=0) ):
     print "WARNING, no SVN version info available for this package"
     print "Proceeding with installation.\n"
     
