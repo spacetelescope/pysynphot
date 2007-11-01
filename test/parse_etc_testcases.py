@@ -36,9 +36,9 @@ def parse_cline(cline):
 
 def parse_rline(rline):
     """Return just the numeric part of the response"""
-
+    
     ans=rline.split(';')[0]
-    return float(ans)
+    return float(ans.strip("'"))
 
 def parse_line(line):
     if line.startswith('[PysynphotRunner.doRun] command'):
@@ -62,7 +62,9 @@ def runfile(fname,accuracy=1.0e-7):
                 print "Failed: tvalue %f, ref %f: %f"%(tvalue,ref,result)
             else:
                 print "ok"
-        except (IOError,IndexError),e:
+
+
+        except (IOError),e:
             if cline != '':
                 print "%s ... Proceeding"%str(e)
             else:
@@ -76,10 +78,13 @@ def parsefile(fname,outname):
     out=open(outname,'w')
     while cline != '':
         try:
+            cdummy=f.readline()
             cline=f.readline()
+            rdummy=f.readline()
             rline=f.readline()
+            sepdummy=f.readline()
             task, spstring,omode,fname = parse_cline(cline)
-            ans=parse_rline(rline.split("response is '")[1])
+            ans=parse_rline(rline)
 
             out.write("class C%d(ETCTestCase):\n"%counter)
             out.write("    def setparms(self):\n")
@@ -89,9 +94,10 @@ def parsefile(fname,outname):
             out.write("        self.cmd='%s'\n"%task)
             out.write("        self.fname='%s'\n"%os.path.basename(fname))
             out.write("\n\n")
+            out.flush()
             counter+=1
                       
-        except (IOError,IndexError),e:
+        except (IndexError),e:
             if cline != '':
                 print "%s ... Proceeding"%str(e)
             else:
