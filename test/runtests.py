@@ -12,7 +12,9 @@ from pytools import testutil
 tlist=['newobs_cases',
        'cos_etc_test',
        'cos_fuv_cases',
-       'cos_nuv_cases']
+       'cos_nuv_cases',
+       'ui_test',
+       'other_etc_test']
 #=====================================================
 
 #Doublecheck environment

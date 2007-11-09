@@ -5,10 +5,8 @@ import math
 import numpy as N
 import pyfits
 from pytools import testutil 
-import units
-import locations
-import spectrum
-from obsbandpass import ObsBandpass
+from pysynphot import units, locations, spectrum, observationmode
+from pysynphot.obsbandpass import ObsBandpass
 
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
@@ -140,7 +138,6 @@ class FSSTestCase(testutil.FPTestCase):
                                                                         
 class BandTestCase(testutil.FPTestCase):
     def setUp(self):
-        import observationmode
         cmptb_name=os.path.join('mtab','r1j2146sm_tmc.fits')
         observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
         print "tests are being run with comptable",observationmode.COMPTABLE
