@@ -26,6 +26,8 @@ def Units(uname):
     except KeyError:
         if uname == str(None):
             return None
+        elif isinstance(uname,BaseUnit):
+            return uname
         else:
             raise ValueError("Unknown units %s"%uname)
 
@@ -392,7 +394,7 @@ class VegaMag(LogFluxUnits):
         resampled = vegaspec.resample(wave)
         return resampled.fluxtable * 10.0**(-0.4 * flux)
 
-    def unitResponse(LogFluxUnits):
+    def unitResponse(self,band):
         total=band.calcVegaFlux()
         return 2.5*math.log10(total)
 

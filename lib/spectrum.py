@@ -286,7 +286,7 @@ class SourceSpectrum(Integrator):
 
         return self * factor
 
-    def renorm(self, band, value, units):
+    def renorm(self, band, value, unitstring):
         """Renormalize the spectrum to the specified value (in the specified
         flux units) in the specified band.
         This method should ultimately replace both the renormalize function
@@ -295,21 +295,22 @@ class SourceSpectrum(Integrator):
         
         #Integrate in the desired units over the desired passband
         sp=self*band
-        rate=sp.integrate(fluxunits=units)
+        rate=sp.integrate(fluxunits=unitstring)
         if rate <= 0.0:
             raise ValueError('Integrated flux is negative')
         
         #Get the unit response of the passband
-        resp=band.calcUnitResponse(fluxunits=units)
+        resp=band.calcUnitResponse(fluxunits=unitstring)
         if resp <= 0.0:
             raise ValueError('Unit response of bandpass is negative')
 
         #Compute the renorm factor;
         #       how to compute it depends on the units we're in
-        if units.name == 'counts':
+        targunits=units.Units(unitstring)
+        if targunits.name == 'counts':
             effstim=rate
             factor=value/effstim
-        elif units.isMag:
+        elif targunits.isMag:
             effstim = resp - 2.5*math.log10(rate)
             magfactor=value - effstim
             factor = 10**(-magfactor*0.4)
