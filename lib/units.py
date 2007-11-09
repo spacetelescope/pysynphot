@@ -69,6 +69,7 @@ class FluxUnits(BaseUnit):
     """All FluxUnits know how to convert themselves to Photlam"""
     def __init__(self):
         self.isFlux = True
+        self.isMag = False
         self.name=None
         self.Dispatch = {'photlam':self.ToPhotlam}
         
@@ -81,6 +82,12 @@ class FluxUnits(BaseUnit):
 
     def ToPhotlam(self,wave,flux):
         raise NotImplementedError("Required method ToPhotlam not yet implemented")
+
+class LogFluxUnits(FluxUnits):
+    """Base class for magnitudes, which often require special handling"""
+    def __init__(self):
+        FluxUnits.__init__(self)
+        self.isMag=True
 
 #.............................................................
 # Internal wavelength units are Angstroms, so it is smarter than the others
@@ -137,6 +144,14 @@ class Photlam(FluxUnits):
                          'obmag':self.ToOBMag,
                          'vegamag':self.ToVegaMag,
                          'counts':self.ToCounts}
+
+    def unitResponse(self,band):
+        """Put a flat spectrum of 1 photlam through this band, & integrate"""
+        #sumfilt(wave,0,band)
+        # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
+        total = band.trapezoidIntegration(band.wave,band.throughput)
+        return 1.0/total
+
 
     def ToFlam(self, wave, flux):
         return HC * flux / wave
@@ -243,6 +258,15 @@ class Flam(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return flux * wave / HC
 
+    def unitResponse(self,band):
+        #sumfilt(wave,1,band)
+        # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput*wave)
+        modtot = total / (H*C)
+        return 1.0/modtot
+
+
 class Photnu(FluxUnits):
     ''' photnu = photon cm^-2 s^-1 Hz^-1'''
     def __init__(self):
@@ -252,6 +276,15 @@ class Photnu(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return C * flux / (wave * wave)
 
+    def unitResponse(self,band):
+        #sumfilt(wave,-2,band)
+        # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput/(wave*wave))
+        modtot = total/C
+        return 1.0/modtot
+
+
 class Fnu(FluxUnits):
     ''' fnu = erg cm^-2 s^-1 Hz^-1'''
     def __init__(self):
@@ -260,6 +293,15 @@ class Fnu(FluxUnits):
     
     def ToPhotlam(self, wave, flux):
         return flux /wave / H
+
+    def unitResponse(self,band):
+        #sumfilt(wave,-1,band)
+        # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput/wave)
+        modtot = total/H
+        return 1.0/modtot
+
 class Jy(FluxUnits):
     ''' jy = 10^-23 erg cm^-2 s^-1 Hz^-1'''
     def __init__(self):
@@ -268,6 +310,14 @@ class Jy(FluxUnits):
 
     def ToPhotlam(self, wave, flux):
         return flux / wave * (1.0e-23 / H)
+
+    def unitResponse(self,band):
+        #sumfilt(wave,-1,band)
+        # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput/wave)
+        modtot = total * (1.0e-23/H)
+        return 1.0/modtot
 
 class mJy(FluxUnits):
     ''' mjy = 10^-26 erg cm^-2 s^-1 Hz^-1'''
@@ -278,7 +328,15 @@ class mJy(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return flux / wave * (1.0e-26 / H)
 
-class ABMag(FluxUnits):
+    def unitResponse(self,band):
+        #sumfilt(wave,-1,band)
+        # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput/wave)
+        modtot = total * (1.0e-26/H)
+        return 1.0/modtot
+
+class ABMag(LogFluxUnits):
     def __init__(self):
         FluxUnits.__init__(self)
         self.name = 'abmag'
@@ -286,7 +344,15 @@ class ABMag(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return 1.0 / (H * wave) * 10.0**(-0.4 * (flux - ABZERO))
 
-class STMag(FluxUnits):
+    def unitResponse(self,band):
+        #sumfilt(wave,-1,band)
+        # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput/wave)
+        modtot = total/H
+        return 2.5*math.log10(modtot) + ABZERO
+
+class STMag(LogFluxUnits):
     def __init__(self):
         FluxUnits.__init__(self)
         self.name = 'stmag'
@@ -294,7 +360,15 @@ class STMag(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return wave / H / C * 10.0**(-0.4 * (flux - STZERO))
 
-class OBMag(FluxUnits):
+    def unitResponse(self,band):
+        #sumfilt(wave,1,band)
+        # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput*wave)
+        modtot = total/(H*C)
+        return 2.5*math.log10(modtot) + STZERO
+
+class OBMag(LogFluxUnits):
     def __init__(self):
         FluxUnits.__init__(self)
         self.name = 'obmag'
@@ -303,7 +377,12 @@ class OBMag(FluxUnits):
         dw = _getDeltaWave(wave)
         return 10.0**(-0.4 * flux) / (dw * HSTAREA)
 
-class VegaMag(FluxUnits):
+    def unitResponse(self,band):
+        #sum = asumr(band,nwave)
+        total = band.throughput.sum()
+        return 2.5*math.log10(total)
+
+class VegaMag(LogFluxUnits):
     def __init__(self):
         FluxUnits.__init__(self)
         self.name = 'vegamag'
@@ -313,6 +392,10 @@ class VegaMag(FluxUnits):
         resampled = vegaspec.resample(wave)
         return resampled.fluxtable * 10.0**(-0.4 * flux)
 
+    def unitResponse(LogFluxUnits):
+        total=band.calcVegaFlux()
+        return 2.5*math.log10(total)
+
 class Counts(FluxUnits):
     def __init__(self):
         FluxUnits.__init__(self)
@@ -320,6 +403,12 @@ class Counts(FluxUnits):
     
     def ToPhotlam(self, wave, flux):
         return flux / (_getDeltaWave(wave) * HSTAREA)
+
+    def unitResponse(self,band):
+        #sum = asumr(band,nwave)
+        total = band.throughput.sum()
+        return 1.0/total
+
 
 ################   Factory for Units subclasses.   #####################
 

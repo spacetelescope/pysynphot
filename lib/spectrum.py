@@ -24,7 +24,9 @@ RENORM = PI * RADIAN * RADIAN # Normalize to 1 solar radius @ 1 kpc
 
 
 def renormalize(spectrum, band, flux, unit):
-    ''' renormalization function.'''
+    ''' renormalization function.
+    This function is marked for deletion once the SourceSpectrum.renorm
+    method is well tested.'''
     if isinstance(band,Band):
         if unit.lower() == 'vegamag':
             return spectrum.setMagnitude(band,flux)
@@ -272,6 +274,8 @@ class SourceSpectrum(Integrator):
     def setMagnitude(self, band, value):
         '''Makes the magnitude of the source in the band equal to value.
         band is a SpectralElement.
+        This method is marked for deletion once the .renorm method is
+        well tested.
         '''
         objectFlux = band.calcTotalFlux(self)
         vegaFlux = band.calcVegaFlux()
@@ -281,6 +285,43 @@ class SourceSpectrum(Integrator):
         '''Object returned is a CompositeSourceSpectrum'''
 
         return self * factor
+
+    def renorm(self, band, value, units):
+        """Renormalize the spectrum to the specified value (in the specified
+        flux units) in the specified band.
+        This method should ultimately replace both the renormalize function
+        in this module, and the setMagnitude() method in this class."""
+
+        
+        #Integrate in the desired units over the desired passband
+        sp=self*band
+        rate=sp.integrate(fluxunits=units)
+        if rate <= 0.0:
+            raise ValueError('Integrated flux is negative')
+        
+        #Get the unit response of the passband
+        resp=band.calcUnitResponse(fluxunits=units)
+        if resp <= 0.0:
+            raise ValueError('Unit response of bandpass is negative')
+
+        #Compute the renorm factor;
+        #       how to compute it depends on the units we're in
+        if units.name == 'counts':
+            effstim=rate
+            factor=value/effstim
+        elif units.isMag:
+            effstim = resp - 2.5*math.log10(rate)
+            magfactor=value - effstim
+            factor = 10**(-magfactor*0.4)
+        else:
+            effstim = rate * resp
+            factor = value/effstim
+
+        #Now apply the factor to the spectrum in its native units.
+        #Eventually maybe do self*=factor, but for now
+        return self*factor 
+
+        
 
 class CompositeSourceSpectrum(SourceSpectrum):
     '''Composite Source Spectrum object, handles addition, multiplication
@@ -740,10 +781,20 @@ class SpectralElement(Integrator):
         return resampled
 
     def unitResponse(self):
+        """Original implementation; correct only for the assumption
+        that the input 'unit spectrum' is in units of photlam.
+        Marked for deletion when calcUnitResponse is well tested."""
         wave = self.GetWaveSet()
         thru = self(wave)
         return 1.0 / self.trapezoidIntegration(wave,thru)
+    
 
+    def calcUnitResponse(self,fluxunits='photlam'):
+        """This is a method of the spectral element for the convenience
+        of the user, but the correct calculation of the unit response
+        depends entirely on the units, so delegate to the fluxunit's method."""
+        return units.Units(fluxunits).unitResponse(self)
+    
     def calcTotalFlux(self,inSpectrum):
         """Moved method from obsolete Magnitude class"""
         filteredflux = inSpectrum * self
