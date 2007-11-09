@@ -9,10 +9,10 @@ from pytools import testutil
 #=====================================================
 #           CONFIGURE TESTS HERE
 #=====================================================
-tlist=['newobs_cases']
-#       'cos_etc_test',
-#       'cos_fuv_cases',
-#       'cos_nuv_cases']
+tlist=['newobs_cases',
+       'cos_etc_test',
+       'cos_fuv_cases',
+       'cos_nuv_cases']
 #=====================================================
 
 #Doublecheck environment

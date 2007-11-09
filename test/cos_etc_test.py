@@ -2,6 +2,7 @@ import sys
 import os
 import tempfile
 
+from pysynphot.etctest_base_class import ETCTestCase
 from pysynphot import spectrum, observationmode
 from pysynphot import locations
 from pysynphot import spparser as P
@@ -597,6 +598,7 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
        
     def tearDown(self):
         os.chdir(self.oldpath)
+
 class ETCTestCase_Spec3(testutil.FPTestCase):
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
@@ -610,32 +612,6 @@ class ETCTestCase_Spec3(testutil.FPTestCase):
         parameters = [spectrum, instrument]
         countrate = etc.specrate(parameters)
         self.assertApproxFP(float(countrate.split(';')[0]), 26.5409)
-
-class ETCTestCase(testutil.FPTestCase):
-    """Base class for cases generated from the ETC test listings"""
-    def setUp(self):
-        self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
-        self.setparms()
-        self.obs=Observation(self.sp,self.bp)
-        
-    def setparms(self):
-        self.sp=None
-        self.bp=None
-        self.ref_rate=None
-        self.file=None
-        self.cmd=None
-        
-    def tearDown(self):
-        os.chdir(self.oldpath)
-                                     
-    def testrate(self):
-        self.assertApproxFP(self.obs.countrate(),self.ref_rate)
-
-#    def testfile(self):
-#        """Need to figure out where to keep reference files"""
-#        pass
-
 
 
 class IcatTestCase(testutil.FPTestCase):
@@ -701,6 +677,6 @@ if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
     else:
-        testutil.testall(__name__,2)
+        result=testutil.testall(__name__,2)
 
 

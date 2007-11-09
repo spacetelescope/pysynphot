@@ -1,4 +1,4 @@
-from cos_etc_test import ETCTestCase
+from pysynphot.etctest_base_class import ETCTestCase
 from pysynphot.newetc import parse_spec
 from pysynphot import ObsBandpass
 from pytools import testutil
@@ -357,7 +357,7 @@ class C39(ETCTestCase):
 
 class C40(ETCTestCase):
     def setparms(self):
-        self.sp=parse_spec('rn(spec(/usr/stsci/stdata/calspec/gd50_004.fits),box(1499.9999999999998,1.0),1.00E-14,flam)')
+        self.sp=parse_spec('rn(spec(/data/cdbs1/calspec/gd50_004.fits),box(1499.9999999999998,1.0),1.00E-14,flam)')
         self.bp=ObsBandpass('cos,fuv,g140l,c1230')
         self.ref_rate=557.267
         self.cmd='SpecSourcerateSpec'
@@ -366,7 +366,7 @@ class C40(ETCTestCase):
 
 class C41(ETCTestCase):
     def setparms(self):
-        self.sp=parse_spec('rn(spec(/usr/stsci/stdata/calspec/feige110_stis_001.fits),box(1499.9999999999998,1.0),1.00E-14,flam)')
+        self.sp=parse_spec('rn(spec(/data/cdbs1/calspec/feige110_stis_001.fits),box(1499.9999999999998,1.0),1.00E-14,flam)')
         self.bp=ObsBandpass('cos,fuv,g140l,c1230')
         self.ref_rate=616.373
         self.cmd='SpecSourcerateSpec'
