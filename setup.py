@@ -50,10 +50,6 @@ class smart_install_data(install_data):
         return install_data.run(self)
 
 
-tpmsrc = glob.glob('src/tpm/*.c')
-tpmsrc.extend(['src/blackbox.c','src/pytpm_wrap.c'])
-
-        
 def dosetup():
     print sys.prefix
     r = setup(name = "pysynphot",
