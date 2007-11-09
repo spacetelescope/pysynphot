@@ -48,12 +48,6 @@ class FileTestCase(testutil.FPTestCase):
         sp2=self.sp + self.sp
         sumflux = self.sp.flux + self.sp.flux
         self.assertEqualNumpy(sp2.flux,sumflux)
-
-    def testsubtract(self):
-        "ui_test.FileTestCase('testsub'): Subtract two spectra, #23"
-        sp2=self.sp + self.sp
-        sp3=sp2-self.sp
-        self.assertEqualNumpy(sp3.flux,self.sp.flux)
         
     def tearDown(self):
         self.openfits.close()
@@ -163,4 +157,4 @@ if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
     else:
-        testutil.testall(__name__,2)
+        testutil.testall(__name__)
