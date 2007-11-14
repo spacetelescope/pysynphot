@@ -24,8 +24,9 @@ if ( (revset.strip() == 'exported') or (stat!=0) ):
 DATA_FILES = glob.glob(os.path.join('data', 'generic', '*'))
 WAVECAT_FILES = glob.glob(os.path.join('data', 'wavecat', '*'))
 DATA_FILES_DIR = os.path.join('pysynphot', 'data')
-PYSYNPHOT_DATA_FILES = [(DATA_FILES_DIR,DATA_FILES), (DATA_FILES_DIR, WAVECAT_FILES)]
-
+testfiles = glob.glob(os.path.join('test','etctest_base_class.py'))
+print testfiles
+PYSYNPHOT_DATA_FILES = [(DATA_FILES_DIR,DATA_FILES), (DATA_FILES_DIR, WAVECAT_FILES),('pysynphot',testfiles)]
 
 
 def dolocal():
@@ -66,6 +67,7 @@ def dosetup():
               cmdclass = {'install_data':smart_install_data},
               data_files = PYSYNPHOT_DATA_FILES
               )
+
 
     return r
 
