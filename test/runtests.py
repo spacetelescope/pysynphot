@@ -24,9 +24,9 @@ for symbol in ('PYSYN_CDBS','PYSYN_USERDATA'):
 
 #open the summary file
 now=time.gmtime()
-fname='%s_%s_%s_%s_%s_%s'%(now.tm_year,now.tm_mon,now.tm_mday,
-                           now.tm_hour,now.tm_min,'pysyn_summary.log')
+fname='pysyn_summary.log'
 fh=open(fname,'w')
+fh.write("%s\n"%time.asctime())
 
 #Run the tests
 failed=0
