@@ -131,6 +131,10 @@ def etccalc(obsmode, spectrum, filename=None):
 
     obs.convert('counts')
     if (filename is not None):
+        if not filename.endswith('.fits'):
+            filename=filename+'.fits'
         obs.writefits(filename)
+        sp.writefits(filename.replace('.fits','_sp.fits'))
+        bp.writefits(filename.replace('.fits','_bp.fits'))
 
     return obs.countrate(), obs.efflam(), obs.pivot()
