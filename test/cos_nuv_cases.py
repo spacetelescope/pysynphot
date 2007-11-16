@@ -1,9 +1,13 @@
-from cos_etc_test import ETCTestCase
+from pysynphot.etctest_base_class import ETCTestCase
 from pysynphot.newetc import parse_spec
 from pysynphot import ObsBandpass
+from pysynphot import observationmode #to check on comptable
 from pytools import testutil
-import sys
+import sys,os
 
+print "%s:"%os.path.basename(__file__)
+print "   Tests are being run with %s"%observationmode.COMPTABLE
+print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
 
 
 class C1(ETCTestCase):
@@ -13,7 +17,7 @@ class C1(ETCTestCase):
         self.ref_rate=4.8e-05
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV1.fits'
-
+        self.accuracy=1e-2
 
 class C2(ETCTestCase):
     def setparms(self):
@@ -31,6 +35,7 @@ class C3(ETCTestCase):
         self.ref_rate=6e-05
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV3.fits'
+        self.accuracy=1e-2
 
 
 class C4(ETCTestCase):
@@ -49,7 +54,7 @@ class C5(ETCTestCase):
         self.ref_rate=6.4e-05
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV5.fits'
-
+        self.accuracy=1e-2
 
 class C6(ETCTestCase):
     def setparms(self):
@@ -67,7 +72,7 @@ class C7(ETCTestCase):
         self.ref_rate=6.7e-05
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV7.fits'
-
+        self.accuracy=1e-2
 
 class C8(ETCTestCase):
     def setparms(self):
@@ -85,7 +90,7 @@ class C9(ETCTestCase):
         self.ref_rate=7.7e-05
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV9.fits'
-
+        self.accuracy=1e-2
 
 class C10(ETCTestCase):
     def setparms(self):
@@ -103,7 +108,7 @@ class C11(ETCTestCase):
         self.ref_rate=9.5e-05
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV11.fits'
-
+        self.accuracy=1e-2
 
 class C12(ETCTestCase):
     def setparms(self):
@@ -121,7 +126,7 @@ class C13(ETCTestCase):
         self.ref_rate=0.000102
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV13.fits'
-
+        self.accuracy=1e-2
 
 class C14(ETCTestCase):
     def setparms(self):
@@ -193,7 +198,7 @@ class C21(ETCTestCase):
         self.ref_rate=0.000517
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV104.fits'
-
+        self.accuracy=1e-2
 
 class C22(ETCTestCase):
     def setparms(self):
@@ -211,7 +216,7 @@ class C23(ETCTestCase):
         self.ref_rate=0.001553
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV106.fits'
-
+        self.accuracy=1e-2
 
 class C24(ETCTestCase):
     def setparms(self):
@@ -220,7 +225,7 @@ class C24(ETCTestCase):
         self.ref_rate=0.000892
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV107.fits'
-
+        self.accuracy=1e-2
 
 class C25(ETCTestCase):
     def setparms(self):
@@ -229,7 +234,7 @@ class C25(ETCTestCase):
         self.ref_rate=0.000899
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV108.fits'
-
+        self.accuracy=1e-2
 
 class C26(ETCTestCase):
     def setparms(self):
@@ -238,7 +243,7 @@ class C26(ETCTestCase):
         self.ref_rate=0.000906
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV109.fits'
-
+        self.accuracy=1e-2
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:

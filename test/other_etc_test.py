@@ -27,8 +27,9 @@ testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 # updates to CDBS
 cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
 observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "Tests are being run with %s"%observationmode.COMPTABLE
-print "Synphot comparison results were computed with r1j2146sm_tmc.fits"
+print "%s:"%os.path.basename(__file__)
+print "  Tests are being run with %s"%observationmode.COMPTABLE
+print "  Synphot comparison results were computed with r1j2146sm_tmc.fits"
 #Synphot comparison results are identified with the varname synphot_ref.
 
 accuracy = 1.0e-5    # default floating point comparison accuracy
