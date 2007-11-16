@@ -749,7 +749,47 @@ class SpectralElement(Integrator):
         OutElement.throughputtable = fcopy
 
         return OutElement
+    
+    def writefits(self, filename, clobber=True, trimzero=True):
+        """Write the bandpass to a FITS file."""
 
+        if clobber:
+            try:
+                os.remove(filename)
+            except OSError:
+                pass
+            
+        wave=self.wave
+        thru=self.throughput
+            
+        first,last=0,len(thru)
+        if trimzero:
+            #Keep one zero at each end
+            nz = thru.nonzero()[0]
+            try:
+                first=max(nz[0]-1,first)
+                last=min(nz[-1]+2,last)
+            except IndexError:
+                pass
+
+        #Construct the columns and HDUlist
+        cw = pyfits.Column(name='WAVELENGTH',
+                           array=wave[first:last],
+                           unit=self.waveunits.name,
+                           format='E')
+        cf = pyfits.Column(name='THROUGHPUT',
+                           array=thru[first:last],
+                           unit='         ',
+                           format='E')
+        hdu = pyfits.PrimaryHDU()
+        hdulist = pyfits.HDUList([hdu])
+
+        #Write the file
+        cols = pyfits.ColDefs([cw, cf])
+        hdu = pyfits.new_table(cols)
+        hdulist.append(hdu)
+        hdu.writeto(filename)
+                                                 
     def resample(self, resampledWaveTab):
         '''Interpolate throughput given a wavelength array that is
         monotonically increasing and the TabularSpectralElement object.
@@ -833,7 +873,11 @@ class CompositeSpectralElement(SpectralElement):
             raise TypeError("Arguments must be SpectralElements")
         self.component1 = component1
         self.component2 = component2
-        self.waveunits = "probably angstroms"
+        if component1.waveunits.name == component2.waveunits.name:
+            self.waveunits = component1.waveunits
+        else:
+            msg="Components have different waveunits (%s and %s)"%(component1.waveunits,component2.waveunits)
+            raise NotImplementedError(msg)
         self.throughputunits = None
         
     def __call__(self, wavelength):
