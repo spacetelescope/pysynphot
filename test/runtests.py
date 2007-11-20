@@ -1,6 +1,11 @@
 """Initial test-running script for pysynphot.
  -->> *** You must set PYSYN_CDBS and PYSYN_USERDATA for these tests to run!!
  -->> *** Stdout and Stderr from this script should be piped to a log file.
+
+Warning: PYSYN_USERDATA should not contain any hyphens ('-'). This
+directory is used to construct the names of test files. The
+synphot syntax parser will interpret them as a minus sign that terminates
+the filename, and some tests will then have errors.
 """
 
 import sys, os, time
