@@ -1,25 +1,26 @@
 from distutils.core import setup, Extension
 import sys, os.path, string, shutil, glob, os, re
 from distutils.command.install_data import install_data
-import glob
+import glob, time
 import commands
 
 #Determine the python version
 ver = sys.version_info
 python_exec = 'python' + str(ver[0]) + '.' + str(ver[1])
 
-#Determine, and save, the revision number
+#Determine & save the revision number
 stat,revset=commands.getstatusoutput('svnversion .')
 if stat != 0:
     revset='unavailable'
+if ( (revset.strip() == 'exported') or (stat!=0) ):
+    revset=revset+'; build date %s'%time.ctime()
+    print "WARNING, no SVN version info available for this package"
+    print "Proceeding with installation.\n"
 vfname=os.path.join('data','generic','versioninfo.dat')
 f=open(vfname,'w')
 f.write(revset)
 f.close()
-if ( (revset.strip() == 'exported') or (stat!=0) ):
-    print "WARNING, no SVN version info available for this package"
-    print "Proceeding with installation.\n"
-    
+
 #Define the datafiles that are part of this package
 DATA_FILES = glob.glob(os.path.join('data', 'generic', '*'))
 WAVECAT_FILES = glob.glob(os.path.join('data', 'wavecat', '*'))
