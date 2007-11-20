@@ -4,6 +4,8 @@ import spparser as P
 from pysynphot.newobservation import Observation
 from pysynphot import ObsBandpass
 from pysynphot.observationmode import ObservationMode
+import os
+
 
 def getparms(parlist):
     """ The ETC presently sends along a bunch of information in key-value

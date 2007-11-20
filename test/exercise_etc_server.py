@@ -15,10 +15,13 @@ call are ignored. See the relevant calculator classes in the etc.py module for
 more detail.)
 
 In order to run this test suite, you must first have started the server by
-running etcserver.py. This will start the server, which will run indefinitely.
+running the pysynphot file server.py. This will start the server,
+which will run indefinitely.
 The server prints diagnostic output to stdout, so it is useful to start this
-in a specific window.
-
+in a specific window, in which you must first:
+  - Define PYSYN_CDBS
+  - cd to a directory that contains the files earthshine.fits and Zodi.fits
+  
 Then you can run this module from the shell in the usual way, eg:
 
 gaudete> python /data/gaudete1/laidler/pyinstall/pysynphot/etc_test.py
@@ -97,12 +100,12 @@ import os
 import socket
 import threading
 import SocketServer
-from client import Client
+from pysynphot.client import Client
 
 #Places used by test code
 userdir   = os.environ['PYSYN_USERDATA']
 
-import etc
+import pysynphot.newetc as etc
 etc.debug = 1
 
 def test():
