@@ -8,10 +8,11 @@ from observationmode import ObservationMode
 from spectrum import CompositeSpectralElement, TabularSpectralElement
 import wavetable
 
-def ObsBandpass(obstring):
+def ObsBandpass(obstring, graphtable=None, comptable=None):
     """ Temporarily create an Obsmode to determine whether an
     ObsModeBandpass or a TabularSpectralElement will be returned."""
-    ob=ObservationMode(obstring)
+    ob=ObservationMode(obstring,graphtable=graphtable,
+                       comptable=comptable)
     if len(ob) > 1:
         return ObsModeBandpass(ob)
     else:

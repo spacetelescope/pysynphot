@@ -25,11 +25,21 @@ wavecat = locations.wavecat
 def _refTable(template):
     names = glob.glob(os.path.join(rootdir,template))
     names.sort()
-    return names[-1]
-
+    try:
+        return names[-1]
+    except IndexError:
+        msg= "No files found for %s."%os.path.join('PYSYN_CDBS',template)
+        raise IOError(msg)
+    
 GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
 COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
-THERMTABLE = _refTable(os.path.join('mtab','*_tmt.fits'))
+try:
+    THERMTABLE = _refTable(os.path.join('mtab','*_tmt.fits'))
+except IOError, e:
+    THERMTABLE = None
+    print "Warning: %s"%str(e)
+    print "         No thermal calculations can be performed."
+    
 CLEAR = 'clear'
 
 
@@ -239,6 +249,9 @@ class BaseObservationMode(object):
             obsmode=tmatch.group(1)
         self._obsmode = obsmode
 
+        if graphtable is None:
+            graphtable=GRAPHTABLE
+
         self.area = units.HSTAREA
 
         # For sensitivity calculations: 5.03411762e7 is hc in
@@ -247,8 +260,9 @@ class BaseObservationMode(object):
 
         modes = obsmode.lower().split(',')
 
-        gt = GraphTable(GRAPHTABLE)
-
+        gt = GraphTable(graphtable)
+        self.gtname=graphtable
+        
         self.compnames,self.thcompnames = gt.GetComponentsFromGT(modes,1)
         self._rampFilterWavelength = gt.rampFilterWavelength
 
@@ -352,11 +366,19 @@ class BaseObservationMode(object):
 
 class ObservationMode(BaseObservationMode):
 
-    def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
+    def __init__(self, obsmode, method='HSTGraphTable',graphtable=None,
+                 comptable=None):
+
+        if graphtable is None:
+            graphtable=GRAPHTABLE
+        if comptable is None:
+            comptable=COMPTABLE
 
         BaseObservationMode.__init__(self, obsmode, method, graphtable)
 
-        ct = CompTable(COMPTABLE)
+        ct = CompTable(comptable)
+        self.ctname = comptable
+        
         self._throughput_filenames = self._getFileNames(ct, self.compnames)
 
         self.components = self._getOpticalComponents(self._throughput_filenames)
@@ -425,14 +447,28 @@ class ObservationMode(BaseObservationMode):
 
 class _ThermalObservationMode(BaseObservationMode):
 
-    def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
+    def __init__(self, obsmode, method='HSTGraphTable',graphtable=None,
+                 comptable=None, thermtable=None):
+
+        if graphtable is None:
+            graphtable = GRAPHTABLE
+        if comptable is None:
+            comptable = COMPTABLE
+        if thermtable is None:
+            thermtable = THERMTABLE
+                        
+            
 
         BaseObservationMode.__init__(self, obsmode, method, graphtable)
 
-        ct = CompTable(COMPTABLE)
+        ct = CompTable(comptable)
+        self.ctname=comptable
+        
         throughput_filenames = self._getFileNames(ct, self.compnames)
 
-        thct = CompTable(THERMTABLE)
+        thct = CompTable(thermtable)
+        self.thname = thermtable
+        
         thermal_filenames = self._getFileNames(thct, self.thcompnames)
 
         self.components = self._getThermalComponents(throughput_filenames, \
