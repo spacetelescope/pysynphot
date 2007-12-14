@@ -4,6 +4,7 @@ import spparser as P
 from pysynphot.newobservation import Observation
 from pysynphot import ObsBandpass
 from pysynphot.observationmode import ObservationMode
+from pysynphot import observationmode as ommod #needed for tabcheck task
 import os
 
 
@@ -95,6 +96,19 @@ def thermback(parlist):
     ans = sp.integrate() * omode.pixscale**2 * omode.area
     return ans
 
+def updatetabs(dummy):
+    """Check for new GRAPH/COMP/THERM tables"""
+    ommod.GRAPHTABLE = ommod._refTable(os.path.join('mtab','*_tmg.fits'))
+    ommod.COMPTABLE  = ommod._refTable(os.path.join('mtab','*_tmc.fits'))
+    try:
+        ommod.THERMTABLE = ommod._refTable(os.path.join('mtab','*_tmt.fits'))
+        msg="Success"
+    except IOError, e:
+        ommod.THERMTABLE = None
+        msg= """Warning: %s
+        No thermal calculations can be performed."""%str(e)
+    return "%s;%s;%s;%s"%(ommod.GRAPHTABLE, ommod.COMPTABLE,
+                          ommod.THERMTABLE, msg)
 
 def Suicide(dummy):
     """Kill this process"""
@@ -118,6 +132,7 @@ tasks = {'calcphot':           calcphot,
          'countrate':          countrate,
          'SpecSourcerateSpec': specrate,
          'thermback':          thermback,
+         'updatetabs':         updatetabs,
          'version':            version,
          'quit':               Suicide}
 
