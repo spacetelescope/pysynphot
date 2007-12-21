@@ -8,7 +8,7 @@ import commands
 ver = sys.version_info
 python_exec = 'python' + str(ver[0]) + '.' + str(ver[1])
 
-#Determine & save the revision number
+#Determine & save the revision number for the ETC
 stat,revset=commands.getstatusoutput('svnversion .')
 if stat != 0:
     revset='unavailable'
@@ -21,14 +21,29 @@ f=open(vfname,'w')
 f.write(revset)
 f.close()
 
+#Determine & save the full svn info string for humans
+#No need to test against status; the info will be self-explanatory
+here=os.path.abspath(os.curdir)
+info=commands.getoutput('svn info %s'%here)
+vfname=os.path.join('data','generic','taginfo.dat')
+f=open(vfname,'w')
+f.write(info)
+f.close()
+
+#------------------------------------------------------------
+# WARNING WARNING WARNING: Any changes made to the datafiles
+# must also be reflected in stsci_python/cfg_pysynphot.py.
+#------------------------------------------------------------
 #Define the datafiles that are part of this package
 DATA_FILES = glob.glob(os.path.join('data', 'generic', '*'))
 WAVECAT_FILES = glob.glob(os.path.join('data', 'wavecat', '*'))
 DATA_FILES_DIR = os.path.join('pysynphot', 'data')
 testfiles = glob.glob(os.path.join('test','etctest_base_class.py'))
 
-PYSYNPHOT_DATA_FILES = [(DATA_FILES_DIR,DATA_FILES), (DATA_FILES_DIR, WAVECAT_FILES),('pysynphot',testfiles)]
-
+PYSYNPHOT_DATA_FILES = [(DATA_FILES_DIR,DATA_FILES),
+                        (DATA_FILES_DIR, WAVECAT_FILES),
+                        ('pysynphot',testfiles)]
+#------------------------------------------------------------
 
 def dolocal():
     """Adds a command line option --local=<install-dir> which is an abbreviation for
@@ -65,6 +80,7 @@ def dosetup():
               platforms = ["Linux","Solaris","Mac OS X", "Win"],
               packages=['pysynphot'],
               package_dir={'pysynphot':'lib'},
+              requires=['pyfits','numpy'],
               cmdclass = {'install_data':smart_install_data},
               data_files = PYSYNPHOT_DATA_FILES
               )

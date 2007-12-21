@@ -110,6 +110,30 @@ def updatetabs(dummy):
     return "%s;%s;%s;%s"%(ommod.GRAPHTABLE, ommod.COMPTABLE,
                           ommod.THERMTABLE, msg)
 
+def showfiles(parlist):
+    """For debugging: print tmg/tmc/tmt and showfiles to a file for the
+    given obsmode.
+
+    For nonserver use:
+    foo='showfiles&obsmode="acs,hrc,f555w"&output="testme2.txt"'
+    newetc.showfiles(foo.split('&')[1:])
+    
+    """
+    d=getparms(parlist)
+    obsmode=d['obsmode']
+    fname=d['output']
+    
+    ob=ommod.ObservationMode(obsmode)
+    flist=[x for x in ob._throughput_filenames if x != 'clear']
+    out=open(fname,'w')
+    out.write("TMG: %s\n"%ommod.GRAPHTABLE)
+    out.write("TMC: %s\n"%ommod.COMPTABLE)
+    out.write("TMT: %s\n"%ommod.THERMTABLE)
+    out.write("\nObsmode %s:\n"%obsmode)
+    for fname in flist:
+        out.write("%s\n"%fname)
+    out.close()
+    
 def Suicide(dummy):
     """Kill this process"""
     mypid=os.getpid()
@@ -130,6 +154,7 @@ def version(dummy):
 tasks = {'calcphot':           calcphot,
          'calcspec':           calcspec,
          'countrate':          countrate,
+         'showfiles':          showfiles,
          'SpecSourcerateSpec': specrate,
          'thermback':          thermback,
          'updatetabs':         updatetabs,

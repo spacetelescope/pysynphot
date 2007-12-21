@@ -131,6 +131,10 @@ def test():
     cl5 = Client ('localhost',\
                   'calcspec&spectrum="rn(pl(4000.0,-1.0,flam),box(1500,1.0),1.00E-14,flam)"&output="%s"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"'%outfile)
     cl5.start()
+
+    cl6 = Client('localhost',
+                 'showfiles&obsmode="acs,hrc,f555w"&output="testme.txt"')
+    cl6.start()
     
 if __name__ == '__main__':
     test()
