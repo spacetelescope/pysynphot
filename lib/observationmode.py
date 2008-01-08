@@ -523,7 +523,7 @@ class _ThermalObservationMode(BaseObservationMode):
     def _getSpectrum(self):
         sp = spectrum.TabularSourceSpectrum()
         sp._wavetable = self._getWavesetIntersection()
-        sp._fluxtable = N.zeros(shape=sp._wavetable.shape,dtype=N.float32)
+        sp._fluxtable = N.zeros(shape=sp._wavetable.shape,dtype=N.float64)
 
         sp.waveunits = units.Units('angstrom')
         sp.fluxunits = units.Units('photlam')

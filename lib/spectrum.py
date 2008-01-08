@@ -405,7 +405,7 @@ class TabularSourceSpectrum(SourceSpectrum):
         lines = fs.readlines()
 
         self._wavetable = N.ones(shape=[len(lines),],dtype=N.float64)
-        self._fluxtable = N.ones(shape=[len(lines),],dtype=N.float32)
+        self._fluxtable = N.ones(shape=[len(lines),],dtype=N.float64)
 
         regx = re.compile(r'\S+', re.IGNORECASE)
         i = 0
@@ -435,7 +435,7 @@ class TabularSourceSpectrum(SourceSpectrum):
         '''
         OutSpec = TabularSourceSpectrum()
         wcopy = N.zeros(self._wavetable.size+2,dtype=N.float64)
-        fcopy = N.zeros(self._fluxtable.size+2,dtype=N.float32)
+        fcopy = N.zeros(self._fluxtable.size+2,dtype=N.float64)
         wcopy[1:-1] = self._wavetable
         fcopy[1:-1] = self._fluxtable
         fcopy[0] = 0.0
@@ -549,7 +549,7 @@ class FileSourceSpectrum(TabularSourceSpectrum):
         lines = fs.readlines()
         
         self._wavetable = N.ones(shape=[len(lines),],dtype=N.float64)
-        self._fluxtable = N.ones(shape=[len(lines),],dtype=N.float32)
+        self._fluxtable = N.ones(shape=[len(lines),],dtype=N.float64)
         
         regx = re.compile(r'\S+', re.IGNORECASE)
         i = 0
@@ -634,7 +634,7 @@ class UnitSpectrum(AnalyticSpectrum):
         sp.waveunits = self.waveunits
         sp.fluxunits = self.fluxunits
         sp._wavetable = wavelength
-        sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float32) * \
+        sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float64) * \
                         self._fluxdensity
         sp.ToInternal()
 
@@ -657,7 +657,7 @@ class Powerlaw(AnalyticSpectrum):
         sp.waveunits = self.waveunits
         sp.fluxunits = self.fluxunits
         sp._wavetable = wavelength
-        sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float32)
+        sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float64)
 
         for i in range(len(sp._fluxtable)):
             sp._fluxtable[i] = (sp._wavetable[i] / self._refwave) ** self._index
@@ -732,7 +732,7 @@ class SpectralElement(Integrator):
         OutElement = TabularSpectralElement()
 
         wcopy = N.zeros(self.wavetable.size+2,dtype=N.float64)
-        fcopy = N.zeros(self.throughputtable.size+2,dtype=N.float32)
+        fcopy = N.zeros(self.throughputtable.size+2,dtype=N.float64)
 
         wcopy[1:-1] = self.wavetable
         fcopy[1:-1] = self.throughputtable
@@ -1038,7 +1038,7 @@ class Box(SpectralElement):
         self.wavetable[-1] = self.wavetable[-2] + step
         
         self.throughputtable = N.ones(shape=self.wavetable.shape, \
-                                        dtype=N.float32)
+                                        dtype=N.float64)
         self.throughputtable[0]  = 0.0
         self.throughputtable[-1] = 0.0
         

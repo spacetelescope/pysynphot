@@ -71,7 +71,7 @@ class Icat(spectrum.TabularSourceSpectrum):
     def _breakList(self, inList, index, parameter):
         par = float(parameter)
 
-        array = N.empty(shape=[len(inList),],dtype=N.float32)
+        array = N.empty(shape=[len(inList),],dtype=N.float64)
         i = 0
         for parameters in inList:
             array[i] = parameters[index]

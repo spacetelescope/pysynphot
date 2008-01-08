@@ -72,7 +72,7 @@ def _computeSeaton(x):
     return result
 
 def _computeLMC(x):
-    result = N.zeros(x.shape, dtype=N.float32)
+    result = N.zeros(x.shape, dtype=N.float64)
 
     mask = N.where(x < 1.83, 1, 0)
     result = N.where(mask == 1, _interp(x, _lmcx, _lmce), result)
