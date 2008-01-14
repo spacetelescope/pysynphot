@@ -583,22 +583,22 @@ class GaussianSource(AnalyticSpectrum):
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
                  fluxunits='flam'):
         self.center = center
+        self.waveunits = units.Units(waveunits)
+        self.fluxunits = units.Units(fluxunits)
         self.input_fwhm = fwhm
         self.input_flux = flux
-        self.input_units = fluxunits
+        self._input_units = self.fluxunits
         self.sigma = fwhm / math.sqrt(8.0 * math.log(2.0))
         self.factor = flux / (math.sqrt(2.0 * math.pi) * self.sigma)
 
-        self.waveunits = units.Units(waveunits)
-        self.fluxunits = units.Units(fluxunits)
 
     def __str__(self):
-        return 'Gaussian: mu=%f,fwhm=%f,flux=%f %s'%(self.center,self.input_fwhm,self.input_flux,self.input_units)
+        return 'Gaussian: mu=%f,fwhm=%f,flux=%f %s'%(self.center,self.input_fwhm,self.input_flux,self._input_units)
 
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
         sp.waveunits = self.waveunits
-        sp.fluxunits = self.fluxunits
+        sp.fluxunits = self._input_units
         sp._wavetable = wavelength
         sp._fluxtable = self.factor * N.exp( \
             -0.5 *((wavelength - self.center)/ self.sigma)**2)
@@ -630,14 +630,14 @@ class UnitSpectrum(AnalyticSpectrum):
         return "Unit spectrum of %f %s"%(self._fluxdensity,self._input_units)
     
     def __call__(self, wavelength):
+        """Create a TabularSourceSpectrum, then use its __call__"""
         sp = TabularSourceSpectrum()
         sp.waveunits = self.waveunits
-        sp.fluxunits = self.fluxunits
+        sp.fluxunits = self._input_units
         sp._wavetable = wavelength
-        sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float64) * \
-                        self._fluxdensity
+        sp._fluxtable = self._fluxdensity*N.ones(sp._wavetable.shape,
+                                                 dtype=N.float64) 
         sp.ToInternal()
-
         return sp(wavelength)
 
 
@@ -646,6 +646,7 @@ class Powerlaw(AnalyticSpectrum):
         self.wavelength = None
         self.waveunits = units.Units(waveunits)
         self.fluxunits = units.Units(fluxunits)
+        self._input_units = self.fluxunits
         self._refwave = refwave
         self._index = index
 
@@ -655,7 +656,7 @@ class Powerlaw(AnalyticSpectrum):
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
         sp.waveunits = self.waveunits
-        sp.fluxunits = self.fluxunits
+        sp.fluxunits = self._input_units
         sp._wavetable = wavelength
         sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float64)
 

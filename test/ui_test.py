@@ -7,7 +7,7 @@ import pyfits
 from pytools import testutil 
 from pysynphot import units, locations, spectrum, observationmode
 from pysynphot.obsbandpass import ObsBandpass
-
+import pysynphot as S
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
 ## import ui_test
@@ -152,6 +152,17 @@ class BandTestCase(testutil.FPTestCase):
         "ui_test.BandTestCase('testompass'): Tests r172"
         bp1=ObsBandpass('acs,hrc,f555w')
         self.assert_(len(bp1) == 6)
+
+class UnitTestCase(testutil.FPTestCase):
+    def setUp(self):
+        self.uspec=S.UnitSpectrum(1.0,fluxunits='flam')
+
+    def testfnu(self):
+        """Converted to fnu, it should not be flat.
+        Can't test against 1.0 because there's computations & some
+        numerical issues."""
+        self.uspec.convert('fnu')
+        self.failIf(self.uspec.flux.mean() == 1.0)
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:
