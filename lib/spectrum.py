@@ -336,8 +336,13 @@ class CompositeSourceSpectrum(SourceSpectrum):
         # for now we keep these attributes here, in spite of the internal
         # units model. There is code that still breaks down if these attributes
         # are not here.
-        self.fluxunits = source1.fluxunits
-        self.waveunits = source1.waveunits
+        try:
+            self.waveunits = source1.waveunits
+            self.fluxunits = source1.fluxunits
+        except AttributeError:
+            self.waveunits = source2.waveunits
+            self.fluxunits = source2.fluxunits
+
 
     def __str__(self):
         opdict = {'add':'+','multiply':'*'}

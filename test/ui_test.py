@@ -46,7 +46,14 @@ class FileTestCase(testutil.FPTestCase):
         sp2=self.sp + self.sp
         sumflux = self.sp.flux + self.sp.flux
         self.assertEqualNumpy(sp2.flux,sumflux)
-        
+  
+    def testmul(self):
+        "ui_test.FileTestCase('testmul'): Multiply flux by band"
+        bp=S.spectrum.Box(3000,50)
+        sp1=self.sp * bp
+        sp2=bp*self.sp
+        self.assertEqualNumpy(sp1.flux,sp2.flux)
+     
     def tearDown(self):
         self.openfits.close()
 
@@ -163,6 +170,8 @@ class UnitTestCase(testutil.FPTestCase):
         numerical issues."""
         self.uspec.convert('fnu')
         self.failIf(self.uspec.flux.mean() == 1.0)
+
+
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:
