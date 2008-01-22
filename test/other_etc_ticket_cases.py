@@ -13,6 +13,9 @@ from pysynphot import newetc as etc
 from pytools import testutil 
 from pysynphot import other_etc_test
 
+from other_etc_test import values
+
+testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 
 class CalcphotTestCase(testutil.FPTestCase):
     """#33: Observations require a binset"""
@@ -22,14 +25,16 @@ class CalcphotTestCase(testutil.FPTestCase):
         self.obs = observation.Observation(self.sp, self.obsmode)
 
     def testcountrate(self):
+        "binset: countrate"
         countrate = self.obs.calcphot()
         self.assertApproxFP(countrate[0], values['countrate'])
 
     def testefflam(self):
+        "binset: efflam"
         efflam = self.obs.calcphot(func='efflam')
         self.assertApproxFP(efflam, values['efflam'])
 
-class ETCTestCase_Imag1(testutil.FPTestCase):
+class ETC_Imag1(testutil.FPTestCase):
     """Ticket 21: parameterized keywords, Imag1"""
 
     def setUp(self):
@@ -38,6 +43,7 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         os.chdir(locations.specdir)
 
     def test4cr1(self):
+        "ETC Imag1, Ticket #21: parm"
         spectrum = "spectrum=em(3880.0,10.0,1.0000000168623835E-16,flam)"
         instrument = "instrument=acs,wfc1,FR388N#3880"
         parameters = [spectrum, instrument]
@@ -53,7 +59,7 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         self.assertApproxFP(countrate[0], 7.73334E-02)
 
 
-class ETCTestCase_Imag2(testutil.FPTestCase):
+class ETC_Imag2(testutil.FPTestCase):
     """Ticket 21: parameterized keywords, Imag2"""
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
@@ -63,27 +69,31 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         os.chdir(self.oldpath)
 
     def test7(self):
+        "#21: ETC_Imag2, parm"
         spectrum = "spectrum=rn(icat(k93models,3500,0.0,4.6),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=acs,hrc,FR388N#3880"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
         self.assertApproxFP(float(countrate[0]), 28.0668)
 
-class ObsmodeTestCase(testutil.FPTestCase):
+class ObsmodeTestCase_Parm(testutil.FPTestCase):
     """Ticket #21: parameterized keywords, ObsmodeTestCase"""
     def test2(self):
+        "acs,hrc,FR388N#3880"
         obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
         self.assertApproxFP(throughput[5000], 2.8632756E-007)
 
     def test3(self):
+        "acs,wfc1,FR647M#6470"
         obsmode = observationmode.ObservationMode("acs,wfc1,FR647M#6470")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable
         self.assertApproxFP(throughput[5000], 5.647170E-3)
 
     def test6(self):
+        "acs,hrc,FR388N#3880"
         obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
         wave = obsmode.Throughput().GetWaveSet()
         throughput = obsmode.Throughput().throughputtable

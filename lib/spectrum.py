@@ -896,6 +896,10 @@ class CompositeSpectralElement(SpectralElement):
         '''
         return self.component1(wavelength) * self.component2(wavelength)
 
+    def __str__(self):
+        opdict = {'add':'+','multiply':'*'}
+        return "(%s %s %s)"%(str(self.component1),opdict[self.operation],str(self.component2))
+
     def GetWaveSet(self):
         '''This method returns a wavelength set appropriate for a composite
         object by forming the union of the wavelengths of the components.
@@ -991,16 +995,19 @@ class InterpolatedSpectralElement(SpectralElement):
     def __init__(self, fileName, wavelength):
         ''' The file name contains a suffix with a column name specification
         in between square brackets, such as [fr388n#]. The wavelength
-        parameter is used to interpolate between two columns in the file.
+        parameter (poorly named -- it is not always a wavelength) is used to
+        interpolate between two columns in the file.
         '''
         self.name = fileName.split('[')[0]
         colSpec = fileName.split('[')[1][:-1]
+
+        self.interpval = wavelength
 
         fs = pyfits.open(self.name)
 
         self.wavetable = fs[1].data.field('wavelength')
 
-        colNames = fs[1].data.names[1:]
+        colNames = fs[1].data.names[2:]
         colWaves = []
         for columnName in colNames:
             colWaves.append(float(columnName.split('#')[1]))
@@ -1025,6 +1032,9 @@ class InterpolatedSpectralElement(SpectralElement):
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.throughputunits = 'none'
         fs.close()
+
+    def __str__(self):
+        return "%s#%f"%(self.name,self.interpval)
 
 
 class ThermalSpectralElement(TabularSpectralElement):

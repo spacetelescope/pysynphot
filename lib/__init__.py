@@ -25,7 +25,7 @@ Example:
 
 >>> import pysynphot as S
 >>> print S.__version__
-0.3d3
+0.4d1
 >>> #Read a spectrum from a file
 >>> vega=S.FileSpectrum('alpha_lyr_stis_003.fits')
 >>> print vega
@@ -107,7 +107,7 @@ flam
 """
 
 
-__version__ = '0.3d4b'
+__version__ = '0.4d1'
 __revstring__  = '$Rev$'
 
 #UI:

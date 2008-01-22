@@ -152,7 +152,6 @@ class GraphTable(object):
         components = []
         thcomponents = []
         outnode = 0
-        self.rampFilterWavelength = None
         inmodes=set(modes)
         used_modes=set()
         count = 0
@@ -190,12 +189,6 @@ class GraphTable(object):
 
             # Now try and match something from the modes list
             for mode in modes:
-
-                # handle #-separated ramp filter spec.
-                modeFields = mode.lower().split('#')
-                if len(modeFields) > 1:
-                    mode = modeFields[0] + '#'
-                    self.rampFilterWavelength = float(modeFields[1])
 
                 if mode in self.keywords[nodes]:
                     used_modes.add(mode)
@@ -257,14 +250,25 @@ class BaseObservationMode(object):
         # For sensitivity calculations: 5.03411762e7 is hc in
         # the appropriate units
         self._constant = 5.03411762e7 * self.area
+        self.pardict={}
 
         modes = obsmode.lower().split(',')
+        if '#' in obsmode:
+            self.modes=[]
+            for m in modes:
+                if '#' in m:
+                    key,val=m.split('#')
+                    self.pardict[key]=float(val)
+                    self.modes.append("%s#"%key)
+                else:
+                    self.modes.append(m)
+        else:
+            self.modes=modes
 
         gt = GraphTable(graphtable)
         self.gtname=graphtable
         
-        self.compnames,self.thcompnames = gt.GetComponentsFromGT(modes,1)
-        self._rampFilterWavelength = gt.rampFilterWavelength
+        self.compnames,self.thcompnames = gt.GetComponentsFromGT(self.modes,1)
 
         self.components = None #Will be filled by subclasses
         self.pixscale = None
@@ -383,11 +387,16 @@ class ObservationMode(BaseObservationMode):
 
         self.components = self._getOpticalComponents(self._throughput_filenames)
 
-
     def _getOpticalComponents(self, throughput_filenames):
         components = []
         for throughput_name in throughput_filenames:
-            component = _Component(throughput_name, self._rampFilterWavelength)
+            if throughput_name.endswith('#]'):
+                barename,parkey=throughput_name.split('[')
+                parkey=parkey[:-2]
+            else:
+                parkey=None
+            component = _Component(throughput_name,
+                                   interpval=self.pardict.get(parkey))
 
             if not component.isEmpty():
                 components.append(component)
@@ -419,6 +428,7 @@ class ObservationMode(BaseObservationMode):
 
             throughput.wavetable = product.GetWaveSet()
             throughput.throughputtable = product(throughput.wavetable)
+            throughput.name='*'.join([str(x) for x in self.components])
 
 ##            throughput = throughput.resample(spectrum.default_waveset)
 
@@ -426,6 +436,7 @@ class ObservationMode(BaseObservationMode):
 
         except IndexError:   # graph table is broken.
             return None
+
 
     def _multiplyThroughputs(self, index):
         product = self.components[index].throughput
@@ -435,6 +446,7 @@ class ObservationMode(BaseObservationMode):
                     product = product * component.throughput
         return product
 
+        
     def ThermalSpectrum(self):
         try:
             # delegate to subclass.
@@ -599,25 +611,24 @@ class _ThermalObservationMode(BaseObservationMode):
 
 
 class _Component(object):
-
-    def __init__(self, throughput_name, rampFilterWavelength):
+    def __init__(self, throughput_name, interpval):
         self.throughput_name = throughput_name
 
         self._empty = True
 
-        self.throughput = self._buildThroughput(throughput_name, rampFilterWavelength)
+        self.throughput = self._buildThroughput(throughput_name, interpval)
 
     def __str__(self):
         return str(self.throughput)
     
-    def _buildThroughput(self, name, rampFilterWavelength):
+    def _buildThroughput(self, name, interpval):
         if name != CLEAR:
-            if len(name.split('[')) == 1:
+            if interpval is None:
                 self._empty = False
                 return spectrum.TabularSpectralElement(name)
             else:
                 self._empty = False
-                return spectrum.InterpolatedSpectralElement(name, rampFilterWavelength)
+                return spectrum.InterpolatedSpectralElement(name, interpval)
         else:
             return None
 
