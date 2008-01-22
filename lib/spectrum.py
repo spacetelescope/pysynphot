@@ -935,19 +935,12 @@ class TabularSpectralElement(SpectralElement):
         of the file with the spectral element table.
         '''
         if fileName:
+            if fileName.endswith('.fits') or fileName.endswith('.fit'):
+                self._readFITS(fileName, thrucol)
+            else:
+                self._readASCII(fileName)
             self.name = fileName
 
-            fs = pyfits.open(self.name)
-
-            self.wavetable = fs[1].data.field('wavelength')
-            self.throughputtable = fs[1].data.field(thrucol)
-
-            self.waveunits = units.Units(fs[1].header['tunit1'].lower())
-            self.throughputunits = 'none'
-
-            self.getHeaderKeywords(fs[1].header)
-
-            fs.close()
         else:
             self.name = None
             self.wavetable = None
@@ -958,6 +951,32 @@ class TabularSpectralElement(SpectralElement):
     def __str__(self):
         return self.name
 
+
+    def _readASCII(self,filename):
+        """ Ascii files have no headers. Following synphot, this
+        routine will assume the first column is wavelength in Angstroms,
+        and the second column is throughput (dimensionless)."""
+        self.waveunits = units.Units('angstrom')
+        self.throughputunits = 'none'
+        wlist,tlist = self._columnsFromASCII(filename)
+        self.wavetable=N.array(wlist,dtype=N.float64)
+        self.throughputtable=N.array(tlist,dtype=N.float64)
+       
+
+    def _readFITS(self,filename,thrucol='throughput'):
+        fs = pyfits.open(filename)
+        
+        self.wavetable = fs[1].data.field('wavelength')
+        self.throughputtable = fs[1].data.field(thrucol)
+        
+        self.waveunits = units.Units(fs[1].header['tunit1'].lower())
+        self.throughputunits = 'none'
+        
+        self.getHeaderKeywords(fs[1].header)
+        
+        fs.close()
+
+       
     def getHeaderKeywords(self, header):
         ''' This is a placeholder for subclasses to get header keywords without
         having to reopen the file again. 
