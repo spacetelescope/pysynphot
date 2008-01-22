@@ -480,19 +480,19 @@ class _ThermalObservationMode(BaseObservationMode):
         obsmode = self._obsmode.split(',')
         obsmode = str(obsmode[0]) + ',' + str(obsmode[1])
 
-        fs = open(os.path.join(locations.specdir,'detectors.dat'),mode='r')
+        fname=os.path.join(locations.specdir,'detectors.dat')
+        fs = open(fname,mode='r')
         lines = fs.readlines()
-
+        fs.close()
+        
         regx = re.compile(r'\S+', re.IGNORECASE)
         for line in lines:
             try:
                 tokens = regx.findall(line)
                 if tokens[0] == obsmode:
                     break
-            except:
-                pass
-
-        fs.close()
+            except Exception, e:
+                raise ValueError("Error processing %s: %s"%(fname,str(e)))
 
         return float(tokens[1])
 
