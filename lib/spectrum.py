@@ -117,6 +117,34 @@ class Integrator(object):
 
         return integrand.sum()
 
+    def _columnsFromASCII(self, filename):
+        """ Following synphot/TABLES, ASCII files may contain blank lines,
+        comment lines (beginning with '#'), or terminal comments. This routine
+        may be called by both Spectrum and SpectralElement objects to extract
+        the first two columns from a file."""
+
+        wlist=[]
+        flist=[]
+        lcount=0
+        fs = open(filename,mode='r')
+        lines=fs.readlines()
+        fs.close()
+        for line in lines:
+            lcount+=1
+            cline=line.strip()
+            if ((len(cline) > 0) and (not cline.startswith('#'))):
+                try:
+                    cols=cline.split()
+                    if len(cols) >= 2: 
+                        wlist.append(float(cols[0]))
+                        flist.append(float(cols[1]))
+                except Exception, e:
+                    raise ValueError("Error reading %s: %s"%(filename,str(e)))
+
+        return wlist, flist
+                
+
+
 
 class SourceSpectrum(Integrator):
     '''Base class for the Source Spectrum object.
@@ -406,27 +434,16 @@ class TabularSourceSpectrum(SourceSpectrum):
         fs.close()
 
     def _readASCII(self, filename):
-        fs = open(filename,mode='r')
-        lines = fs.readlines()
-
-        self._wavetable = N.ones(shape=[len(lines),],dtype=N.float64)
-        self._fluxtable = N.ones(shape=[len(lines),],dtype=N.float64)
-
-        regx = re.compile(r'\S+', re.IGNORECASE)
-        i = 0
-        for line in lines:
-            try:
-                [w,f] = regx.findall(line)
-                self._wavetable[i] = float(w)
-                self._fluxtable[i] = float(f)
-                i = i + 1
-            except:
-                pass
+        """ Ascii files have no headers. Following synphot, this
+        routine will assume the first column is wavelength in Angstroms,
+        and the second column is flux in Flam."""
 
         self.waveunits = units.Units('angstrom')
         self.fluxunits = units.Units('flam')
-
-        fs.close()
+        wlist,flist = self._columnsFromASCII(filename)
+        self._wavetable=N.array(wlist,dtype=N.float64)
+        self._fluxtable=N.array(flist,dtype=N.float64)
+                
 
     def __call__(self, wavelengths):
         '''This is where the flux array is actually calculated given a
@@ -550,27 +567,15 @@ class FileSourceSpectrum(TabularSourceSpectrum):
             fs.close()
 
     def _readASCII(self, filename):
-        fs = open(filename,mode='r')
-        lines = fs.readlines()
-        
-        self._wavetable = N.ones(shape=[len(lines),],dtype=N.float64)
-        self._fluxtable = N.ones(shape=[len(lines),],dtype=N.float64)
-        
-        regx = re.compile(r'\S+', re.IGNORECASE)
-        i = 0
-        for line in lines:
-            try:
-                [w,f] = regx.findall(line)
-                self._wavetable[i] = float(w)
-                self._fluxtable[i] = float(f)
-                i = i + 1
-            except:
-                pass
-            
+        """ Ascii files have no headers. Following synphot, this
+        routine will assume the first column is wavelength in Angstroms,
+        and the second column is flux in Flam."""
+
         self.waveunits = units.Units('angstrom')
         self.fluxunits = units.Units('flam')
-                            
-        fs.close()
+        wlist,flist = self._columnsFromASCII(filename)
+        self._wavetable=N.array(wlist,dtype=N.float64)
+        self._fluxtable=N.array(flist,dtype=N.float64)
             
                                 
                                                         

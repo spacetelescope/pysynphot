@@ -19,7 +19,8 @@ tlist=['newobs_cases',
        'cos_fuv_cases',
        'cos_nuv_cases',
        'ui_test',
-       'other_etc_test']
+       'other_etc_test',
+       'ticket82']
 #=====================================================
 
 #Doublecheck environment
