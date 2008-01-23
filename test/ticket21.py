@@ -11,7 +11,19 @@ from pysynphot import locations
 from pysynphot import spparser as P
 from pysynphot import units, planck
 
+class Extraphi(testutil.FPTestCase):
+    def setUp(self):
+        self.omstring='acs,hrc,f555w,mjd#5400000'
         
+    def testraise(self):
+        self.assertRaises(NotImplementedError,observationmode.ObservationMode,
+                          self.omstring)
+        
+class Extraplo(Extraphi):
+    def setUp(self):
+        self.omstring='acs,hrc,f555w,mjd#2'
+        
+                                            
 class ParmCase(testutil.FPTestCase):
     def setUp(self):
         self.omstring='acs,hrc,f555w,mjd#54000'

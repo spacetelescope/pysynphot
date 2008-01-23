@@ -1017,6 +1017,10 @@ class InterpolatedSpectralElement(SpectralElement):
         less = MA.masked_greater(waves, wavelength)
         upper = MA.minimum(greater)
         lower = MA.maximum(less)
+
+        if '--' in (upper,lower):
+            raise NotImplementedError("%f outside of range in %s; extrapolation not yet supported"%(wavelength,fileName))
+        
         lcol = (colSpec + str(lower)).upper()
         ucol = (colSpec + str(upper)).upper()
 
