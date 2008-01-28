@@ -9,13 +9,14 @@ ver = sys.version_info
 python_exec = 'python' + str(ver[0]) + '.' + str(ver[1])
 
 #Determine & save the revision number for the ETC
+warning=0
 stat,revset=commands.getstatusoutput('svnversion .')
 if stat != 0:
     revset='unavailable'
 if ( (revset.strip() == 'exported') or (stat!=0) ):
     revset=revset+'; build date %s'%time.ctime()
-    print "WARNING, no SVN version info available for this package"
-    print "Proceeding with installation.\n"
+    warning=1
+
 vfname=os.path.join('data','generic','versioninfo.dat')
 f=open(vfname,'w')
 f.write(revset)
@@ -85,14 +86,20 @@ def dosetup():
               data_files = PYSYNPHOT_DATA_FILES
               )
 
-
     return r
 
 def main():
     args = sys.argv
     dolocal()
     dosetup()
-
+    if warning == 1:
+        print """\n \n \n \n \n \n \n
+        X        X        X       X        X       X      X\n
+        X    WARNING, no SVN version info was available.  X
+        X    Pysynphot installation was performed anyway. X\n
+        X        X        X       X        X       X      X\n
+        \n \n \n \n"""
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
