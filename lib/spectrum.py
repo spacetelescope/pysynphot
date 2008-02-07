@@ -326,6 +326,10 @@ class SourceSpectrum(Integrator):
         rate=sp.integrate(fluxunits=unitstring)
         if rate <= 0.0:
             raise ValueError('Integrated flux is negative')
+        if N.isnan(rate):
+            raise ValueError('Integrated flux is NaN')
+        if N.isinf(rate):
+            raise ValueError('Integrated flux is infinite')
         
         #Get the unit response of the passband
         resp=band.calcUnitResponse(fluxunits=unitstring)
@@ -919,6 +923,7 @@ class UniformTransmission(SpectralElement):
     def __init__(self, value, waveunits='angstrom'):
         self.waveunits = units.Units(waveunits)
         self.value = value
+
 
     def GetWaveSet(self):
         return None

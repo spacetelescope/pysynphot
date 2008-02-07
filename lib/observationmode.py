@@ -65,6 +65,7 @@ class CompTable(object):
             compdict[self.compnames[i]] = self.filenames[i]
 
         cp.close()
+        self.name=CFile
 
 class GraphTable(object):
     '''GraphTable class; opens the specified graph table and populates
@@ -283,14 +284,14 @@ class BaseObservationMode(object):
     def _getFileNames(self, comptable, compnames):
         files = []
         for compname in compnames:
-            if compname != None and compname != '' and compname != CLEAR:
+            if compname not in [None, '', CLEAR]:
                 index = N.where(comptable.compnames == compname)
                 try:
                     iraffilename = comptable.filenames[index[0][0]]
                     filename = irafconvert(iraffilename)
                     files.append(filename.lstrip())
                 except IndexError:
-                    files.append(CLEAR)
+                    raise IndexError("Can't find %s in comptable %s"%(compname,comptable.name))
             else:
                 files.append(CLEAR)
 
@@ -454,7 +455,7 @@ class ObservationMode(BaseObservationMode):
             self.pixscale = thom.pixscale
             return thom._getSpectrum()
         except IndexError:   # graph table is broken.
-            return None
+            raise IndexError("Cannot calculate thermal spectrum; graphtable may be broken")
 
 
 class _ThermalObservationMode(BaseObservationMode):

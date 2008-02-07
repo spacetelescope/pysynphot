@@ -1,15 +1,19 @@
 
 import sys
 import os
-import tempfile
 from pytools import testutil
 
 from pysynphot import spectrum,observationmode
-from pysynphot import newobservation as observation
-from pysynphot import ObsBandpass
 from pysynphot import locations
-from pysynphot import spparser as P
-from pysynphot import units, planck
+
+
+
+#Freeze the version of the comptable so tests are not susceptible to
+# updates to CDBS
+cmptb_name = os.path.join('mtab','rcb1833hm_tmc.fits')
+observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+print "%s:"%os.path.basename(__file__)
+print "   Tests are being run with %s"%observationmode.COMPTABLE
 
 class Extraphi(testutil.FPTestCase):
     def setUp(self):
@@ -22,6 +26,7 @@ class Extraphi(testutil.FPTestCase):
 class Extraplo(Extraphi):
     def setUp(self):
         self.omstring='acs,hrc,f555w,mjd#2'
+
         
                                             
 class ParmCase(testutil.FPTestCase):
@@ -89,6 +94,6 @@ if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
     else:
-        testutil.testall(__name__)
+        testutil.testall(__name__,2)
 
                             
