@@ -99,9 +99,20 @@ class ObsmodeTestCase(testutil.FPTestCase):
         throughput = obsmode.Throughput().throughputtable
         self.assertEqual(len(throughput), 11003)
         self.assertApproxFP(throughput[5000], 0.12232652011958853)
+    def test2(self):
+        "acs,hrc,FR388N#3880"
+        obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
+        wave = obsmode.Throughput().GetWaveSet()
+        throughput = obsmode.Throughput().throughputtable
+        self.assertApproxFP(throughput[5000], 2.8632756E-007)
 
-    #Moved test2 to other_etc_ticket_cases: ticket #21
-    #Moved test3 to other_etc_ticket_cases: ticket #21
+    def test3(self):
+        "acs,wfc1,FR647M#6470"
+        obsmode = observationmode.ObservationMode("acs,wfc1,FR647M#6470")
+        wave = obsmode.Throughput().GetWaveSet()
+        throughput = obsmode.Throughput().throughputtable
+        self.assertApproxFP(throughput[5000], 5.647170E-3)
+
 
     def test4(self):
         obsmode = observationmode.ObservationMode("acs,sbc,F125LP")
@@ -115,7 +126,13 @@ class ObsmodeTestCase(testutil.FPTestCase):
         throughput = obsmode.Throughput().throughputtable
         self.assertApproxFP(throughput[500], 0.1451186)
 
-    #Moved test6 to other_etc_ticket_cases: ticket #21
+    def test6(self):
+        "acs,hrc,FR388N#3880"
+        obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
+        wave = obsmode.Throughput().GetWaveSet()
+        throughput = obsmode.Throughput().throughputtable
+        self.assertApproxFP(throughput[5000], 2.863276E-7)
+
 
     def test7(self):
         obsmode = observationmode.ObservationMode("acs,wfc1,G800L")
@@ -189,7 +206,13 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         countrate = etc.countrate(parameters)
         self.assertApproxFP(countrate[0], 0.115697)
 
-    #Removed test 4cr1 to other_etc_ticket_cases: ticket #21
+    def test4cr1(self):
+        spectrum = "spectrum=em(3880.0,10.0,1.0000000168623835E-16,flam)"
+        instrument = "instrument=acs,wfc1,FR388N#3880"
+        parameters = [spectrum, instrument]
+        countrate = etc.countrate(parameters)
+        self.assertApproxFP(countrate[0], 1.25658E-01)
+
     #Removed test 4cr2 to other_etc_ticket_cases: ticket #71
 
     def test5cr(self):
@@ -211,40 +234,26 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
 
 
 
-    def thermback1(self):
+    def testtherm1(self):
         obsmode = "obsmode="
-        calculator = etc.Thermback([obsmode])
-        countrate = calculator.run()
-        self.assertEqual(countrate,'NaN')
+        self.assertRaises(ValueError,
+                          etc.thermback,
+                          [obsmode])
+        #ans = etc.thermback([obsmode])
+        #Do we really want to return a NaN instead of an error?
+        #self.assertEqual(countrate,'NaN')
 
-    def thermback2(self):
+    def testtherm2(self):
         obsmode = "obsmode=null"
-        calculator = etc.Thermback([obsmode])
-        countrate = calculator.run()
-        self.assertEqual(countrate,'NaN')
+        self.assertRaises(ValueError,
+                          etc.thermback,
+                          [obsmode])
+        #countrate = etc.thermback([obsmode])
+        #self.assertEqual(countrate,'NaN')
 
-    def thermback3(self):
-        obsmode = "obsmode=nicmos,1,F090M"
-        calculator = etc.Thermback([obsmode])
-        countrate = calculator.run()
-        synphot_ref=1.98635725923e-12
-        self.assertApproxFP(float(countrate), synphot_ref)
+    #Moved thermtest3/4/5 to other_etc_ticket_cases
+    #Tests run, but fail comparison.
 
-    def thermback4(self):
-        obsmode = "obsmode=nicmos,1,f190n"
-        calculator = etc.Thermback([obsmode])
-        countrate = calculator.run()
-        synphot_ref=0.0142158651724
-        self.assertApproxFP(float(countrate), synphot_ref)
-
-    def thermback5(self):
-        obsmode = "obsmode=wfc3,ir,f110w"
-        calculator = etc.Thermback([obsmode])
-        countrate = calculator.run()
-        synphot_ref=0.0342143550515
-        self.assertApproxFP(float(countrate), synphot_ref)
-
-        
     def test6(self):
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=acs,sbc,F140LP"
@@ -252,9 +261,9 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         countrate = etc.countrate(parameters)
         self.assertApproxFP(float(countrate[0]), 0.0834405)
 
-    #Moved test7 to other_etc_ticket_cases: ticket #21
-    #Deleted test8: it's an obsolete case.
-    
+
+    #Moved test7 to other_etc_ticket_case: answers disagree
+    #Deleted test8: it's an obsolete case.   
 
     def test9(self):
         spectrum = "spectrum= rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
@@ -463,7 +472,7 @@ if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
     else:
-        testutil.testall(__name__)
+        testutil.testall(__name__,2)
 
 
 

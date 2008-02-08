@@ -48,5 +48,7 @@ for tname in tlist:
 
 #Clean up & go home
 fh.close()
+status={0:'passed',1:'failed'}
+print "Test suite %s"%status[failed]
 sys.exit(failed)
 

@@ -11,7 +11,7 @@ from pysynphot import units, planck
 from pysynphot import newetc as etc
 
 from pytools import testutil 
-from pysynphot import other_etc_test
+import other_etc_test
 
 from other_etc_test import values
 
@@ -42,14 +42,6 @@ class ETC_Imag1(testutil.FPTestCase):
         self.expr = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
         os.chdir(locations.specdir)
 
-    def test4cr1(self):
-        "ETC Imag1, Ticket #21: parm"
-        spectrum = "spectrum=em(3880.0,10.0,1.0000000168623835E-16,flam)"
-        instrument = "instrument=acs,wfc1,FR388N#3880"
-        parameters = [spectrum, instrument]
-        countrate = etc.countrate(parameters)
-        self.assertApproxFP(countrate[0], 1.25658E-01)
-
     def test4cr2(self):
         """Ticket #71: discrepancy for (acs,sbc,f150lp) powerlaw case"""
         spectrum = "spectrum=rn(pl(4000,1.0,jy),box(5500.0,1),1e-18,flam)"
@@ -67,37 +59,32 @@ class ETC_Imag2(testutil.FPTestCase):
        
     def tearDown(self):
         os.chdir(self.oldpath)
-
+        
     def test7(self):
-        "#21: ETC_Imag2, parm"
+        "test7: acs,hrc,fr488n#3880 discrep"
         spectrum = "spectrum=rn(icat(k93models,3500,0.0,4.6),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=acs,hrc,FR388N#3880"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 28.0668)
+        self.assertApproxFP(float(countrate[0]), 28.56996)
 
-class ObsmodeTestCase_Parm(testutil.FPTestCase):
-    """Ticket #21: parameterized keywords, ObsmodeTestCase"""
-    def test2(self):
-        "acs,hrc,FR388N#3880"
-        obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
-        wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
-        self.assertApproxFP(throughput[5000], 2.8632756E-007)
+    def testtherm3(self):
+        obsmode = "obsmode=nicmos,1,F090M"
+        countrate = etc.thermback([obsmode])
+        synphot_ref=1.98635725923e-12
+        self.assertApproxFP(float(countrate), synphot_ref)
 
-    def test3(self):
-        "acs,wfc1,FR647M#6470"
-        obsmode = observationmode.ObservationMode("acs,wfc1,FR647M#6470")
-        wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
-        self.assertApproxFP(throughput[5000], 5.647170E-3)
+    def testtherm4(self):
+        obsmode = "obsmode=nicmos,1,f190n"
+        countrate = etc.thermback([obsmode])
+        synphot_ref=0.0142158651724
+        self.assertApproxFP(float(countrate), synphot_ref)
 
-    def test6(self):
-        "acs,hrc,FR388N#3880"
-        obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
-        wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
-        self.assertApproxFP(throughput[5000], 2.863276E-7)
+    def testtherm5(self):
+        obsmode = "obsmode=wfc3,ir,f110w"
+        countrate = etc.thermback([obsmode])
+        synphot_ref=0.0342143550515
+        self.assertApproxFP(float(countrate), synphot_ref)
 
 
         
@@ -106,6 +93,6 @@ if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
     else:
-        testutil.testall(__name__)
+        testutil.testall(__name__,2)
 
 

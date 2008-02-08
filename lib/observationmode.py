@@ -514,9 +514,14 @@ class _ThermalObservationMode(BaseObservationMode):
         for i in range(len(throughput_filenames)):
             throughput_name = throughput_filenames[i]
             thermal_name = thermal_filenames[i]
+            if throughput_name.endswith('#]'):
+                barename,parkey=throughput_name.split('[')
+                parkey=parkey[:-2]
+            else:
+                parkey=None
 
             component = _ThermalComponent(throughput_name, thermal_name, \
-                                          self._rampFilterWavelength)
+                                          interpval=self.pardict.get(parkey))
             if not component.isEmpty():
                 components.append(component)
 
@@ -549,7 +554,7 @@ class _ThermalObservationMode(BaseObservationMode):
             if component.throughput != None:
                 sp = sp * component.throughput
 
-                sp = spectrum.trimSpectrum(sp, minw, maxw)
+ #               sp = spectrum.trimSpectrum(sp, minw, maxw)
 
             # thermal section
             if component.emissivity != None:
@@ -639,13 +644,13 @@ class _Component(object):
 
 class _ThermalComponent(_Component):
 
-    def __init__(self, throughput_name, thermal_name, rampFilterWavelength):
+    def __init__(self, throughput_name, thermal_name, interpval):
         self.throughput_name = throughput_name
         self.thermal_name = thermal_name
 
         self._empty = True
 
-        self.throughput = self._buildThroughput(throughput_name, rampFilterWavelength)
+        self.throughput = self._buildThroughput(throughput_name, interpval)
 
         if thermal_name != CLEAR:
             self._empty = False
