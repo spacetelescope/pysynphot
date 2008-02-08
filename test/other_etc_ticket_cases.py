@@ -9,6 +9,7 @@ from pysynphot import locations
 from pysynphot import spparser as P
 from pysynphot import units, planck
 from pysynphot import newetc as etc
+import pysynphot as S
 
 from pytools import testutil 
 import other_etc_test
@@ -17,22 +18,6 @@ from other_etc_test import values
 
 testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 
-class CalcphotTestCase(testutil.FPTestCase):
-    """#33: Observations require a binset"""
-    def setUp(self):
-        self.sp = spectrum.TabularSourceSpectrum(testdata)
-        self.obsmode = observationmode.ObservationMode(values['obsmode'])
-        self.obs = observation.Observation(self.sp, self.obsmode)
-
-    def testcountrate(self):
-        "binset: countrate"
-        countrate = self.obs.calcphot()
-        self.assertApproxFP(countrate[0], values['countrate'])
-
-    def testefflam(self):
-        "binset: efflam"
-        efflam = self.obs.calcphot(func='efflam')
-        self.assertApproxFP(efflam, values['efflam'])
 
 class ETC_Imag1(testutil.FPTestCase):
     """Ticket 21: parameterized keywords, Imag1"""

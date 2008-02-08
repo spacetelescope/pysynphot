@@ -9,6 +9,7 @@ from pysynphot import locations
 from pysynphot import spparser as P
 from pysynphot import units, planck
 from pysynphot import newetc as etc
+import pysynphot as S
 
 from pytools import testutil 
 
@@ -88,6 +89,22 @@ def format(value):
 
     return str1+str2
 
+class CalcphotTestCase(testutil.FPTestCase):
+    def setUp(self):
+        self.sp = S.FileSpectrum(testdata)
+        self.obsmode = S.ObsBandpass(values['obsmode'])
+        self.obs = observation.Observation(self.sp, self.obsmode)
+
+    def testcountrate(self):
+        "countrate"
+        countrate = self.obs.countrate()
+        self.assertApproxFP(countrate, values['countrate'])
+
+    def testefflam(self):
+        "efflam"
+        synphot_efflerg = 5304.462
+        efflam = self.obs.efflam()
+        self.assertApproxFP(efflam, synphot_efflerg)
 
 
 
