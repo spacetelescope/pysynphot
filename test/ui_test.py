@@ -17,7 +17,7 @@ import pysynphot as S
 class FileTestCase(testutil.FPTestCase):
     def setUp(self):
         self.fname = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
-        self.sp = spectrum.TabularSourceSpectrum(self.fname)
+        self.sp = S.FileSpectrum(self.fname)
         self.openfits = pyfits.open(self.fname)
 
     def testwave(self):
@@ -33,7 +33,7 @@ class FileTestCase(testutil.FPTestCase):
     def testname(self):
         "ui_test.FileTestCase('testname'): Tests r163"
         self.assert_(str(self.sp) == self.fname)
-        self.assert_(self.sp.filename == self.fname)
+        self.assert_(self.sp.name == self.fname)
 
     def testresample(self):
         "ui_test.FileTestCase('testresample'): Tests #24"
@@ -60,14 +60,14 @@ class FileTestCase(testutil.FPTestCase):
 class TabTestCase(testutil.FPTestCase):
     def setUp(self):
         self.fname = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
-        self.old_sp = spectrum.TabularSourceSpectrum(self.fname)
+        self.old_sp = S.FileSpectrum(self.fname)
         self.openfits = pyfits.open(self.fname)
         fdata=self.openfits[1].data
-        self.new_sp = spectrum.NewTabularSpectrum(wave=fdata.field('wavelength'),
-                                             flux=fdata.field('flux'),
-                                             waveunits=self.openfits[1].header['tunit1'],
-                                             fluxunits=self.openfits[1].header['tunit2'],
-                                             name='table from feige66')
+        self.new_sp = S.ArraySpectrum(wave=fdata.field('wavelength'),
+                                      flux=fdata.field('flux'),
+                                      waveunits=self.openfits[1].header['tunit1'],
+                                      fluxunits=self.openfits[1].header['tunit2'],
+                                      name='table from feige66')
 
 
     def testwave(self):
@@ -172,6 +172,42 @@ class UnitTestCase(testutil.FPTestCase):
         self.failIf(self.uspec.flux.mean() == 1.0)
 
 
+class TabularCase(testutil.FPTestCase):
+    """Test new ArraySpectrum inheriting from TabularSourceSpectrum"""
+    def setUp(self):
+        self.inwave=S.Waveset(1300,1800)
+        self.influx=-2.5*N.log10(self.inwave**2)
+        self.sp=S.ArraySpectrum(wave=self.inwave,flux=self.influx)
+
+    def testarrays(self):
+        self.assertApproxNumpy(self.inwave,self.sp.wave)
+        self.assertApproxNumpy(self.influx,self.sp.flux)
+        
+    def testunits(self):
+        self.assert_(isinstance(self.sp.waveunits,units.Angstrom))
+        self.assert_(isinstance(self.sp.fluxunits, units.Photlam))
+
+    def testconvert(self):
+        self.sp.convert('flam')
+        self.failIf(N.any(self.influx == self.sp.flux))
+        
+    def teststring(self):
+        foo=str(self.sp)
+
+class Tab2(TabularCase):
+    def setUp(self):
+        self.inwave=S.Waveset(1300,1800)
+        self.influx=N.random.lognormal(size=len(self.inwave))*1e-15
+        self.sp=S.ArraySpectrum(wave=self.inwave,flux=self.influx,
+                                waveunits='nm',fluxunits='fnu',
+                                name='Tab2 spectrum')
+        
+    def testunits(self):
+        self.assert_(isinstance(self.sp.waveunits,units.Nm))
+        self.assert_(isinstance(self.sp.fluxunits, units.Fnu))
+
+    def teststring(self):
+        self.assert_(str(self.sp) == 'Tab2 spectrum')
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:

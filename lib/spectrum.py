@@ -416,7 +416,7 @@ class TabularSourceSpectrum(SourceSpectrum):
         
 
     def __str__(self):
-        return self.filename
+        return self.name
 
     def _readSpectrumFile(self, filename, fluxname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
@@ -533,11 +533,11 @@ class TabularSourceSpectrum(SourceSpectrum):
         self.waveunits = savewunits
         self.fluxunits = savefunits
 
-class NewTabularSpectrum(TabularSourceSpectrum):
-    """ Replacement class """
+class ArraySourceSpectrum(TabularSourceSpectrum):
+    """ Class for a source spectrumthat is constructed from arrays."""
     def __init__(self, wave=None, flux=None,
                  waveunits='angstrom', fluxunits='photlam',
-                 name='TabularSourceSpectrum'):
+                 name='UnnamedArraySpectrum'):
         self._wavetable=wave
         self._fluxtable=flux
         self.waveunits=units.Units(waveunits)

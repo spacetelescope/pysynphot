@@ -4,11 +4,8 @@ import math
 import numpy as N
 import pyfits
 from pytools import testutil 
-import units
-import locations
-import spectrum
-from obsbandpass import ObsBandpass
-
+import pysynphot as S
+from pysynphot import units, locations
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
 ## import ui_test
@@ -18,7 +15,7 @@ from obsbandpass import ObsBandpass
 class FileTestCase(testutil.FPTestCase):
     def setUp(self):
         self.fname = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
-        self.sp = spectrum.TabularSourceSpectrum(self.fname)
+        self.sp = S.FileSpectrum(self.fname)
         self.openfits = pyfits.open(self.fname)
 
     def testsubtract(self):
@@ -29,9 +26,7 @@ class FileTestCase(testutil.FPTestCase):
 
     def tearDown(self):
         self.openfits.close()
-
-
-
+                    
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)

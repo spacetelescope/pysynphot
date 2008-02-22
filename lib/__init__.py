@@ -72,23 +72,23 @@ acs,hrc,f555w
 >>> print bp1.throughput
 [ 0.  0.  0. ...,  0.  0.  0.]
 >>> bp1.showfiles()
-/data/cdbs1/comp/ota/hst_ota_007_syn.fits
-/data/cdbs1/comp/acs/acs_hrc_m12_005_syn.fits
-/data/cdbs1/comp/acs/acs_hrc_m3_005_syn.fits
-/data/cdbs1/comp/acs/acs_f555w_003_syn.fits
-/data/cdbs1/comp/acs/acs_hrc_win_005_syn.fits
-/data/cdbs1/comp/acs/acs_hrc_ccd_011_syn.fits
+/grp/hst/cdbs/comp/ota/hst_ota_007_syn.fits
+/grp/hst/cdbs/comp/acs/acs_hrc_m12_005_syn.fits
+/grp/hst/cdbs/comp/acs/acs_hrc_m3_005_syn.fits
+/grp/hst/cdbs/comp/acs/acs_f555w_003_syn.fits
+/grp/hst/cdbs/comp/acs/acs_hrc_win_005_syn.fits
+/grp/hst/cdbs/comp/acs/acs_hrc_ccd_011_syn.fits
 >>> len(bp1)
 6
 
->>> sp1=S.FileSpectrum('/data/cdbs1/calspec/feige66_002.fits')
+>>> sp1=S.FileSpectrum('/grp/hst/cdbs/calspec/feige66_002.fits')
 >>> print bp1.waveunits
-probably angstroms
+angstrom
 >>> print sp1.waveunits
 angstrom
 >>> obs1=sp1*bp1
 >>> print obs1
-/data/cdbs1/calspec/feige66_002.fits * acs,hrc,f555w
+/grp/hst/cdbs/calspec/feige66_002.fits * acs,hrc,f555w
 >>> print obs1.wave
 [   500.   1000.   1001. ...,  11999.  30000.  30010.]
 >>> print obs1.flux.max()
@@ -96,9 +96,9 @@ angstrom
 >>> print obs1.flux.argmax()
 6924
 
->>> sp2=S.FileSpectrum('/data/cdbs1/calspec/feige66_002.fits')*S.ObsBandpass('acs,hrc,f555w')
+>>> sp2=S.FileSpectrum('/grp/hst/cdbs/calspec/feige66_002.fits')*S.ObsBandpass('acs,hrc,f555w')
 >>> print sp2
-/data/cdbs1/calspec/feige66_002.fits * acs,hrc,f555w
+/grp/hst/cdbs/calspec/feige66_002.fits * acs,hrc,f555w
 >>> print sp2.waveunits
 angstrom
 >>> print sp2.fluxunits
@@ -113,8 +113,8 @@ __revstring__  = '$Rev$'
 #UI:
 from spectrum import BlackBody, GaussianSource, UnitSpectrum
 from spectrum import Powerlaw as PowerLaw
-from spectrum import TabularSourceSpectrum as FileSpectrum
-
+from spectrum import FileSourceSpectrum as FileSpectrum
+from spectrum import ArraySourceSpectrum as ArraySpectrum
 from spectrum import TabularSpectralElement as FileBandpass
 from observationmode import ObservationMode as Obsmode
 from obsbandpass import ObsBandpass

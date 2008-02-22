@@ -2,13 +2,14 @@
 Units class hierarchy: is used to manage both wavelength and flux
 unit conversions
 
-Warning: vegamag unit conversions import spectrum and locations => circular
+Warning: vegamag unit conversions require spectrum and locations => circular
 imports.
 """
 
 import math
 import numpy as N
-
+import locations, spectrum #Circular import
+        
 C = 2.99792458e18 # speed of light in Angstrom/sec
 H = 6.62620E-27   # Planck's constant
 HC = H * C
@@ -187,7 +188,7 @@ class Photlam(FluxUnits):
         return -1.085736 * N.log(arg)
 
     def ToVegaMag(self, wave, flux):
-        import locations, spectrum #Circular import
+
         vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
         resampled = vegaspec.resample(wave)
         normalized = flux / resampled._fluxtable
@@ -392,7 +393,7 @@ class VegaMag(LogFluxUnits):
     def ToPhotlam(self, wave, flux):
         vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
         resampled = vegaspec.resample(wave)
-        return resampled.fluxtable * 10.0**(-0.4 * flux)
+        return resampled.flux * 10.0**(-0.4 * flux)
 
     def unitResponse(self,band):
         total=band.calcVegaFlux()
