@@ -524,6 +524,12 @@ class TabularSourceSpectrum(SourceSpectrum):
     def ToInternal(self):
         '''Convert to the internal representation of (angstroms, photlam).
         '''
+        #Validate unittypes
+        if (not isinstance(self.waveunits,units.WaveUnits)):
+            raise ValueError("%s is not a valid WaveUnit"%self.waveunits)
+        if (not isinstance(self.fluxunits,units.FluxUnits)):
+            raise ValueError("%s is not a valid FluxUnit"%self.fluxunits)
+        
         savewunits = self.waveunits
         savefunits = self.fluxunits
         angwave = self.waveunits.Convert(self.GetWaveSet(), 'angstrom')

@@ -171,7 +171,27 @@ class UnitTestCase(testutil.FPTestCase):
         self.uspec.convert('fnu')
         self.failIf(self.uspec.flux.mean() == 1.0)
 
+class EnforceUnitsCase(testutil.FPTestCase):
+    def setUp(self):
+        self.sp=S.BlackBody(30000)
+        self.waveunits='flam'
+        self.fluxunits='angstrom'
+        
+    def testwavetype(self):
+        """Make sure waveunits are really waveunits"""
+        self.assertRaises(ValueError,
+                          S.ArraySpectrum,
+                          self.sp.wave,self.sp.flux,
+                          self.waveunits)
+        
 
+    def testfluxtype(self):
+        """Make sure fluxunits are really fluxunits"""
+        self.assertRaises(ValueError,
+                          S.ArraySpectrum,
+                          self.sp.wave,self.sp.flux,
+                          'angstrom',self.fluxunits)
+                          
 class TabularCase(testutil.FPTestCase):
     """Test new ArraySpectrum inheriting from TabularSourceSpectrum"""
     def setUp(self):
