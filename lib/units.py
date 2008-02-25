@@ -49,7 +49,7 @@ class BaseUnit(object):
         try:
             return self.Dispatch[target_units](wave,flux)
         except KeyError:
-            raise KeyError("Target units %s unrecognized%(target_units)")
+            raise TypeError("Target units %s unrecognized%(target_units)")
 
 class WaveUnits(BaseUnit):
     """All WaveUnits know how to convert themselves to Angstroms"""
@@ -63,7 +63,7 @@ class WaveUnits(BaseUnit):
         try:
             return self.Dispatch[target_units](wave)
         except KeyError:
-            raise KeyError("Target units %s unrecognized:"%target_units)
+            raise TypeError(" %s is not a valid wavelength unit"%target_units)
 
     def ToAngstrom(self,wave):
         raise NotImplementedError("Required method ToAngstrom not yet implemented")
@@ -81,7 +81,7 @@ class FluxUnits(BaseUnit):
         try:
             return self.Dispatch[target_units](wave,flux)
         except KeyError:
-            raise KeyError("Target units %s unrecognized:%(target_units)")
+            raise TypeError("%s is not a valid flux unit"%(target_units))
 
     def ToPhotlam(self,wave,flux):
         raise NotImplementedError("Required method ToPhotlam not yet implemented")

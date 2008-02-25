@@ -179,7 +179,7 @@ class EnforceUnitsCase(testutil.FPTestCase):
         
     def testwavetype(self):
         """Make sure waveunits are really waveunits"""
-        self.assertRaises(ValueError,
+        self.assertRaises(TypeError,
                           S.ArraySpectrum,
                           self.sp.wave,self.sp.flux,
                           self.waveunits)
@@ -187,7 +187,7 @@ class EnforceUnitsCase(testutil.FPTestCase):
 
     def testfluxtype(self):
         """Make sure fluxunits are really fluxunits"""
-        self.assertRaises(ValueError,
+        self.assertRaises(TypeError,
                           S.ArraySpectrum,
                           self.sp.wave,self.sp.flux,
                           'angstrom',self.fluxunits)

@@ -143,7 +143,22 @@ class Integrator(object):
 
         return wlist, flist
                 
+    def validate_wavetable(self):
+        "Enforce monotonic, ascending wavelengths with no zero values"
+        #First check for invalid values
+        wave=self.wave
+        if N.any(wave <= 0):
+            raise ValueError('Zero wavelength occurs in wavelength array: invalid value')
 
+
+        #Now check for monotonicity & enforce ascending
+        sorted=N.sort(wave)
+        if not N.alltrue(sorted == wave):
+            if N.alltrue(sorted[::-1] == wave):
+                #monotonic descending is allowed, but we need to flip it.
+                self._reverse_wave()
+            else:
+                raise ValueError('Wavelength array is not monotonic: invalid')
 
 
 class SourceSpectrum(Integrator):
@@ -200,6 +215,13 @@ class SourceSpectrum(Integrator):
 
     wave=property(_getWaveProp,doc="Wavelength property")
     flux=property(_getFluxProp,doc="Flux property")
+
+    def validate_units(self):
+        "Ensure that waveunits are WaveUnits and fluxunits are FluxUnits"
+        if (not isinstance(self.waveunits,units.WaveUnits)):
+            raise ValueError("%s is not a valid WaveUnit"%self.waveunits)
+        if (not isinstance(self.fluxunits,units.FluxUnits)):
+            raise ValueError("%s is not a valid FluxUnit"%self.fluxunits)
 
     def writefits(self, filename, clobber=True, trimzero=True,
                   binned=False):
@@ -414,7 +436,10 @@ class TabularSourceSpectrum(SourceSpectrum):
             self.fluxunits = None
             self.filename = None
         
+    def _reverse_wave(self):
+        self._wavetable = self._wavetable[::-1]
 
+        
     def __str__(self):
         return self.name
 
@@ -524,12 +549,7 @@ class TabularSourceSpectrum(SourceSpectrum):
     def ToInternal(self):
         '''Convert to the internal representation of (angstroms, photlam).
         '''
-        #Validate unittypes
-        if (not isinstance(self.waveunits,units.WaveUnits)):
-            raise ValueError("%s is not a valid WaveUnit"%self.waveunits)
-        if (not isinstance(self.fluxunits,units.FluxUnits)):
-            raise ValueError("%s is not a valid FluxUnit"%self.fluxunits)
-        
+        self.validate_units()
         savewunits = self.waveunits
         savefunits = self.fluxunits
         angwave = self.waveunits.Convert(self.GetWaveSet(), 'angstrom')
@@ -540,23 +560,29 @@ class TabularSourceSpectrum(SourceSpectrum):
         self.fluxunits = savefunits
 
 class ArraySourceSpectrum(TabularSourceSpectrum):
-    """ Class for a source spectrumthat is constructed from arrays."""
+    """ Class for a source spectrum that is constructed from arrays."""
     def __init__(self, wave=None, flux=None,
                  waveunits='angstrom', fluxunits='photlam',
                  name='UnnamedArraySpectrum'):
+        if len(wave)!=len(flux):
+            raise ValueError("wave and flux arrays must be of equal length")
+        
         self._wavetable=wave
         self._fluxtable=flux
         self.waveunits=units.Units(waveunits)
         self.fluxunits=units.Units(fluxunits)
         self.name=name
-        
+
+        self.validate_wavetable() #must do before ToInternal in case of descending
         self.ToInternal()
 
+    
 class FileSourceSpectrum(TabularSourceSpectrum):
     '''Class for a source spectrum that is read in from a table.'''
     def __init__(self, filename, fluxname=None):
         self._readSpectrumFile(filename, fluxname)
         self.name=filename
+        self.validate_wavetable()
         self.ToInternal()
 
     def _readSpectrumFile(self, filename, fluxname):
@@ -594,6 +620,13 @@ class AnalyticSpectrum(SourceSpectrum):
     which are defined, by default, on top of the default synphot
     waveset. 
     '''
+
+    def __init__(self,waveunits='angstrom',fluxunits='photlam'):
+        "All AnalyticSpectra must set wave & flux units; do it here."
+        self.waveunits = units.Units(waveunits)
+        self.fluxunits = units.Units(fluxunits)
+        self.validate_units()
+        
     def GetWaveSet(self):
         global default_waveset
         return default_waveset.copy()
@@ -602,9 +635,8 @@ class AnalyticSpectrum(SourceSpectrum):
 class GaussianSource(AnalyticSpectrum):
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
                  fluxunits='flam'):
+        AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.center = center
-        self.waveunits = units.Units(waveunits)
-        self.fluxunits = units.Units(fluxunits)
         self.input_fwhm = fwhm
         self.input_flux = flux
         self._input_units = self.fluxunits
@@ -640,9 +672,8 @@ class GaussianSource(AnalyticSpectrum):
 
 class UnitSpectrum(AnalyticSpectrum):
     def __init__(self, fluxdensity, waveunits='angstrom', fluxunits='photlam'):
+        AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.wavelength = None
-        self.waveunits = units.Units(waveunits)
-        self.fluxunits = units.Units(fluxunits)
         self._fluxdensity = fluxdensity
         self._input_units = self.fluxunits
 
@@ -663,9 +694,8 @@ class UnitSpectrum(AnalyticSpectrum):
 
 class Powerlaw(AnalyticSpectrum):
     def __init__(self, refwave, index, waveunits='angstrom', fluxunits='photlam'):
+        AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.wavelength = None
-        self.waveunits = units.Units(waveunits)
-        self.fluxunits = units.Units(fluxunits)
         self._input_units = self.fluxunits
         self._refwave = refwave
         self._index = index
@@ -690,9 +720,9 @@ class Powerlaw(AnalyticSpectrum):
 
 class BlackBody(AnalyticSpectrum):
     def __init__(self, temperature):
+        self.waveunits=units.Units('angstrom')
+        self.fluxunits=units.Units('photlam')
         self.wavelength = None
-        self.waveunits = units.Units('angstrom')
-        self.fluxunits = units.Units('photlam')
         self.temperature = temperature
 
     def __str__(self):
@@ -963,6 +993,9 @@ class TabularSpectralElement(SpectralElement):
             self.waveunits = None
             self.throughputunits = None
 
+    def _reverse_wave(self):
+        self.wavetable = self.wavetable[::-1]
+        
     def __str__(self):
         return self.name
 

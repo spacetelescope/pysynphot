@@ -4,12 +4,12 @@ import os, sys
 from pytools import testutil
 import numpy as N
 
-def writedata(fh,start=None,end=None):
+def writedata(fh,start=0,end=4000):
     wave=N.arange(10000,14000,dtype=N.float64)
     flux=N.ones(wave.shape,dtype=N.float64)
-    for k in range(len(wave)):
+    for k in range(start,end):
         fh.write("%f   %f\n"%(wave[k],flux[k]))
-    return len(wave)
+    return end-start
                  
 def writeinline(fh):
     wave=N.arange(10000,14000,dtype=N.float64)
@@ -77,10 +77,10 @@ class midcomment(goodcase):
     def setUp(self):
         self.fname='midcomment.dat'
         fh=open(self.fname,'w')
-        x1=writedata(fh)
+        x1=writedata(fh,end=2000)
         fh.write("#middle of the file\n")
         fh.write("#  yet more middle of the file\n")
-        x2=writedata(fh)
+        x2=writedata(fh,start=2000)
         fh.close()
         self.len=x1+x2
         self.sp=S.FileSpectrum(self.fname)
