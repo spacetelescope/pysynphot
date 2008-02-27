@@ -112,8 +112,8 @@ class Ebmvx(spectrum.SpectralElement):
         '''
         law = factory(redlaw, extval)
 
-        self.wavetable = 10000.0 / law.wavetable
-        self.throughputtable = law.transparencytable
+        self._wavetable = 10000.0 / law._wavetable
+        self._throughputtable = law.transparencytable
 
 
 class _ExtinctionLaw(object):
@@ -126,7 +126,7 @@ class Gal1(_ExtinctionLaw):
     def __init__(self, extval):
         self.name = 'Seaton'
         global _seaton
-        self.wavetable = _waveset.copy()
+        self._wavetable = _waveset.copy()
         self.transparencytable = self._computeTransparency(extval, _seaton)
 
 
@@ -144,7 +144,7 @@ class Smc(_ExtinctionLaw):
     def __init__(self, extval):
         self.name = 'SMC'
         global _smc
-        self.wavetable = _waveset.copy()
+        self._wavetable = _waveset.copy()
         self.transparencytable = self._computeTransparency(extval, _smc)
 
 
@@ -152,7 +152,7 @@ class Lmc(_ExtinctionLaw):
     def __init__(self, extval):
         self.name = 'LMC'
         global _lmc
-        self.wavetable = _waveset.copy()
+        self._wavetable = _waveset.copy()
         self.transparencytable = self._computeTransparency(extval, _lmc)
 
 
@@ -160,7 +160,7 @@ class Xgal(_ExtinctionLaw):
     def __init__(self, extval):
         self.name = 'Extragalactic'
         global _xgal
-        self.wavetable = _waveset.copy()
+        self._wavetable = _waveset.copy()
         self.transparencytable = self._computeTransparency(extval, _xgal)
 
 

@@ -147,13 +147,11 @@ class _EfflamCalculator(_CalcphotCalculator):
 
 
 def _integrate(values, refspectrum):
-        sp = spectrum.TabularSourceSpectrum()
-
-        sp.waveunits = refspectrum.waveunits
-        sp.fluxunits = refspectrum.fluxunits
-        sp._wavetable = refspectrum.GetWaveSet()
-        sp._fluxtable = values
-
+        sp = spectrum.ArraySourceSpectrum(wave=refspectrum.GetWaveSet(),
+                                          flux=values,
+                                          waveunits = refspectrum.waveunits,
+                                          fluxunits = refspectrum.fluxunits,
+                                          name="temp spec in EfflamCalc")
         return sp.integrate()
 
 

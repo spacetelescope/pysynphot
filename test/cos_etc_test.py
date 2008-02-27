@@ -235,7 +235,7 @@ class ObsmodeTestCase(testutil.FPTestCase):
     def test1(self):
         obsmode = observationmode.ObservationMode(values['obsmode'])
         self.assertApproxFP(obsmode.area, values['hstarea'])
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertEqual(len(throughput), 11003)
         self.assertApproxFP(throughput[5000], 0.12232652011958853)
 
@@ -265,9 +265,9 @@ class FunctionTestCase(testutil.FPTestCase):
 
     def testbox1(self):
         box = spectrum.Box(5500.0,1.0)
-        self.assertApproxFP(box.wavetable.shape[0], 22.)
-        self.assertApproxFP(box.throughputtable.shape[0], 22.)
-        self.assertApproxFP(box.throughputtable[1], 1.0)
+        self.assertApproxFP(box._wavetable.shape[0], 22.)
+        self.assertApproxFP(box._throughputtable.shape[0], 22.)
+        self.assertApproxFP(box._throughputtable[1], 1.0)
 
     def testmult1(self):
         sp = spectrum.UnitSpectrum(1.0,fluxunits='photlam')
@@ -524,14 +524,14 @@ class ParserTestCase(testutil.FPTestCase):
         expr = "ebmvx(0.1,gal1)"
         th = P.interpret(P.parse(P.scan(expr)))
         wave = th.GetWaveSet()
-        throughput = th.throughputtable
+        throughput = th._throughputtable
         self.assertApproxFP(throughput[1000], 0.9816266)
 
     def testsmc(self):
         expr = "ebmvx(0.5,smc)"
         th = P.interpret(P.parse(P.scan(expr)))
         wave = th.GetWaveSet()
-        throughput = th.throughputtable
+        throughput = th._throughputtable
         self.assertApproxFP(throughput[1000], 0.87486)
 
     def testcomp12(self):

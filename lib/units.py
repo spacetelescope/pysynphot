@@ -22,15 +22,18 @@ HSTAREA = 45238.93416  # cm^2
 def Units(uname):
     """This needs to be a factory function in order to return an object
     of the correct subclass."""
-    try:
-        return factory(uname)
-    except KeyError:
-        if uname == str(None):
-            return None
-        elif isinstance(uname,BaseUnit):
-            return uname
-        else:
-            raise ValueError("Unknown units %s"%uname)
+    if isinstance(uname,BaseUnit):
+        return uname
+    else:
+        try:
+            return factory(uname)
+        except KeyError:
+            if uname == str(None):
+                return None
+            elif isinstance(uname,BaseUnit):
+                return uname
+            else:
+                raise ValueError("Unknown units %s"%uname)
 
 #......................................................................
 #Base classes

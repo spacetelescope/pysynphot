@@ -413,9 +413,9 @@ class ObservationMode(BaseObservationMode):
 
         product = self._multiplyThroughputs()
 
-        sensitivity.wavetable = product.GetWaveSet()
-        sensitivity.throughputtable = product(sensitivity.wavetable) * \
-                                      sensitivity.wavetable * self._constant
+        sensitivity._wavetable = product.GetWaveSet()
+        sensitivity._throughputtable = product(sensitivity._wavetable) * \
+                                      sensitivity._wavetable * self._constant
 
         return sensitivity
 
@@ -427,8 +427,8 @@ class ObservationMode(BaseObservationMode):
 
             product = self._multiplyThroughputs(0)
 
-            throughput.wavetable = product.GetWaveSet()
-            throughput.throughputtable = product(throughput.wavetable)
+            throughput._wavetable = product.GetWaveSet()
+            throughput._throughputtable = product(throughput._wavetable)
             throughput.name='*'.join([str(x) for x in self.components])
 
 ##            throughput = throughput.resample(spectrum.default_waveset)
@@ -539,12 +539,13 @@ class _ThermalObservationMode(BaseObservationMode):
         return BaseObservationMode._multiplyThroughputs(self, index)
 
     def _getSpectrum(self):
-        sp = spectrum.TabularSourceSpectrum()
-        sp._wavetable = self._getWavesetIntersection()
-        sp._fluxtable = N.zeros(shape=sp._wavetable.shape,dtype=N.float64)
+        wave=self._getWavesetIntersection()
+        sp = spectrum.ArraySourceSpectrum(wave=wave,
+                       flux=N.zeros(shape=wave.shape,dtype=N.float64),
+                       waveunits='angstrom',
+                       fluxunits='photlam',
+                       name="%s %s"%(self.name,'ThermalSpectrum'))
 
-        sp.waveunits = units.Units('angstrom')
-        sp.fluxunits = units.Units('photlam')
 
         minw = sp._wavetable[0]
         maxw = sp._wavetable[-1]
@@ -610,9 +611,9 @@ class _ThermalObservationMode(BaseObservationMode):
         return result
 
     def _bb(self, wave, temperature):
-        sp = spectrum.TabularSourceSpectrum()
-        sp._wavetable = wave
-        sp._fluxtable = planck.bb_photlam_arcsec(wave, temperature)
+        sp = spectrum.ArraySourceSpectrum(wave=wave,
+                             flux=planck.bb_photlam_arcsec(wave, temperature),
+                                          name='planck bb_photlam_arcsec')
         return sp
 
 

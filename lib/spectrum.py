@@ -775,18 +775,18 @@ class SpectralElement(Integrator):
         '''This is where the throughput array is calculated for a given
         input wavelength table.
         '''
-        return self.resample(wavelengths).throughputtable
+        return self.resample(wavelengths)._throughputtable
 
     def taper(self):
         '''Taper the spectrum by adding zeros to each end.
         '''
         OutElement = TabularSpectralElement()
 
-        wcopy = N.zeros(self.wavetable.size+2,dtype=N.float64)
-        fcopy = N.zeros(self.throughputtable.size+2,dtype=N.float64)
+        wcopy = N.zeros(self._wavetable.size+2,dtype=N.float64)
+        fcopy = N.zeros(self._throughputtable.size+2,dtype=N.float64)
 
-        wcopy[1:-1] = self.wavetable
-        fcopy[1:-1] = self.throughputtable
+        wcopy[1:-1] = self._wavetable
+        fcopy[1:-1] = self._throughputtable
 
         fcopy[0] = 0.0
         fcopy[-1] = 0.0
@@ -796,8 +796,8 @@ class SpectralElement(Integrator):
         wcopy[0] = wcopy[1]*wcopy[1]/wcopy[2]
         wcopy[-1] = wcopy[-2]*wcopy[-2]/wcopy[-3]
 
-        OutElement.wavetable = wcopy
-        OutElement.throughputtable = fcopy
+        OutElement._wavetable = wcopy
+        OutElement._throughputtable = fcopy
 
         return OutElement
     
@@ -852,23 +852,23 @@ class SpectralElement(Integrator):
         tapered = self.taper()
 
         ## Linear interpolations from the Python tutorial
-        indices = N.searchsorted(tapered.wavetable, resampledWaveTab)-1
+        indices = N.searchsorted(tapered._wavetable, resampledWaveTab)-1
 
         ## Make sure the indices containing the desired points don't go
         ## beyond the ends of the array
-        indices = N.clip(indices, 0, tapered.wavetable.size-2)
-        fraction = resampledWaveTab - tapered.wavetable[indices]
-        fraction = fraction / (tapered.wavetable[indices+1] -
-                               tapered.wavetable[indices])
+        indices = N.clip(indices, 0, tapered._wavetable.size-2)
+        fraction = resampledWaveTab - tapered._wavetable[indices]
+        fraction = fraction / (tapered._wavetable[indices+1] -
+                               tapered._wavetable[indices])
 
         ## Make sure the fraction is calculated correctly for elements beyond
         ## the valid regions of the input spectrum
         fraction = N.clip(fraction, 0.0, 1.0)
-        resampled.throughputtable = tapered.throughputtable[indices] + \
-                                    fraction*(tapered.throughputtable[indices+1] - \
-                                              tapered.throughputtable[indices])
+        resampled._throughputtable = tapered._throughputtable[indices] + \
+                                    fraction*(tapered._throughputtable[indices+1] - \
+                                              tapered._throughputtable[indices])
 
-        resampled.wavetable = resampledWaveTab.copy()
+        resampled._wavetable = resampledWaveTab.copy()
 
         return resampled
 
@@ -903,7 +903,7 @@ class SpectralElement(Integrator):
         
 
     def GetWaveSet(self):
-        return self.wavetable
+        return self._wavetable
 
     def GetThroughput(self):
         """Return the throughput for the internal wavetable"""
@@ -988,13 +988,13 @@ class TabularSpectralElement(SpectralElement):
 
         else:
             self.name = None
-            self.wavetable = None
-            self.throughputtable = None
+            self._wavetable = None
+            self._throughputtable = None
             self.waveunits = None
             self.throughputunits = None
 
     def _reverse_wave(self):
-        self.wavetable = self.wavetable[::-1]
+        self._wavetable = self._wavetable[::-1]
         
     def __str__(self):
         return self.name
@@ -1007,15 +1007,15 @@ class TabularSpectralElement(SpectralElement):
         self.waveunits = units.Units('angstrom')
         self.throughputunits = 'none'
         wlist,tlist = self._columnsFromASCII(filename)
-        self.wavetable=N.array(wlist,dtype=N.float64)
-        self.throughputtable=N.array(tlist,dtype=N.float64)
+        self._wavetable=N.array(wlist,dtype=N.float64)
+        self._throughputtable=N.array(tlist,dtype=N.float64)
        
 
     def _readFITS(self,filename,thrucol='throughput'):
         fs = pyfits.open(filename)
         
-        self.wavetable = fs[1].data.field('wavelength')
-        self.throughputtable = fs[1].data.field(thrucol)
+        self._wavetable = fs[1].data.field('wavelength')
+        self._throughputtable = fs[1].data.field(thrucol)
         
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.throughputunits = 'none'
@@ -1049,7 +1049,7 @@ class InterpolatedSpectralElement(SpectralElement):
 
         fs = pyfits.open(self.name)
 
-        self.wavetable = fs[1].data.field('wavelength')
+        self._wavetable = fs[1].data.field('wavelength')
 
         colNames = fs[1].data.names[2:]
         colWaves = []
@@ -1073,9 +1073,9 @@ class InterpolatedSpectralElement(SpectralElement):
 
         if upper != lower:
             w = (wavelength - lower) / (upper - lower)
-            self.throughputtable = uthr * w + lthr * (1.0 - w)
+            self._throughputtable = uthr * w + lthr * (1.0 - w)
         else:
-            self.throughputtable = uthr
+            self._throughputtable = uthr
 
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.throughputunits = 'none'
@@ -1092,7 +1092,7 @@ class ThermalSpectralElement(TabularSpectralElement):
     ThermalSpectralElements differ from regular SpectralElements in
     that they carry thermal parameters such as temperature and beam
     filling factor, but otherwise they operate just as regular
-    SpectralElements. They don't know how to apply themselves to an
+    SpectralElements. They dont know how to apply themselves to an
     existing beam, in the sense that their emissivities should be
     handled explictly, outside the objects themselves.
     '''
@@ -1118,17 +1118,17 @@ class Box(SpectralElement):
         step = 0.05                     # fixed step for now (in A)
 
         nwaves = int(((upper - lower) / step)) + 2
-        self.wavetable = N.zeros(shape=[nwaves,], dtype=N.float64)
+        self._wavetable = N.zeros(shape=[nwaves,], dtype=N.float64)
         for i in range(nwaves):
-            self.wavetable[i] = lower + step * i
+            self._wavetable[i] = lower + step * i
 
-        self.wavetable[0]  = self.wavetable[1]  - step
-        self.wavetable[-1] = self.wavetable[-2] + step
+        self._wavetable[0]  = self._wavetable[1]  - step
+        self._wavetable[-1] = self._wavetable[-2] + step
         
-        self.throughputtable = N.ones(shape=self.wavetable.shape, \
+        self._throughputtable = N.ones(shape=self._wavetable.shape, \
                                         dtype=N.float64)
-        self.throughputtable[0]  = 0.0
-        self.throughputtable[-1] = 0.0
+        self._throughputtable[0]  = 0.0
+        self._throughputtable[-1] = 0.0
         
 
 class Band(SpectralElement):
@@ -1152,8 +1152,8 @@ class Band(SpectralElement):
 
             band = TabularSpectralElement(filename)
 
-        self.wavetable = band.wavetable
-        self.throughputtable = band.throughputtable
+        self._wavetable = band._wavetable
+        self._throughputtable = band._throughputtable
 
 
 

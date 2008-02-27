@@ -113,75 +113,75 @@ class ObsmodeTestCase(testutil.FPTestCase):
     def test1(self):
         obsmode = observationmode.ObservationMode(values['obsmode'])
         self.assertApproxFP(obsmode.area, values['hstarea'])
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertEqual(len(throughput), 11003)
         self.assertApproxFP(throughput[5000], 0.12232652011958853)
     def test2(self):
         "acs,hrc,FR388N#3880"
         obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[5000], 2.8632756E-007)
 
     def test3(self):
         "acs,wfc1,FR647M#6470"
         obsmode = observationmode.ObservationMode("acs,wfc1,FR647M#6470")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[5000], 5.647170E-3)
 
 
     def test4(self):
         obsmode = observationmode.ObservationMode("acs,sbc,F125LP")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[500], 3.983354E-15)
 
     def test5(self):
         obsmode = observationmode.ObservationMode("stis,ccd")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[500], 0.1451186)
 
     def test6(self):
         "acs,hrc,FR388N#3880"
         obsmode = observationmode.ObservationMode("acs,hrc,FR388N#3880")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[5000], 2.863276E-7)
 
 
     def test7(self):
         obsmode = observationmode.ObservationMode("acs,wfc1,G800L")
         wave = obsmode.bandWave()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[5000], 0.389376)
 
 
     def test8(self):
         obsmode = observationmode.ObservationMode("stis,g750m,c8825")
         wave = obsmode.bandWave()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[7500], 0.0681207)
 
     def test9(self):
         obsmode = observationmode.ObservationMode("stis,fuvmama,g140l,s52x2")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[200], 0.0297475)
 
 
     def test10(self):
         obsmode = observationmode.ObservationMode("acs,hrc,PR200L")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[5000], 0.266238)
 
 
     def test11(self):
         obsmode = observationmode.ObservationMode("stis,nuvmama,e230h,c2263,s02x02")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
         self.assertApproxFP(throughput[1500], 0.0048806)
 
 
@@ -189,7 +189,7 @@ class ObsmodeWFC3TestCase(testutil.FPTestCase):
     def test1(self):
         obsmode = observationmode.ObservationMode("wfc3,ir,f160w")
         wave = obsmode.Throughput().GetWaveSet()
-        throughput = obsmode.Throughput().throughputtable
+        throughput = obsmode.Throughput()._throughputtable
 
 
 class ETCTestCase_Imag1(testutil.FPTestCase):
