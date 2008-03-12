@@ -21,7 +21,8 @@ tlist=['newobs_cases',
        'ui_test',
        'other_etc_test',
        'ticket82',
-       'ticket21'
+       'ticket21',
+       'spectest'
        ]
 #=====================================================
 

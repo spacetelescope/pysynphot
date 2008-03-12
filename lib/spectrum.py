@@ -146,7 +146,7 @@ class Integrator(object):
     def validate_wavetable(self):
         "Enforce monotonic, ascending wavelengths with no zero values"
         #First check for invalid values
-        wave=self.wave
+        wave=self._wavetable
         if N.any(wave <= 0):
             raise ValueError('Zero wavelength occurs in wavelength array: invalid value')
 
@@ -219,9 +219,9 @@ class SourceSpectrum(Integrator):
     def validate_units(self):
         "Ensure that waveunits are WaveUnits and fluxunits are FluxUnits"
         if (not isinstance(self.waveunits,units.WaveUnits)):
-            raise ValueError("%s is not a valid WaveUnit"%self.waveunits)
+            raise TypeError("%s is not a valid WaveUnit"%self.waveunits)
         if (not isinstance(self.fluxunits,units.FluxUnits)):
-            raise ValueError("%s is not a valid FluxUnit"%self.fluxunits)
+            raise TypeError("%s is not a valid FluxUnit"%self.fluxunits)
 
     def writefits(self, filename, clobber=True, trimzero=True,
                   binned=False):
@@ -573,7 +573,7 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
         self.fluxunits=units.Units(fluxunits)
         self.name=name
 
-        self.validate_wavetable() #must do before ToInternal in case of descending
+        self.validate_wavetable() #must do before ToInternal in case of descending        
         self.ToInternal()
 
     
