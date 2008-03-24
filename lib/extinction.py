@@ -1,7 +1,7 @@
 import string
 import numpy as N
 import spectrum
-
+import units
 
 _seatonx = N.array([0.,  1.0, 1.1, 1.2, 1.3, 1.4, 1.5, \
                                 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, \
@@ -108,12 +108,14 @@ _xgal    = _computeXgal(_waveset)
 
 class Ebmvx(spectrum.SpectralElement):
     def __init__(self, extval, redlaw):
-        ''' Extiction mimics as a spectral element.
+        ''' Extinction mimics as a spectral element.
         '''
         law = factory(redlaw, extval)
 
         self._wavetable = 10000.0 / law._wavetable
         self._throughputtable = law.transparencytable
+        self.name=redlaw
+        self.waveunits=units.Units('angstrom')
 
 
 class _ExtinctionLaw(object):
