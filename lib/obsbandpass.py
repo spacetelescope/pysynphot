@@ -37,10 +37,11 @@ class ObsModeBandpass(CompositeSpectralElement):
         
             
         self.obsmode=ob
+        self.name=self.obsmode._obsmode #str(self.obsmode)
 
     def __str__(self):
         """Defer to ObservationMode component """
-        return self.obsmode._obsmode
+        return self.name #self.obsmode._obsmode
 
     def __len__(self):
         """Defer to ObservationMode component """

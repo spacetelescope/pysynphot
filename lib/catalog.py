@@ -13,6 +13,7 @@ class Icat(spectrum.TabularSourceSpectrum):
     def __init__(self,args):
 
         filename = locations.CAT_TEMPLATE.replace('*',args[0])
+        self.name=str(args)
 
         table = pyfits.open(filename)
 

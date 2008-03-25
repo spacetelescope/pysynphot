@@ -386,6 +386,7 @@ class CompositeSourceSpectrum(SourceSpectrum):
         self.component1 = source1
         self.component2 = source2
         self.operation = operation
+        self.name=str(self)
 
         # for now we keep these attributes here, in spite of the internal
         # units model. There is code that still breaks down if these attributes
@@ -428,6 +429,7 @@ class TabularSourceSpectrum(SourceSpectrum):
             self._readSpectrumFile(filename, fluxname)
             self.filename=filename
             self.ToInternal()
+            self.name=self.filename
 
         else:
             self._wavetable = None
@@ -435,13 +437,14 @@ class TabularSourceSpectrum(SourceSpectrum):
             self.waveunits = None
             self.fluxunits = None
             self.filename = None
+            self.name=self.filename
         
     def _reverse_wave(self):
         self._wavetable = self._wavetable[::-1]
 
         
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def _readSpectrumFile(self, filename, fluxname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
@@ -642,10 +645,10 @@ class GaussianSource(AnalyticSpectrum):
         self._input_units = self.fluxunits
         self.sigma = fwhm / math.sqrt(8.0 * math.log(2.0))
         self.factor = flux / (math.sqrt(2.0 * math.pi) * self.sigma)
-
+        self.name ='Gaussian: mu=%f,fwhm=%f,flux=%f %s'%(self.center,self.input_fwhm,self.input_flux,self._input_units)
 
     def __str__(self):
-        return 'Gaussian: mu=%f,fwhm=%f,flux=%f %s'%(self.center,self.input_fwhm,self.input_flux,self._input_units)
+        return self.name
 
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
@@ -676,9 +679,9 @@ class UnitSpectrum(AnalyticSpectrum):
         self.wavelength = None
         self._fluxdensity = fluxdensity
         self._input_units = self.fluxunits
-
+        self.name="Unit spectrum of %f %s"%(self._fluxdensity,self._input_units)
     def __str__(self):
-        return "Unit spectrum of %f %s"%(self._fluxdensity,self._input_units)
+        return self.name
     
     def __call__(self, wavelength):
         """Create a TabularSourceSpectrum, then use its __call__"""
@@ -691,6 +694,11 @@ class UnitSpectrum(AnalyticSpectrum):
         sp.ToInternal()
         return sp(wavelength)
 
+##This change produces 5 errors and 17 failures in cos_etc_test.py
+##     def GetWaveSet(self):
+##         global default_waveset
+##         return N.array([default_waveset[0],default_waveset[-1]])
+
 
 class Powerlaw(AnalyticSpectrum):
     def __init__(self, refwave, index, waveunits='angstrom', fluxunits='photlam'):
@@ -699,9 +707,10 @@ class Powerlaw(AnalyticSpectrum):
         self._input_units = self.fluxunits
         self._refwave = refwave
         self._index = index
-
+        self.name="Power law: refwave %f, index %f"%(self._refwave,self._index)
+        
     def __str__(self):
-        return "Power law: refwave %f, index %f"%(self._refwave,self._index)
+        return self.name
 
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
@@ -724,9 +733,10 @@ class BlackBody(AnalyticSpectrum):
         self.fluxunits=units.Units('photlam')
         self.wavelength = None
         self.temperature = temperature
-
+        self.name='BB(T=%d)'%self.temperature
+        
     def __str__(self):
-        return 'BlackBody(T=%d)'%self.temperature
+        return self.name
 
     def __call__(self, wavelength):
         sp = TabularSourceSpectrum()
@@ -930,6 +940,7 @@ class CompositeSpectralElement(SpectralElement):
             msg="Components have different waveunits (%s and %s)"%(component1.waveunits,component2.waveunits)
             raise NotImplementedError(msg)
         self.throughputunits = None
+        self.name="(%s * %s)"%(str(self.component1),str(self.component2))
         
     def __call__(self, wavelength):
         '''This is where the throughput calculation is delegated.
@@ -937,8 +948,7 @@ class CompositeSpectralElement(SpectralElement):
         return self.component1(wavelength) * self.component2(wavelength)
 
     def __str__(self):
-        opdict = {'add':'+','multiply':'*'}
-        return "(%s %s %s)"%(str(self.component1),opdict[self.operation],str(self.component2))
+        return self.name
 
     def GetWaveSet(self):
         '''This method returns a wavelength set appropriate for a composite
@@ -959,11 +969,18 @@ class UniformTransmission(SpectralElement):
     def __init__(self, value, waveunits='angstrom'):
         self.waveunits = units.Units(waveunits)
         self.value = value
-
+        self.name="Uniform %5.3f"%value
 
     def GetWaveSet(self):
         return None
 
+## This produced 15 test failures in cos_etc_test.
+##     def GetWaveSet(self):
+##         global default_waveset
+##         return N.array([default_waveset[0],default_waveset[-1]])
+##
+##     wave = property(GetWaveSet,doc="wave for UniformTransmission")
+    
     def __call__(self, wavelength):
         '''__call__ returns the constant value as an array, given a
         wavelength array as argument.
@@ -997,7 +1014,7 @@ class TabularSpectralElement(SpectralElement):
         self._wavetable = self._wavetable[::-1]
         
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
     def _readASCII(self,filename):
