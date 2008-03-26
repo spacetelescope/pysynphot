@@ -75,7 +75,17 @@ class NegFluxTest(SpecTestCase):
         self.sp=S.ArraySpectrum(N.arange(3000,6000,500),
                                 N.array([1.0,0.5,0.2,0.1,-0.1,-0.3])*1e-14,
                                 fluxunits='flam')
-
+    
+class NegFlamTest(NegFluxTest):
+    def setUp(self):
+        self.sp=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
+                                            'calspec',
+                                            'vb8_stisnic_001.fits'))
+class NegMagTest(NegFluxTest):
+    def setUp(self):
+        self.sp=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
+                                            'calobs',
+                                            'alpha_lyr_006.fits'))
                 
 class GaussianTest(SpecTestCase):
     def setUp(self):

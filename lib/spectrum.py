@@ -970,6 +970,9 @@ class UniformTransmission(SpectralElement):
         self.waveunits = units.Units(waveunits)
         self.value = value
         self.name="Uniform %5.3f"%value
+        #The ._wavetable is used only by the .writefits() method at this time
+        #It is not for general use.
+        self._wavetable = N.array([default_waveset[0],default_waveset[-1]])
 
     def GetWaveSet(self):
         return None
@@ -1130,10 +1133,12 @@ class Box(SpectralElement):
         ''' Both center and width are assumed to be in Angstrom
             units, according to the synphot definition.
         '''
+        self.waveunits=units.Units('angstrom') #per docstring: for now
         lower = center - width / 2.0
         upper = center + width / 2.0
         step = 0.05                     # fixed step for now (in A)
 
+        self.name='Box at %f (%f wide)'%(center,width)
         nwaves = int(((upper - lower) / step)) + 2
         self._wavetable = N.zeros(shape=[nwaves,], dtype=N.float64)
         for i in range(nwaves):
@@ -1146,6 +1151,8 @@ class Box(SpectralElement):
                                         dtype=N.float64)
         self._throughputtable[0]  = 0.0
         self._throughputtable[-1] = 0.0
+
+        
         
 
 class Band(SpectralElement):
