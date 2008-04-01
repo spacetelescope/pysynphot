@@ -26,7 +26,20 @@ class FileTestCase(testutil.FPTestCase):
 
     def tearDown(self):
         self.openfits.close()
+
+class TicketXX(testutil.FPTestCase):
+    def setUp(self):
+        self.sp=S.UnitSpectrum(1)
+        self.z=2.5
+        self.wavecheck=N.array([550])
+
                     
+    def testfluxpt(self):
+        tst=self.sp.redshift(self.z)
+        tstpt=tst(self.wavecheck)[0]
+        self.assert_(tst.flux.max() == tstpt,"tstpt=%f"%tstpt)
+        
+
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)

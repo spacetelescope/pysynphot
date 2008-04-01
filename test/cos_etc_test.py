@@ -769,6 +769,15 @@ class EnforceWaveFile(EnforceWave):
         for k in self.cases:
             os.remove(self.cases[k])
 
+class Ticket87(testutil.FPTestCase):
+    def setUp(self):
+        self.sp=S.UnitSpectrum(1)
+        self.z=2.5
+        self.wavecheck=N.array([550])
+
+    def testminwave(self):
+        tst=self.sp.redshift(self.z)
+        self.assert_(self.sp.wave.min() == tst.wave.min(),"wave.min=%f"%tst.wave.min())
                             
 if __name__ == '__main__':
     if 'debug' in sys.argv:

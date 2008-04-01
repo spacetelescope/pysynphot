@@ -694,6 +694,16 @@ class UnitSpectrum(AnalyticSpectrum):
         sp.ToInternal()
         return sp(wavelength)
 
+    def redshift(self, z):
+        """Call the parent's method, which returns a TabularSourceSpectrum,
+        then use its results to create a new UnitSpectrum with the correct
+        value. """
+        
+        tmp=SourceSpectrum.redshift(self,z)
+        ans=UnitSpectrum(tmp.flux.max(),
+                         fluxunits=tmp.fluxunits)
+        return ans
+
 ##This change produces 5 errors and 17 failures in cos_etc_test.py
 ##     def GetWaveSet(self):
 ##         global default_waveset
