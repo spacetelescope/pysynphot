@@ -488,6 +488,7 @@ class _ThermalObservationMode(BaseObservationMode):
                                                      thermal_filenames)
 
         self.pixscale = self._getPixelScale()
+        self.name = obsmode+" (thermal)"
 
     def _getPixelScale(self):
         obsmode = self._obsmode.split(',')

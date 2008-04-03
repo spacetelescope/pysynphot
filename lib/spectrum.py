@@ -27,6 +27,8 @@ def renormalize(spectrum, band, flux, unit):
     ''' renormalization function.
     This function is marked for deletion once the SourceSpectrum.renorm
     method is well tested.'''
+
+    
     if isinstance(band,Band):
         if unit.lower() == 'vegamag':
             return spectrum.setMagnitude(band,flux)
@@ -342,21 +344,22 @@ class SourceSpectrum(Integrator):
         This method should ultimately replace both the renormalize function
         in this module, and the setMagnitude() method in this class."""
 
-        
+        return renormalize(self, band, value, unitstring)
+    
         #Integrate in the desired units over the desired passband
         sp=self*band
         rate=sp.integrate(fluxunits=unitstring)
         if rate <= 0.0:
-            raise ValueError('Integrated flux is negative')
+            raise ValueError('Integrated flux is <= 0')
         if N.isnan(rate):
             raise ValueError('Integrated flux is NaN')
         if N.isinf(rate):
             raise ValueError('Integrated flux is infinite')
         
         #Get the unit response of the passband
-        resp=band.calcUnitResponse(fluxunits=unitstring)
+        resp=band.unitResponse()
         if resp <= 0.0:
-            raise ValueError('Unit response of bandpass is negative')
+            raise ValueError('Unit response of bandpass is <= 0')
 
         #Compute the renorm factor;
         #       how to compute it depends on the units we're in
@@ -369,8 +372,9 @@ class SourceSpectrum(Integrator):
             magfactor=value - effstim
             factor = 10**(-magfactor*0.4)
         else:
-            effstim = rate * resp
-            factor = value/effstim
+            factor = value / (rate*resp)
+##             effstim = rate * resp
+##             factor = value/effstim
 
         #Now apply the factor to the spectrum in its native units.
         #Eventually maybe do self*=factor, but for now

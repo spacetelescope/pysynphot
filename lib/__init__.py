@@ -111,14 +111,23 @@ __version__ = '0.4d1'
 __revstring__  = '$Rev$'
 
 #UI:
+#AnalyticSpectra:
 from spectrum import BlackBody, GaussianSource, UnitSpectrum
 from spectrum import Powerlaw as PowerLaw
+#Tabular Spectra
 from spectrum import FileSourceSpectrum as FileSpectrum
 from spectrum import ArraySourceSpectrum as ArraySpectrum
+from catalog import Icat
+#Analytic Spectral Elements
+from spectrum import Box, UniformTransmission
+#Tabular Spectral Elements
 from spectrum import TabularSpectralElement as FileBandpass
-from observationmode import ObservationMode as Obsmode
+#Complicated spectral elements
 from obsbandpass import ObsBandpass
+from extinction import Ebmvx
 
+#Other constructs
+from observationmode import ObservationMode as Obsmode
 from numpy import arange as Waveset
 
 
