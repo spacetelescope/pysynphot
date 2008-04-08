@@ -8,28 +8,55 @@ import commands
 ver = sys.version_info
 python_exec = 'python' + str(ver[0]) + '.' + str(ver[1])
 
+
 #Determine & save the revision number for the ETC
-warning=0
-stat,revset=commands.getstatusoutput('svnversion .')
-if stat != 0:
-    revset='unavailable'
-if ( (revset.strip() == 'exported') or (stat!=0) ):
-    revset=revset+'; build date %s'%time.ctime()
-    warning=1
-
+warning=""
 vfname=os.path.join('data','generic','versioninfo.dat')
-f=open(vfname,'w')
-f.write(revset)
-f.close()
+try :
+    # If the version file already exists, it was created when the
+    # source distribution was being assembled.  All we need to
+    # do is read it from the file.
+    f=open(vfname,"r")
+    revset=f.readline()
+    f.close()
+except IOError:
+    # If we can't read the file, then we need to generate the file
+    warning=""
+    stat,revset=commands.getstatusoutput('svnversion .')
+    if stat != 0:
+        warning="cannot extract svnversion information\n"
+        revset='unavailable'
+    if revset.find('exported') >= 0 :
+        warning="this copy was exported - no version information\n"
+        revset='unavailable'
+    if revset.find("M") >= 0 :
+        warning="this copy is modified\n"
 
-#Determine & save the full svn info string for humans
-#No need to test against status; the info will be self-explanatory
-here=os.path.abspath(os.curdir)
-info=commands.getoutput('svn info %s'%here)
-vfname=os.path.join('data','generic','taginfo.dat')
-f=open(vfname,'w')
-f.write(info)
-f.close()
+    revset=revset+'; build date %s\n'%time.ctime()
+        
+    f=open(vfname,'w')
+    f.write(revset)
+    f.close()
+
+    #Determine & save the full svn info string for humans
+    #No need to test against status; the info will be self-explanatory
+    here=os.path.abspath(os.curdir)
+    info=commands.getoutput('svn info %s'%here)
+    vfname=os.path.join('data','generic','taginfo.dat')
+    f=open(vfname,'w')
+    f.write(info)
+    f.close()
+
+# "python setup.py assemble" causes it to only to assemble
+# the source distribution; we have collected the version
+# information into the files by now, so we're done.
+if len(sys.argv) == 2 and sys.argv[1] == 'prep' :
+    if warning :
+        print "unable to store useful version information"
+        print warning
+        sys.exit(1)
+    else :
+        sys.exit(0)
 
 #------------------------------------------------------------
 # WARNING WARNING WARNING: Any changes made to the datafiles
@@ -92,11 +119,11 @@ def main():
     args = sys.argv
     dolocal()
     dosetup()
-    if warning == 1:
+    if warning != "" :
         print """\n \n \n \n \n \n \n
         X        X        X       X        X       X      X\n
-        X    WARNING, no SVN version info was available.  X
-        X    Pysynphot installation was performed anyway. X\n
+        X    WARNING, """ + warning + """
+        X    Pysynphot installation was performed anyway.\n
         X        X        X       X        X       X      X\n
         \n \n \n \n"""
         sys.exit(1)
