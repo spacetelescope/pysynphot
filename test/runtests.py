@@ -10,7 +10,6 @@ the filename, and some tests will then have errors.
 
 import sys, os, time
 from pytools import testutil
-
 #=====================================================
 #           CONFIGURE TESTS HERE
 #=====================================================
@@ -31,6 +30,14 @@ tlist=['newobs_cases',
 for symbol in ('PYSYN_CDBS','PYSYN_USERDATA'):
     if symbol not in os.environ:
         raise EnvironmentError("%s must be set to run these tests"%symbol)
+
+import numpy
+import pyfits
+import pysynphot
+
+print "numpy version: %s"%numpy.__version__
+print "pyfits version: %s"%pyfits.__version__
+print "Pysynphot version: %s"%pysynphot.__revstring__
 
 #open the summary file
 now=time.gmtime()

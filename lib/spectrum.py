@@ -15,6 +15,7 @@ import locations
 import planck
 
 
+
 # Renormalization constants from synphot:
 PI = 3.14159265               # Mysterious math constant
 RSUN = 6.9599E10              # Radius of sun
@@ -379,8 +380,6 @@ class SourceSpectrum(Integrator):
         #Now apply the factor to the spectrum in its native units.
         #Eventually maybe do self*=factor, but for now
         return self*factor 
-
-        
 
 class CompositeSourceSpectrum(SourceSpectrum):
     '''Composite Source Spectrum object, handles addition, multiplication
@@ -1096,7 +1095,7 @@ class InterpolatedSpectralElement(SpectralElement):
         upper = MA.minimum(greater)
         lower = MA.maximum(less)
 
-        if '--' in (upper,lower):
+        if '--' in (str(upper),str(lower)):
             raise NotImplementedError("%f outside of range in %s; extrapolation not yet supported"%(wavelength,fileName))
         
         lcol = (colSpec + str(lower)).upper()
