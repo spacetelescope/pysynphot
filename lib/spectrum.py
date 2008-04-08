@@ -163,6 +163,14 @@ class Integrator(object):
             else:
                 raise ValueError('Wavelength array is not monotonic: invalid')
 
+    def validate_fluxtable(self):
+        "Enforce non-negative fluxes"
+        if ((not self.fluxunits.isMag) #neg. magnitudes are legal
+            and (self._fluxtable.min() < 0)):
+            idx=N.where(self._fluxtable < 0)
+            self._fluxtable[idx]=0.0
+            print "Warning, %d of %d bins contained negative fluxes; they have been set to zero."%(len(idx[0]),len(self._fluxtable))
+
 
 class SourceSpectrum(Integrator):
     '''Base class for the Source Spectrum object.
@@ -569,7 +577,8 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
     """ Class for a source spectrum that is constructed from arrays."""
     def __init__(self, wave=None, flux=None,
                  waveunits='angstrom', fluxunits='photlam',
-                 name='UnnamedArraySpectrum'):
+                 name='UnnamedArraySpectrum',
+                 keepneg=False):
         if len(wave)!=len(flux):
             raise ValueError("wave and flux arrays must be of equal length")
         
@@ -579,16 +588,23 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
         self.fluxunits=units.Units(fluxunits)
         self.name=name
 
-        self.validate_wavetable() #must do before ToInternal in case of descending        
+        self.validate_units() #must do before validate_fluxtable because it tests against unit type
+        self.validate_wavetable() #must do before ToInternal in case of descending
+        if not keepneg:
+            self.validate_fluxtable()
+            
         self.ToInternal()
 
     
 class FileSourceSpectrum(TabularSourceSpectrum):
     '''Class for a source spectrum that is read in from a table.'''
-    def __init__(self, filename, fluxname=None):
+    def __init__(self, filename, fluxname=None, keepneg=False):
         self._readSpectrumFile(filename, fluxname)
         self.name=filename
+        self.validate_units() 
         self.validate_wavetable()
+        if not keepneg:
+            self.validate_fluxtable()
         self.ToInternal()
 
     def _readSpectrumFile(self, filename, fluxname):

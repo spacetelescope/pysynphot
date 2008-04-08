@@ -344,7 +344,7 @@ class mJy(FluxUnits):
 
 class ABMag(LogFluxUnits):
     def __init__(self):
-        FluxUnits.__init__(self)
+        LogFluxUnits.__init__(self)
         self.name = 'abmag'
     
     def ToPhotlam(self, wave, flux):
@@ -360,7 +360,7 @@ class ABMag(LogFluxUnits):
 
 class STMag(LogFluxUnits):
     def __init__(self):
-        FluxUnits.__init__(self)
+        LogFluxUnits.__init__(self)
         self.name = 'stmag'
     
     def ToPhotlam(self, wave, flux):
@@ -376,7 +376,7 @@ class STMag(LogFluxUnits):
 
 class OBMag(LogFluxUnits):
     def __init__(self):
-        FluxUnits.__init__(self)
+        LogFluxUnits.__init__(self)
         self.name = 'obmag'
     
     def ToPhotlam(self, wave, flux):
@@ -390,7 +390,7 @@ class OBMag(LogFluxUnits):
 
 class VegaMag(LogFluxUnits):
     def __init__(self):
-        FluxUnits.__init__(self)
+        LogFluxUnits.__init__(self)
         self.name = 'vegamag'
     
     def ToPhotlam(self, wave, flux):

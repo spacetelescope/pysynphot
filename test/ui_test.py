@@ -197,7 +197,8 @@ class TabularCase(testutil.FPTestCase):
     def setUp(self):
         self.inwave=S.Waveset(1300,1800)
         self.influx=-2.5*N.log10(self.inwave**2)
-        self.sp=S.ArraySpectrum(wave=self.inwave,flux=self.influx)
+        self.sp=S.ArraySpectrum(wave=self.inwave,flux=self.influx,
+                                fluxunits='abmag')
 
     def testarrays(self):
         self.assertApproxNumpy(self.inwave,self.sp.wave)
@@ -205,7 +206,7 @@ class TabularCase(testutil.FPTestCase):
         
     def testunits(self):
         self.assert_(isinstance(self.sp.waveunits,units.Angstrom))
-        self.assert_(isinstance(self.sp.fluxunits, units.Photlam))
+        self.assert_(isinstance(self.sp.fluxunits, units.ABMag))
 
     def testconvert(self):
         self.sp.convert('flam')

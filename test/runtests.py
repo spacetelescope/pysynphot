@@ -22,7 +22,8 @@ tlist=['newobs_cases',
        'ticket82',
        'ticket21',
        'spectest',
-       'testwrite'
+       'testwrite',
+       'ticket86'
        ]
 #=====================================================
 
