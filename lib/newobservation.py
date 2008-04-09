@@ -136,6 +136,9 @@ class Observation(spectrum.CompositeSourceSpectrum):
         num = self.trapezoidIntegration(wave,countmulwave)
         den = self.trapezoidIntegration(wave,countdivwave)
 
+        if num == 0.0 or den == 0.0:
+            return 0.0
+
         return math.sqrt(num/den)
 
 
