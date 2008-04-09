@@ -125,7 +125,8 @@ from spectrum import TabularSpectralElement as FileBandpass
 #Complicated spectral elements
 from obsbandpass import ObsBandpass
 from extinction import Ebmvx
-
+#Observations
+from newobservation import Observation
 #Other constructs
 from observationmode import ObservationMode as Obsmode
 from numpy import arange as Waveset
