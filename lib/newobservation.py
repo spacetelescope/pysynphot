@@ -154,4 +154,8 @@ class Observation(spectrum.CompositeSourceSpectrum):
         num = self.trapezoidIntegration(wave,flux*wave*wave)
         den = self.trapezoidIntegration(wave,flux*wave)
         self.convert(myfluxunits)
+
+        if num == 0.0 or den == 0.0:
+            return 0.0
+
         return num/den
