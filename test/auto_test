@@ -1,0 +1,111 @@
+#!/bin/sh
+#
+# this is a hack to run pysynphot tests until we get a better
+# automatic testing scheme in place
+#
+
+# svn checkout http://astropy.scipy.org/svn/astrolib/trunk/pysynphot/test/
+# cd test
+# mv auto_test ..
+# /..../auto_test to run the test
+#
+# d= the name of the directory where you put this script (auto_test)
+d=/eng/ssb/tests/pysynphot/
+
+#
+# echo each command as it is executed
+set -x 
+
+# who gets failure reports (there are no success reports)
+mailto="sienkiew laidler"
+
+# exit immediately if a command fails - this means we will leave
+# a non-zero exit code, and so whatever program is running us
+# will know that the test aborted.  This is significantly different
+# from the test failing.
+set -e
+
+# add the host name to the log file, because we will be running on
+# multiple systems now.
+host=`hostname`
+host=`basename $host .stsci.edu`
+t=${host}.`date +%Y-%m-%d.%H:%M`
+
+# decide which python to use, since it is different on different
+# machines
+case "$host"
+in
+etc-dev1)
+	eval `/usr/local/bin/pythonenv -s 2.5.1ssg`
+	;;
+*)
+	eval `/usr/local/bin/pythonenv -s 2.5.1ssgdev`
+	;;
+esac
+
+#
+# we have no PYSYN_CDBS, so try to find a suitable one.
+#
+if [ "$PYSYN_CDBS" = "" ]
+then
+        found=0
+        # 
+        # the directories to search are:
+	# - where the local copy is on the ETC machines
+        # - the nfs mounted central store location on linux/solaris machines
+        # - where it is on a mac if you use st-storage to mount it
+        # - where it is on a mac if you use MountCIFSgrp to mount it
+        for src in /usr/stsci/data1/cdbs /grp/hst/cdbs $HOME/CentralStore/grp/hst/cdbs /Volumes/grp/hst/cdbs
+        do
+                if [ -d $src ]
+                then
+                        break
+                fi
+        done
+
+	PYSYN_CDBS=$src/
+
+	export PYSYN_CDBS
+fi
+
+if [ "$PYSYN_CDBS" = "" ]
+then
+	echo "cannot find cdbs data - cannot run test" >&2
+	exit 1
+fi
+	
+
+cd $d/run
+
+find . ! -mtime -14 -exec rm -f {} ';'
+
+echo $PATH
+
+( cd $d/scripts ; svn update )
+
+python $d/scripts/runtests.py > $t.pysyn_full 2>&1
+status=$?
+
+mv pysyn_summary.log $t.pysyn_summary
+
+case "$status"
+in
+0)
+	echo "pysynphot test on $host passed"
+	;;
+*)
+	echo "pysynphot test on $host failed"
+	cat $t.pysyn_summary
+	(
+		echo "pysynphot test failed on $host"
+		echo "logs in $d on $host"
+		echo ""
+		cat $t.pysyn_summary
+		
+	) | mail -s "pysynphot test on $host failed" $mailto
+	;;
+esac
+
+#
+# exit 0 means we were able to run the test, not whether it passed or not.
+exit 0
