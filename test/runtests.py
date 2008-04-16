@@ -23,7 +23,8 @@ tlist=['newobs_cases',
        'ticket21',
        'spectest',
        'testwrite',
-       'ticket86'
+       'ticket86',
+       'wavecat_tests'
        ]
 #=====================================================
 

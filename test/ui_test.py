@@ -13,6 +13,16 @@ import pysynphot as S
 ## import ui_test
 ## ui_test.FileTestCase('testwave').debug()
 
+class MergeTestCase(testutil.FPTestCase):
+    """Demonstrate the problem described in ticket #34:
+    Adding two identical tabular spectra loses a pixel in the resulting
+    spectrum's table."""
+
+    def testwave(self):
+        """tickettest.MergeTestCase('testwave'): merge simple identical wavesets: #34"""
+        foo=N.array(range(10,20),dtype=N.float64)
+        x=spectrum.MergeWaveSets(foo,foo)
+        self.assertEqualNumpy(foo,x)
 
 class FileTestCase(testutil.FPTestCase):
     def setUp(self):
