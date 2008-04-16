@@ -43,7 +43,11 @@ print "Pysynphot version: %s"%pysynphot.__revstring__
 
 #open the summary file
 now=time.gmtime()
-fname='pysyn_summary.log'
+
+if os.getenv("host") :
+    fname=os.getenv("host")+".pysyn_summary.log"
+else :
+    fname='pysyn_summary.log'
 fh=open(fname,'w')
 fh.write("%s\n"%time.asctime())
 
