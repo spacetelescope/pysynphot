@@ -4,10 +4,10 @@ import os, sys
 from pytools import testutil
 import numpy as N
 
+testdir   = os.path.join(os.path.dirname(__file__),'data')
 class Keepneg(testutil.FPTestCase):
     def setUp(self):
-        self.fname=os.path.join(os.environ['PYSYN_USERDATA'],
-                           'us7.txt')
+        self.fname=os.path.join(testdir,'us7.txt')
         self.refrate=2303.5 #provided by C. Oliveira        
         self.bp=S.ObsBandpass('cos,fuv,g130m,c1309,psa')
 

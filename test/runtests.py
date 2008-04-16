@@ -28,7 +28,7 @@ tlist=['newobs_cases',
 #=====================================================
 
 #Doublecheck environment
-for symbol in ('PYSYN_CDBS','PYSYN_USERDATA'):
+for symbol in ('PYSYN_CDBS',):  #,'PYSYN_USERDATA'):
     if symbol not in os.environ:
         raise EnvironmentError("%s must be set to run these tests"%symbol)
 

@@ -21,7 +21,7 @@ from pytools import testutil
 
 
 #Places used by test code
-userdir   = os.environ['PYSYN_USERDATA']
+userdir   = os.path.join(os.path.dirname(__file__),'data')
 testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 
 #Freeze the version of the comptable so tests are not susceptible to

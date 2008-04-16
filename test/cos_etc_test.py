@@ -18,7 +18,7 @@ from pytools import testutil
 
 
 #Places used by test code
-userdir   = os.environ['PYSYN_USERDATA']
+userdir   = os.path.join(os.path.dirname(__file__),'data')
 testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 
 #Freeze the version of the comptable so tests are not susceptible to
@@ -450,7 +450,7 @@ class ParserTestCase(testutil.FPTestCase):
         self.assertApproxFP(flux[5000], 1.53329E-7)
 
     def testuserdir2(self):
-        expr = "spec(%stest.dat)"%userdir
+        expr = "spec(%s/test.dat)"%userdir
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
