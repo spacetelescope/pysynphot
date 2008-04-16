@@ -8,7 +8,7 @@ from pysynphot import locations
 from pysynphot.catalog import Icat
 from pysynphot import spparser as P
 
-from pytools import testutil
+import testutil
 
 class UnixCase(testutil.FPTestCase):
     def setUp(self):

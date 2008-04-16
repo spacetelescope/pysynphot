@@ -3,7 +3,7 @@ import math
 
 import numpy as N
 import pyfits
-from pytools import testutil 
+import testutil 
 import pysynphot as S
 from pysynphot import units, locations
 

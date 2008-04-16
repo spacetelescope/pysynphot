@@ -1,7 +1,7 @@
 """Tests varying legal cases for ASCII file spectrum data"""
 import pysynphot as S
 import os, sys
-from pytools import testutil
+import testutil
 import numpy as N
 
 def writedata(fh,start=0,end=4000):

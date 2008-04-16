@@ -2,7 +2,7 @@ from pysynphot.etctest_base_class import ETCTestCase
 from pysynphot.newetc import parse_spec
 from pysynphot import ObsBandpass
 from pysynphot import observationmode #to check on comptable
-from pytools import testutil
+import testutil
 import sys, os
 
 

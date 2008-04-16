@@ -1,5 +1,5 @@
 import os
-from pytools import testutil
+import testutil
 from pysynphot import locations
 from pysynphot.newobservation import Observation 
 from pysynphot import observationmode #to freeze comptable

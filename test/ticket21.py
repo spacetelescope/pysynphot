@@ -1,7 +1,7 @@
 
 import sys
 import os
-from pytools import testutil
+import testutil
 
 from pysynphot import spectrum,observationmode
 from pysynphot import locations

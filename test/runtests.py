@@ -9,7 +9,7 @@ the filename, and some tests will then have errors.
 """
 
 import sys, os, time
-from pytools import testutil
+import testutil
 #=====================================================
 #           CONFIGURE TESTS HERE
 #=====================================================

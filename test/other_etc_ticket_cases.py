@@ -11,7 +11,7 @@ from pysynphot import units, planck
 from pysynphot import newetc as etc
 import pysynphot as S
 
-from pytools import testutil 
+import testutil 
 import other_etc_test
 
 from other_etc_test import values

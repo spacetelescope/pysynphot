@@ -1,6 +1,6 @@
 """Test that exceptions really are raised when they should be."""
 import unittest,sys,os
-from pytools import testutil
+import testutil
 from pysynphot import observationmode
 import pysynphot as S
 

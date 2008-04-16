@@ -1,7 +1,7 @@
 import pysynphot as S
 from pysynphot.newobservation import Observation
 import os, sys
-from pytools import testutil
+import testutil
 import numpy as N
 
 testdir   = os.path.join(os.path.dirname(__file__),'data')

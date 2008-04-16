@@ -11,7 +11,7 @@ from pysynphot import units, planck
 from pysynphot import newetc as etc
 import pysynphot as S
 
-from pytools import testutil 
+import testutil 
 
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:

@@ -8,7 +8,7 @@ from pysynphot import locations
 from pysynphot.catalog import Icat
 from pysynphot import spparser as P
 
-from pytools import testutil 
+import testutil 
 
 #Places used by test code
 userdir   = os.path.join(os.path.dirname(__file__),'data')

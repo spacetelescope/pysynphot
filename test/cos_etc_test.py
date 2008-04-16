@@ -13,7 +13,7 @@ from pysynphot import newetc as etc
 from pysynphot.newobservation import Observation
 import pysynphot as S
 
-from pytools import testutil 
+import testutil 
 
 
 

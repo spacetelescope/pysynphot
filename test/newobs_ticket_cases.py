@@ -1,6 +1,6 @@
 import newobs_test 
 import sys
-from pytools import testutil
+import testutil
 
 class C2(newobs_test.NativeCase):
     """C2:Ticket #21, parameterized keywords"""

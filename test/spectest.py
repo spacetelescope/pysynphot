@@ -4,7 +4,7 @@ import math
 
 import numpy as N
 import pyfits
-from pytools import testutil
+import testutil
 from pysynphot import units, locations, spectrum, observationmode
 from pysynphot.obsbandpass import ObsBandpass
 import pysynphot as S

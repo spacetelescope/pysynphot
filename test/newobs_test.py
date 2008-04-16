@@ -10,7 +10,7 @@ from pysynphot import spparser as P
 from pysynphot import etc, newetc
 import pysynphot as S
 
-from pytools import testutil 
+import testutil 
 
 etc.debug=0
 

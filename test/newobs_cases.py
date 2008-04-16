@@ -1,6 +1,6 @@
 import newobs_test 
 import sys
-from pytools import testutil
+import testutil
 
 
 class C1(newobs_test.NativeCase):
