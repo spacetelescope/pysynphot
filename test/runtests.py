@@ -36,21 +36,24 @@ for symbol in ('PYSYN_CDBS',):  #,'PYSYN_USERDATA'):
 import numpy
 import pyfits
 import pysynphot
+from pysynphot import newetc
 
-print "numpy version: %s"%numpy.__version__
-print "pyfits version: %s"%pyfits.__version__
-print "Pysynphot version: %s"%pysynphot.__revstring__
 
 #open the summary file
 now=time.gmtime()
-
-if os.getenv("host") :
-    fname=os.getenv("host")+".pysyn_summary.log"
+if os.getenv("hostname") :
+    fname=os.getenv("hostname")+".pysyn_summary.log"
 else :
     fname='pysyn_summary.log'
 fh=open(fname,'w')
 fh.write("%s\n"%time.asctime())
 
+#Print some useful version information
+fh.write("numpy version: %s\n"%numpy.__version__)
+fh.write("pyfits version: %s\n"%pyfits.__version__)
+fh.write("Pysynphot version: %s\n"%newetc.version(1))
+
+#
 #Run the tests
 failed=0
 summary=[]
