@@ -15,13 +15,9 @@ syfunctions = [
     'bb',
     'pl',
     'em',
-    'hi',
-    'cat',
     'icat',
-    'grid',
     'rn',
     'z',
-    'ebmv',
     'ebmvx',
     'band'
     ]
