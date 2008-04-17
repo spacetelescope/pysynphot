@@ -27,13 +27,13 @@ mailto="sienkiew laidler"
 
 # add the host name to the log file, because we will be running on
 # multiple systems now.
-host=`hostname`
-host=`basename $host .stsci.edu`
-t=${host}.`date +%Y-%m-%d.%H:%M`
+hostname=`hostname`
+hostname=`basename $hostname .stsci.edu`
+t=${hostname}.`date +%Y-%m-%d.%H:%M`
 
 # decide which python to use, since it is different on different
 # machines
-case "$host"
+case "$hostname"
 in
 etc-dev1)
 	eval `/usr/local/bin/pythonenv -s 2.5.1ssg`
@@ -84,6 +84,8 @@ echo $PATH
 
 ( cd $d/test ; svn update )
 
+pwd
+echo output to $t.pysyn_full
 # this is in an if so that the exit code can't cause the
 # script to exit.
 if python $d/test/runtests.py > $t.pysyn_full 2>&1
@@ -95,23 +97,23 @@ fi
 
 # the host name is in the file name for race avoidance.  if
 # you run the test on the same machine, you might conflict
-mv $host.pysyn_summary.log $t.pysyn_summary
+mv $hostname.pysyn_summary.log $t.pysyn_summary
 
 case "$status"
 in
 0)
-	echo "pysynphot test on $host passed"
+	echo "pysynphot test on $hostname passed"
 	;;
 *)
-	echo "pysynphot test on $host failed"
+	echo "pysynphot test on $hostname failed"
 	cat $t.pysyn_summary
 	(
-		echo "pysynphot test failed on $host"
-		echo "logs in $d on $host"
+		echo "pysynphot test failed on $hostname"
+		echo "logs in $d on $hostname"
 		echo ""
 		cat $t.pysyn_summary
 		
-	) | mail -s "pysynphot test on $host failed" $mailto
+	) | mail -s "pysynphot test on $hostname failed" $mailto
 	;;
 esac
 
