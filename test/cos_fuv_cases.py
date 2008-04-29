@@ -365,7 +365,10 @@ class C39(ETCTestCase):
 
 class C40(ETCTestCase):
     def setparms(self):
-        self.sp=parse_spec('rn(spec(/grp/hst/cdbs/calspec/gd50_004.fits),box(1499.9999999999998,1.0),1.00E-14,flam)')
+        spname=os.path.join(os.environ['PYSYN_CDBS'],
+                            'calspec',
+                            'gd50_004.fits')
+        self.sp=parse_spec('rn(spec(%s),box(1499.9999999999998,1.0),1.00E-14,flam)'%spname)
         self.bp=ObsBandpass('cos,fuv,g140l,c1230')
         self.ref_rate=557.267
         self.cmd='SpecSourcerateSpec'
@@ -374,7 +377,10 @@ class C40(ETCTestCase):
 
 class C41(ETCTestCase):
     def setparms(self):
-        self.sp=parse_spec('rn(spec(/grp/hst/cdbs/calspec/feige110_stis_001.fits),box(1499.9999999999998,1.0),1.00E-14,flam)')
+        spname=os.path.join(os.environ['PYSYN_CDBS'],
+                            'calspec',
+                            'feige110_stis_001.fits')
+        self.sp=parse_spec('rn(spec(%s),box(1499.9999999999998,1.0),1.00E-14,flam)'%spname)
         self.bp=ObsBandpass('cos,fuv,g140l,c1230')
         self.ref_rate=616.373
         self.cmd='SpecSourcerateSpec'
