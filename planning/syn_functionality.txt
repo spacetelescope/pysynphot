@@ -1,0 +1,113 @@
+CALCBAND
+Construct bandpasses:
+Supported:
+  from obsmode string
+  box (1 angstrom wide)
+
+
+Not yet supported:
+  gauss
+  lgauss A passband with normal distribution in the logarithm of the
+        wavelength.
+
+No plans to support:
+  poly: Legendre polynomials
+  tilt: Like poly, except mean & fwhm are computed from wavelength
+
+BANDPAR: Not yet supported. Should be methods on SpectralElement.
+Calculate bandpass parameters:
+            URESP           Flux (in flam) of a star that produces a response
+                            of one photon per second in this passband
+            PIVWV           Passband pivot wavelength
+            BANDW           Passband rms width
+            FWHM            Full width half max of equivalent gaussian
+            WPEAK           Wavelength at peak throughput
+            TPEAK           Peak bandpass throughput
+            AVGLAM          Passband average wavelength
+            QTLAM           Dimensionless efficiency
+            EQUVW           Passband equivalent width
+            RECTW           Passband rectangular width
+            EMFLX           Equivalent monochromatic flux
+
+             NAME           PARAMETER
+            =======         =========
+            REFWAVE         The reference wavelength (set by user, or AVGLAM)
+            TLAMBDA         The throughput at the reference wavelength
+
+
+CALCPHOT:
+Should be methods on Observation (and possibly Spectrum, for effstim
+only)
+
+Supported?
+ not yet      EFFSTIM         effective stimulus      (form)
+ not yet      AVGLAM          average wavelength      (Angstroms)
+ not yet      BARLAM          mean log wavelength     (Angstroms)
+ not yet      FWHMLAM         FWHM bandwidth          (Angstroms)
+ not yet      RMSLAM          rms bandwidth           (Angstroms)
+ yes          EFFLERG         effective wavelength    (Angstroms)
+
+CALCSPEC:
+Supported?  (yes, no, partial)
+       ----------------------------------------------------------------------
+y        band(str1, ...)                 0       Telescope passband
+y        bb(num1)                        1       Black body spectrum
+y        box(num1, num2)                 0       Rectangular passband
+n        cat(str1, ...)                  1       Read from a catalog of spectra
+n        ebmv(num1)                      0       Galactic extinction curve
+y        ebmvx(num1, str1)               0       Other extinction curves
+n        em(num1, num2, num3, str1)      1       Emission line spectrum
+y        gauss(num1, num2)               0       Normal curve passband
+n        grid (str1, num1)               1       Interpolated spectrum in grid
+n        hi(num1, num2)                  1       Hydrogen absorption spectrum
+y        icat(str1, ...)                 1       Interpolate in a catalog of spectra
+n        lgauss(num1, num2)              0       Log normal curve passband
+y        pl(num1, num2, str1)            1       Power law spectrum
+n        poly(num1, num2, num3, ...)     0       Legendre polynomial
+p        rn(spec1, band1, num1, str1)    1       Renormalize spectrum
+y        spec(str1)                      1       Read a spectrum
+y        thru(str1)                      0       Read a passband
+n        tilt(band1, num1, ...)          0       Legendre polynomial product
+y        unit(num1, str1)                1       Constant spectrum
+p        z(spec1, num1)                  1       Redshift spectrum
+
+COUNTRATE:
+Supported:
+  - compute the total flux (effective stimulation) in counts
+Not yet supported:
+- can specify exposure time
+- refwave: a specifically called out flux
+- flux_tot: total flux through band
+- flux_ref: the flux at the reference wavelength
+
+
+
+Obsmode: Not yet supported
+Fills out a partial obsmode with all its possible completions
+
+Showfiles: Supported via a method on bandpass
+
+Thermback: now a special newetc task; should be a method on bandpass
+or obsmode
+
+==No need to support:==
+Plband, Plspec: use matplotlib/pylab to directly plot spectra & bandpasses
+Genwave: use numpy call to create arrays instead
+
+
+==No plans to support:==
+Fitband, fitgrid, fitspec
+
+Grafcheck: validates graph table as legitimate
+Graflist: utility function on graph table
+Grafpath: replaced by showfiles
+Imspec: no plans to support
+Mkthru: utility for CDBS reference file construction; no plans to support
+
+Plratio: no plans for support
+Pltrans: no plans for support
+
+
+Simulators/ no plans for support
+
+
