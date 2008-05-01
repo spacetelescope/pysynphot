@@ -1,0 +1,42 @@
+== CALACS/CALWP2 support ==
+Purpose of this release: allow pipelines to survive the demise of synphot
+Acceptance defined as: CALxxx regression tests pass
+
+- Showfiles: already implemented in 17.1
+
+- Provide method(s) on SpectralElement to calculate:
+
+            URESP           Flux (in flam) of a star that produces a response
+                            of one photon per second in this passband
+            PIVWV           Passband pivot wavelength
+            BANDW           Passband rms width
+            FWHM            Full width half max of equivalent gaussian
+            WPEAK           Wavelength at peak throughput
+            TPEAK           Peak bandpass throughput
+            AVGLAM          Passband average wavelength
+            QTLAM           Dimensionless efficiency
+            EQUVW           Passband equivalent width
+            RECTW           Passband rectangular width
+            EMFLX           Equivalent monochromatic flux
+
+
+
+==Subsequent to 18.0 UI==
+Purpose of this release: complete core synphot functionality.
+Acceptance defined as: ???
+
+- Provide ColorIndex objects so they can be used in the same way as
+  SpectralElement objects
+
+- Provide gauss and lgauss AnalyticSpectralElements
+
+- Provide methods on Observation to calculate avglam, barlam, fwhmlam,
+  rmslam
+
+- Provide AnalyticSourceSpectrum types for emission line and HI
+  absorption spectra
+
+- Provide a means by which to determine the flux at a particular
+  wavelength (analogous to refwave/flux_ref parameters in countrate)
+
+

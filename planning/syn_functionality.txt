@@ -1,11 +1,11 @@
 CALCBAND
 Construct bandpasses:
-Supported:
+Supported: (in 0.3.x / 17.x)
   from obsmode string
   box (1 angstrom wide)
 
 
-Not yet supported:
+Not yet supported:  (1.0)
   gauss
   lgauss A passband with normal distribution in the logarithm of the
         wavelength.
@@ -14,7 +14,9 @@ No plans to support:
   poly: Legendre polynomials
   tilt: Like poly, except mean & fwhm are computed from wavelength
 
-BANDPAR: Not yet supported. Should be methods on SpectralElement.
+BANDPAR: Not yet supported. (0.9 / OPUS 200x.x)
+
+Should be methods on SpectralElement.
 Calculate bandpass parameters:
             URESP           Flux (in flam) of a star that produces a response
                             of one photon per second in this passband
@@ -40,74 +42,76 @@ Should be methods on Observation (and possibly Spectrum, for effstim
 only)
 
 Supported?
- not yet      EFFSTIM         effective stimulus      (form)
- not yet      AVGLAM          average wavelength      (Angstroms)
- not yet      BARLAM          mean log wavelength     (Angstroms)
- not yet      FWHMLAM         FWHM bandwidth          (Angstroms)
- not yet      RMSLAM          rms bandwidth           (Angstroms)
- yes          EFFLERG         effective wavelength    (Angstroms)
+0.6           EFFSTIM         effective stimulus      (form)
+1.0           AVGLAM          average wavelength      (Angstroms)
+1.0           BARLAM          mean log wavelength     (Angstroms)
+1.0           FWHMLAM         FWHM bandwidth          (Angstroms)
+1.0           RMSLAM          rms bandwidth           (Angstroms)
+0.3           EFFLERG         effective wavelength    (Angstroms)
 
 CALCSPEC:
-Supported?  (yes, no, partial)
+Supported?  yes, no, partial; 
+pysynphot build (-- = superceded)
        ----------------------------------------------------------------------
-y        band(str1, ...)                 0       Telescope passband
-y        bb(num1)                        1       Black body spectrum
-y        box(num1, num2)                 0       Rectangular passband
-n        cat(str1, ...)                  1       Read from a catalog of spectra
-n        ebmv(num1)                      0       Galactic extinction curve
-y        ebmvx(num1, str1)               0       Other extinction curves
-n        em(num1, num2, num3, str1)      1       Emission line spectrum
-y        gauss(num1, num2)               0       Normal curve passband
-n        grid (str1, num1)               1       Interpolated spectrum in grid
-n        hi(num1, num2)                  1       Hydrogen absorption spectrum
-y        icat(str1, ...)                 1       Interpolate in a catalog of spectra
-n        lgauss(num1, num2)              0       Log normal curve passband
-y        pl(num1, num2, str1)            1       Power law spectrum
-n        poly(num1, num2, num3, ...)     0       Legendre polynomial
-p        rn(spec1, band1, num1, str1)    1       Renormalize spectrum
-y        spec(str1)                      1       Read a spectrum
-y        thru(str1)                      0       Read a passband
-n        tilt(band1, num1, ...)          0       Legendre polynomial product
-y        unit(num1, str1)                1       Constant spectrum
-p        z(spec1, num1)                  1       Redshift spectrum
+y 0.3    band(str1, ...)              0       Telescope passband
+y 0.3    bb(num1)                     1       Black body spectrum
+y 0.3    box(num1, num2)              0       Rectangular passband
+n --     cat(str1, ...)               1       Read from a catalog of spectra
+n --     ebmv(num1)                   0       Galactic extinction curve
+y 0.3    ebmvx(num1, str1)            0       Other extinction curves
+n 1.0    em(num1, num2, num3, str1)   1       Emission line spectrum
+y 0.3    gauss(num1, num2)            0       Normal curve passband
+n --     grid (str1, num1)            1       Interpolated spectrum in grid
+n 1.0    hi(num1, num2)               1       Hydrogen absorption spectrum
+y 0.3    icat(str1, ...)              1       Interpolate in a catalog of spectra
+n 1.0    lgauss(num1, num2)           0       Log normal curve passband
+y 0.3    pl(num1, num2, str1)         1       Power law spectrum
+n >1.0   poly(num1, num2, num3, ...)  0       Legendre polynomial
+p 0.3/0.6  rn(spec1, band1, num1, str1)  1    Renormalize spectrum
+y 0.3    spec(str1)                   1       Read a spectrum
+y 0.3    thru(str1)                   0       Read a passband
+n >1.0   tilt(band1, num1, ...)       0       Legendre polynomial product
+y 0.3    unit(num1, str1)             1       Constant spectrum
+p 0.3/0.6  z(spec1, num1)             1       Redshift spectrum
 
 COUNTRATE:
-Supported:
+Supported (0.3):
   - compute the total flux (effective stimulation) in counts
+
 Not yet supported:
-- can specify exposure time
-- refwave: a specifically called out flux
-- flux_tot: total flux through band
-- flux_ref: the flux at the reference wavelength
+- can specify exposure time (--; just multiply)
+- flux_tot: total flux through band        (0.6)
+- refwave: a specifically called out flux (0.7)
+- flux_ref: the flux at the reference wavelength (0.7)
 
 
 
-Obsmode: Not yet supported
+Obsmode: Not yet supported (0.7)
 Fills out a partial obsmode with all its possible completions
 
-Showfiles: Supported via a method on bandpass
+Showfiles: Supported via a method on bandpass (0.4)
 
-Thermback: now a special newetc task; should be a method on bandpass
+Thermback: (0.6) 
+now a special newetc task; should be a method on bandpass
 or obsmode
 
 ==No need to support:==
 Plband, Plspec: use matplotlib/pylab to directly plot spectra & bandpasses
 Genwave: use numpy call to create arrays instead
+Grafpath: replaced by showfiles
 
-
-==No plans to support:==
-Fitband, fitgrid, fitspec
-
+==Utility programs: no plans to support==
 Grafcheck: validates graph table as legitimate
 Graflist: utility function on graph table
-Grafpath: replaced by showfiles
-Imspec: no plans to support
 Mkthru: utility for CDBS reference file construction; no plans to support
 
-Plratio: no plans for support
-Pltrans: no plans for support
+
+==Complex tasks: No plans to support unless requested (> 1.0):==
+Fitband, fitgrid, fitspec
+Imspec
+Plratio, pltrans
+Simulators
 
 
-Simulators/ no plans for support
 
 

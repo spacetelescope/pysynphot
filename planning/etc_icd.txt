@@ -30,6 +30,10 @@ that it is running.
 ==Requirements for 17.0==
 (reverse-engineered from what was delivered):
 
+Purpose of this release: Support COS ETC 
+Pysynphot builds: 0.3.x
+Acceptance defined as: COS team accepts ETC regression test results.
+
 - Parse a syntactically correct synphot expression to produce a
   spectrum. The expression may include the following functions:
     'spec', 'unit', 'box', 'bb', 'pl', 'em', 'icat',
@@ -70,11 +74,15 @@ the obsmode.
 - Compute the countrate and effective wavelength of an observation.
 
 
-Acceptance defined as: COS team accepts ETC regression test results.
+
 
 
 
 == Requirements for 17.1==:
+Purpose of this release: Improve support for COS ETC
+Pysynphot builds: 0.4.x
+Acceptance defined as: ETC regression tests pass
+
 - Update the graph, component, and thermal component tables.
 
 - Show the full file specifications being used in the computation of a
@@ -83,12 +91,24 @@ bandpass.
 - Report the version of pysynphot being used.
 
 
-== Requirements for 17.2==:
-Added bugfixes but no new functionality.
 
+== Requirements for 17.2==:
+
+Purpose of this release: Bugfixes & improved robustness to
+user-supplied spectra
+Pysynphot builds: 0.4.x
+Acceptance defined as: ETC regression tests pass
 
 
 == Requirements for 18.0==:
+
+Purpose of this release: Support all ETCs
+Pysynphot builds: 0.5.x
+
+                       { current regression tests pass & agree with synphot
+Acceptance defined as: {                    OR
+                       { instrument teams accept synphot & ETC test results
+
 - Support parameterized keywords.
 
 - Compute the thermal background for an obsmode that includes support
@@ -97,15 +117,13 @@ Added bugfixes but no new functionality.
 - Support spectral elements in descending wavelength order(* Or:
   modify the offending files in CDBS so that they are ascending.)
 
-                       { current regression tests pass & agree with synphot
-Acceptance defined as: {                    OR
-                       { instrument teams accept synphot & ETC test results
-
 
 
 == Requirements for UI for 18.0==
 Purpose of this release: provide direct access to pysynphot for ETC
-users to perform analysis related to their ETC requests
+            users to perform analysis related to their ETC requests
+Pysynphot builds: 0.6.x, 0.7.x
+Acceptance defined as: ??
 
 - All the above functionality via OO UI
 
@@ -117,8 +135,11 @@ users to perform analysis related to their ETC requests
 
 - Fully support renormalization in the standard set of units
 
-- Support calcphot.effstim with an Observation.effstim() method
+- Make .thermback() a method on an ObsBandpass
+
+- Support calcphot.effstim with an Observation.effstim() method that
+  supports the full set of units
 
 - Provide capability to modify "refdata" functionality
 
-- Provide obsmode capability (?)
+- Provide obsmode capability 
