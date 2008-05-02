@@ -4,8 +4,8 @@ Dec 2007    Cycle 17: Support COS ETCs
 Nov 2008    ADASS: Public release of pysynphot (build 0.6ish?)
 Feb 2009    Cycle 18}: Support all ETCs & UI to ETC functionality
     stsci_python 2.7}
-Fall 2009 STSDAS 3.9}: Announce synphot deprecation, replaced by
-    stsci_python 2.8}         pysynphot
+Fall 2009 STSDAS 3.10}: Announce synphot deprecation, replaced by
+     stsci_python 2.8}         pysynphot
 
 
 

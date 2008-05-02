@@ -1,4 +1,13 @@
 == CALACS/CALWP2 support ==
+TENTATIVE: It's not clear what will be the best way to replace synphot
+functionality in the pipelines. It could be that adopting an ETC-like
+model, where pysynphot queries are sent to a server, would be best; or
+it might be best to pre-calculate the necessary quantities into files
+that would be managed, thus breaking the dependency on
+(py)synphot. For purposes of pysynphot planning, we will assume that
+the pipelines will require this functionality, just in case that is
+the route that is decided.
+
 Purpose of this release: allow pipelines to survive the demise of synphot
 Acceptance defined as: CALxxx regression tests pass
 
@@ -30,11 +39,7 @@ Acceptance defined as: ???
 
 - Provide gauss and lgauss AnalyticSpectralElements
 
-- Provide methods on Observation to calculate avglam, barlam, fwhmlam,
-  rmslam
-
-- Provide AnalyticSourceSpectrum types for emission line and HI
-  absorption spectra
+- Provide AnalyticSourceSpectrum type for HI absorption spectra
 
 - Provide a means by which to determine the flux at a particular
   wavelength (analogous to refwave/flux_ref parameters in countrate)

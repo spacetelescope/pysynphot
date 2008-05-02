@@ -1,3 +1,14 @@
+This document describes the functionality provided by the most
+commonly used synphot tasks, and identifies the pysynphot builds in
+which they will be supported. It also identifies functionality for
+which there are at present no plans to provide pysynphot support.
+
+These identifications are tentative, and are subject to revision after
+consultation with INS and after a survey is taken of synphot users
+both internal to STScI and in the community.
+
+
+
 CALCBAND
 Construct bandpasses:
 Supported: (in 0.3.x / 17.x)
