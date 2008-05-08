@@ -100,6 +100,10 @@ Not yet supported:
 Obsmode: Not yet supported (0.7)
 Fills out a partial obsmode with all its possible completions
 
+Plband-related functionality: (0.6ish)
+
+- Add a method to SpectralElement.normalize()
+
 Showfiles: Supported via a method on bandpass (0.4)
 
 Thermback: (0.6) 

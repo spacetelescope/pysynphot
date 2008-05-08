@@ -8,7 +8,9 @@ that would be managed, thus breaking the dependency on
 the pipelines will require this functionality, just in case that is
 the route that is decided.
 
-Purpose of this release: allow pipelines to survive the demise of synphot
+Purpose of this release: allow pipelines to survive the demise of
+synphot
+Pysynphot build: 0.9.x
 Acceptance defined as: CALxxx regression tests pass
 
 - Showfiles: already implemented in 17.1
@@ -32,6 +34,7 @@ Acceptance defined as: CALxxx regression tests pass
 
 ==Subsequent to 18.0 UI==
 Purpose of this release: complete core synphot functionality.
+Pysynphot build: 1.0
 Acceptance defined as: ???
 
 - Provide ColorIndex objects so they can be used in the same way as

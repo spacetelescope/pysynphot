@@ -52,11 +52,11 @@ Acceptance: TBD
 
 
 Build: 0.8.x
-8Associated with: ??
+Associated with: ??
 Purpose: Rationalize CDBS and data files
 Acceptance: TBD
 
-Build: 0.9.x
+Build: 0.9.x -- TENTATIVE
 Associated with: OPUS 200x.x ?
 Purpose: allow pipelines to survive the demise of synphot
 Acceptance: CALxxx regression tests pass
