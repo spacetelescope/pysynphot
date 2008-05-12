@@ -106,17 +106,6 @@ _smc     = _computeSMC(_waveset)
 _xgal    = _computeXgal(_waveset)
 
 
-class Ebmvx(spectrum.SpectralElement):
-    def __init__(self, extval, redlaw):
-        ''' Extinction mimics as a spectral element.
-        '''
-        law = factory(redlaw, extval)
-
-        self._wavetable = 10000.0 / law._wavetable
-        self._throughputtable = law.transparencytable
-        self.name=redlaw
-        self.waveunits=units.Units('angstrom')
-
 
 class _ExtinctionLaw(object):
 
@@ -125,32 +114,41 @@ class _ExtinctionLaw(object):
 
 
 class Gal1(_ExtinctionLaw):
+    citation = 'Seaton 1979 (MNRAS 187:75)'
+    name = 'gal1'
     def __init__(self, extval):
-        self.name = 'Seaton'
+
         global _seaton
         self._wavetable = _waveset.copy()
         self.transparencytable = self._computeTransparency(extval, _seaton)
 
 
 class Gal2(_ExtinctionLaw):
+    citation = 'Savage & Mathis 1979 (ARA&A 17:73)'
+    name = 'gal2'
     def __init__(self, extval):
-        self.name = 'Savage & Mathis'
-
-
+        raise NotImplementedError("Sorry, %s is not yet implemented"%self.name)
+    
 class Gal3(_ExtinctionLaw):
+    citation='Cardelli, Clayton & Mathis 1989 (ApJ 345:245)'
+    name='gal3'
+
     def __init__(self, extval):
-        self.name = 'Cardelli, Clayton & Mathis'
+        raise NotImplementedError("Sorry, %s is not yet implemented"%self.name)
 
 
 class Smc(_ExtinctionLaw):
+    citation='Prevot et al.1984 (A&A 132:389)'
+    name='SMC'
     def __init__(self, extval):
-        self.name = 'SMC'
         global _smc
         self._wavetable = _waveset.copy()
         self.transparencytable = self._computeTransparency(extval, _smc)
 
 
 class Lmc(_ExtinctionLaw):
+    citation='Howarth 1983 (MNRAS 203:301)'
+    name='LMC'
     def __init__(self, extval):
         self.name = 'LMC'
         global _lmc
@@ -159,8 +157,9 @@ class Lmc(_ExtinctionLaw):
 
 
 class Xgal(_ExtinctionLaw):
+    citation = 'Calzetti, Kinney and Storchi-Bergmann, 1994 (ApJ 429:582)'
+    name='XGAL'
     def __init__(self, extval):
-        self.name = 'Extragalactic'
         global _xgal
         self._wavetable = _waveset.copy()
         self.transparencytable = self._computeTransparency(extval, _xgal)
@@ -176,3 +175,19 @@ reddeningClasses = {'gal1': Gal1,
 def factory(redlaw, *args, **kwargs):
     return apply(reddeningClasses[string.lower(redlaw)], args, kwargs)
 
+class Ebmvx(spectrum.SpectralElement):
+    def __init__(self, extval, redlaw):
+        ''' Extinction mimics as a spectral element.
+        '''
+        law = factory(redlaw, extval)
+        self._wavetable = 10000.0 / law._wavetable
+        self._throughputtable = law.transparencytable
+        self.name=law.name
+        self.citation=law.citation
+        self.waveunits=units.Units('angstrom')
+
+    def options():
+        print "Supported reddening laws:"
+        for k in reddeningClasses.keys():
+            print "%s: %s"%(k,reddeningClasses[k].citation)
+    options=staticmethod(options)
