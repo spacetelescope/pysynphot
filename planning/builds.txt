@@ -36,15 +36,19 @@ Associated with: ETC 17.x (Dec 07 - May 08)
 Purpose: COS ETC support
 Acceptance: COS team accepts ETC regression test results.
 
-
 Build:   0.5.x
+Associated with: ADASS presentation proposal, general cleanup
+Purpose: Improve renormalization, extinction, & user interface
+Acceptance: Passes its own test suite 
+
+Build:   0.6.x
 Associated with: ETC 18.x (Dec 08 - Feb 09?)
 Purpose: All ETC support
             { current regression tests pass & agree with synphot
 Acceptance: {                    OR
             { instrument teams accept synphot & ETC test results
 
-Build: 0.6.x, 0.7.x
+Build: 0.7.x
 Associated with: UI for ETC 18.x (Dec 08 - Feb 09?); stsci_python 2.8 (Feb 09)
 Purpose: provide direct access to pysynphot for ETC
          users to perform analysis related to their ETC requests
