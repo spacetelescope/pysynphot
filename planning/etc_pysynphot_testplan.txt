@@ -52,17 +52,26 @@ Discrepancies greater than some pre-agreed percentage will be brought
 to the attention of the instrument teams.
 
 Some analysis will also be performed on the test results -- e.g.,
-histogram of discrepancies, mean & std.
+histogram of discrepancies, mean & std. The pass/fail discrepancy will
+probably be updated based on such analysis.
 
 
 Other comments:
 
-All pysynphot calculations for these tests will be performed using the
-same wavelength set as the corresponding synphot calculations, in
-order to enable direct comparison of the results. This will frequently
-not match the native waveset used by pysynphot; therefore, we may wish
-to design some tests intended to validate the pysynphot native
-results.
+Waveset issues require special handling:
+  - for COUNTRATE comparisons, both synphot and pysynphot will produce
+  spectra (in counts) on the same optimally binned wavelength
+  set. These can be compared directly.
+
+  - for all other comparisons of flux arrays, the synphot and
+    pysynphot calculations will be performed independently, each in
+    their native wavesets. Then the waveset from the synphot spectrum
+    will be used to sample the pysynphot spectrum, and those results
+    will be compared.
+
+
+We may additionally wish to design some tests intended to validate the
+pysynphot native results.
 
 Both synphot and pysynphot use photlam as their native or internal
 units for calculations; thus making these comparisons will be
