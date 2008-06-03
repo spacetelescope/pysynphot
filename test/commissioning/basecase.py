@@ -8,16 +8,25 @@ import os,time
 
 print os.path.basename(__file__)
 
-class calcspecCase(testutil.FPTestCase):
+class calcspecCase(testutil.LogTestCase):
     def setUp(self):
         self.obsmode=None
         self.spectrum=None
-        
+        self.runpy()
+
+    def setglobal(self,fname=None):
+        if fname is None:
+            fname=__file__
+        self.propername=self.id() 
+        self.name=self.propername.replace('__main__',os.path.basename(fname))
+                                          
+        self.file=os.path.basename(__file__)
+        self.thresh=0.01
+
     def runpy(self):
-        self.name=self.id().replace('__main__',os.path.basename(__file__))
         self.sptest=etc.parse_spec(self.spectrum)
         self.csname=self.name+'.fits'
-        self.thresh=0.01
+
         try:
             os.remove(self.csname)
         except OSError:
@@ -35,35 +44,27 @@ class calcspecCase(testutil.FPTestCase):
         self.failUnless(N.alltrue(self.adiscrep<self.thresh),msg="Worst case %f"%abs(self.adiscrep).max())
 
 
-    def tearDown(self):
-        if self._exc_info() == (None,None,None):
-            status='P'
-        else:
-            status='S'
-
-
-                              
+    def log(self,status):
         f=open(self.name+'.log','w')
         f.write("%s:: Status=%s\n"%(self.name,status))
         f.write("%s:: Time=%s\n"%(self.name,time.asctime()))
-        f.write("%s:: Obsmode=%s\n"%(self.name,self.obsmode))
-        f.write("%s:: Spectrum=%s\n"%(self.name,self.spectrum))
+        f.write("%s:: ta_Obsmode=%s\n"%(self.name,self.obsmode))
+        f.write("%s:: ta_Spectrum=%s\n"%(self.name,self.spectrum))
         try:
-            f.write("%s:: Discrepmax=%f\n"%(self.name,self.discrep[1]))
-            f.write("%s:: Discrepmin=%f\n"%(self.name,self.discrep[0]))
+            f.write("%s:: ra_Discrepmax=%f\n"%(self.name,self.discrep[1]))
+            f.write("%s:: ra_Discrepmin=%f\n"%(self.name,self.discrep[0]))
         except TypeError:
-            f.write("%s:: Discrep=%f\n"%(self.name,self.discrep))
+            f.write("%s:: ra_Discrep=%f\n"%(self.name,self.discrep))
         if status != 'P':
-            f.write("%s:: Trace=%s\n"%(self.name,str(self._exc_info())))
+            f.write("%s:: ra_Trace=%s\n"%(self.name,str(self._exc_info())))
         f.close()
         
 class calcphotCase(calcspecCase):
+        
     def runpy(self):
-        self.name=self.id().replace('__main__',__file__)
         self.sptest=etc.parse_spec(self.spectrum)
         self.bp=S.ObsBandpass(self.obsmode)
         self.cbname=self.name+'.fits'
-        self.thresh=0.01
         try:
             os.remove(self.cbname)
         except OSError:
