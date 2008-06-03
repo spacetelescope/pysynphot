@@ -6,7 +6,6 @@ from pyraf import iraf
 from iraf import stsdas,hst_calib,synphot
 import os,time
 
-print os.path.basename(__file__)
 
 class calcspecCase(testutil.LogTestCase):
     def setUp(self):
@@ -22,6 +21,7 @@ class calcspecCase(testutil.LogTestCase):
                                           
         self.file=os.path.basename(__file__)
         self.thresh=0.01
+        self.discrep=-99
 
     def runpy(self):
         self.sptest=etc.parse_spec(self.spectrum)
@@ -32,6 +32,12 @@ class calcspecCase(testutil.LogTestCase):
         except OSError:
             pass
 
+    def arraydiff(self,test,ref):
+        idx=N.nonzero(ref)
+        ans=abs( (test[idx]-ref[idx])/ref[idx])
+        return ans
+
+
     def testphotlam(self):
         iraf.calcspec(spectrum=self.spectrum,form='photlam',
                       output=self.csname)
@@ -39,7 +45,7 @@ class calcspecCase(testutil.LogTestCase):
         rflux=spref.flux
         tflux=self.sptest(spref.wave)
         
-        self.adiscrep=abs(1.0-tflux/rflux)
+        self.adiscrep=self.arraydiff(tflux,rflux)
         self.discrep=self.adiscrep.min(),self.adiscrep.max()
         self.failUnless(N.alltrue(self.adiscrep<self.thresh),msg="Worst case %f"%abs(self.adiscrep).max())
 
@@ -51,10 +57,10 @@ class calcspecCase(testutil.LogTestCase):
         f.write("%s:: ta_Obsmode=%s\n"%(self.name,self.obsmode))
         f.write("%s:: ta_Spectrum=%s\n"%(self.name,self.spectrum))
         try:
-            f.write("%s:: ra_Discrepmax=%f\n"%(self.name,self.discrep[1]))
-            f.write("%s:: ra_Discrepmin=%f\n"%(self.name,self.discrep[0]))
+            f.write("%s:: ra_Discrepmax=%g\n"%(self.name,self.discrep[1]))
+            f.write("%s:: ra_Discrepmin=%g\n"%(self.name,self.discrep[0]))
         except TypeError:
-            f.write("%s:: ra_Discrep=%f\n"%(self.name,self.discrep))
+            f.write("%s:: ra_Discrep=%g\n"%(self.name,self.discrep))
         if status != 'P':
             f.write("%s:: ra_Trace=%s\n"%(self.name,str(self._exc_info())))
         f.close()
@@ -81,7 +87,7 @@ class calcphotCase(calcspecCase):
         rwave=ref.wave
         tthru=self.bp(rwave)
         
-        self.adiscrep=abs(1.0-tthru/rthru)
+        self.adiscrep=self.arraydiff(tthru,rthru)
         self.discrep=self.adiscrep.min(),self.adiscrep.max()
         self.failUnless(N.alltrue(self.adiscrep<self.thresh),msg="Worst case %f"%abs(self.adiscrep).max())
 
@@ -92,7 +98,7 @@ class calcphotCase(calcspecCase):
         rlam=iraf.calcphot.getParam('calcphot.result',native=1)
         obs=S.Observation(self.sptest,self.bp)
         tlam=obs.efflam()
-        self.discrep=abs(1.0-tlam/rlam)
+        self.discrep=abs((tlam-rlam)/rlam)
         self.failUnless(self.discrep < self.thresh,msg="Discrep=%f"%self.discrep)
 
         
