@@ -28,22 +28,30 @@ specification (usually), and a taskname, the following tests will be
 performed: 
 
 - Compare the throughput arrays for the obsmode (syn calcband/pysyn)
+    calcphotCase.testthru
 
 - Compare the spectrum arrays in photlam (syn calcspec/pysyn) 
+    calcspecCase.testspecphotlam
 
 - Compare the resulting (spectrum through obsmode) arrays in photlam
   (syn calcspec/syn countrate/pysyn)
+    countrateCase.testcsphotlam, countrateCase.testcrphotlam
 
 - Compare the resulting (spectrum through obsmode) arrays in counts
   (syn calcspec/syn countrate/pysyn)
+    countrateCase.testcscounts, countrateCase.testcrcounts
 
 - Compare any scalar values calculated (countrate, efflam, ...)
+     calcphotCase.testefflam
+     countrateCase.testcountrate
 
+Array comparisons will (eventually) be performed in two stages, so as
+to apply a looser acceptance criteria at locations that are likely to
+exhibit numerical discrepancies (eg, steep gradients, inflection
+points) and a tighter acceptance criteria elsewhere.
 
-Array comparisons will be performed in two stages, so as to apply a
-looser acceptance criteria at locations that are likely to exhibit
-numerical discrepancies (eg, steep gradients, inflection points) and a
-tighter acceptance criteria elsewhere.
+Another possibility is to calculate the mean, std, and extrema of the 
+difference array after some clipping has been applied
 
 
 Test results:
