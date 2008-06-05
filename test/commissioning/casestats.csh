@@ -13,10 +13,17 @@ else
   set idstring = $1
 endif
 #
-# Now delete the spurious log files from the base cases - until
-# we figure out how to not make them run...
-#set basepattern = {$idstring}*case\.log
-#...ok that's not working, do it later.
+#Collect stats from the full set
+set ntests = `ls -1 $idstring*.log | wc -l`
+set ncases = `ls $idstring*Case*.log | awk -F . '{print $3}' | sort -u | wc -l`
+set nobs=`grep da_obs $idstring*.log | awk '{print $2}' | sort -u | wc -l`
+set nspec=`grep da_spec $idstring*.log | awk '{print $2}' | sort -u | wc -l`
+echo Test statistics for "$idstring*.log":
+echo $ncases test cases
+echo $ntests total tests
+echo $nobs unique obsmodes
+echo $nspec unique spectra
+echo ================================================
 #
 # Work with one type of test at a time
 foreach tname (`ls $idstring*.log | awk -F . '{print $4}' | sort -u`)
