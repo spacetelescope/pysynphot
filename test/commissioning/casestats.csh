@@ -32,16 +32,24 @@ foreach tname (`ls $idstring*.log | awk -F . '{print $4}' | sort -u`)
   set ntests = `ls -1 $idstring*$tname.log | wc -l`
   echo $tname : $ntests total tests
 # Count the number that failed
-  set files=`grep -l Status=F $idstring*$tname.log`
+  set ffiles=`grep -l Status=F $idstring*$tname.log`
   set nfailed = `grep -i -l Status=F $idstring*$tname.log | wc -l` 
   echo Failed cases: $nfailed
-# Count the number of unique obsmodes in the failures
 
-  set nobs = `grep -i da_obsmode $files | awk '{print $2}' | sort -u | wc -l`
-  echo Unique obsmodes: $nobs
-# Count the number of unique spectra in the failures
-  set nspec = `grep -i da_spectrum $files | awk '{print $2}' | sort -u | wc -l`
-  echo -n Unique spectra: $nspec
+# Count the number of extreme failures
+  set efiles=`grep -l ra_extreme $idstring*$tname.log`
+  set nextreme = `grep -i -l ra_extreme $idstring*$tname.log | wc -l` 
+  echo Extreme failures: $nextreme
+
+# Count the number of unique obsmodes 
+  set nobs = `grep -i da_obsmode $ffiles | awk '{print $2}' | sort -u | wc -l`
+  set nobs_e = `grep -i da_obsmode $efiles | awk '{print $2}' | sort -u | wc -l`
+  echo Unique obsmodes: $nobs_e extreme / $nobs all failures
+
+# Count the number of unique spectra 
+  set nspec = `grep -i da_spectrum $ffiles | awk '{print $2}' | sort -u | wc -l`
+  set nspec_e = `grep -i da_spectrum $efiles | awk '{print $2}' | sort -u | wc -l`
+  echo -n Unique spectra : $nspec_e extreme / $nspec all failures
   echo 
   echo -------------------------------------------------------
   echo

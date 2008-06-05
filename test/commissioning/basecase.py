@@ -22,10 +22,12 @@ class calcspecCase(testutil.LogTestCase):
                                           
         self.file=os.path.basename(__file__)
         self.thresh=0.01
+        self.superthresh=0.20
         self.discrep=-99
         self.tda={'Obsmode':self.obsmode,
                  'Spectrum':self.spectrum,
-                 'Thresh':self.thresh}
+                 'Thresh':self.thresh,
+                  'Superthresh':self.superthresh}
         self.tra={}
 
     def run_calcspec(self,obsmode,spstring,form,output=None,binset=False):
@@ -68,6 +70,9 @@ class calcspecCase(testutil.LogTestCase):
         self.adiscrep=self.arraydiff(test,ref)
         self.tra['Discrepmin']=self.adiscrep.min()
         self.tra['Discrepmax']=self.adiscrep.max()
+        if (abs(self.tra['Discrepmin'] > self.superthresh) or
+            abs(self.tra['Discrepmax'] > self.superthresh)):
+            self.tra['Extreme']=True
         self.failUnless(N.alltrue(abs(self.adiscrep)<self.thresh),msg="Worst case %f"%abs(self.adiscrep).max())
 
 
@@ -115,6 +120,8 @@ class calcphotCase(calcspecCase):
         tlam=obs.efflam()
         self.discrep=(tlam-rlam)/rlam
         self.tra['Discrep']=self.discrep
+        if abs(self.discrep)>self.superthresh:
+            self.tra['Extreme']=True
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
 
         
@@ -178,6 +185,8 @@ class countrateCase(calcphotCase):
         tval=obs.countrate()
         self.discrep=(tval-rval)/rval
         self.tra['Discrep']=self.discrep
+        if abs(self.discrep)>self.superthresh:
+            self.tra['Extreme']=True
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
       
 class SpecSourcerateSpecCase(countrateCase):
