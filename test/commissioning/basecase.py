@@ -180,5 +180,6 @@ class countrateCase(calcphotCase):
         self.tra['Discrep']=self.discrep
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
       
-class SpecSourcerateSpecCase:
-    pass
+class SpecSourcerateSpecCase(countrateCase):
+    def placeholder(self):
+        pass
