@@ -67,7 +67,10 @@ class calcspecCase(testutil.LogTestCase):
         return ans
 
     def arraytest(self,test,ref):
-        self.adiscrep=self.arraydiff(test,ref)
+        #Exclude the endpoints where the gradient is very steep
+        self.adiscrep=self.arraydiff(test,ref)[2:-2]
+        count=N.where(abs(self.adiscrep)>self.thresh)[0].size
+        self.tra['Discrepfrac']=float(count)/self.adiscrep.size
         self.tra['Discrepmin']=self.adiscrep.min()
         self.tra['Discrepmax']=self.adiscrep.max()
         if (abs(self.tra['Discrepmin'] > self.superthresh) or
