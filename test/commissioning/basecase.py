@@ -17,10 +17,16 @@ class calcspecCase(testutil.LogTestCase):
     def setglobal(self,fname=None):
         if fname is None:
             fname=__file__
-        self.propername=self.id() 
-        self.name=self.propername.replace('__main__',os.path.basename(fname))
-                                          
-        self.file=os.path.basename(__file__)
+        self.propername=self.id()
+        base,ext=os.path.splitext(os.path.basename(fname))
+        main,case,test=self.propername.split('.')
+        self.name=os.path.join(base,test,case)
+        #Make sure the directories exist
+        dirname=os.path.dirname(self.name)
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
+            
+        self.file=self.name
         self.thresh=0.01
         self.superthresh=0.20
         self.discrep=-99
