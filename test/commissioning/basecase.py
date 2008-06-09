@@ -13,7 +13,8 @@ class calcspecCase(testutil.LogTestCase):
         self.obsmode=None
         self.spectrum=None
         self.runpy()
-
+        self.skip=True
+        
     def setglobal(self,fname=None):
         if fname is None:
             fname=__file__
@@ -39,6 +40,12 @@ class calcspecCase(testutil.LogTestCase):
     def run_calcspec(self,obsmode,spstring,form,output=None,binset=False):
         if binset:
             wavetab=Wavecat[self.obsmode]
+            if wavetab.startswith('('):
+                #generate a wavetab that IRAF can read.
+                wmin,wmax,dw=wavetab[1:-1].split(',')
+                wavename=self.name+'_wave.dat'
+                iraf.genwave(wavename,wmin,wmax,dw)
+                wavetab=wavename
         else:
             wavetab=""
 
@@ -76,7 +83,10 @@ class calcspecCase(testutil.LogTestCase):
         #Exclude the endpoints where the gradient is very steep
         self.adiscrep=self.arraydiff(test,ref)[2:-2]
         count=N.where(abs(self.adiscrep)>self.thresh)[0].size
-        self.tra['Discrepfrac']=float(count)/self.adiscrep.size
+        try:
+            self.tra['Discrepfrac']=float(count)/self.adiscrep.size
+        except ZeroDivisionError:
+            self.tra['Discrepfrac']=0.0
         self.tra['Discrepmin']=self.adiscrep.min()
         self.tra['Discrepmax']=self.adiscrep.max()
         if (abs(self.tra['Discrepmin'] > self.superthresh) or
