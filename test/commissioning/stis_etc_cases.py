@@ -971,7 +971,7 @@ class SpecSourcerateSpecCase9(SpecSourcerateSpecCase):
 class SpecSourcerateSpecCase10(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="stis,nuvmama,prism,s52x2"
-        self.spectrum="spec(/usr/stsci/APT/userFiles/HS20270651.dat)"
+        self.spectrum="spec(HS20270651.dat)"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase11(SpecSourcerateSpecCase):
@@ -1031,7 +1031,7 @@ class SpecSourcerateSpecCase19(SpecSourcerateSpecCase):
 class SpecSourcerateSpecCase20(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="stis,nuvmama,prism,s52x01"
-        self.spectrum="spec(/usr/stsci/APT/userFiles/HS20270651.dat)"
+        self.spectrum="spec(HS20270651.dat)"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase21(SpecSourcerateSpecCase):
