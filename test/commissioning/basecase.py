@@ -85,14 +85,17 @@ class calcspecCase(testutil.LogTestCase):
         count=N.where(abs(self.adiscrep)>self.thresh)[0].size
         try:
             self.tra['Discrepfrac']=float(count)/self.adiscrep.size
+            self.tra['Discrepmin']=self.adiscrep.min()
+            self.tra['Discrepmax']=self.adiscrep.max()
+            if (abs(self.tra['Discrepmin'] > self.superthresh) or
+                abs(self.tra['Discrepmax'] > self.superthresh)):
+                self.tra['Extreme']=True
+            self.failUnless(N.alltrue(abs(self.adiscrep)<self.thresh),
+                            msg="Worst case %f"%abs(self.adiscrep).max())
         except ZeroDivisionError:
             self.tra['Discrepfrac']=0.0
-        self.tra['Discrepmin']=self.adiscrep.min()
-        self.tra['Discrepmax']=self.adiscrep.max()
-        if (abs(self.tra['Discrepmin'] > self.superthresh) or
-            abs(self.tra['Discrepmax'] > self.superthresh)):
-            self.tra['Extreme']=True
-        self.failUnless(N.alltrue(abs(self.adiscrep)<self.thresh),msg="Worst case %f"%abs(self.adiscrep).max())
+            self.tra['Discrepmin']=0.0
+            self.tra['Discrepmax']=0.0
 
 
     def testspecphotlam(self):
