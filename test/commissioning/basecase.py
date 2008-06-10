@@ -1,6 +1,7 @@
 from pytools import testutil
 import pysynphot as S
 import numpy as N
+import pyfits
 from pysynphot import newetc as etc
 from pyraf import iraf
 from iraf import stsdas,hst_calib,synphot
@@ -98,12 +99,21 @@ class calcspecCase(testutil.LogTestCase):
             self.tra['Discrepmax']=0.0
 
 
+    def savepysyn(self,wave,flux):
+        """ Cannot always use the .writefits() method, because the array is
+        frequently just sampled at the synphot waveset."""
+        col1=pyfits.Column(name='wavelength',format='D',array=wave)
+        col2=pyfits.Column(name='flux',format='D',array=flux)
+        tbhdu=pyfits.new_table(pyfits.ColDefs([col1,col2]))
+        tbhdu.writeto(self.csname.replace('.fits','_pysyn.fits'))
+                               
     def testspecphotlam(self):
         self.run_calcspec(None,self.spectrum,'photlam',self.csname)
         spref=S.FileSpectrum(self.csname)
         self.sptest.convert('photlam')
         rflux=spref.flux
         tflux=self.sptest(spref.wave)
+        self.savepysyn(spref.wave,tflux)
         
         self.arraytest(tflux,rflux)
         
@@ -130,7 +140,7 @@ class calcphotCase(calcspecCase):
         rthru=ref.throughput
         rwave=ref.wave
         tthru=self.bp(rwave)
-        
+        self.savepysyn(rwave,tthru)
         self.arraytest(tthru,rthru)
 
         
@@ -144,6 +154,9 @@ class calcphotCase(calcspecCase):
         self.tra['Discrep']=self.discrep
         if abs(self.discrep)>self.superthresh:
             self.tra['Extreme']=True
+        self.tra['Syn']=rlam
+        self.tra['Pysyn']=tlam
+
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
 
         
@@ -169,6 +182,7 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.csname)
         rflux=spref.flux
         tflux=obs.binflux
+        obs.writefits(self.csname.replace('.fits','_pysyn.fits'))
         self.arraytest(tflux,rflux)
 
     def testcscounts(self):
@@ -180,6 +194,7 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.csname.replace('.fits','_counts.fits'))
         rflux=spref.flux
         tflux=obs.binflux
+        obs.writefits(self.csname.replace('.fits','_counts_pysyn.fits'))
         self.arraytest(tflux,rflux)
  
     def testcrphotlam(self):
@@ -189,6 +204,7 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.crname.replace('.fits','_cr.fits'))
         rflux=spref.flux
         tflux=obs.binflux
+        obs.writefits(self.crname.replace('.fits','_cr_pysyn.fits'))
         self.arraytest(tflux,rflux)
 
     def testcrcounts(self):
@@ -198,6 +214,7 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.crname.replace('.fits','_counts.fits'))
         rflux=spref.flux
         tflux=obs.binflux
+        obs.writefits(self.crname.replace('.fits','_counts_pysyn.fits'))
         self.arraytest(tflux,rflux)
 
     def testcountrate(self):
@@ -207,6 +224,8 @@ class countrateCase(calcphotCase):
         tval=obs.countrate()
         self.discrep=(tval-rval)/rval
         self.tra['Discrep']=self.discrep
+        self.tra['Syn']=rval
+        self.tra['Pysyn']=tval
         if abs(self.discrep)>self.superthresh:
             self.tra['Extreme']=True
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
