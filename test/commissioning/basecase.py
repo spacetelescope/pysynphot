@@ -100,8 +100,9 @@ class calcspecCase(testutil.LogTestCase):
 
 
     def savepysyn(self,wave,flux,fname,units='flux'):
-        """ Cannot always use the .writefits() method, because the array is
-        frequently just sampled at the synphot waveset."""
+        """ Cannot ever use the .writefits() method, because the array is
+        frequently just sampled at the synphot waveset; plus, writefits
+        is smart and does things like tapering."""
         col1=pyfits.Column(name='wavelength',format='D',array=wave)
         col2=pyfits.Column(name='flux',format='D',array=flux)
         tbhdu=pyfits.new_table(pyfits.ColDefs([col1,col2]))
@@ -185,7 +186,7 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.csname)
         rflux=spref.flux
         tflux=obs.binflux
-        obs.writefits(self.csname.replace('.fits','_pysyn.fits'))
+        self.savepysyn(obs.binwave,obs.binflux,self.csname)
         self.arraytest(tflux,rflux)
 
     def testcscounts(self):
@@ -197,7 +198,8 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.csname.replace('.fits','_counts.fits'))
         rflux=spref.flux
         tflux=obs.binflux
-        obs.writefits(self.csname.replace('.fits','_counts_pysyn.fits'))
+        self.savepysyn(obs.binwave,obs.binflux,
+                       self.csname.replace('.fits','_counts.fits'))
         self.arraytest(tflux,rflux)
  
     def testcrphotlam(self):
@@ -207,7 +209,9 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.crname)
         rflux=spref.flux
         tflux=obs.binflux
-        obs.writefits(self.crname.replace('.fits','_pysyn.fits'))
+        self.savepysyn(obs.binwave,obs.binflux,
+                       self.crname)
+
         self.arraytest(tflux,rflux)
 
     def testcrcounts(self):
@@ -217,7 +221,9 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.crname.replace('.fits','_counts.fits'))
         rflux=spref.flux
         tflux=obs.binflux
-        obs.writefits(self.crname.replace('.fits','_counts_pysyn.fits'))
+        self.savepysyn(obs.binwave,obs.binflux,
+                       self.crname.replace('.fits','_counts.fits'))
+
         self.arraytest(tflux,rflux)
 
     def testcountrate(self):
