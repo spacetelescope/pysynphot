@@ -99,13 +99,13 @@ class calcspecCase(testutil.LogTestCase):
             self.tra['Discrepmax']=0.0
 
 
-    def savepysyn(self,wave,flux):
+    def savepysyn(self,wave,flux,fname,units='flux'):
         """ Cannot always use the .writefits() method, because the array is
         frequently just sampled at the synphot waveset."""
         col1=pyfits.Column(name='wavelength',format='D',array=wave)
         col2=pyfits.Column(name='flux',format='D',array=flux)
         tbhdu=pyfits.new_table(pyfits.ColDefs([col1,col2]))
-        tbhdu.writeto(self.csname.replace('.fits','_pysyn.fits'))
+        tbhdu.writeto(fname.replace('.fits','_pysyn.fits'))
                                
     def testspecphotlam(self):
         self.run_calcspec(None,self.spectrum,'photlam',self.csname)
@@ -113,7 +113,7 @@ class calcspecCase(testutil.LogTestCase):
         self.sptest.convert('photlam')
         rflux=spref.flux
         tflux=self.sptest(spref.wave)
-        self.savepysyn(spref.wave,tflux)
+        self.savepysyn(spref.wave,tflux,self.csname)
         
         self.arraytest(tflux,rflux)
         
@@ -124,9 +124,11 @@ class calcphotCase(calcspecCase):
         self.bp=S.ObsBandpass(self.obsmode)
         self.cbname=self.name+'.fits'
         self.csname=self.name+'_cs.fits'
+
         for fname in (self.cbname, self.csname):
             try:
                 os.remove(fname)
+                os.remove(fname.replace('.fits','_pysyn.fits'))
             except OSError:
                 pass
         self.discrep=-99
@@ -140,7 +142,7 @@ class calcphotCase(calcspecCase):
         rthru=ref.throughput
         rwave=ref.wave
         tthru=self.bp(rwave)
-        self.savepysyn(rwave,tthru)
+        self.savepysyn(rwave,tthru,self.cbname,units='throughput')
         self.arraytest(tthru,rthru)
 
         
@@ -171,6 +173,7 @@ class countrateCase(calcphotCase):
         for fname in (self.cbname, self.csname, self.crname):
             try:
                 os.remove(fname)
+                os.remove(fname.replace('.fits','_pysyn.fits'))
             except OSError:
                 pass
 
@@ -200,11 +203,11 @@ class countrateCase(calcphotCase):
     def testcrphotlam(self):
         obs=S.Observation(self.sptest,self.bp)
         obs.convert('photlam')
-        self.run_countrate('photlam',self.crname.replace('.fits','_cr.fits'))
-        spref=S.FileSpectrum(self.crname.replace('.fits','_cr.fits'))
+        self.run_countrate('photlam',self.crname)
+        spref=S.FileSpectrum(self.crname)
         rflux=spref.flux
         tflux=obs.binflux
-        obs.writefits(self.crname.replace('.fits','_cr_pysyn.fits'))
+        obs.writefits(self.crname.replace('.fits','_pysyn.fits'))
         self.arraytest(tflux,rflux)
 
     def testcrcounts(self):
