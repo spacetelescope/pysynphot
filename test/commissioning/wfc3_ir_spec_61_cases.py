@@ -1613,7 +1613,7 @@ class calcspecCase254(calcspecCase):
 class SpecSourcerateSpecCase9(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
-        self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal2),band(johnson,b),23.0,vegamag)"
+        self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal1),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase255(calcspecCase):
@@ -1673,7 +1673,7 @@ class SpecSourcerateSpecCase14(SpecSourcerateSpecCase):
 class SpecSourcerateSpecCase15(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase16(SpecSourcerateSpecCase):
@@ -1709,7 +1709,7 @@ class SpecSourcerateSpecCase20(SpecSourcerateSpecCase):
 class SpecSourcerateSpecCase21(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase22(SpecSourcerateSpecCase):
@@ -1745,7 +1745,7 @@ class SpecSourcerateSpecCase26(SpecSourcerateSpecCase):
 class SpecSourcerateSpecCase27(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase28(SpecSourcerateSpecCase):

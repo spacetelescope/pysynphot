@@ -827,7 +827,7 @@ class calcspecCase128(calcspecCase):
 class SpecSourcerateSpecCase6(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,g280"
-        self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal2),band(johnson,b),23.0,vegamag)"
+        self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal1),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase129(calcspecCase):
@@ -887,7 +887,7 @@ class SpecSourcerateSpecCase11(SpecSourcerateSpecCase):
 class SpecSourcerateSpecCase12(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,g280"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase13(SpecSourcerateSpecCase):
@@ -923,7 +923,7 @@ class SpecSourcerateSpecCase17(SpecSourcerateSpecCase):
 class SpecSourcerateSpecCase18(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,g280"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase19(SpecSourcerateSpecCase):
@@ -959,7 +959,7 @@ class SpecSourcerateSpecCase23(SpecSourcerateSpecCase):
 class SpecSourcerateSpecCase24(SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,g280"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase25(SpecSourcerateSpecCase):

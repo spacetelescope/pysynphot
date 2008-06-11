@@ -1175,25 +1175,25 @@ class countrateCase76(countrateCase):
 class calcphotCase77(calcphotCase):
     def setUp(self):
         self.obsmode="nicmos,1,f110w"
-        self.spectrum="rn(unit(1.0,flam)*ebmvx(3.0,gal2),box(10000.0,1.0),1.00E-13,flam)"
+        self.spectrum="rn(unit(1.0,flam)*ebmvx(3.0,gal3),box(10000.0,1.0),1.00E-13,flam)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase77(countrateCase):
     def setUp(self):
         self.obsmode="nicmos,1,f110w"
-        self.spectrum="rn(unit(1.0,flam)*ebmvx(3.0,gal2),box(10000.0,1.0),1.00E-13,flam)"
+        self.spectrum="rn(unit(1.0,flam)*ebmvx(3.0,gal3),box(10000.0,1.0),1.00E-13,flam)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase78(calcphotCase):
     def setUp(self):
         self.obsmode="nicmos,1,f110w"
-        self.spectrum="rn(unit(1.0,flam),box(10000.0,1.0),1.00E-13,flam)*ebmvx(3.0,gal2)"
+        self.spectrum="rn(unit(1.0,flam),box(10000.0,1.0),1.00E-13,flam)*ebmvx(3.0,gal3)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase78(countrateCase):
     def setUp(self):
         self.obsmode="nicmos,1,f110w"
-        self.spectrum="rn(unit(1.0,flam),box(10000.0,1.0),1.00E-13,flam)*ebmvx(3.0,gal2)"
+        self.spectrum="rn(unit(1.0,flam),box(10000.0,1.0),1.00E-13,flam)*ebmvx(3.0,gal3)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase79(calcphotCase):

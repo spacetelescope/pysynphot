@@ -3827,13 +3827,13 @@ class calcspecCase542(calcspecCase):
 class countrateCase48(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f110w"
-        self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal2),band(johnson,b),28.0,vegamag)"
+        self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal1),band(johnson,b),28.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase49(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f110w"
-        self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal2),band(johnson,b),28.0,vegamag)"
+        self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal1),band(johnson,b),28.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase543(calcspecCase):
@@ -3935,13 +3935,13 @@ class calcspecCase548(calcspecCase):
 class countrateCase54(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f110w"
-        self.spectrum="rn(icat(k93models,8200,0.0,4.3)*ebmvx(0.08,gal2),band(johnson,b),28.0,vegamag)"
+        self.spectrum="rn(icat(k93models,8200,0.0,4.3)*ebmvx(0.08,gal1),band(johnson,b),28.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase55(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f110w"
-        self.spectrum="rn(icat(k93models,8200,0.0,4.3)*ebmvx(0.08,gal2),band(johnson,b),28.0,vegamag)"
+        self.spectrum="rn(icat(k93models,8200,0.0,4.3)*ebmvx(0.08,gal1),band(johnson,b),28.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase549(calcspecCase):
@@ -4043,13 +4043,13 @@ class calcspecCase554(calcspecCase):
 class countrateCase60(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f110w"
-        self.spectrum="rn(icat(k93models,5860,0.0,4.4)*ebmvx(0.08,gal2),band(johnson,b),28.0,vegamag)"
+        self.spectrum="rn(icat(k93models,5860,0.0,4.4)*ebmvx(0.08,gal1),band(johnson,b),28.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase61(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f110w"
-        self.spectrum="rn(icat(k93models,5860,0.0,4.4)*ebmvx(0.08,gal2),band(johnson,b),28.0,vegamag)"
+        self.spectrum="rn(icat(k93models,5860,0.0,4.4)*ebmvx(0.08,gal1),band(johnson,b),28.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase555(calcspecCase):
@@ -4151,13 +4151,13 @@ class calcspecCase560(calcspecCase):
 class countrateCase66(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f110w"
-        self.spectrum="rn(icat(k93models,4060,0.0,4.5)*ebmvx(0.08,gal2),band(johnson,b),28.0,vegamag)"
+        self.spectrum="rn(icat(k93models,4060,0.0,4.5)*ebmvx(0.08,gal1),band(johnson,b),28.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase67(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f110w"
-        self.spectrum="rn(icat(k93models,4060,0.0,4.5)*ebmvx(0.08,gal2),band(johnson,b),28.0,vegamag)"
+        self.spectrum="rn(icat(k93models,4060,0.0,4.5)*ebmvx(0.08,gal1),band(johnson,b),28.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase561(calcspecCase):
@@ -4247,13 +4247,13 @@ class calcphotCase72(calcphotCase):
 class countrateCase72(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase73(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase73(countrateCase):
@@ -4319,13 +4319,13 @@ class calcphotCase78(calcphotCase):
 class countrateCase78(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase79(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase79(countrateCase):
@@ -4391,13 +4391,13 @@ class calcphotCase84(calcphotCase):
 class countrateCase84(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase85(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase85(countrateCase):
@@ -4463,13 +4463,13 @@ class calcphotCase90(calcphotCase):
 class countrateCase90(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_20.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_20.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase91(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_20.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_20.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase91(countrateCase):
@@ -4535,13 +4535,13 @@ class calcphotCase96(calcphotCase):
 class countrateCase96(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_26.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_26.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase97(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_26.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_26.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase97(countrateCase):
@@ -4607,13 +4607,13 @@ class calcphotCase102(calcphotCase):
 class countrateCase102(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_32.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_32.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase103(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_32.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_32.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase103(countrateCase):
@@ -4679,13 +4679,13 @@ class calcphotCase108(calcphotCase):
 class countrateCase108(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_39.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_39.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase109(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_39.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_39.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase109(countrateCase):
@@ -4751,13 +4751,13 @@ class calcphotCase114(calcphotCase):
 class countrateCase114(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_46.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_46.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase115(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_46.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_46.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase115(countrateCase):
@@ -4823,13 +4823,13 @@ class calcphotCase120(calcphotCase):
 class countrateCase120(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_52.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_52.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase121(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_52.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_52.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase121(countrateCase):
@@ -4895,13 +4895,13 @@ class calcphotCase126(calcphotCase):
 class countrateCase126(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_58.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_58.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase127(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_58.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_58.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase127(countrateCase):
@@ -4967,13 +4967,13 @@ class calcphotCase132(calcphotCase):
 class countrateCase132(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_64.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_64.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase133(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_64.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_64.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase133(countrateCase):
@@ -5039,13 +5039,13 @@ class calcphotCase138(calcphotCase):
 class countrateCase138(countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_72.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_72.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase139(calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,f160w"
-        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_72.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal2)"
+        self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_72.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase139(countrateCase):
