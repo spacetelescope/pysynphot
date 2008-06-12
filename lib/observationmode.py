@@ -273,6 +273,14 @@ class BaseObservationMode(object):
 
         self.components = None #Will be filled by subclasses
         self.pixscale = None
+        
+        obm=self._obsmode.lower()
+
+        try:
+            self.binset = wavetable.wavetable[obm]
+        except KeyError,e:
+            print "Warning, %s"%str(e)
+
 
     def __str__(self):
         return self._obsmode
@@ -309,19 +317,11 @@ class BaseObservationMode(object):
     def bandWave(self):
         """ Return the binned waveset most appropriate for the obsmode,
         as defined by the wavecat.dat file. """
-        
-        obm=self._obsmode.lower()
 
-        try:
-            coeff = wavetable.wavetable[obm]
-        except KeyError,e:
-            print "Warning, %s"%str(e)
-            return None
-
-        if coeff.startswith('('):
-            return self._computeBandwave(coeff)
+        if self.binset.startswith('('):
+            return self._computeBandwave(self.binset)
         else:
-            return self._getBandwaveFomFile(coeff)
+            return self._getBandwaveFomFile(self.binset)
 
     def _computeBandwave(self, coeff):
         (a,b,c,nwave) = self._computeQuadraticCoefficients(coeff)
