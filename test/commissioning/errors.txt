@@ -1,13 +1,7 @@
 This file contains an ongoing log of errors encountered by the
 syn_pysyn tests.
 
-Missing files [test setup: fixed]
---------------
-IOError: [Errno 2] No such file or directory: 'egal.dat'
-IOError: [Errno 2] No such file or directory: 'orion.fits'
-IOError: [Errno 2] No such file or directory: 'orion_smooth.fits'
-IOError: [Errno 2] No such file or directory: 'pn_smooth.fits'
-IOError: [Errno 2] No such file or directory: '/usr/stsci/APT/userFiles/HS20270651.dat'
+
 
 IRAF errors [test coding: fixed]:
 -----------
@@ -24,7 +18,7 @@ IrafError: Error running IRAF task calcphot
 IRAF task terminated abnormally
 ERROR (502, "floating point invalid operation")
  
-Observation/binset error [Known pysyn issue; solution defined]:
+Observation/binset error [resolved in r463]:
 ---------------------------------------------------------------
 KeyError: '(stis,ccd,50ccd) does not have a defined binset in the wavecat table. You must provide a binset to create this Observation.'
   --> Also repeated for a number of other obsmodes
@@ -32,6 +26,7 @@ KeyError: '(stis,ccd,50ccd) does not have a defined binset in the wavecat table.
 Missing extinction laws: [Known pysyn issue, solution defined]
 -----------------------
 NotImplementedError: Sorry, gal2 is not yet implemented
+  --> replaced all gal2 by gal1 or gal3
 NotImplementedError: Sorry, gal3 is not yet implemented
 
 Badly parsed obsmodes with numbers in them: [New; solution not yet defined]
@@ -47,6 +42,3 @@ Test sw error [no solution w/o writing extra code]:
 ValueError: too many values to unpack
 ---> countrate allows 4 params to specify a wavetab; genwave does not.
 
-Discrepancy calculation when there are no discrepancies: [Test sw error: fixed]
--------------------------------------------------------
-ZeroDivisionError: float division
