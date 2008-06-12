@@ -32,14 +32,16 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
     def initbinset(self,binset=None):
         if binset is None:
-            msg="(%s) does not have a defined binset in the wavecat table. You must provide a binset to create this Observation."%str(self.bandpass)
+            msg="(%s) does not have a defined binset in the wavecat table. The waveset of the spectrum will be used instead."%str(self.bandpass)
 
             try:
                 self.binwave = self.bandpass.obsmode.bandWave()
             except (KeyError, AttributeError), e:
-                raise KeyError(msg)
+                self.binwave=self.spectrum.wave
+                print(msg)
             if self.binwave is None:
-                raise KeyError(msg)
+                self.binwave=self.spectrum.wave
+                print(msg)
         else:
             self.binwave=binset
 
