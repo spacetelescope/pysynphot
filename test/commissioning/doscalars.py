@@ -3,6 +3,7 @@ import glob, os, sys
 import numpy as N
 import pyfits
 import pylab as P
+import matplotlib
 
 def getdata(dirpath,fieldname,instr,save=True):
     #get the list of files
@@ -43,8 +44,12 @@ def getdata(dirpath,fieldname,instr,save=True):
             sdict[sp]=scount
             scount+=1
         spectrum[i]=sdict[sp]
-
-        val[i]=float(d['tra_discrep'])
+        
+        try:
+            val[i]=float(d['tra_discrep'])
+        except KeyError:
+            #Cases with errors don't have results.
+            pass
         i+=1
 
     #Save our results as a FITS table
@@ -79,6 +84,9 @@ def reverse(d):
 
 def plotdata(obsmode,spectrum,val,odict,sdict,
              instr,fieldname,outdir,outname):
+    isetting=P.isinteractive()
+    P.ioff()
+    
     P.clf()
     P.plot(obsmode,val,'.')
     P.ylabel('(pysyn-syn)/syn')
@@ -92,7 +100,8 @@ def plotdata(obsmode,spectrum,val,odict,sdict,
     P.xlabel('spectrum')
     P.title("%s: %s"%(instr,fieldname))
     P.savefig(os.path.join(outdir,outname+'_spectrum.ps'))
-  
+
+    matplotlib.interactive(isetting)
 
 def run(dirpath, fieldname, instr):
     
