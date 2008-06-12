@@ -106,4 +106,8 @@ def run(dirpath, fieldname, instr):
 
 if __name__ == '__main__':
     #dirpath, fieldname, instr=sys.argv[1:]
-    run(*sys.argv[1:])
+    try:
+        run(*sys.argv[1:])
+    except TypeError,e:
+        print "sys.argv[1:] = ",sys.argv[1:]
+        raise e
