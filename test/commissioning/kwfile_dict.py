@@ -11,7 +11,7 @@ def read_kwfile(fname):
             kvpair=re.findall("(.*):: (.*)=(.*)$",line)[0]
             d['name']=os.path.basename(kvpair[0])
             key,val=kvpair[1:]
-            d[key]=val
+            d[key.lower()]=val
         except (ValueError,IndexError):
             break
         
