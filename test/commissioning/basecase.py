@@ -31,11 +31,13 @@ class calcspecCase(testutil.LogTestCase):
         self.file=self.name
         self.thresh=0.01
         self.superthresh=0.20
+        self.sigthresh=0.005
         self.discrep=-99
         self.tda={'Obsmode':self.obsmode,
                  'Spectrum':self.spectrum,
                  'Thresh':self.thresh,
-                  'Superthresh':self.superthresh}
+                  'Superthresh':self.superthresh,
+                  'SigThresh':self.sigthresh}
         self.tra={}
 
     def run_calcspec(self,obsmode,spstring,form,output=None,binset=False):
@@ -80,9 +82,23 @@ class calcspecCase(testutil.LogTestCase):
         ans=(test[idx]-ref[idx])/ref[idx]
         return ans
 
+    def arraysigtest(self,test,ref):
+        #Identify the significant elements
+        tidx=N.where(test>(self.sigthresh*test.max()))[0]
+        ridx=N.where(ref>(self.sigthresh*ref.max()))[0]
+        #Fail if they're not the same set
+        self.failUnless(N.alltrue(tidx == ridx),
+                        msg="Significant elements are not the same")
+
+        #Now compare only the significant elements.
+        #We no longer need to exclude points with zero value, because
+        #those points were already excluded as insignificant.
+        self.arraytest(test[ridx],ref[ridx])
+
+        
     def arraytest(self,test,ref):
         #Exclude the endpoints where the gradient is very steep
-        self.adiscrep=self.arraydiff(test,ref)[2:-2]
+        self.adiscrep=self.arraydiff(test,ref)#[2:-2]
         count=N.where(abs(self.adiscrep)>self.thresh)[0].size
         try:
             self.tra['Discrepfrac']=float(count)/self.adiscrep.size
@@ -116,7 +132,7 @@ class calcspecCase(testutil.LogTestCase):
         tflux=self.sptest(spref.wave)
         self.savepysyn(spref.wave,tflux,self.csname)
         
-        self.arraytest(tflux,rflux)
+        self.arraysigtest(tflux,rflux)
         
 class calcphotCase(calcspecCase):
         
@@ -144,7 +160,7 @@ class calcphotCase(calcspecCase):
         rwave=ref.wave
         tthru=self.bp(rwave)
         self.savepysyn(rwave,tthru,self.cbname,units='throughput')
-        self.arraytest(tthru,rthru)
+        self.arraysigtest(tthru,rthru)
 
         
     def testefflam(self):
@@ -187,8 +203,9 @@ class countrateCase(calcphotCase):
         rflux=spref.flux
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,self.csname)
-        self.arraytest(tflux,rflux)
-
+        self.arraysigtest(tflux,rflux)
+    testcsphotlam.skip=True
+    
     def testcscounts(self):
         obs=S.Observation(self.sptest,self.bp)
         obs.convert('counts')
@@ -200,8 +217,9 @@ class countrateCase(calcphotCase):
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
                        self.csname.replace('.fits','_counts.fits'))
-        self.arraytest(tflux,rflux)
- 
+        self.arraysigtest(tflux,rflux)
+    testcscounts.skip=True
+    
     def testcrphotlam(self):
         obs=S.Observation(self.sptest,self.bp)
         obs.convert('photlam')
@@ -212,7 +230,7 @@ class countrateCase(calcphotCase):
         self.savepysyn(obs.binwave,obs.binflux,
                        self.crname)
 
-        self.arraytest(tflux,rflux)
+        self.arraysigtest(tflux,rflux)
 
     def testcrcounts(self):
         obs=S.Observation(self.sptest,self.bp)
@@ -224,7 +242,7 @@ class countrateCase(calcphotCase):
         self.savepysyn(obs.binwave,obs.binflux,
                        self.crname.replace('.fits','_counts.fits'))
 
-        self.arraytest(tflux,rflux)
+        self.arraysigtest(tflux,rflux)
 
     def testcountrate(self):
         obs=S.Observation(self.sptest,self.bp)
