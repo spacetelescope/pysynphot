@@ -209,7 +209,7 @@ class Hz(WaveUnits):
         WaveUnits.__init__(self)
         self.name='hz'
 
-    def ToAngstrom(self, wave, dummy):
+    def ToAngstrom(self, wave):
         return C / wave
 
 class _MetricWavelength(WaveUnits):
