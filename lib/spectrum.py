@@ -279,19 +279,15 @@ class SourceSpectrum(Integrator):
         hdulist.append(hdu)
         hdu.writeto(filename)
                                                  
-    def integrate(self,fluxunits=None):
-        wavelengths = self.GetWaveSet()
-        fluxes = self(wavelengths)
+    def integrate(self,fluxunits='photlam'):
+        u=self.fluxunits
+        self.convert(fluxunits)
 
-        if fluxunits != None:
-            sp = TabularSourceSpectrum()
-            sp.waveunits = self.waveunits
-            sp.fluxunits = units.Units(fluxunits)
-            sp._wavetable = wavelengths
-            sp._fluxtable = self(wavelengths)
-            w,fluxes = sp.getArrays()
-
-        return self.trapezoidIntegration(wavelengths,fluxes)
+        wave,flux=self.getArrays()
+        self.convert(u)
+            
+        return self.trapezoidIntegration(wave,flux)
+    
 
     def convert(self, targetunits):
         '''Convert to other units. This method actually just changes the

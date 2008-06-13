@@ -103,7 +103,7 @@ Acceptance defined as: ETC regression tests pass
 == Requirements for 18.0==:
 
 Purpose of this release: Support all ETCs
-Pysynphot builds: 0.5.x
+Pysynphot builds: 0.6.x
 
                        { current regression tests pass & agree with synphot
 Acceptance defined as: {                    OR
@@ -122,7 +122,7 @@ Acceptance defined as: {                    OR
 == Requirements for UI for 18.0==
 Purpose of this release: provide direct access to pysynphot for ETC
             users to perform analysis related to their ETC requests
-Pysynphot builds: 0.6.x, 0.7.x
+Pysynphot builds: 0.7.x
 Acceptance defined as: ??
 
 - All the above functionality via OO UI
