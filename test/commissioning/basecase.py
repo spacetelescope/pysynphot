@@ -120,7 +120,7 @@ class calcspecCase(testutil.LogTestCase):
         frequently just sampled at the synphot waveset; plus, writefits
         is smart and does things like tapering."""
         col1=pyfits.Column(name='wavelength',format='D',array=wave)
-        col2=pyfits.Column(name='flux',format='D',array=flux)
+        col2=pyfits.Column(name=units,format='D',array=flux)
         tbhdu=pyfits.new_table(pyfits.ColDefs([col1,col2]))
         tbhdu.writeto(fname.replace('.fits','_pysyn.fits'))
                                
