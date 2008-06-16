@@ -45,6 +45,26 @@ performed:
      calcphotCase.testefflam
      countrateCase.testcountrate
 
+Array comparisons:
+
+Prior to r465, array comparisons were performed strictly, applying the
+same (pysyn-syn)/syn metric as for scalar elements to each element of
+the array. If any elements failed, then the test failed; the fraction
+of array elements that failed was compared to the superthreshold to
+determine extreme failures.
+
+This generated a large number of spurious failures because of
+differences between very small numbers in the domain where the
+spectrum was essentially zero. With r465, the array comparisons were
+performed only on "significant" array elements, where:
+  - a "significant" element has a value at least SigThresh*max(array)
+    - if the set of significant elements for the two arrays differs,
+    the test fails
+    - the (pysyn-syn)/syn comparison is performed only on the
+    significant elements.
+
+The SigThresh was initially set to 0.005.
+
 Array comparisons will (eventually) be performed in two stages, so as
 to apply a looser acceptance criteria at locations that are likely to
 exhibit numerical discrepancies (eg, steep gradients, inflection
@@ -56,8 +76,8 @@ difference array after some clipping has been applied
 
 Test results:
 
-Discrepancies greater than some pre-agreed percentage will be brought
-to the attention of the instrument teams.
+Discrepancies greater than some pre-agreed percentage 
+will be brought to the attention of the instrument teams.
 
 Some analysis will also be performed on the test results -- e.g.,
 histogram of discrepancies, mean & std. The pass/fail discrepancy will

@@ -3,11 +3,6 @@ syn_pysyn tests.
 
 
 
-IRAF errors [test coding: fixed]:
------------
-IrafError: Error running IRAF task [calcspec|countrate]
-  ---> test problem specifying wavetab
-
 IRAF errors [real calcspec/countrate difference]
 -------------------------------------------------
   ---> renormalization+wavetab has non-overlap for calcspec but not for countrate
@@ -17,11 +12,13 @@ IRAF errors [mystery: not yet able to reproduce at will]
 IrafError: Error running IRAF task calcphot
 IRAF task terminated abnormally
 ERROR (502, "floating point invalid operation")
- 
-Observation/binset error [resolved in r463]:
----------------------------------------------------------------
-KeyError: '(stis,ccd,50ccd) does not have a defined binset in the wavecat table. You must provide a binset to create this Observation.'
-  --> Also repeated for a number of other obsmodes
+
+or 
+
+IrafError: Error running IRAF task countrate
+IRAF task terminated abnormally
+ERROR (2, "Syntax error in expression")
+
 
 Missing extinction laws: [Known pysyn issue, solution defined]
 -----------------------
@@ -36,9 +33,10 @@ TypeError: cannot concatenate 'str' and 'float' objects
 Obsmode not supported by graph table: [Known: pysyn stricter than syn]
 ------------------------------------
 ValueError: Warning: unused keywords set(['f25mama'])
+  Note: this identified an error in the ETC specification of the obsmode.
 
 Test sw error [no solution w/o writing extra code]:
 --------------------------------------
 ValueError: too many values to unpack
----> countrate allows 4 params to specify a wavetab; genwave does not.
-
+---> countrate allows 4 params to specify a wavetab; genwave does not,
+so cannot use genwave to generate the matching wavetab for calcspec to use.
