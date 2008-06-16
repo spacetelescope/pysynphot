@@ -169,7 +169,10 @@ class calcphotCase(calcspecCase):
         rlam=iraf.calcphot.getParam('calcphot.result',native=1)
         obs=S.Observation(self.sptest,self.bp)
         tlam=obs.efflam()
-        self.discrep=(tlam-rlam)/rlam
+        try:
+            self.discrep=(tlam-rlam)/rlam
+        except ZeroDivisionError:
+            self.discrep=tlam-rlam
         self.tra['Discrep']=self.discrep
         if abs(self.discrep)>self.superthresh:
             self.tra['Extreme']=True
@@ -249,7 +252,10 @@ class countrateCase(calcphotCase):
         self.run_countrate('counts')
         rval=iraf.countrate.getParam('flux_tot',native=1)
         tval=obs.countrate()
-        self.discrep=(tval-rval)/rval
+        try:
+            self.discrep=(tval-rval)/rval
+        except ZeroDivisionError:
+            self.discrep=tval-rval
         self.tra['Discrep']=self.discrep
         self.tra['Syn']=rval
         self.tra['Pysyn']=tval
