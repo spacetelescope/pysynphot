@@ -7,7 +7,8 @@ IRAF errors [real calcspec/countrate difference]
 -------------------------------------------------
   ---> renormalization+wavetab has non-overlap for calcspec but not for countrate
 
-IRAF errors [mystery: not yet able to reproduce at will]
+IRAF errors [mystery: errors occur in large runs, but not when  
+             the case is run individually]
 -------------------------------------------------------
 IrafError: Error running IRAF task calcphot
 IRAF task terminated abnormally
@@ -29,6 +30,9 @@ NotImplementedError: Sorry, gal3 is not yet implemented
 Badly parsed obsmodes with numbers in them: [New; solution not yet defined]
 ------------------------------------------
 TypeError: cannot concatenate 'str' and 'float' objects
+  --> This turns out to be a tough problem, given the current
+  architecture, because by the time we know we're trying to construct
+  a bandpass, the original command provided to the parser is long gone.
 
 Obsmode not supported by graph table: [Known: pysyn stricter than syn]
 ------------------------------------
@@ -40,3 +44,4 @@ Test sw error [no solution w/o writing extra code]:
 ValueError: too many values to unpack
 ---> countrate allows 4 params to specify a wavetab; genwave does not,
 so cannot use genwave to generate the matching wavetab for calcspec to use.
+
