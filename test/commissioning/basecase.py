@@ -23,6 +23,7 @@ class calcspecCase(testutil.LogTestCase):
         base,ext=os.path.splitext(os.path.basename(fname))
         main,case,test=self.propername.split('.')
         self.name=os.path.join(base,test,case)
+        self.wavename=self.name+'_wave.fits'
         #Make sure the directories exist
         dirname=os.path.dirname(self.name)
         if not os.path.isdir(dirname):
@@ -42,13 +43,21 @@ class calcspecCase(testutil.LogTestCase):
 
     def run_calcspec(self,obsmode,spstring,form,output=None,binset=False):
         if binset:
-            wavetab=Wavecat[self.obsmode]
+            try:
+                wavetab=Wavecat[self.obsmode]
+            except KeyError:
+                self.sptest.writefits(self.wavename)
+                wavetab=self.wavename
             if wavetab.startswith('('):
                 #generate a wavetab that IRAF can read.
-                wmin,wmax,dw=wavetab[1:-1].split(',')
-                wavename=self.name+'_wave.dat'
-                iraf.genwave(wavename,wmin,wmax,dw)
-                wavetab=wavename
+                try:
+                    wmin,wmax,dw=wavetab[1:-1].split(',')
+                    iraf.genwave(self.wavename,wmin,wmax,dw)
+                    wavetab=self.wavename
+                except ValueError:
+                    self.sptest.writefits(self.wavename)
+                    wavetab=self.wavename
+                   
         else:
             wavetab=""
 
@@ -71,11 +80,11 @@ class calcspecCase(testutil.LogTestCase):
     def runpy(self):
         self.sptest=etc.parse_spec(self.spectrum)
         self.csname=self.name+'.fits'
-
-        try:
-            os.remove(self.csname)
-        except OSError:
-            pass
+        for name in (self.csname, self.wavename):
+            try:
+                os.remove(self.csname)
+            except OSError:
+                pass
 
     def arraydiff(self,test,ref):
         idx=N.nonzero(ref)
