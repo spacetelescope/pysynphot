@@ -203,6 +203,15 @@ class SourceSpectrum(Integrator):
     def __rmul__(self, other):
         return self.__mul__(other)
 
+    def addmag(self,magval):
+        """Adding a magnitude is like multiplying a flux. Only works for
+        numbers -- not arrays, spectrum objects, etc"""
+        if N.isscalar(magval):
+            factor = 10**(-0.4*magval)
+            return self*factor
+        else:
+            raise TypeError(".addmag() only takes a constant scalar argument")
+    
     def getArrays(self):
         '''Returns wavelength and flux arrays as a tuple, performing
            units conversion.

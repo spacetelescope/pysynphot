@@ -79,3 +79,22 @@ class AddInverseMicron(testutil.FPTestCase):
         self.failUnless(isinstance(test.waveunits,units.Angstrom))
         self.assertApproxNumpy(test.wave,self.awave)
                                                 
+class AddMag(testutil.FPTestCase):
+    "Ticket #122"
+    def setUp(self):
+        self.bright=S.UnitSpectrum(18.0,fluxunits='abmag')
+        self.faint=S.UnitSpectrum(21.0,fluxunits='abmag')
+        self.delta=3
+
+    def testadd(self):
+        test=self.bright.addmag(self.delta)
+        self.assertEqualNumpy(test.flux,self.faint.flux)
+
+    def testsubtract(self):
+        test=self.faint.addmag(self.delta*-1.0)
+        self.assertEqualNumpy(test.flux,self.bright.flux)
+
+    def testtypecatch(self):
+        self.assertRaises(TypeError,
+                          self.faint.addmag,
+                          self.bright)

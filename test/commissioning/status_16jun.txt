@@ -36,6 +36,6 @@ Status Report 16 June 2008
      Two test cases were reported to me that demonstrated discrepant
      results on Solaris, Mac, and Linux platforms. I have run these
      cases on various platforms and determined that pysynphot
-     demonstrates significantly closer agreement across platforms than
-     does synphot. (Test results and list of platforms tested are
+     performs identically platforms on which synphot differs.
+     results and list of platforms tested are
      located in /eng/ssb/syn_pysyn/platform. )
