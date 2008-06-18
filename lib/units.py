@@ -50,9 +50,10 @@ class BaseUnit(object):
     def Convert(self,wave,flux,target_units):
         #This signature is appropriate for fluxes, not waves
         try:
-            return self.Dispatch[target_units](wave,flux)
+            return self.Dispatch[target_units.lower()](wave,flux)
         except KeyError:
-            raise TypeError("Target units %s unrecognized%(target_units)")
+            raise TypeError("%s cannot be converted to %s"%(self.name,
+                                                            target_units))
 
 class WaveUnits(BaseUnit):
     """All WaveUnits know how to convert themselves to Angstroms"""
@@ -64,9 +65,10 @@ class WaveUnits(BaseUnit):
     def Convert(self,wave,target_units):
         """WaveUnits only need a wavelength table to do a conversion."""
         try:
-            return self.Dispatch[target_units](wave)
+            return self.Dispatch[target_units.lower()](wave)
         except KeyError:
-            raise TypeError(" %s is not a valid wavelength unit"%target_units)
+            raise TypeError("%s cannot be converted to %s"%(self.name,
+                                                            target_units))
 
     def ToAngstrom(self,wave):
         raise NotImplementedError("Required method ToAngstrom not yet implemented")
@@ -102,8 +104,13 @@ class Angstrom(WaveUnits):
         WaveUnits.__init__(self)
         self.name = 'angstrom'
         self.Dispatch = {'angstrom' : self.ToAngstrom,
+                         'angstroms' : self.ToAngstrom,
                          'nm': self.ToNm,
                          'micron': self.ToMicron,
+                         'microns': self.ToMicron,
+                         '1/um': self.ToInverseMicron,
+                         'inversemicron': self.ToInverseMicron,
+                         'inversemicrons': self.ToInverseMicron,
                          'mm': self.ToMm,
                          'cm': self.ToCm,
                          'm': self.ToMeter,
@@ -118,7 +125,10 @@ class Angstrom(WaveUnits):
     
     def ToMicron(self, wave):
         return wave * 1.0e-4
-    
+
+    def ToInverseMicron(self, wave):
+        return 1.0e4/wave
+
     def ToMm(self, wave):
         return wave * 1.0e-7
     
@@ -149,6 +159,7 @@ class Photlam(FluxUnits):
                          'stmag':self.ToSTMag,
                          'obmag':self.ToOBMag,
                          'vegamag':self.ToVegaMag,
+                         'counts':self.ToCounts,
                          'counts':self.ToCounts}
 
     def unitResponse(self,band):
@@ -212,6 +223,14 @@ class Hz(WaveUnits):
     def ToAngstrom(self, wave):
         return C / wave
 
+class InverseMicron(WaveUnits):
+    def __init__(self):
+        WaveUnits.__init__(self)
+        self.name = '1/um'
+
+    def ToAngstrom(self, wave):
+        return 1.0e4/wave
+        
 class _MetricWavelength(WaveUnits):
     """ Encapsulates some easy unit-conversion machinery. Angstrom
     is not subclassed from here because it needs to be especially smart in
@@ -431,11 +450,16 @@ def factory(uname, *args, **kwargs):
                     'obmag'     : OBMag,
                     'vegamag'   : VegaMag,
                     'counts'    : Counts,
+                    'count'     : Counts,
                     'angstrom'  : Angstrom,
                     'angstroms' : Angstrom,
                     'nm'        : Nm,
                     'micron'    : Micron,
+                    'microns'   : Micron,
                     'um'        : Micron,
+                    'inversemicron': InverseMicron,
+                    'inversemicrons': InverseMicron,
+                    '1/um'      : InverseMicron,
                     'mm'        : Mm,
                     'cm'        : Cm,
                     'm'         : Meter,
