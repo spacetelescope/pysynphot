@@ -92,6 +92,10 @@ class calcspecCase(testutil.LogTestCase):
         return ans
 
     def arraysigtest(self,test,ref):
+        #Raise an error if the arrays are not the same size
+        if test.shape != ref.shape:
+            raise ValueError("Array size mismatch")
+        
         #Identify the significant elements
         tidx=N.where(test>(self.sigthresh*test.max()))[0]
         ridx=N.where(ref>(self.sigthresh*ref.max()))[0]
