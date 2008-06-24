@@ -143,9 +143,9 @@ class calcspecCase(testutil.LogTestCase):
         spref=S.FileSpectrum(self.csname)
         self.sptest.convert('photlam')
         rflux=spref.flux
+        #ok, this works because it uses the call.
         tflux=self.sptest(spref.wave)
         self.savepysyn(spref.wave,tflux,self.csname)
-        
         self.arraysigtest(tflux,rflux)
         
 class calcphotCase(calcspecCase):
@@ -232,6 +232,8 @@ class thermbackCase(calcphotCase):
 
     def testthermspec(self):
         ref=S.FileSpectrum(self.csname)
+        if N.anytrue(self.sp.wave != ref.wave):
+            raise ValueError('wave arrays not equal')
         self.arraysigtest(self.sp.flux,ref.flux)
         
     def testthermback(self):
@@ -288,6 +290,8 @@ class countrateCase(calcphotCase):
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
                        self.csname.replace('.fits','_counts.fits'))
+        if N.anytrue(self.sp.wave != ref.wave):
+            raise ValueError('wave arrays not equal')
         self.arraysigtest(tflux,rflux)
     testcscounts.skip=True
     
@@ -312,7 +316,9 @@ class countrateCase(calcphotCase):
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
                        self.crname.replace('.fits','_counts.fits'))
-
+        if N.anytrue(self.sp.wave != ref.wave):
+            raise ValueError('wave arrays not equal')
+        
         self.arraysigtest(tflux,rflux)
 
     def testcountrate(self):
