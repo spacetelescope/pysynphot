@@ -17,7 +17,7 @@ from basecase import calcphotCase, calcspecCase, countrateCase,SpecSourcerateSpe
 """)
 
 
-    count={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0}
+    count={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
     for line in f:
     
     #parse the line
@@ -34,7 +34,11 @@ from basecase import calcphotCase, calcspecCase, countrateCase,SpecSourcerateSpe
            obsmode=kwd.get('obsmode','None')
 
         #fix the CDBS specification
-        kwd['spectrum']=kwd['spectrum'].replace('/cdbs',os.environ['PYSYN_CDBS'])
+        try:
+            kwd['spectrum']=kwd['spectrum'].replace('/cdbs',os.environ['PYSYN_CDBS'])
+        except KeyError:
+            kwd['spectrum']=None
+            
         defn=pattern%(cmd,count[cmd],cmd,obsmode,kwd['spectrum'])
         out.write(defn)
 

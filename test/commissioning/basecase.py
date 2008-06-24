@@ -7,6 +7,7 @@ from pyraf import iraf
 from iraf import stsdas,hst_calib,synphot
 import os,time
 from pysynphot.wavetable import wavetable as Wavecat
+from pysynphot.observationmode import ObservationMode
 
 
 class calcspecCase(testutil.LogTestCase):
@@ -191,6 +192,61 @@ class calcphotCase(calcspecCase):
             self.tra['Extreme']=True
         self.tra['Syn']=rlam
         self.tra['Pysyn']=tlam
+
+        self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
+
+        
+
+class thermbackCase(calcphotCase):
+        
+    def runpy(self):
+        print "Hello World!!"
+        #self.sptest=etc.parse_spec(self.spectrum)
+        self.bp=S.ObsBandpass(self.obsmode)
+        self.cbname=self.name+'.fits'
+        self.csname=self.name+'_cs.fits'
+
+        for fname in (self.cbname, self.csname):
+            try:
+                os.remove(fname)
+                os.remove(fname.replace('.fits','_pysyn.fits'))
+            except OSError:
+                pass
+        self.discrep=-99
+
+        iraf.thermback(obsmode=self.obsmode,form='counts',
+                       output=self.csname)
+
+        omode=ObservationMode(self.obsmode)
+        self.sp=omode.ThermalSpectrum()
+        self.ttherm=self.sp.integrate()*omode.pixscale**2*omode.area
+        self.sp.convert('counts')
+        print "Fluxunits %s"%self.sp.fluxunits
+        self.savepysyn(self.sp.wave,self.sp.flux,self.csname)
+
+    def testspecphotlam(self):
+        pass
+
+    def testefflam(self):
+        pass
+
+
+    def testthermspec(self):
+        ref=S.FileSpectrum(self.csname)
+        self.arraysigtest(self.sp.flux,ref.flux)
+        
+    def testthermback(self):
+        rtherm=iraf.thermback.getParam('thermback.thermflux',native=1)
+        ttherm=self.ttherm
+        if rtherm != 0:
+            self.discrep=(ttherm-rtherm)/rtherm
+        else:
+            self.discrep=ttherm-rtherm
+        self.tra['Discrep']=self.discrep
+        if abs(self.discrep)>self.superthresh:
+            self.tra['Extreme']=True
+        self.tra['Syn']=rtherm
+        self.tra['Pysyn']=ttherm
 
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
 
