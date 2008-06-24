@@ -19,6 +19,10 @@ endif
 #..................................................
 #Append the revision number; silly humans get it wrong
 set revset = `svnversion | awk -F: '{print $2}'`
+if ( "$revset" == "") then
+  set revset = `svnversion`
+endif 
+
 set dirname = {$rname}_r{$revset}
 #...................................................
 # Set up a test directory

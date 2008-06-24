@@ -200,7 +200,7 @@ class calcphotCase(calcspecCase):
 class thermbackCase(calcphotCase):
         
     def runpy(self):
-        print "Hello World!!"
+
         #self.sptest=etc.parse_spec(self.spectrum)
         self.bp=S.ObsBandpass(self.obsmode)
         self.cbname=self.name+'.fits'
@@ -221,7 +221,6 @@ class thermbackCase(calcphotCase):
         self.sp=omode.ThermalSpectrum()
         self.ttherm=self.sp.integrate()*omode.pixscale**2*omode.area
         self.sp.convert('counts')
-        print "Fluxunits %s"%self.sp.fluxunits
         self.savepysyn(self.sp.wave,self.sp.flux,self.csname)
 
     def testspecphotlam(self):
