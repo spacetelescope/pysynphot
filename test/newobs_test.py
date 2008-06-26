@@ -20,6 +20,8 @@ class SpecCase(testutil.FPTestCase):
     def setUp(self):
         os.chdir(locations.specdir)
         self.setparms()
+        self.tda={'spectrum':self.spectrum,
+                  'obsmode':self.obsmode}
         self.params=['spectrum=%s'%self.spectrum,'instrument=%s'%self.obsmode]
         self.init_countrate()
         self.sp=newetc.parse_spec(self.spectrum)

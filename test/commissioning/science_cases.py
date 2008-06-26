@@ -2,30 +2,30 @@
 
 from pytools import testutil
 import sys
-from basecase import calcphotCase, calcspecCase, countrateCase,SpecSourcerateSpecCase
+import basecase
 
-class S1(countrateCase):
+class S1(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f435w"
         self.spectrum="crcalspec$g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class S2(countrateCase):
+class S2(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f220w"
         self.spectrum="crcalspec$g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class S3(countrateCase):
+class S3(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f775w"
         self.spectrum="crcalspec$g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class S4(countrateCase):
+class S4(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f814w"
         self.spectrum="crcalspec$g191b2b_mod_004.fits"
@@ -33,639 +33,639 @@ class S4(countrateCase):
         self.runpy()
 
  
-class stisS0(countrateCase):
+class stisS0(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g140l,fuvmama,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS1(countrateCase):
+class stisS1(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g140l,fuvmama,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS2(countrateCase):
+class stisS2(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g140l,fuvmama,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS3(countrateCase):
+class stisS3(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g230l,nuvmama,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS4(countrateCase):
+class stisS4(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g230l,nuvmama,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS5(countrateCase):
+class stisS5(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g230l,nuvmama,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS6(countrateCase):
+class stisS6(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g430l,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS7(countrateCase):
+class stisS7(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g430l,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS8(countrateCase):
+class stisS8(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g430l,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS9(countrateCase):
+class stisS9(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g750l,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS10(countrateCase):
+class stisS10(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g750l,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS11(countrateCase):
+class stisS11(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g750l,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS12(countrateCase):
+class stisS12(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g230lb,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS13(countrateCase):
+class stisS13(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g230lb,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class stisS14(countrateCase):
+class stisS14(basecase.countrateCase):
     def setUp(self):
         self.obsmode="stis,g230lb,ccd,s52x2"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class acsS0(countrateCase):
+class acsS0(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f220w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS1(countrateCase):
+class acsS1(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f220w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS2(countrateCase):
+class acsS2(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f220w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS3(countrateCase):
+class acsS3(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f250w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS4(countrateCase):
+class acsS4(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f250w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS5(countrateCase):
+class acsS5(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f250w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS6(countrateCase):
+class acsS6(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f475w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS7(countrateCase):
+class acsS7(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f475w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS8(countrateCase):
+class acsS8(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f475w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS9(countrateCase):
+class acsS9(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f555w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS10(countrateCase):
+class acsS10(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f555w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS11(countrateCase):
+class acsS11(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f555w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS12(countrateCase):
+class acsS12(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f775w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS13(countrateCase):
+class acsS13(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f775w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS14(countrateCase):
+class acsS14(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f775w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS15(countrateCase):
+class acsS15(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f850lp"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS16(countrateCase):
+class acsS16(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f850lp"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS17(countrateCase):
+class acsS17(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f850lp"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS18(countrateCase):
+class acsS18(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f814w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS19(countrateCase):
+class acsS19(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f814w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS20(countrateCase):
+class acsS20(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f814w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS21(countrateCase):
+class acsS21(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f475w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS22(countrateCase):
+class acsS22(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f475w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS23(countrateCase):
+class acsS23(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f475w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS24(countrateCase):
+class acsS24(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f435w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS25(countrateCase):
+class acsS25(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f435w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS26(countrateCase):
+class acsS26(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f435w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS27(countrateCase):
+class acsS27(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f550m"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS28(countrateCase):
+class acsS28(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f550m"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS29(countrateCase):
+class acsS29(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f550m"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS30(countrateCase):
+class acsS30(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f555w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS31(countrateCase):
+class acsS31(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f555w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS32(countrateCase):
+class acsS32(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f555w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS33(countrateCase):
+class acsS33(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f658n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS34(countrateCase):
+class acsS34(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f658n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS35(countrateCase):
+class acsS35(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f658n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS36(countrateCase):
+class acsS36(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f814w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS37(countrateCase):
+class acsS37(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f814w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS38(countrateCase):
+class acsS38(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f814w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS39(countrateCase):
+class acsS39(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f775w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS40(countrateCase):
+class acsS40(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f775w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS41(countrateCase):
+class acsS41(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f775w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS42(countrateCase):
+class acsS42(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f892n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS43(countrateCase):
+class acsS43(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f892n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS44(countrateCase):
+class acsS44(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f892n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS45(countrateCase):
+class acsS45(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f850lp"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS46(countrateCase):
+class acsS46(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f850lp"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS47(countrateCase):
+class acsS47(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f850lp"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS48(countrateCase):
+class acsS48(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f892n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS49(countrateCase):
+class acsS49(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f892n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS50(countrateCase):
+class acsS50(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f892n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS51(countrateCase):
+class acsS51(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f660n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS52(countrateCase):
+class acsS52(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f660n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS53(countrateCase):
+class acsS53(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f660n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS54(countrateCase):
+class acsS54(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f658n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS55(countrateCase):
+class acsS55(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f658n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS56(countrateCase):
+class acsS56(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f658n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS57(countrateCase):
+class acsS57(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f625w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS58(countrateCase):
+class acsS58(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f625w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS59(countrateCase):
+class acsS59(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f625w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS60(countrateCase):
+class acsS60(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f606w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS61(countrateCase):
+class acsS61(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f606w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS62(countrateCase):
+class acsS62(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f606w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS63(countrateCase):
+class acsS63(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f550m"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS64(countrateCase):
+class acsS64(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f550m"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS65(countrateCase):
+class acsS65(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f550m"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS66(countrateCase):
+class acsS66(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f435w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS67(countrateCase):
+class acsS67(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f435w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS68(countrateCase):
+class acsS68(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f435w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS69(countrateCase):
+class acsS69(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f502n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS70(countrateCase):
+class acsS70(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f502n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS71(countrateCase):
+class acsS71(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f502n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS72(countrateCase):
+class acsS72(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f344n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS73(countrateCase):
+class acsS73(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f344n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS74(countrateCase):
+class acsS74(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f344n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS75(countrateCase):
+class acsS75(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f330w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS76(countrateCase):
+class acsS76(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f330w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS77(countrateCase):
+class acsS77(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,hrc,f330w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS78(countrateCase):
+class acsS78(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f502n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS79(countrateCase):
+class acsS79(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f502n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS80(countrateCase):
+class acsS80(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f502n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS81(countrateCase):
+class acsS81(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f606w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS82(countrateCase):
+class acsS82(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f606w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS83(countrateCase):
+class acsS83(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f606w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS84(countrateCase):
+class acsS84(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f625w"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS85(countrateCase):
+class acsS85(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f625w"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS86(countrateCase):
+class acsS86(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f625w"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS87(countrateCase):
+class acsS87(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f660n"
         self.spectrum="/grp/hst/cdbs/calspec/gd71_mod_005.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS88(countrateCase):
+class acsS88(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f660n"
         self.spectrum="/grp/hst/cdbs/calspec/gd153_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
-class acsS89(countrateCase):
+class acsS89(basecase.countrateCase):
     def setUp(self):
         self.obsmode="acs,wfc1,f660n"
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class e1(countrateCase):
+class e1(basecase.countrateCase):
     def setUp(self):
         self.obsmode='stis,g140l,fuvmama,s52x2'
         self.spectrum="el1215a.fits"
@@ -673,21 +673,21 @@ class e1(countrateCase):
         self.runpy()
 
 
-class e2(countrateCase):
+class e2(basecase.countrateCase):
     def setUp(self):
         self.obsmode='stis,g140l,fuvmama,s52x2'
         self.spectrum="el1302a.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class e3(countrateCase):
+class e3(basecase.countrateCase):
     def setUp(self):
         self.obsmode='stis,g140l,fuvmama,s52x2'
         self.spectrum="el1356a.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class e4(countrateCase):
+class e4(basecase.countrateCase):
     def setUp(self):
         self.obsmode='stis,g140l,fuvmama,s52x2'
         self.spectrum="el2471a.fits"

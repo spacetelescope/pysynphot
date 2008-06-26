@@ -23,6 +23,8 @@ import testutil
 #Places used by test code
 userdir   = os.path.join(os.path.dirname(__file__),'data')
 testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
+testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
+
 
 #Freeze the version of the comptable so tests are not susceptible to
 # updates to CDBS
@@ -32,6 +34,11 @@ print "%s:"%os.path.basename(__file__)
 print "  Tests are being run with %s"%observationmode.COMPTABLE
 print "  Synphot comparison results were computed with r1j2146sm_tmc.fits"
 #Synphot comparison results are identified with the varname synphot_ref.
+
+#Also set the version of Vega for similar reasons
+locations.VegaFile=os.path.join(testdir,
+                                'alpha_lyr_stis_002.fits')
+print "Using Vega spectrum: %s"%locations.VegaFile
 
 accuracy = 1.0e-5    # default floating point comparison accuracy
 etc.debug = 0        # supress messages from ETC-support tasks

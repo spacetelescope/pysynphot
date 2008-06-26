@@ -16,7 +16,7 @@ CAT_TEMPLATE = os.path.join(rootdir,'grid','*','catalog.fits')
 KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
 
 
-VegaFile = os.path.join(specdir,'vega.fits')
+VegaFile = os.path.join(specdir,'alpha_lyr_stis_003.fits')
 
 
 #Define wavecat file explicitly

@@ -1,1970 +1,1969 @@
 from pytools import testutil
 import sys
-from basecase import calcphotCase, calcspecCase, countrateCase,SpecSourcerateSpecCase
-
-class calcspecCase1(calcspecCase):
+import basecase
+class calcspecCase1(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase1(countrateCase):
+class countrateCase1(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase1(calcphotCase):
+class calcphotCase1(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase1(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase1(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase2(calcspecCase):
+class calcspecCase2(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase2(countrateCase):
+class countrateCase2(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase2(calcphotCase):
+class calcphotCase2(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase2(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase2(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),18.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase3(calcspecCase):
+class calcspecCase3(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase3(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase3(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase4(calcspecCase):
+class calcspecCase4(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase5(calcspecCase):
+class calcspecCase5(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase6(calcspecCase):
+class calcspecCase6(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase7(calcspecCase):
+class calcspecCase7(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase8(calcspecCase):
+class calcspecCase8(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase9(calcspecCase):
+class calcspecCase9(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase10(calcspecCase):
+class calcspecCase10(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase11(calcspecCase):
+class calcspecCase11(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase12(calcspecCase):
+class calcspecCase12(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase13(calcspecCase):
+class calcspecCase13(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase14(calcspecCase):
+class calcspecCase14(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase15(calcspecCase):
+class calcspecCase15(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase16(calcspecCase):
+class calcspecCase16(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase17(calcspecCase):
+class calcspecCase17(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase18(calcspecCase):
+class calcspecCase18(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase19(calcspecCase):
+class calcspecCase19(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase20(calcspecCase):
+class calcspecCase20(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase21(calcspecCase):
+class calcspecCase21(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase22(calcspecCase):
+class calcspecCase22(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase23(calcspecCase):
+class calcspecCase23(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase24(calcspecCase):
+class calcspecCase24(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase25(calcspecCase):
+class calcspecCase25(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase26(calcspecCase):
+class calcspecCase26(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase27(calcspecCase):
+class calcspecCase27(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase28(calcspecCase):
+class calcspecCase28(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase29(calcspecCase):
+class calcspecCase29(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase30(calcspecCase):
+class calcspecCase30(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase31(calcspecCase):
+class calcspecCase31(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase3(countrateCase):
+class countrateCase3(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase3(calcphotCase):
+class calcphotCase3(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase4(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase4(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase32(calcspecCase):
+class calcspecCase32(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase5(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase5(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),18.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase33(calcspecCase):
+class calcspecCase33(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase34(calcspecCase):
+class calcspecCase34(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase35(calcspecCase):
+class calcspecCase35(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase36(calcspecCase):
+class calcspecCase36(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase37(calcspecCase):
+class calcspecCase37(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase38(calcspecCase):
+class calcspecCase38(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase39(calcspecCase):
+class calcspecCase39(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase40(calcspecCase):
+class calcspecCase40(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase41(calcspecCase):
+class calcspecCase41(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase42(calcspecCase):
+class calcspecCase42(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase43(calcspecCase):
+class calcspecCase43(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase44(calcspecCase):
+class calcspecCase44(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase45(calcspecCase):
+class calcspecCase45(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase46(calcspecCase):
+class calcspecCase46(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase47(calcspecCase):
+class calcspecCase47(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase48(calcspecCase):
+class calcspecCase48(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase49(calcspecCase):
+class calcspecCase49(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase50(calcspecCase):
+class calcspecCase50(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase51(calcspecCase):
+class calcspecCase51(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase52(calcspecCase):
+class calcspecCase52(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase53(calcspecCase):
+class calcspecCase53(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase54(calcspecCase):
+class calcspecCase54(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase55(calcspecCase):
+class calcspecCase55(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase56(calcspecCase):
+class calcspecCase56(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase57(calcspecCase):
+class calcspecCase57(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase58(calcspecCase):
+class calcspecCase58(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase59(calcspecCase):
+class calcspecCase59(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase60(calcspecCase):
+class calcspecCase60(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase61(calcspecCase):
+class calcspecCase61(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase62(calcspecCase):
+class calcspecCase62(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase63(calcspecCase):
+class calcspecCase63(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase64(calcspecCase):
+class calcspecCase64(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase65(calcspecCase):
+class calcspecCase65(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase66(calcspecCase):
+class calcspecCase66(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase67(calcspecCase):
+class calcspecCase67(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase68(calcspecCase):
+class calcspecCase68(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase69(calcspecCase):
+class calcspecCase69(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase70(calcspecCase):
+class calcspecCase70(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase71(calcspecCase):
+class calcspecCase71(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase72(calcspecCase):
+class calcspecCase72(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase73(calcspecCase):
+class calcspecCase73(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase74(calcspecCase):
+class calcspecCase74(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase75(calcspecCase):
+class calcspecCase75(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase76(calcspecCase):
+class calcspecCase76(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase77(calcspecCase):
+class calcspecCase77(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase78(calcspecCase):
+class calcspecCase78(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase79(calcspecCase):
+class calcspecCase79(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase80(calcspecCase):
+class calcspecCase80(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase81(calcspecCase):
+class calcspecCase81(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase82(calcspecCase):
+class calcspecCase82(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase83(calcspecCase):
+class calcspecCase83(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase84(calcspecCase):
+class calcspecCase84(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase85(calcspecCase):
+class calcspecCase85(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase86(calcspecCase):
+class calcspecCase86(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase87(calcspecCase):
+class calcspecCase87(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase88(calcspecCase):
+class calcspecCase88(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase89(calcspecCase):
+class calcspecCase89(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase90(calcspecCase):
+class calcspecCase90(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase91(calcspecCase):
+class calcspecCase91(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase92(calcspecCase):
+class calcspecCase92(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase93(calcspecCase):
+class calcspecCase93(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase94(calcspecCase):
+class calcspecCase94(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase95(calcspecCase):
+class calcspecCase95(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase96(calcspecCase):
+class calcspecCase96(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase97(calcspecCase):
+class calcspecCase97(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase98(calcspecCase):
+class calcspecCase98(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase99(calcspecCase):
+class calcspecCase99(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase100(calcspecCase):
+class calcspecCase100(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase101(calcspecCase):
+class calcspecCase101(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase102(calcspecCase):
+class calcspecCase102(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase103(calcspecCase):
+class calcspecCase103(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase104(calcspecCase):
+class calcspecCase104(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase105(calcspecCase):
+class calcspecCase105(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase106(calcspecCase):
+class calcspecCase106(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase107(calcspecCase):
+class calcspecCase107(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase108(calcspecCase):
+class calcspecCase108(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase109(calcspecCase):
+class calcspecCase109(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase110(calcspecCase):
+class calcspecCase110(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase111(calcspecCase):
+class calcspecCase111(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase112(calcspecCase):
+class calcspecCase112(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase113(calcspecCase):
+class calcspecCase113(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase114(calcspecCase):
+class calcspecCase114(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase115(calcspecCase):
+class calcspecCase115(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase116(calcspecCase):
+class calcspecCase116(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase117(calcspecCase):
+class calcspecCase117(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase118(calcspecCase):
+class calcspecCase118(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase119(calcspecCase):
+class calcspecCase119(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase120(calcspecCase):
+class calcspecCase120(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase121(calcspecCase):
+class calcspecCase121(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase122(calcspecCase):
+class calcspecCase122(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase123(calcspecCase):
+class calcspecCase123(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase124(calcspecCase):
+class calcspecCase124(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase125(calcspecCase):
+class calcspecCase125(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase126(calcspecCase):
+class calcspecCase126(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase127(calcspecCase):
+class calcspecCase127(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase128(calcspecCase):
+class calcspecCase128(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase129(calcspecCase):
+class calcspecCase129(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase130(calcspecCase):
+class calcspecCase130(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase131(calcspecCase):
+class calcspecCase131(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase132(calcspecCase):
+class calcspecCase132(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase133(calcspecCase):
+class calcspecCase133(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase134(calcspecCase):
+class calcspecCase134(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase135(calcspecCase):
+class calcspecCase135(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase136(calcspecCase):
+class calcspecCase136(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase137(calcspecCase):
+class calcspecCase137(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase138(calcspecCase):
+class calcspecCase138(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase139(calcspecCase):
+class calcspecCase139(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase140(calcspecCase):
+class calcspecCase140(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase141(calcspecCase):
+class calcspecCase141(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase142(calcspecCase):
+class calcspecCase142(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase143(calcspecCase):
+class calcspecCase143(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase144(calcspecCase):
+class calcspecCase144(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase145(calcspecCase):
+class calcspecCase145(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase146(calcspecCase):
+class calcspecCase146(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase147(calcspecCase):
+class calcspecCase147(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase148(calcspecCase):
+class calcspecCase148(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase149(calcspecCase):
+class calcspecCase149(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase150(calcspecCase):
+class calcspecCase150(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase151(calcspecCase):
+class calcspecCase151(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase152(calcspecCase):
+class calcspecCase152(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase153(calcspecCase):
+class calcspecCase153(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase154(calcspecCase):
+class calcspecCase154(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase155(calcspecCase):
+class calcspecCase155(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase156(calcspecCase):
+class calcspecCase156(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase157(calcspecCase):
+class calcspecCase157(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase158(calcspecCase):
+class calcspecCase158(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase159(calcspecCase):
+class calcspecCase159(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase160(calcspecCase):
+class calcspecCase160(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase161(calcspecCase):
+class calcspecCase161(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase162(calcspecCase):
+class calcspecCase162(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase163(calcspecCase):
+class calcspecCase163(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase164(calcspecCase):
+class calcspecCase164(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase165(calcspecCase):
+class calcspecCase165(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase166(calcspecCase):
+class calcspecCase166(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase167(calcspecCase):
+class calcspecCase167(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase168(calcspecCase):
+class calcspecCase168(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase169(calcspecCase):
+class calcspecCase169(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase170(calcspecCase):
+class calcspecCase170(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase171(calcspecCase):
+class calcspecCase171(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase172(calcspecCase):
+class calcspecCase172(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase173(calcspecCase):
+class calcspecCase173(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase174(calcspecCase):
+class calcspecCase174(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase175(calcspecCase):
+class calcspecCase175(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase176(calcspecCase):
+class calcspecCase176(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase177(calcspecCase):
+class calcspecCase177(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase178(calcspecCase):
+class calcspecCase178(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase179(calcspecCase):
+class calcspecCase179(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase180(calcspecCase):
+class calcspecCase180(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase181(calcspecCase):
+class calcspecCase181(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase182(calcspecCase):
+class calcspecCase182(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase183(calcspecCase):
+class calcspecCase183(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase184(calcspecCase):
+class calcspecCase184(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase185(calcspecCase):
+class calcspecCase185(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase186(calcspecCase):
+class calcspecCase186(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase187(calcspecCase):
+class calcspecCase187(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase188(calcspecCase):
+class calcspecCase188(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase189(calcspecCase):
+class calcspecCase189(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase190(calcspecCase):
+class calcspecCase190(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase191(calcspecCase):
+class calcspecCase191(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase192(calcspecCase):
+class calcspecCase192(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase193(calcspecCase):
+class calcspecCase193(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase194(calcspecCase):
+class calcspecCase194(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase195(calcspecCase):
+class calcspecCase195(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase196(calcspecCase):
+class calcspecCase196(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase197(calcspecCase):
+class calcspecCase197(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase198(calcspecCase):
+class calcspecCase198(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase199(calcspecCase):
+class calcspecCase199(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase200(calcspecCase):
+class calcspecCase200(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase201(calcspecCase):
+class calcspecCase201(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase202(calcspecCase):
+class calcspecCase202(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase203(calcspecCase):
+class calcspecCase203(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase204(calcspecCase):
+class calcspecCase204(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase205(calcspecCase):
+class calcspecCase205(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase6(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase6(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),17.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase206(calcspecCase):
+class calcspecCase206(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase207(calcspecCase):
+class calcspecCase207(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase208(calcspecCase):
+class calcspecCase208(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase209(calcspecCase):
+class calcspecCase209(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase210(calcspecCase):
+class calcspecCase210(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase211(calcspecCase):
+class calcspecCase211(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase7(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase7(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),17.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase212(calcspecCase):
+class calcspecCase212(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase213(calcspecCase):
+class calcspecCase213(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase214(calcspecCase):
+class calcspecCase214(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase215(calcspecCase):
+class calcspecCase215(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase216(calcspecCase):
+class calcspecCase216(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase217(calcspecCase):
+class calcspecCase217(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase218(calcspecCase):
+class calcspecCase218(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase219(calcspecCase):
+class calcspecCase219(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase220(calcspecCase):
+class calcspecCase220(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase221(calcspecCase):
+class calcspecCase221(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase222(calcspecCase):
+class calcspecCase222(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase223(calcspecCase):
+class calcspecCase223(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase224(calcspecCase):
+class calcspecCase224(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase225(calcspecCase):
+class calcspecCase225(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase226(calcspecCase):
+class calcspecCase226(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase227(calcspecCase):
+class calcspecCase227(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase228(calcspecCase):
+class calcspecCase228(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase229(calcspecCase):
+class calcspecCase229(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase230(calcspecCase):
+class calcspecCase230(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase231(calcspecCase):
+class calcspecCase231(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase232(calcspecCase):
+class calcspecCase232(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase233(calcspecCase):
+class calcspecCase233(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase234(calcspecCase):
+class calcspecCase234(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase235(calcspecCase):
+class calcspecCase235(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase236(calcspecCase):
+class calcspecCase236(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase237(calcspecCase):
+class calcspecCase237(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase238(calcspecCase):
+class calcspecCase238(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase239(calcspecCase):
+class calcspecCase239(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase240(calcspecCase):
+class calcspecCase240(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase241(calcspecCase):
+class calcspecCase241(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase242(calcspecCase):
+class calcspecCase242(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase243(calcspecCase):
+class calcspecCase243(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase244(calcspecCase):
+class calcspecCase244(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase245(calcspecCase):
+class calcspecCase245(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase246(calcspecCase):
+class calcspecCase246(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase247(calcspecCase):
+class calcspecCase247(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase248(calcspecCase):
+class calcspecCase248(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase249(calcspecCase):
+class calcspecCase249(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase250(calcspecCase):
+class calcspecCase250(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase251(calcspecCase):
+class calcspecCase251(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase252(calcspecCase):
+class calcspecCase252(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase253(calcspecCase):
+class calcspecCase253(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,30000,0.0,4.0)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase8(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase8(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0)*ebmvx(0.04,gal1),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase254(calcspecCase):
+class calcspecCase254(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,25400,0.0,3.9)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase9(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase9(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,25400,0.0,3.9)*ebmvx(0.08,gal1),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase255(calcspecCase):
+class calcspecCase255(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,18700,0.0,3.9)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase10(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase10(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,18700,0.0,3.9)*ebmvx(0.12,gal3),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase256(calcspecCase):
+class calcspecCase256(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,15400,0.0,3.9)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase11(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase11(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,15400,0.0,3.9)*ebmvx(0.16,smc),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase257(calcspecCase):
+class calcspecCase257(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,11900,0.0,4.0)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase12(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase12(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,11900,0.0,4.0)*ebmvx(0.2,lmc),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase258(calcspecCase):
+class calcspecCase258(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="icat(k93models,9230,0.0,4.1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase13(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase13(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1)*ebmvx(0.24,xgal),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase14(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase14(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_1.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase15(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase15(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase16(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase16(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_3.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.12,gal3)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase17(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase17(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_4.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.16,smc)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase18(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase18(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_5.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.2,lmc)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase19(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase19(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_6.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.24,xgal)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase20(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase20(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_7.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase21(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase21(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_8.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase22(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase22(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_9.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.12,gal3)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase23(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase23(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_10.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.16,smc)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase24(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase24(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_11.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.2,lmc)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase25(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase25(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_12.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.24,xgal)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase26(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase26(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_13.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase27(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase27(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/bz77/bz_14.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase28(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase28(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),0.05),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase29(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase29(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),0.1),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase30(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase30(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),0.15),band(johnson,b),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase259(calcspecCase):
+class calcspecCase259(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="bb(10000)"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase31(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase31(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(bb(10000),band(johnson,u),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase260(calcspecCase):
+class calcspecCase260(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="bb(10000)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase4(countrateCase):
+class countrateCase4(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.1,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase4(calcphotCase):
+class calcphotCase4(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.1,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase32(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase32(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(bb(10000),band(johnson,r),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase261(calcspecCase):
+class calcspecCase261(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="bb(10000)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase5(countrateCase):
+class countrateCase5(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),23.3,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase5(calcphotCase):
+class calcphotCase5(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),23.3,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase33(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase33(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(bb(10000),band(johnson,i),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase262(calcspecCase):
+class calcspecCase262(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="bb(10000)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase6(countrateCase):
+class countrateCase6(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),21.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase6(calcphotCase):
+class calcphotCase6(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),21.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase34(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase34(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(bb(10000),band(johnson,j),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase263(calcspecCase):
+class calcspecCase263(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="bb(10000)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase7(countrateCase):
+class countrateCase7(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.424602593467696,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase7(calcphotCase):
+class calcphotCase7(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.424602593467696,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase35(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase35(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(bb(10000),band(johnson,k),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase264(calcspecCase):
+class calcspecCase264(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="bb(10000)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase8(countrateCase):
+class countrateCase8(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+spec(Zodi.fits)*0.5+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase8(calcphotCase):
+class calcphotCase8(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+spec(Zodi.fits)*0.5+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase36(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase36(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141"
         self.spectrum="rn(bb(10000),band(cousins,r),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase265(calcspecCase):
+class calcspecCase265(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="pl(4000.0,-2.0,flam)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase9(countrateCase):
+class countrateCase9(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="spec(earthshine.fits)*2.0+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase9(calcphotCase):
+class calcphotCase9(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="spec(earthshine.fits)*2.0+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase37(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase37(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(pl(4000.0,-2.0,flam),band(bessell,h),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase266(calcspecCase):
+class calcspecCase266(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="pl(4000.0,-2.0,flam)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase10(countrateCase):
+class countrateCase10(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="spec(earthshine.fits)+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase10(calcphotCase):
+class calcphotCase10(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="spec(earthshine.fits)+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase38(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase38(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(pl(4000.0,-2.0,flam),band(Bessell,j),23.0,vegamag)"
         self.setglobal(__file__)
         self.runpy()
-class calcspecCase267(calcspecCase):
+class calcspecCase267(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="pl(4000.0,-2.0,flam)"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase11(countrateCase):
+class countrateCase11(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase11(calcphotCase):
+class calcphotCase11(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase39(SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase39(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102"
         self.spectrum="rn(pl(4000.0,-2.0,flam),band(bessell,k),23.0,vegamag)"
@@ -1979,6 +1978,7 @@ if __name__ == '__main__':
     else:
         testutil.testall(__name__,2)
 # calcspec:267
+# thermback:0
 # calcphot:11
 # countrate:11
 # SpecSourcerateSpec:39

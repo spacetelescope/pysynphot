@@ -3,7 +3,7 @@ import sys,os
 
 def run(cmdfile):
     """ Generate TestCases from cmdfile according to the pattern in patternfile"""
-    pattern="""class %sCase%d(%sCase):
+    pattern="""class %sCase%d(basecase.%sCase):
     def setUp(self):
         self.obsmode="%s"
         self.spectrum="%s"
@@ -13,7 +13,7 @@ def run(cmdfile):
     out=open(cmdfile.replace('.txt','.py'),'w')
     out.write("""from pytools import testutil
 import sys
-from basecase import calcphotCase, calcspecCase, countrateCase,SpecSourcerateSpecCase\n
+import basecase
 """)
 
 

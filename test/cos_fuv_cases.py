@@ -1,6 +1,6 @@
 from pysynphot.etctest_base_class import ETCTestCase
 from pysynphot.newetc import parse_spec
-from pysynphot import ObsBandpass
+from pysynphot import ObsBandpass, locations
 from pysynphot import observationmode #to check on comptable
 import testutil
 import sys, os
@@ -10,6 +10,11 @@ print "%s:"%os.path.basename(__file__)
 print "   Tests are being run with %s"%observationmode.COMPTABLE
 print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
 
+testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
+#Also set the version of Vega for similar reasons
+locations.VegaFile=os.path.join(testdir,
+                                'alpha_lyr_stis_002.fits')
+print "Using Vega spectrum: %s"%locations.VegaFile
 
 class C1(ETCTestCase):
     def setparms(self):

@@ -232,7 +232,7 @@ class thermbackCase(calcphotCase):
 
     def testthermspec(self):
         ref=S.FileSpectrum(self.csname)
-        if N.anytrue(self.sp.wave != ref.wave):
+        if N.any(self.sp.wave != ref.wave):
             raise ValueError('wave arrays not equal')
         self.arraysigtest(self.sp.flux,ref.flux)
         
@@ -290,7 +290,7 @@ class countrateCase(calcphotCase):
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
                        self.csname.replace('.fits','_counts.fits'))
-        if N.anytrue(self.sp.wave != ref.wave):
+        if N.any(self.sp.wave != ref.wave):
             raise ValueError('wave arrays not equal')
         self.arraysigtest(tflux,rflux)
     testcscounts.skip=True
@@ -316,7 +316,7 @@ class countrateCase(calcphotCase):
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
                        self.crname.replace('.fits','_counts.fits'))
-        if N.anytrue(self.sp.wave != ref.wave):
+        if N.any(self.sp.wave != ref.wave):
             raise ValueError('wave arrays not equal')
         
         self.arraysigtest(tflux,rflux)
