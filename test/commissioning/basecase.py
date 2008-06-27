@@ -105,10 +105,11 @@ class calcspecCase(testutil.LogTestCase):
         #Raise an error if the arrays are not the same size
         if test.shape != ref.shape:
             raise ValueError("Array size mismatch")
-        
+        tt=test[2:-2]
+        rr=ref[2:-2]
         #Identify the significant elements
-        tidx=N.where(test>(self.sigthresh*test.max()))[0]
-        ridx=N.where(ref>(self.sigthresh*ref.max()))[0]
+        tidx=N.where(tt>(self.sigthresh*tt.max()))[0]
+        ridx=N.where(rr>(self.sigthresh*rr.max()))[0]
         #Fail if they're not the same set
         self.failUnless(N.alltrue(tidx == ridx),
                         msg="Significant elements are not the same")
@@ -116,9 +117,15 @@ class calcspecCase(testutil.LogTestCase):
         #Now compare only the significant elements.
         #We no longer need to exclude points with zero value, because
         #those points were already excluded as insignificant.
-        self.arraytest(test[ridx],ref[ridx])
+        self.arraytest(tt[ridx],rr[ridx])
 
-        
+
+    def count_outliers(self,Nsigma=3):
+        mean=self.adiscrep.mean()
+        std=self.adiscrep.std()
+        outliers=N.where(abs(self.adiscrep) > mean + Nsigma*std)
+        return len(outliers[0])
+    
     def arraytest(self,test,ref):
         #Exclude the endpoints where the gradient is very steep
         self.adiscrep=self.arraydiff(test,ref)#[2:-2]
@@ -127,6 +134,9 @@ class calcspecCase(testutil.LogTestCase):
             self.tra['Discrepfrac']=float(count)/self.adiscrep.size
             self.tra['Discrepmin']=self.adiscrep.min()
             self.tra['Discrepmax']=self.adiscrep.max()
+            self.tra['Discrepmean']=self.adiscrep.mean()
+            self.tra['Discrepstd']=self.adiscrep.std()
+            self.tra['Outliers']=self.count_outliers(5)
             if (self.tra['Discrepfrac'] > self.superthresh):
                 self.tra['Extreme']=True
             self.failUnless(N.alltrue(abs(self.adiscrep)<self.thresh),
@@ -143,6 +153,7 @@ class calcspecCase(testutil.LogTestCase):
         is smart and does things like tapering."""
         if units is None:
             ytype='throughput'
+            units=' '
         else:
             ytype='flux'
         col1=pyfits.Column(name='wavelength',format='D',array=wave)
@@ -294,17 +305,17 @@ class countrateCase(calcphotCase):
     testcsphotlam.skip=True
     
     def testcscounts(self):
-        obs=S.Observation(self.sptest,self.bp)
-        obs.convert('counts')
         self.run_calcspec(self.obsmode,self.spectrum,
                           'counts',self.csname.replace('.fits','_counts.fits'),
                           binset=True)
         spref=S.FileSpectrum(self.csname.replace('.fits','_counts.fits'))
+        obs=S.Observation(self.sptest,self.bp,binset=spref.wave)
+        obs.convert('counts')
         rflux=spref.flux
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
                        self.csname.replace('.fits','_counts.fits'))
-        if N.any(self.sp.wave != ref.wave):
+        if N.any(obs.binwave != spref.wave):
             raise ValueError('wave arrays not equal')
         self.arraysigtest(tflux,rflux)
     testcscounts.skip=True
@@ -322,16 +333,16 @@ class countrateCase(calcphotCase):
         self.arraysigtest(tflux,rflux)
 
     def testcrcounts(self):
-        obs=S.Observation(self.sptest,self.bp)
-        obs.convert('counts')
         self.run_countrate('counts',self.crname.replace('.fits','_counts.fits'))
         spref=S.FileSpectrum(self.crname.replace('.fits','_counts.fits'))
+        obs=S.Observation(self.sptest,self.bp,binset=spref.wave)
+        obs.convert('counts')
         rflux=spref.flux
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
                        self.crname.replace('.fits','_counts.fits'),
                        units='counts')
-        if N.any(self.sp.wave != ref.wave):
+        if N.any(obs.binwave != spref.wave):
             raise ValueError('wave arrays not equal')
         
         self.arraysigtest(tflux,rflux)
