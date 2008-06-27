@@ -5,7 +5,7 @@ import pyfits
 from pysynphot import newetc as etc
 from pyraf import iraf
 from iraf import stsdas,hst_calib,synphot
-import os,time
+import os,time,re
 from pysynphot.wavetable import wavetable as Wavecat
 from pysynphot.observationmode import ObservationMode
 
@@ -16,6 +16,14 @@ class calcspecCase(testutil.LogTestCase):
         self.spectrum=None
         self.runpy()
         self.skip=True
+
+    def hasSkyLines(self):
+        lnames="el1215a|el1302a|el1356a|el2471a"
+        ans=re.findall(lnames,self.spectrum)
+        if len(ans) > 0:
+            return True
+        else:
+            return False
         
     def setglobal(self,fname=None):
         if fname is None:
@@ -39,7 +47,8 @@ class calcspecCase(testutil.LogTestCase):
                  'Spectrum':self.spectrum,
                  'Thresh':self.thresh,
                   'Superthresh':self.superthresh,
-                  'SigThresh':self.sigthresh}
+                  'SigThresh':self.sigthresh,
+                  'SkyLines':self.hasSkyLines()}
         self.tra={}
 
     def run_calcspec(self,obsmode,spstring,form,output=None,binset=False):
@@ -118,8 +127,7 @@ class calcspecCase(testutil.LogTestCase):
             self.tra['Discrepfrac']=float(count)/self.adiscrep.size
             self.tra['Discrepmin']=self.adiscrep.min()
             self.tra['Discrepmax']=self.adiscrep.max()
-            if (abs(self.tra['Discrepmin'] > self.superthresh) or
-                abs(self.tra['Discrepmax'] > self.superthresh)):
+            if (self.tra['Discrepfrac'] > self.superthresh):
                 self.tra['Extreme']=True
             self.failUnless(N.alltrue(abs(self.adiscrep)<self.thresh),
                             msg="Worst case %f"%abs(self.adiscrep).max())
@@ -129,13 +137,19 @@ class calcspecCase(testutil.LogTestCase):
             self.tra['Discrepmax']=0.0
 
 
-    def savepysyn(self,wave,flux,fname,units='flux'):
+    def savepysyn(self,wave,flux,fname,units=None):
         """ Cannot ever use the .writefits() method, because the array is
         frequently just sampled at the synphot waveset; plus, writefits
         is smart and does things like tapering."""
+        if units is None:
+            ytype='throughput'
+        else:
+            ytype='flux'
         col1=pyfits.Column(name='wavelength',format='D',array=wave)
-        col2=pyfits.Column(name=units,format='D',array=flux)
+        col2=pyfits.Column(name=ytype,format='D',array=flux)
         tbhdu=pyfits.new_table(pyfits.ColDefs([col1,col2]))
+        tbhdu.header.update('tunit1','angstrom')
+        tbhdu.header.update('tunit2',units)
         tbhdu.writeto(fname.replace('.fits','_pysyn.fits'))
                                
     def testspecphotlam(self):
@@ -145,7 +159,7 @@ class calcspecCase(testutil.LogTestCase):
         rflux=spref.flux
         #ok, this works because it uses the call.
         tflux=self.sptest(spref.wave)
-        self.savepysyn(spref.wave,tflux,self.csname)
+        self.savepysyn(spref.wave,tflux,self.csname,units='photlam')
         self.arraysigtest(tflux,rflux)
         
 class calcphotCase(calcspecCase):
@@ -173,7 +187,7 @@ class calcphotCase(calcspecCase):
         rthru=ref.throughput
         rwave=ref.wave
         tthru=self.bp(rwave)
-        self.savepysyn(rwave,tthru,self.cbname,units='throughput')
+        self.savepysyn(rwave,tthru,self.cbname)
         self.arraysigtest(tthru,rthru)
 
         
@@ -221,7 +235,7 @@ class thermbackCase(calcphotCase):
         self.sp=omode.ThermalSpectrum()
         self.ttherm=self.sp.integrate()*omode.pixscale**2*omode.area
         self.sp.convert('counts')
-        self.savepysyn(self.sp.wave,self.sp.flux,self.csname)
+        self.savepysyn(self.sp.wave,self.sp.flux,self.csname,units='counts')
 
     def testspecphotlam(self):
         pass
@@ -275,7 +289,7 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.csname)
         rflux=spref.flux
         tflux=obs.binflux
-        self.savepysyn(obs.binwave,obs.binflux,self.csname)
+        self.savepysyn(obs.binwave,obs.binflux,self.csname,units='photlam')
         self.arraysigtest(tflux,rflux)
     testcsphotlam.skip=True
     
@@ -303,7 +317,7 @@ class countrateCase(calcphotCase):
         rflux=spref.flux
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
-                       self.crname)
+                       self.crname,units='photlam')
 
         self.arraysigtest(tflux,rflux)
 
@@ -315,7 +329,8 @@ class countrateCase(calcphotCase):
         rflux=spref.flux
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
-                       self.crname.replace('.fits','_counts.fits'))
+                       self.crname.replace('.fits','_counts.fits'),
+                       units='counts')
         if N.any(self.sp.wave != ref.wave):
             raise ValueError('wave arrays not equal')
         
