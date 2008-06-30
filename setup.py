@@ -12,20 +12,13 @@ python_exec = 'python' + str(ver[0]) + '.' + str(ver[1])
 #Determine & save the revision number for the ETC
 warning=""
 vfname=os.path.join('data','generic','versioninfo.dat')
-try :
-    # If the version file already exists, it was created when the
-    # source distribution was being assembled.  All we need to
-    # do is read it from the file.
-    f=open(vfname,"r")
-    revset=f.readline()
-    f.close()
-except IOError:
-    # If we can't read the file, then we need to generate the file
+try:
+
+    # Always try to determine the version using svnversion
     warning=""
     stat,revset=commands.getstatusoutput('svnversion .')
     if stat != 0:
-        warning="cannot extract svnversion information\n"
-        revset='unavailable'
+        raise ValueError("cannot extract svnversion information")
     if revset.find('exported') >= 0 :
         warning="this copy was exported - no version information\n"
         revset='unavailable'
@@ -47,7 +40,19 @@ except IOError:
     f.write(info)
     f.close()
 
-# "python setup.py assemble" causes it to only to assemble
+except ValueError:
+    print "couldn't run svnversion"
+    #If we can't generate it, then see if the version file already
+    #exists from when the source distribution was being assembled. 
+    try :
+        f=open(vfname,"r")
+        revset=f.readline()
+        f.close()
+    except IOError:
+        warning="cannot extract svnversion information"
+        revset='unavailable'
+
+# "python setup.py prep" causes it to only to assemble
 # the source distribution; we have collected the version
 # information into the files by now, so we're done.
 if len(sys.argv) == 2 and sys.argv[1] == 'prep' :
