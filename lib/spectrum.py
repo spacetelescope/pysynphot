@@ -117,8 +117,10 @@ class Integrator(object):
         indices = N.arange(npoints)[:-1]
         deltas = x[indices+1] - x[indices]
         integrand = 0.5*(y[indices+1] + y[indices])*deltas
-
-        return integrand.sum()
+        sum = integrand.sum()
+        if x[-1]<x[0]:
+            sum*= -1.0
+        return sum
 
     def _columnsFromASCII(self, filename):
         """ Following synphot/TABLES, ASCII files may contain blank lines,
