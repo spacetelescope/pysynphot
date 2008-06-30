@@ -98,3 +98,17 @@ class AddMag(testutil.FPTestCase):
         self.assertRaises(TypeError,
                           self.faint.addmag,
                           self.bright)
+
+class Sample(testutil.FPTestCase):
+    "Ticket #99"
+
+    def setUp(self):
+        self.sp=S.UnitSpectrum(10,fluxunits='flam')
+        self.wave=S.Waveset(1000,11000,1000)
+        self.ref=S.ArraySpectrum(wave=self.wave,
+                                 flux=self.sp.flux[0]*N.ones(self.wave.shape),
+                                 fluxunits=self.sp.fluxunits)
+
+    def test1(self):
+        test=self.sp.sample(self.wave)
+        self.assertEqualNumpy(test,self.ref.flux)
