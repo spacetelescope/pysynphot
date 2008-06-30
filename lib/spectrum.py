@@ -298,6 +298,16 @@ class SourceSpectrum(Integrator):
         return self.trapezoidIntegration(wave,flux)
     
 
+    def sample(self,wave):
+        """Return a flux array, in self.fluxunits, on the provided
+        wavetable"""
+        #First use the __call__ to get it in photlam
+        flux=self(wave)
+        #Then convert to the desired units
+
+        ans=units.Photlam().Convert(wave,flux,self.fluxunits.name)
+        return ans
+    
     def convert(self, targetunits):
         '''Convert to other units. This method actually just changes the
         wavelength and flux units objects, it does not recompute the
