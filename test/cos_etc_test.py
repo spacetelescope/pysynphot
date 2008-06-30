@@ -734,11 +734,15 @@ class EnforceWave(testutil.FPTestCase):
         self.assertRaises(ValueError,
                           self.constructor,
                           *self.args)
-
-    def testdescending(self):
-        self.args=self.argdict['desc']
-        sp=self.constructor(*self.args)
-        self.assertEqualNumpy(sp.wave,self.descending[::-1])
+        
+##................................................................
+## Commenting out this test: descending "wavelengths" need to be
+## legal after all -- frequency units legitimately descend.
+##................................................................
+##     def testdescending(self):
+##         self.args=self.argdict['desc']
+##         sp=self.constructor(*self.args)
+##         self.assertEqualNumpy(sp.wave,self.descending[::-1])
 
                     
 class EnforceWaveFile(EnforceWave):

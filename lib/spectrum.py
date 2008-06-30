@@ -158,8 +158,8 @@ class Integrator(object):
         sorted=N.sort(wave)
         if not N.alltrue(sorted == wave):
             if N.alltrue(sorted[::-1] == wave):
-                #monotonic descending is allowed, but we need to flip it.
-                self._reverse_wave()
+                #monotonic descending is allowed
+                pass
             else:
                 raise ValueError('Wavelength array is not monotonic: invalid')
 
