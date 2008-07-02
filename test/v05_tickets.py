@@ -176,3 +176,23 @@ class PerPhoton(testutil.FPTestCase):
         sp=S.UnitSpectrum(10,fluxunits='photnu')
         test=sp.fluxunits.perPhoton(sp.wave)
         self.assertEqual(test, 1.0)
+
+#--------------------------------------------------------------------
+def testPhotonRate():
+
+    def checkrate(em,total,funits):
+        em.convert(funits)
+        test=em.photonrate()
+        assert abs(test-total) < 0.0001
+
+    ema=S.GaussianSource(100,1000,2,fluxunits='photlam')
+    emh=S.GaussianSource(100,1000,2,fluxunits='photnu',
+                         waveunits='hz')
+    emc=S.GaussianSource(100,1000,2,fluxunits='counts')
+    uset={ema:['photlam','flam','stmag','vegamag'],
+          emh:['photnu', 'fnu', 'abmag','jy','mjy'],
+          emc:['counts','obmag']}
+    for em in (ema,emh,emc):
+        for u in uset[em]:
+            checkrate.description="%s.testPhotonRate.test%sfunc"%(__name__,u)
+            yield checkrate, em, 100, u

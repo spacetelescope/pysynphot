@@ -289,6 +289,30 @@ class SourceSpectrum(Integrator):
         hdu = pyfits.new_table(cols)
         hdulist.append(hdu)
         hdu.writeto(filename)
+
+    def photonrate(self,funits=None):
+        """ Return photons per sec per cm**2 """
+        if funits is None:
+            funits=self.fluxunits
+
+        oldw,oldf=self.waveunits,self.fluxunits
+        if funits.isMag:
+            self.convert(funits.linunit)
+        else:
+            self.convert(funits)
+            
+        self.convert(self.fluxunits.nativewave)
+        
+        wave,flux=self.getArrays()
+        integrand=flux/self.fluxunits.perPhoton(wave)
+        ans = self.trapezoidIntegration(wave, integrand)
+        
+        self.convert(oldw)
+        self.convert(oldf)
+        
+        return ans
+                                                                                            
+
                                                  
     def integrate(self,fluxunits='photlam'):
         u=self.fluxunits

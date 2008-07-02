@@ -26,14 +26,17 @@ def Units(uname):
         return uname
     else:
         try:
-            return factory(uname)
-        except KeyError:
-            if uname == str(None):
-                return None
-            elif isinstance(uname,BaseUnit):
-                return uname
-            else:
-                raise ValueError("Unknown units %s"%uname)
+            if issubclass(uname,BaseUnit):
+                return uname()
+        except TypeError:
+
+            try:
+                return factory(uname)
+            except KeyError:
+                if uname == str(None):
+                    return None
+                else:
+                    raise ValueError("Unknown units %s"%uname)
 
 #......................................................................
 def ismatch(a,b):
