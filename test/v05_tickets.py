@@ -112,3 +112,67 @@ class Sample(testutil.FPTestCase):
     def test1(self):
         test=self.sp.sample(self.wave)
         self.assertEqualNumpy(test,self.ref.flux)
+
+
+class PerPhoton(testutil.FPTestCase):
+    "Renorm effort: ticket #70"
+
+        
+    def testflam1(self):
+        sp=S.UnitSpectrum(10,fluxunits='flam')
+        test=sp.flux/sp.fluxunits.perPhoton(sp.wave)
+        sp.convert('photlam')
+        ref=sp.flux
+        self.assertApproxNumpy(test,ref)
+
+    def testflam2(self):
+        sp=S.BlackBody(10000)
+        sp.convert('photlam')
+        flam=Units('flam')
+        test=sp.flux*flam.perPhoton(sp.wave)
+        sp.convert('flam')
+        ref=sp.flux
+        self.assertApproxNumpy(test,ref)
+
+    def testfnu1(self):
+        sp=S.UnitSpectrum(10,fluxunits='fnu',waveunits='Hz')
+        test=sp.flux/sp.fluxunits.perPhoton(sp.wave)
+        sp.convert('photnu')
+        ref=sp.flux
+        self.assertApproxNumpy(test,ref)
+
+
+    def testjy(self):
+        sp=S.UnitSpectrum(10,fluxunits='Jy',waveunits='Hz')
+        test=sp.flux/sp.fluxunits.perPhoton(sp.wave,sp.waveunits)
+        sp.convert('photnu')
+        ref=sp.flux
+        self.assertApproxNumpy(test,ref)
+
+
+    def testmismatch(self):
+        sp=S.UnitSpectrum(10,fluxunits='fnu',waveunits='angstrom')
+        self.assertRaises(NotImplementedError,
+                          sp.fluxunits.perPhoton,
+                          sp.wave,
+                          sp.waveunits)
+    def testabmag(self):
+        sp=S.UnitSpectrum(10,fluxunits='abmag')
+        self.assertRaises(NotImplementedError,
+                          sp.fluxunits.perPhoton,
+                          sp.wave)
+
+    def testcounts(self):
+        sp=S.UnitSpectrum(10,fluxunits='counts')
+        test=sp.fluxunits.perPhoton(sp.wave)
+        self.assertEqual(test, 1.0)
+    def testphotlam(self):
+        sp=S.UnitSpectrum(10,fluxunits='photlam')
+        test=sp.fluxunits.perPhoton(sp.wave)
+        self.assertEqual(test, 1.0)
+
+    
+    def testphotnu(self):
+        sp=S.UnitSpectrum(10,fluxunits='photnu')
+        test=sp.fluxunits.perPhoton(sp.wave)
+        self.assertEqual(test, 1.0)
