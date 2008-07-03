@@ -5,7 +5,8 @@ syn_pysyn tests.
 
 IRAF errors [real calcspec/countrate difference]
 -------------------------------------------------
-  ---> renormalization+wavetab has non-overlap for calcspec but not for countrate
+  ---> renormalization+wavetab has non-overlap for calcspec 
+but not for countrate
 
 IRAF errors [mystery: errors occur in large runs, but not when  
              the case is run individually]
@@ -39,9 +40,34 @@ Obsmode not supported by graph table: [Known issue: pysyn stricter than syn]
 ValueError: Warning: unused keywords set(['f25mama'])
   Note: this identified an error in the ETC specification of the obsmode.
 
-Test sw error [no solution w/o writing extra code]:
+Test sw error [workaround found]:
 --------------------------------------
 ValueError: too many values to unpack
 ---> countrate allows 4 params to specify a wavetab; genwave does not,
-so cannot use genwave to generate the matching wavetab for calcspec to use.
+so cannot use genwave to generate the matching wavetab for calcspec to
+use.
+   Workaround: in this case, save the wavetable that pysynphot used
+   and feed it to the synphot task.
 
+===> Wavelength table is not sorted [No workaround identified]:
+    ------------------------------------------------------------------
+     When this workaround is used, sometimes there is an extremely
+     small difference between two wavelength elements (say,
+     499.9999992343 and 500.0) which are distinguishable in the
+     pysynphot double precision table, but which wash out into a
+     duplicate wavelength entry (500,500) when it is written out in
+     single precision and synphot reads it in.
+
+     This does identify a pysynphot problem: those tables should be
+     written out in double precision. But, the problem would still
+     occur when synphot read it in. 
+
+     This problem is observed when an extinction law is used. The
+     computation of the wavelength table for the extinction produces
+     the 499.99999x wavelength entry.
+
+Syn/Pysyn produce arrays of different dimensions [no workaround found]
+---------------------------------------------------------------------
+ValueError('Array size mismatch')
+--->This is tested for before we try to do the significance test.
+If the arrays are not the same shape, this exception is raised.
