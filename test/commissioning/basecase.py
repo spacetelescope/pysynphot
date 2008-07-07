@@ -314,7 +314,8 @@ class countrateCase(calcphotCase):
         rflux=spref.flux
         tflux=obs.binflux
         self.savepysyn(obs.binwave,obs.binflux,
-                       self.csname.replace('.fits','_counts.fits'))
+                       self.csname.replace('.fits','_counts.fits'),
+                       units='counts')
         if N.any(obs.binwave != spref.wave):
             raise ValueError('wave arrays not equal')
         self.arraysigtest(tflux,rflux)

@@ -1233,8 +1233,25 @@ class Band(SpectralElement):
         if len(args) == 1:
             self.name = 'band(johnson,' + args[0] + ')'
         else:
-            self.name = 'band(' + args[0] + ',' + args[1] + ')'
+            try:
+                largs=','.join(args) 
+            except TypeError:
+                ###Warning, this is a HACK and is NOT the right thing
+                ###to do for some cases: some FOS obsmodes actually
+                ###do look like floating point representations of integers.
+                ###But this will get us through till we can make the parser
+                ###smarter.
+                tmp=[]
+                for k in args:
+                    try:
+                        tmp.append(str(int(k)))
+                    except (TypeError,ValueError):
+                        tmp.append(k)
+                largs=','.join(tmp)
+                
+            self.name = 'band(' + largs + ')'
 
+                
         # first, check if the band is a valid obsmode taken from the graph table
         obsmode = observationmode.ObservationMode(self.name)
         band = obsmode.Throughput()
