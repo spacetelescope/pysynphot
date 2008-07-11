@@ -434,7 +434,7 @@ class ABMag(LogFluxUnits):
     def __init__(self):
         LogFluxUnits.__init__(self)
         self.name = 'abmag'
-        self.linunit = Fnu
+        self.linunit = Fnu()
         self.zeropoint = ABZERO
     
     def ToPhotlam(self, wave, flux):
@@ -452,7 +452,7 @@ class STMag(LogFluxUnits):
     def __init__(self):
         LogFluxUnits.__init__(self)
         self.name = 'stmag'
-        self.linunit = Flam
+        self.linunit = Flam()
         self.zeropoint = STZERO
     
     def ToPhotlam(self, wave, flux):
@@ -470,7 +470,7 @@ class OBMag(LogFluxUnits):
     def __init__(self):
         LogFluxUnits.__init__(self)
         self.name = 'obmag'
-        self.linunit = Counts
+        self.linunit = Counts()
         self.zeropoint = 0.0
     
     def ToPhotlam(self, wave, flux):

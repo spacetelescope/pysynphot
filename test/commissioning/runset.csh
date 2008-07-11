@@ -41,10 +41,13 @@ endif
 
 #set tlist = "fewcases science_cases"
 #.........................................
-echo $PYTHONPATH
+irafdev
 set codeplace = /data/gaudete1/dg1/laidler/ssb/checkout/pysynphot/test/commissioning
 setenv PATH {$PATH}:{$codeplace}
 setenv PYTHONPATH {$PYTHONPATH}:{$codeplace}
+setenv PYSYN_CDBS /grp/hst/cdbs/
+echo $PYTHONPATH
+
 foreach tname ($tlist)
   echo $tname
 ###  nosetests $tname >& `echo "$tname" | sed 's/.py/.log/'`

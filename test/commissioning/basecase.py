@@ -51,34 +51,34 @@ class calcspecCase(testutil.LogTestCase):
                   'SkyLines':self.hasSkyLines()}
         self.tra={}
 
-    def run_calcspec(self,obsmode,spstring,form,output=None,binset=False):
-        if binset:
-            try:
-                wavetab=Wavecat[self.obsmode]
-            except KeyError:
-                self.sptest.writefits(self.wavename)
-                wavetab=self.wavename
-            if wavetab.startswith('('):
-                #generate a wavetab that IRAF can read.
-                try:
-                    wmin,wmax,dw=wavetab[1:-1].split(',')
-                    iraf.genwave(self.wavename,wmin,wmax,dw)
-                    wavetab=self.wavename
-                except ValueError:
-                    self.sptest.writefits(self.wavename)
-                    wavetab=self.wavename
+##     def run_calcspec(self,obsmode,spstring,form,output=None,binset=False):
+##         if binset:
+##             try:
+##                 wavetab=Wavecat[self.obsmode]
+##             except KeyError:
+##                 self.sptest.writefits(self.wavename)
+##                 wavetab=self.wavename
+##             if wavetab.startswith('('):
+##                 #generate a wavetab that IRAF can read.
+##                 try:
+##                     wmin,wmax,dw=wavetab[1:-1].split(',')
+##                     iraf.genwave(self.wavename,wmin,wmax,dw)
+##                     wavetab=self.wavename
+##                 except ValueError:
+##                     self.sptest.writefits(self.wavename)
+##                     wavetab=self.wavename
                    
-        else:
-            wavetab=""
+##         else:
+##             wavetab=""
 
-        if obsmode in (None,"None"):
-            spec=spstring
-        else:
-            spec="band(%s)*(%s)"%(obsmode,spstring)
+##         if obsmode in (None,"None"):
+##             spec=spstring
+##         else:
+##             spec="band(%s)*(%s)"%(obsmode,spstring)
 
-        iraf.calcspec(spectrum=spec,
-                      output=output,
-                      form=form,wavetab=wavetab)
+##         iraf.calcspec(spectrum=spec,
+##                       output=output,
+##                       form=form,wavetab=wavetab)
 
     def run_countrate(self,form,output=None):
         if output is None:
@@ -163,16 +163,6 @@ class calcspecCase(testutil.LogTestCase):
         tbhdu.header.update('tunit2',units)
         tbhdu.writeto(fname.replace('.fits','_pysyn.fits'))
                                
-    def testspecphotlam(self):
-        self.run_calcspec(None,self.spectrum,'photlam',self.csname)
-        spref=S.FileSpectrum(self.csname)
-        self.sptest.convert('photlam')
-        rflux=spref.flux
-        #ok, this works because it uses the call.
-        tflux=self.sptest(spref.wave)
-        self.savepysyn(spref.wave,tflux,self.csname,units='photlam')
-        self.arraysigtest(tflux,rflux)
-        
 class calcphotCase(calcspecCase):
         
     def runpy(self):
@@ -249,10 +239,10 @@ class thermbackCase(calcphotCase):
         self.savepysyn(self.sp.wave,self.sp.flux,self.csname,units='counts')
 
     def testspecphotlam(self):
-        pass
+        __test__ = False
 
     def testefflam(self):
-        pass
+        __test__ = False
 
 
     def testthermspec(self):
@@ -291,36 +281,6 @@ class countrateCase(calcphotCase):
                 os.remove(fname.replace('.fits','_pysyn.fits'))
             except OSError:
                 pass
-
-    def testcsphotlam(self):
-        obs=S.Observation(self.sptest,self.bp)
-        obs.convert('photlam')
-        self.run_calcspec(self.obsmode,self.spectrum,
-                          'photlam',self.csname,binset=True)
-        spref=S.FileSpectrum(self.csname)
-        rflux=spref.flux
-        tflux=obs.binflux
-        self.savepysyn(obs.binwave,obs.binflux,self.csname,units='photlam')
-        self.arraysigtest(tflux,rflux)
-    testcsphotlam.skip=True
-    
-    def testcscounts(self):
-        self.run_calcspec(self.obsmode,self.spectrum,
-                          'counts',self.csname.replace('.fits','_counts.fits'),
-                          binset=True)
-        spref=S.FileSpectrum(self.csname.replace('.fits','_counts.fits'))
-        obs=S.Observation(self.sptest,self.bp,binset=spref.wave)
-        obs.convert('counts')
-        rflux=spref.flux
-        tflux=obs.binflux
-        self.savepysyn(obs.binwave,obs.binflux,
-                       self.csname.replace('.fits','_counts.fits'),
-                       units='counts')
-        if N.any(obs.binwave != spref.wave):
-            raise ValueError('wave arrays not equal')
-        self.arraysigtest(tflux,rflux)
-    testcscounts.skip=True
-    
     def testcrphotlam(self):
         obs=S.Observation(self.sptest,self.bp)
         obs.convert('photlam')
