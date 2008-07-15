@@ -388,7 +388,7 @@ class SourceSpectrum(Integrator):
 
         return self * factor
 
-    def renorm(self, band, value, unitstring):
+    def renorm(self, value, unitstring, band):
         """Renormalize the spectrum to the specified value (in the specified
         flux units) in the specified band.
         This method should ultimately replace both the renormalize function
@@ -849,7 +849,7 @@ class SpectralElement(Integrator):
     def convert(self, targetunits):
         '''Spectral elements are not convertible.
         '''
-        return self
+        raise NotImplementedError("Conversion for spectral elements is not yet supported")
 
     def __call__(self, wavelengths):
         '''This is where the throughput array is calculated for a given

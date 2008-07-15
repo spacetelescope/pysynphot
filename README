@@ -18,6 +18,9 @@ datafiles.) You can get them from
 
 http://www.stsci.edu/resources/software_hardware/stsdas/synphot
 
+You must define the environment variable PYSYN_CDBS to point
+to the top level directory where you have installed these files.
+
 If you have questions about this module, send mail to
 help@stsci.edu and it will get to the appropriate
 person.
@@ -26,7 +29,7 @@ person.
 
 The current revision is $Rev$.
 
-Version 0.2 uses numpy. It has the following dependencies:
+It has the following dependencies:
   - numpy v1.0 or higher
   - PyFITS v1.1 or higher
   - matplotlib v0.9 or higher
