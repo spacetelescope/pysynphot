@@ -4,7 +4,7 @@ import testutil
 import pysynphot as S
 import numpy as N
 from pysynphot.units import Units
-from pysynphot import extinction, spectrum, units
+from pysynphot import extinction, spectrum, units, newetc
 
 class ticket121(testutil.FPTestCase):
     def setUp(self):
@@ -21,7 +21,12 @@ class ticket121(testutil.FPTestCase):
         self.hz=self.sp.trapezoidIntegration(wave,flux)
         self.failUnlessAlmostEqual(self.ang/self.hz,1)
 
-
+class ticket125(testutil.FPTestCase):
+    def setUp(self):
+        self.spstring="rn(icat(k93models,44500,0.0,5.0),band(nicmos,2,f222m),18,vegamag)"
+    def testparse(self):
+        self.spstring=newetc.parse_spec(self.spstring)
+        
 class AddInverseMicron(testutil.FPTestCase):
     def setUp(self):
         self.x=Units('1/um')
@@ -114,85 +119,29 @@ class Sample(testutil.FPTestCase):
         self.assertEqualNumpy(test,self.ref.flux)
 
 
-class PerPhoton(testutil.FPTestCase):
-    "Renorm effort: ticket #70"
-
-        
-    def testflam1(self):
-        sp=S.UnitSpectrum(10,fluxunits='flam')
-        test=sp.flux/sp.fluxunits.perPhoton(sp.wave)
-        sp.convert('photlam')
-        ref=sp.flux
-        self.assertApproxNumpy(test,ref)
-
-    def testflam2(self):
-        sp=S.BlackBody(10000)
-        sp.convert('photlam')
-        flam=Units('flam')
-        test=sp.flux*flam.perPhoton(sp.wave)
-        sp.convert('flam')
-        ref=sp.flux
-        self.assertApproxNumpy(test,ref)
-
-    def testfnu1(self):
-        sp=S.UnitSpectrum(10,fluxunits='fnu',waveunits='Hz')
-        test=sp.flux/sp.fluxunits.perPhoton(sp.wave)
-        sp.convert('photnu')
-        ref=sp.flux
-        self.assertApproxNumpy(test,ref)
-
-
-    def testjy(self):
-        sp=S.UnitSpectrum(10,fluxunits='Jy',waveunits='Hz')
-        test=sp.flux/sp.fluxunits.perPhoton(sp.wave,sp.waveunits)
-        sp.convert('photnu')
-        ref=sp.flux
-        self.assertApproxNumpy(test,ref)
-
-
-    def testmismatch(self):
-        sp=S.UnitSpectrum(10,fluxunits='fnu',waveunits='angstrom')
-        self.assertRaises(NotImplementedError,
-                          sp.fluxunits.perPhoton,
-                          sp.wave,
-                          sp.waveunits)
-    def testabmag(self):
-        sp=S.UnitSpectrum(10,fluxunits='abmag')
-        self.assertRaises(NotImplementedError,
-                          sp.fluxunits.perPhoton,
-                          sp.wave)
-
-    def testcounts(self):
-        sp=S.UnitSpectrum(10,fluxunits='counts')
-        test=sp.fluxunits.perPhoton(sp.wave)
-        self.assertEqual(test, 1.0)
-    def testphotlam(self):
-        sp=S.UnitSpectrum(10,fluxunits='photlam')
-        test=sp.fluxunits.perPhoton(sp.wave)
-        self.assertEqual(test, 1.0)
-
-    
-    def testphotnu(self):
-        sp=S.UnitSpectrum(10,fluxunits='photnu')
-        test=sp.fluxunits.perPhoton(sp.wave)
-        self.assertEqual(test, 1.0)
-
 #--------------------------------------------------------------------
-def testPhotonRate():
+## I removed the spectrum.photonrate() method, but this test identified
+## a problem with the GaussianSource when defined in frequency-based
+## units. The test needs to be reworked & the problem solved.
+##.....................................................................
+## def testPhotonRate():
+##     """Passes for Angstrom & count linear units; fails for Hertz-linear due
+##     to a problem with the Gaussian source. Does not test Vegamag which are
+##     special."""
+##     ema=S.GaussianSource(100,1000,2,fluxunits='photlam')
+##     emh=S.GaussianSource(100,1000,2,fluxunits='photnu',
+##                          waveunits='hz')
+##     emc=S.GaussianSource(100,1000,2,fluxunits='counts')
+##     uset={ema:['photlam','flam','stmag'],
+##           emh:['photnu', 'fnu', 'abmag','jy','mjy'],
+##           emc:['counts','obmag']}
+##     for em in (ema,emh,emc):
+##         for u in uset[em]:
 
-    def checkrate(em,total,funits):
-        em.convert(funits)
-        test=em.photonrate()
-        assert abs(test-total) < 0.0001
+##             def checkrate(em,total,funits):
+##                 em.convert(funits)
+##                 test=em.photonrate()
+##                 assert abs(test-total) < 0.0001, "Expected %f, got %f"%(total,test)
+##             checkrate.description="%s.testPhotonRate.test%sfunc"%(__name__,u)
 
-    ema=S.GaussianSource(100,1000,2,fluxunits='photlam')
-    emh=S.GaussianSource(100,1000,2,fluxunits='photnu',
-                         waveunits='hz')
-    emc=S.GaussianSource(100,1000,2,fluxunits='counts')
-    uset={ema:['photlam','flam','stmag','vegamag'],
-          emh:['photnu', 'fnu', 'abmag','jy','mjy'],
-          emc:['counts','obmag']}
-    for em in (ema,emh,emc):
-        for u in uset[em]:
-            checkrate.description="%s.testPhotonRate.test%sfunc"%(__name__,u)
-            yield checkrate, em, 100, u
+##             yield checkrate, em, 100, u

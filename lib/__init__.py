@@ -130,7 +130,8 @@ from newobservation import Observation
 #Other constructs
 from observationmode import ObservationMode as Obsmode
 from numpy import arange as Waveset
-
+#Get Vega
+from spectrum import Vega
 
 def _test():
     import doctest

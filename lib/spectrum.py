@@ -16,38 +16,13 @@ import planck
 
 
 
+
 # Renormalization constants from synphot:
 PI = 3.14159265               # Mysterious math constant
 RSUN = 6.9599E10              # Radius of sun
 PC = 3.085678E18              # Parsec
 RADIAN = RSUN / PC /1000.
 RENORM = PI * RADIAN * RADIAN # Normalize to 1 solar radius @ 1 kpc
-
-
-def renormalize(spectrum, band, flux, unit):
-    ''' renormalization function.
-    This function is marked for deletion once the SourceSpectrum.renorm
-    method is well tested.'''
-
-    
-    if isinstance(band,Band):
-        if unit.lower() == 'vegamag':
-            return spectrum.setMagnitude(band,flux)
-        else:
-            raise ValueError("%s not supported yet."%unit)
-
-            sp = spectrum * band
-            cntrate = sp.integrate(fluxunits=unit)
-            resp = band.unitResponse()
-            factor = flux / (cntrate * resp)
-            return spectrum * factor
-    else:
-        sp = spectrum * band
-        cntrate = sp.integrate(fluxunits=unit)
-        resp = band.unitResponse()
-        factor = flux / (cntrate * resp)
-        return spectrum * factor
-
 
 def _computeDefaultWaveset():
     minwave = 500.
@@ -290,28 +265,7 @@ class SourceSpectrum(Integrator):
         hdulist.append(hdu)
         hdu.writeto(filename)
 
-    def photonrate(self,funits=None):
-        """ Return photons per sec per cm**2 """
-        if funits is None:
-            funits=self.fluxunits
-
-        oldw,oldf=self.waveunits,self.fluxunits
-        if funits.isMag:
-            self.convert(funits.linunit)
-        else:
-            self.convert(funits)
-            
-        self.convert(self.fluxunits.nativewave)
-        
-        wave,flux=self.getArrays()
-        integrand=flux/self.fluxunits.perPhoton(wave)
-        ans = self.trapezoidIntegration(wave, integrand)
-        
-        self.convert(oldw)
-        self.convert(oldf)
-        
-        return ans
-                                                                                            
+           
 
                                                  
     def integrate(self,fluxunits='photlam'):
@@ -388,47 +342,14 @@ class SourceSpectrum(Integrator):
 
         return self * factor
 
-    def renorm(self, value, unitstring, band):
+    def renorm(self, RNval, RNUnits, band):
         """Renormalize the spectrum to the specified value (in the specified
         flux units) in the specified band.
-        This method should ultimately replace both the renormalize function
-        in this module, and the setMagnitude() method in this class."""
+        Calls a function in another module to alleviate circular import
+        issues."""
 
-        return renormalize(self, band, value, unitstring)
-    
-        #Integrate in the desired units over the desired passband
-        sp=self*band
-        rate=sp.integrate(fluxunits=unitstring)
-        if rate <= 0.0:
-            raise ValueError('Integrated flux is <= 0')
-        if N.isnan(rate):
-            raise ValueError('Integrated flux is NaN')
-        if N.isinf(rate):
-            raise ValueError('Integrated flux is infinite')
-        
-        #Get the unit response of the passband
-        resp=band.unitResponse()
-        if resp <= 0.0:
-            raise ValueError('Unit response of bandpass is <= 0')
-
-        #Compute the renorm factor;
-        #       how to compute it depends on the units we're in
-        targunits=units.Units(unitstring)
-        if targunits.name == 'counts':
-            effstim=rate
-            factor=value/effstim
-        elif targunits.isMag:
-            effstim = resp - 2.5*math.log10(rate)
-            magfactor=value - effstim
-            factor = 10**(-magfactor*0.4)
-        else:
-            factor = value / (rate*resp)
-##             effstim = rate * resp
-##             factor = value/effstim
-
-        #Now apply the factor to the spectrum in its native units.
-        #Eventually maybe do self*=factor, but for now
-        return self*factor 
+        from renorm import StdRenorm
+        return StdRenorm(self,band,RNval,RNUnits)
 
 class CompositeSourceSpectrum(SourceSpectrum):
     '''Composite Source Spectrum object, handles addition, multiplication
@@ -849,7 +770,9 @@ class SpectralElement(Integrator):
     def convert(self, targetunits):
         '''Spectral elements are not convertible.
         '''
-        raise NotImplementedError("Conversion for spectral elements is not yet supported")
+        raise NotImplementedError("Unit conversion for spectral elements is not yet supported")
+    
+
 
     def __call__(self, wavelengths):
         '''This is where the throughput array is calculated for a given
@@ -953,32 +876,10 @@ class SpectralElement(Integrator):
         return resampled
 
     def unitResponse(self):
-        """Original implementation; correct only for the assumption
-        that the input 'unit spectrum' is in units of photlam.
-        Marked for deletion when calcUnitResponse is well tested."""
+        """Is this correct if waveunits != Angstrom?"""
         wave = self.GetWaveSet()
         thru = self(wave)
         return 1.0 / self.trapezoidIntegration(wave,thru)
-    
-
-    def calcUnitResponse(self,fluxunits='photlam'):
-        """This is a method of the spectral element for the convenience
-        of the user, but the correct calculation of the unit response
-        depends entirely on the units, so delegate to the fluxunit's method."""
-        return units.Units(fluxunits).unitResponse(self)
-    
-    def calcTotalFlux(self,inSpectrum):
-        """Moved method from obsolete Magnitude class"""
-        filteredflux = inSpectrum * self
-        return filteredflux.integrate()
-
-    def calcVegaFlux(self):
-        """Moved method from obsolete Magnitude class.
-        Definitely need to fix up Vega handling here."""
-        vegaspec = TabularSourceSpectrum(locations.VegaFile)
-        filteredvega = vegaspec * self
-        return filteredvega.integrate()
-
     
         
 
@@ -1266,7 +1167,4 @@ class Band(SpectralElement):
         self._wavetable = band._wavetable
         self._throughputtable = band._throughputtable
 
-
-
-
-
+Vega = FileSourceSpectrum(locations.VegaFile)

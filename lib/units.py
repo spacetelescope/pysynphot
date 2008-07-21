@@ -102,9 +102,15 @@ class FluxUnits(BaseUnit):
     def __init__(self):
         self.isFlux = True
         self.isMag = False
+        self.isDensity = True #False for counts and obmag
         self.name=None
         self.Dispatch = {'photlam':self.ToPhotlam}
         self.nativewave = Angstrom
+        #self.StdSpectrum = None
+        #...StdSpectrum is a placeholder. Actual values for the attributes
+        # be defined in the renorm.py module; they can't be done here
+        # because of a circular import problem. If you add a new fluxunit
+        # in this file, you must define its StdSpectrum in renorm.py.
         
     def Convert(self,wave,flux,target_units):
         """FluxUnits need both wavelength and flux tables to do a unit conversion."""
@@ -116,8 +122,6 @@ class FluxUnits(BaseUnit):
     def ToPhotlam(self,wave,flux):
         raise NotImplementedError("Required method ToPhotlam not yet implemented")
 
-    def perPhoton(self,wave,waveunits=None):
-        raise NotImplementedError("Required method ToPhotlam not yet implemented")
     
 class LogFluxUnits(FluxUnits):
     """Base class for magnitudes, which often require special handling"""
@@ -194,8 +198,6 @@ class Photlam(FluxUnits):
 
         self.nativewave = Angstrom
 
-    def perPhoton(self,wave,waveunits=Angstrom):
-        return 1.0
     
     def unitResponse(self,band):
         """Put a flat spectrum of 1 photlam through this band, & integrate"""
@@ -319,11 +321,6 @@ class Flam(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return flux * wave / HC
 
-    def perPhoton(self,wave,waveunits=Angstrom):
-        if not ismatch(waveunits,self.nativewave):
-            raise NotImplementedError("This function supports only %s waveunits at this time"%self.nativewave)
-        else:
-            return HC/wave
     
     def unitResponse(self,band):
         #sumfilt(wave,1,band)
@@ -344,8 +341,6 @@ class Photnu(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return C * flux / (wave * wave)
 
-    def perPhoton(self, wave, waveunits=None):
-        return 1.0
     
     def unitResponse(self,band):
         #sumfilt(wave,-2,band)
@@ -366,13 +361,6 @@ class Fnu(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return flux /wave / H
 
-    def perPhoton(self,wave,waveunits=Hz):
-        if not ismatch(waveunits,self.nativewave):
-            raise NotImplementedError("This function supports only %s waveunits at this time"%self.nativewave)
-        else:
-            return H*wave       #Correct if wave is in Hz
-        #        return HC/wave      #Correct only if wave is in Angstrom
-
 
     def unitResponse(self,band):
         #sumfilt(wave,-1,band)
@@ -392,11 +380,6 @@ class Jy(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return flux / wave * (1.0e-23 / H)
 
-    def perPhoton(self,wave,waveunits=Hz):
-        if not ismatch(waveunits,self.nativewave):
-            raise NotImplementedError("This function supports only %s waveunits at this time"%self.nativewave)
-        else:
-            return H*wave*1.0e23
 
     def unitResponse(self,band):
         #sumfilt(wave,-1,band)
@@ -416,11 +399,6 @@ class mJy(FluxUnits):
     def ToPhotlam(self, wave, flux):
         return flux / wave * (1.0e-26 / H)
 
-    def perPhoton(self,wave,waveunits=Hz):
-        if not ismatch(waveunits,self.nativewave):
-            raise NotImplementedError("This function supports only %s waveunits at this time"%self.nativewave)
-        else:
-            return H*wave*1.0e26
     
     def unitResponse(self,band):
         #sumfilt(wave,-1,band)
@@ -436,6 +414,7 @@ class ABMag(LogFluxUnits):
         self.name = 'abmag'
         self.linunit = Fnu()
         self.zeropoint = ABZERO
+        
     
     def ToPhotlam(self, wave, flux):
         return 1.0 / (H * wave) * 10.0**(-0.4 * (flux - ABZERO))
@@ -454,6 +433,7 @@ class STMag(LogFluxUnits):
         self.name = 'stmag'
         self.linunit = Flam()
         self.zeropoint = STZERO
+        
     
     def ToPhotlam(self, wave, flux):
         return wave / H / C * 10.0**(-0.4 * (flux - STZERO))
@@ -472,6 +452,7 @@ class OBMag(LogFluxUnits):
         self.name = 'obmag'
         self.linunit = Counts()
         self.zeropoint = 0.0
+        self.isDensity = False
     
     def ToPhotlam(self, wave, flux):
         dw = _getDeltaWave(wave)
@@ -486,6 +467,7 @@ class VegaMag(LogFluxUnits):
     def __init__(self):
         LogFluxUnits.__init__(self)
         self.name = 'vegamag'
+        
     
     def ToPhotlam(self, wave, flux):
         vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
@@ -500,12 +482,11 @@ class Counts(FluxUnits):
     def __init__(self):
         FluxUnits.__init__(self)
         self.name = 'counts'
+        self.isDensity = False
     
     def ToPhotlam(self, wave, flux):
         return flux / (_getDeltaWave(wave) * HSTAREA)
 
-    def perPhoton(self,wave,waveunits=None):
-        return 1.0
     
     def unitResponse(self,band):
         #sum = asumr(band,nwave)

@@ -14,7 +14,7 @@ class ETCTestCase(testutil.FPTestCase):
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
         os.chdir(locations.specdir)
-        self.accuracy = 1e-5
+        self.accuracy = 0.00109 
         self.setparms()
         if self.sp is not None:#Skip the base class!!
             self.obs=Observation(self.sp,self.bp)

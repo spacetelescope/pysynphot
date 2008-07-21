@@ -214,21 +214,21 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         bp = ObsBandpass('acs,hrc,f220w')
         obs = observation.Observation(sp, bp)
         countrate = obs.countrate()
-        self.assertApproxFP(countrate, 0.115697)
+        self.assertApproxFP(countrate, 0.115697,accuracy=0.001)
 
     def test2lam(self):
         spectrum = "spectrum=" + self.expr
         obsmode = "obsmode=acs,hrc,f220w"
         parameters = [spectrum, obsmode]
         efflam = etc.calcphot(parameters)
-        self.assertApproxFP(efflam, 2499.47)
+        self.assertApproxFP(efflam, 2499.47,accuracy=0.001)
 
     def test3cr(self):
         spectrum = "spectrum=" + self.expr
         instrument = "instrument=acs,hrc,f220w"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(countrate[0], 0.115697)
+        self.assertApproxFP(countrate[0], 0.115697,accuracy=0.001)
 
     def test4cr1(self):
         spectrum = "spectrum=em(3880.0,10.0,1.0000000168623835E-16,flam)"
@@ -244,7 +244,7 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
         instrument = "instrument=acs,sbc,F125LP"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(countrate[0], 0.00015431)
+        self.assertApproxFP(countrate[0], 0.00015431, accuracy=0.0025)
 
 
 class ETCTestCase_Imag2(testutil.FPTestCase):
@@ -294,28 +294,28 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         instrument = "instrument=stis,ccd"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 36130.9)
+        self.assertApproxFP(float(countrate[0]), 36130.9, accuracy=0.0025)
 
     def test10(self):
         spectrum = "spectrum=rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=wfc3,ir,F110W"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 134832)
+        self.assertApproxFP(float(countrate[0]), 134832, accuracy=0.0025)
 
     def test11(self):
         spectrum = "spectrum=rn(bb(5000.0),band(johnson,v),28.0,vegamag)"
         instrument = "instrument=wfc3,uvis1,F606W"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 0.175573)
+        self.assertApproxFP(float(countrate[0]), 0.175573, accuracy=0.0025)
 
     def test12(self):
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=wfc3,uvis1,F606W"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 31.9866)
+        self.assertApproxFP(float(countrate[0]), 31.9866, accuracy=0.0025)
 
 
 class ETCTestCase(testutil.FPTestCase):
@@ -339,26 +339,31 @@ class ETCTestCase_Spec1a(ETCTestCase):
         self.spectrum = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)"
         self.obsmode = "acs,hrc,PR200L"
         ETCTestCase.setUp(self)
+        self.accuracy=0.0025
         
     def testrate(self):
         countrate = etc.specrate(self.parameters)
-        self.assertApproxFP(float(countrate.split(';')[0]), 13.7853)
+        self.assertApproxFP(float(countrate.split(';')[0]), 13.7853,
+                            accuracy=0.0025)
 
     def testflux(self):
-        self.assertApproxFP(float(self.obs.binflux[-1]), 5.01883)
+        self.assertApproxFP(float(self.obs.binflux[-1]), 5.01883, accuracy=0.0025)
 
 class ETCTestCase_Spec1b(ETCTestCase):
     def setUp(self):
         self.spectrum = "rn((unit(1,flam)),band(johnson,v),15.0,vegamag)"
         self.obsmode = "acs,wfc1,G800L"
         ETCTestCase.setUp(self)
+        self.accuracy=0.0025
         
     def testrate(self):
         countrate = etc.specrate(self.parameters)
-        self.assertApproxFP(float(countrate.split(';')[0]), 73770.3)
+        self.assertApproxFP(float(countrate.split(';')[0]), 73770.3,
+                            accuracy=self.accuracy)
 
     def testflux(self):
-        self.assertApproxFP(float(self.obs.binflux[50]), 915.203)
+        self.assertApproxFP(float(self.obs.binflux[50]), 915.203,
+                            accuracy=self.accuracy)
 
 class ETCTestCase_Spec1c(ETCTestCase):
     def setUp(self):
@@ -375,13 +380,16 @@ class ETCTestCase_Spec1d(ETCTestCase):
         self.spectrum = "rn((unit(1,flam)),band(johnson,v),15.0,vegamag)"
         self.obsmode="acs,hrc,PR200L"
         ETCTestCase.setUp(self)
-
+        self.accuracy=0.0025
+        
     def testrate(self):
         countrate = etc.specrate(self.parameters)
-        self.assertApproxFP(float(countrate.split(';')[0]),15658.6)
+        self.assertApproxFP(float(countrate.split(';')[0]),15658.6,
+                            accuracy=self.accuracy)
 
     def testflux(self):
-        self.assertApproxFP(float(self.obs.binflux[80]), 79.8567)
+        self.assertApproxFP(float(self.obs.binflux[80]), 79.8567,
+                            accuracy=self.accuracy)
 
 class ETCTestCase_Spec1e(ETCTestCase):
     def setUp(self):
@@ -402,6 +410,7 @@ class ETCTestCase_Spec2a(ETCTestCase):
         self.obsmode = "stis,fuvmama,g140l,s52x2"
         ETCTestCase.setUp(self)
 
+
     def testrate(self):
         countrate = etc.specrate(self.parameters)
         self.assertApproxFP(float(countrate.split(';')[0]), 28935.7)
@@ -414,13 +423,16 @@ class ETCTestCase_Spec2b(ETCTestCase):
         self.spectrum = "rn((icat(k93models,44500,0.0,5.0)),band(johnson,v),10.516,vegamag)"
         self.obsmode = "stis,nuvmama,e230h,c2263,s02x02"
         ETCTestCase.setUp(self)
-
+        self.accuracy=0.0025
+        
     def testrate(self):
         countrate = etc.specrate(self.parameters)
-        self.assertApproxFP(float(countrate.split(';')[0]), 35412)
+        self.assertApproxFP(float(countrate.split(';')[0]), 35412,
+                            accuracy=self.accuracy)
 
     def testflux(self):
-        self.assertApproxFP(float(self.obs.binflux[500]), 1.1851)
+        self.assertApproxFP(float(self.obs.binflux[500]), 1.1851,
+                            accuracy=self.accuracy)
 
 class ETCTestCase_Spec2c(ETCTestCase):
     def setUp(self):

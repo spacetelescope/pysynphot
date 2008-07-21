@@ -480,7 +480,7 @@ class C51(ETCTestCase):
         self.ref_rate=2177.42
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV51.fits'
-
+        self.accuracy = 0.025
 
 class C52(ETCTestCase):
     def setparms(self):
@@ -489,7 +489,7 @@ class C52(ETCTestCase):
         self.ref_rate=6495.2
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV52.fits'
-
+        self.accuracy = 0.025
 
 class C53(ETCTestCase):
     def setparms(self):
@@ -498,7 +498,7 @@ class C53(ETCTestCase):
         self.ref_rate=8657.44
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV53.fits'
-
+        self.accuracy = 0.025
 
 class C54(ETCTestCase):
     def setparms(self):
