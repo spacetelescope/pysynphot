@@ -41,7 +41,7 @@ class calcspecCase(testutil.LogTestCase):
         self.file=self.name
         self.thresh=0.01
         self.superthresh=0.20
-        self.sigthresh=0.005
+        self.sigthresh=0.01
         self.discrep=-99
         self.tda={'Obsmode':self.obsmode,
                  'Spectrum':self.spectrum,
@@ -163,7 +163,7 @@ class calcspecCase(testutil.LogTestCase):
 
         spref=S.FileSpectrum(self.csname)
         rflux=spref.flux
-        tflux=self.sptest.flux
+        tflux=self.sptest(spref.wave)
         self.arraysigtest(tflux,rflux)
         
 class calcphotCase(calcspecCase):
