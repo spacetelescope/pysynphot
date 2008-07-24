@@ -26,6 +26,19 @@ class ticket125(testutil.FPTestCase):
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(nicmos,2,f222m),18,vegamag)"
     def testparse(self):
         self.spstring=newetc.parse_spec(self.spstring)
+
+class ticket125_a(ticket125):
+    def setUp(self):
+        self.spstring="rn(icat(k93models,44500,0.0,5.0),band(v),18,vegamag)"
+
+class ticket125_b(ticket125):
+    def setUp(self):
+        self.spstring="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
+
+class ticket125_c(ticket125):
+    def setUp(self):
+        self.spstring="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
+        self.spstring="rn(/grp/hst/cdbs/calspec/bd_75d325_stis_001.fits,band(u),9.5,vegamag)*band(fos,blue,4.3,g160l)"
         
 class AddInverseMicron(testutil.FPTestCase):
     def setUp(self):

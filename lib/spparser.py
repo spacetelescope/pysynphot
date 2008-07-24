@@ -7,6 +7,7 @@ import locations
 import etc
 import catalog
 import os
+from obsbandpass import ObsBandpass
 
 syfunctions = [
     'spec',
@@ -151,12 +152,15 @@ class Interpreter(GenericASTMatcher):
     def p_int(self, tree):
         ''' V ::= INTEGER '''
         tree.value = int(tree.attr)
+        tree.svalue = tree.attr
     def p_float(self, tree):
         ''' V ::= FLOAT '''
         tree.value = float(tree.attr)
+        tree.svalue = tree.attr
     def p_identifier(self, tree):
         ''' V ::= IDENTIFIER '''
         tree.value = tree.attr
+        tree.svalue = tree.attr
     def p_factor_unary_plus(self, tree):
         ''' V ::= factor ( + V ) '''
         tree.value = convertstr(tree[1].value)
@@ -178,12 +182,18 @@ class Interpreter(GenericASTMatcher):
     def p_term_paren(self, tree):
         ''' V ::= term ( LPAREN V RPAREN )'''
         tree.value = convertstr(tree[1].value)
+        tree.svalue = "(%s)"%str(tree[1].value)
     def p_arglist(self, tree):
         ''' V ::= arglist ( V , V )'''
         if type(tree[0].value) == type([]):
             tree.value = tree[0].value + [tree[2].value]
         else:
             tree.value = [tree[0].value, tree[2].value]
+        try:
+            tree.svalue = "%s,%s"%(tree[0].svalue,tree[2].svalue)
+        except AttributeError:
+            pass #We only care about this for relatively simple constructs.
+        
     def p_functioncall(self, tree):
         # Where all the real interpreter action is
         # Note that things that should only be done at the top level
@@ -219,9 +229,10 @@ class Interpreter(GenericASTMatcher):
                 tree.value = spectrum.TabularSourceSpectrum(_handleIRAFName(name))
             elif fname == 'band':
                 # passband
-                tree.value = spectrum.Band(args)
+                args=tree[2].svalue
+                tree.value = ObsBandpass(args)
             elif fname == 'em':
-                # emmission line
+                # emission line
                 tree.value = spectrum.GaussianSource(args[2],args[0],args[1],fluxunits=args[3])
             elif fname == 'icat':
                 # catalog interpolation

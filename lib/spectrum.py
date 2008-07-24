@@ -1126,45 +1126,4 @@ class Box(SpectralElement):
         
         
 
-class Band(SpectralElement):
-
-    def __init__(self, args):
-        ''' Band derived from a reference file.
-        '''
-        if len(args) == 1:
-            self.name = 'band(johnson,' + args[0] + ')'
-        else:
-            try:
-                largs=','.join(args) 
-            except TypeError:
-                ###Warning, this is a HACK and is NOT the right thing
-                ###to do for some cases: some FOS obsmodes actually
-                ###do look like floating point representations of integers.
-                ###But this will get us through till we can make the parser
-                ###smarter.
-                tmp=[]
-                for k in args:
-                    try:
-                        tmp.append(str(int(k)))
-                    except (TypeError,ValueError):
-                        tmp.append(k)
-                largs=','.join(tmp)
-                
-            self.name = 'band(' + largs + ')'
-
-                
-        # first, check if the band is a valid obsmode taken from the graph table
-        obsmode = observationmode.ObservationMode(self.name)
-        band = obsmode.Throughput()
-
-        # if not, try to build it from a locally kept throughput file.
-        if band == None:
-            self.name = self.name.split('(')[1][:-1].lower()
-            filename = locations.getBandFileName(self.name)
-
-            band = TabularSpectralElement(filename)
-
-        self._wavetable = band._wavetable
-        self._throughputtable = band._throughputtable
-
 Vega = FileSourceSpectrum(locations.VegaFile)
