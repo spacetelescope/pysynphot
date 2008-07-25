@@ -131,7 +131,17 @@ class Sample(testutil.FPTestCase):
         test=self.sp.sample(self.wave)
         self.assertEqualNumpy(test,self.ref.flux)
 
+class Ticket104(testutil.FPTestCase):
+    """Use the extinction laws to test & make sure the conversion to
+    SpectralElements works ok"""
 
+    def test1(self):
+        self.sp = S.Ebmvx(0.2,'gal1') #Make an extinction law
+        self.sp.convert('1/um')       #convert to inverse microns
+        refwave = extinction._buildDefaultWaveset()
+        testwave = self.sp.wave
+        self.assertApproxNumpy(testwave,refwave)
+        
 #--------------------------------------------------------------------
 ## I removed the spectrum.photonrate() method, but this test identified
 ## a problem with the GaussianSource when defined in frequency-based

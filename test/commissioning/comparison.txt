@@ -1,0 +1,38 @@
+Writing tests to compare array results from synphot and pysynphot was
+difficult. The problem had two elements:
+
+  - produce arrays to be compared on the same waveset
+  - devise a comparison that was reasonably insensitive to numerical noise
+
+Producing arrays on the same waveset
+-------------------------------------
+
+Because pysynphot was deliberately designed to correct some of synphot's
+deficiencies in waveset handling, it is clear that the spectral arrays
+produced by the two software packages will be different, unless
+special steps are taken to force them onto the same waveset. 
+
+testcrspec:
+  This test uses the synphot.countrate task, with a box(15000,30000)
+  to simulate the obsmode to produce the source spectrum unconvolved with the
+  instrumental obsmode. The task uses a wavecat file to select the
+  wavelength table used based on the obsmode. For this test, a special
+  purpose wavecat was produced for each run, so that the wavelength
+  table in the pysynphot-computed spectrum would be used.
+
+testthru:
+  This test samples the pysynphot-computed throughput array on the
+  wavelength table used for the synphot-computed throughput.
+
+testcrphotlam:
+  For this test, the synphot.countrate task selects its wavelength
+  table from the wavecat based on the obsmode, and the pysynphot
+  Observation selects its binned wavelength set from the same wavecat
+  based on the obsmode. Thus the synphot spectrum can be compared
+  directly to the binned tables associated with the pysynphot
+  Observation.
+
+testcrcounts:
+  For this test, the wavelength table from the synphot-computed
+  spectrum is used as the binned wavelength set when constructing
+  the pysynphot Observation. 

@@ -1,20 +1,20 @@
 from pytools import testutil
 import sys
-from basecase import thermbackCase
+import basecase 
 
-class thermbackCase1(thermbackCase):
+class thermbackCase1(basecase.thermbackCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="None"
         self.setglobal(__file__)
         self.runpy()
-class thermbackCase2(thermbackCase):
+class thermbackCase2(basecase.thermbackCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="None"
         self.setglobal(__file__)
         self.runpy()
-class thermbackCase3(thermbackCase):
+class thermbackCase3(basecase.thermbackCase):
     def setUp(self):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="None"

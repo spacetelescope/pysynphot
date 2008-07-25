@@ -244,6 +244,9 @@ class thermbackCase(calcphotCase):
     def testspecphotlam(self):
         __test__ = False
 
+    def testcrspec(self):
+        __test__ = False
+        
     def testefflam(self):
         __test__ = False
 
