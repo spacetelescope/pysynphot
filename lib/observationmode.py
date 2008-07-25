@@ -429,6 +429,7 @@ class ObservationMode(BaseObservationMode):
 
             throughput._wavetable = product.GetWaveSet()
             throughput._throughputtable = product(throughput._wavetable)
+            throughput.waveunits = product.waveunits
             throughput.name='*'.join([str(x) for x in self.components])
 
 ##            throughput = throughput.resample(spectrum.default_waveset)
@@ -625,6 +626,8 @@ class _Component(object):
         self._empty = True
 
         self.throughput = self._buildThroughput(throughput_name, interpval)
+        if self.throughput is not None:
+            self.waveunits = self.throughput.waveunits
 
     def __str__(self):
         return str(self.throughput)

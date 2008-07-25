@@ -767,11 +767,27 @@ class SpectralElement(Integrator):
     def __rmul__(self, other):
         return self.__mul__(other)
 
+
     def convert(self, targetunits):
-        '''Spectral elements are not convertible.
-        '''
-        raise NotImplementedError("Unit conversion for spectral elements is not yet supported")
+        '''Convert to other units. This method actually just changes the
+        wavelength unit objects, it does not recompute the
+        internally kept wave data; these are kept always in internal
+        units. Method getWaveSet does the actual computation.'''
+        nunits = units.Units(targetunits)
+        self.waveunits = nunits
+
     
+    def ToInternal():
+        '''Convert wavelengths to the internal representation of angstroms..
+        Note: This is not yet used, but should be for safety when creating
+        TabularSpectralElements from files. It will also be necessary for the
+        ArraySpectralElement class that we want to create RSN.
+        '''
+        self.validate_units()
+        savewunits = self.waveunits
+        angwave = self.waveunits.Convert(self.GetWaveSet(), 'angstrom')
+        self._wavetable = angwave.copy()
+        self.waveunits = savewunits
 
 
     def __call__(self, wavelengths):
@@ -884,7 +900,9 @@ class SpectralElement(Integrator):
         
 
     def GetWaveSet(self):
-        return self._wavetable
+        "Return the waveset in the requested units."
+        wave = units.Angstrom().Convert(self._wavetable, self.waveunits.name)
+        return wave
 
     def GetThroughput(self):
         """Return the throughput for the internal wavetable"""
