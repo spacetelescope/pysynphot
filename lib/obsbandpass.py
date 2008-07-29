@@ -9,8 +9,12 @@ from spectrum import CompositeSpectralElement, TabularSpectralElement
 import wavetable
 
 def ObsBandpass(obstring, graphtable=None, comptable=None):
-    """ Temporarily create an Obsmode to determine whether an
-    ObsModeBandpass or a TabularSpectralElement will be returned."""
+    """ obsband = ObsBandpass(string specifying obsmode; for details
+    see the Synphot Data User's Guide,
+    U{http://www.stsci.edu/hst/HST_overview/documents/synphot/hst_synphotTOC.html}"""
+
+    ##Temporarily create an Obsmode to determine whether an
+    ##ObsModeBandpass or a TabularSpectralElement will be returned.
     ob=ObservationMode(obstring,graphtable=graphtable,
                        comptable=comptable)
     if len(ob) > 1:

@@ -10,9 +10,15 @@ import math
 
 
 class Observation(spectrum.CompositeSourceSpectrum):
-    """An Observation is the end point of a chain of spectral manipulation.
-    The normal means of creating an Observation is by means of the .observe
-    method on a SpectralElement."""
+    """ obs = Observation(Spectrum object, Bandpass object,
+    binset=numpy array to be used for binning when converting to counts.)
+    
+    Most ObsBandpass objects have a built-in binset that is optimized
+    for use with the specified observing mode; specifying the binset
+    in the Observation constructor would overrirde that binset.
+
+    An Observation is the end point of a chain of spectral manipulation."""
+    
 
     def __init__(self,spec,band,binset=None):
         """The normal means of producing an Observation is by means of the

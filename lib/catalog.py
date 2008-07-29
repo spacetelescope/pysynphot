@@ -9,7 +9,12 @@ import locations
 
 
 class Icat(spectrum.TabularSourceSpectrum):
-
+    """spec = Icat(CDBS directory name,Teff,metallicity,logG).
+    This class constructs a model from the grid available in catalogs such
+    as the Castelli & Kurucz. See the Synphot User's Data Manual, Appendix A,
+    for more information
+    U{http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs.html#57}
+    """
     def __init__(self,args):
 
         filename = locations.CAT_TEMPLATE.replace('*',args[0])

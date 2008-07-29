@@ -176,6 +176,7 @@ def factory(redlaw, *args, **kwargs):
     return apply(reddeningClasses[string.lower(redlaw)], args, kwargs)
 
 class Ebmvx(spectrum.SpectralElement):
+    """extinction = Ebmvx(extinction in magnitudes, 'gal1|smc|lmc reddening laws)"""
     def __init__(self, extval, redlaw):
         ''' Extinction mimics as a spectral element.
         '''

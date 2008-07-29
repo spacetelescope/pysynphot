@@ -1,4 +1,18 @@
-## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+"""
+Module: spectrum.py
+
+Contains SourceSpectrum and SpectralElement class defnitions and
+their subclasses.
+
+Also contains the Vega object, which is an instance of a FileSourceSpectrum
+that can be imported from this file and used for Vega-related calculations.
+
+Dependencies:
+============
+pyfits, numpy
+
+
+"""
 
 import string
 import re
@@ -536,11 +550,30 @@ class TabularSourceSpectrum(SourceSpectrum):
         self.fluxunits = savefunits
 
 class ArraySourceSpectrum(TabularSourceSpectrum):
-    """ Class for a source spectrum that is constructed from arrays."""
+    """ spec = ArraySpectrum(numpy array containing wavelenght table,
+    numpy array containing flux table, waveunits, fluxunits,
+    name=human-readable nickname for spectrum, keepneg=True to
+    override the default behavior of setting negative flux values to zero)
+    """
     def __init__(self, wave=None, flux=None,
                  waveunits='angstrom', fluxunits='photlam',
                  name='UnnamedArraySpectrum',
                  keepneg=False):
+        """Create a spectrum from arrays.
+        @param wave: Wavelength array
+        @param flux: Flux array
+        @type wave,flux:  Numpy array with numerical data
+
+        @param waveunits: Units of wave
+        @param fluxunits: Units of flux
+        @type waveunits:  L{units.WaveUnits} or subclass
+        @type fluxunits: L{units.FluxUnits} or subclass
+
+        @param name: Description of this array
+        @type name: string
+        @param keepneg: If true, negative flux values will be retained; by default, they are forced to zero
+        @type keepneg: bool
+        """
         if len(wave)!=len(flux):
             raise ValueError("wave and flux arrays must be of equal length")
         
@@ -559,8 +592,23 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
 
     
 class FileSourceSpectrum(TabularSourceSpectrum):
-    '''Class for a source spectrum that is read in from a table.'''
+    """spec = FileSpectrum(filename (FITS or ASCII),
+    fluxname=column name containing flux (for FITS tables only),
+    keepneg=True to override the default behavior of setting negative
+    flux values to zero)"""
+
     def __init__(self, filename, fluxname=None, keepneg=False):
+        """Create a spectrum from a file.
+        @param filename: FITS or ASCII file containing the spectrum
+        @type filename: string
+
+        @param fluxname: Column name specifying the flux (FITS only)
+        @type fluxname: string
+
+        @param keepneg: If true, negative flux values will be retained; by default, they are forced to zero
+        @type keepneg: bool
+ 
+        """
         self._readSpectrumFile(filename, fluxname)
         self.name=filename
         self.validate_units() 
@@ -617,6 +665,9 @@ class AnalyticSpectrum(SourceSpectrum):
 
 
 class GaussianSource(AnalyticSpectrum):
+    """spec = GaussianSource(TotalFlux under Gaussian, central wavelength of
+    Gaussian, FWHM of Gaussian, waveunits, fluxunits)
+    """
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
                  fluxunits='flam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
@@ -655,6 +706,8 @@ class GaussianSource(AnalyticSpectrum):
 
 
 class UnitSpectrum(AnalyticSpectrum):
+    """spec = UnitSpectrum(Flux density, waveunits, fluxunits). Defines a
+    flat spectrum in units of fluxunits."""
     def __init__(self, fluxdensity, waveunits='angstrom', fluxunits='photlam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.wavelength = None
@@ -692,6 +745,7 @@ class UnitSpectrum(AnalyticSpectrum):
 
 
 class Powerlaw(AnalyticSpectrum):
+    """spec=PowerLaw(refwave, exponent, waveunits, fluxunits). As described in U{http://www.stsci.edu/resources/software_hardware/stsdas/synphot/SynphotManual.pdf}, table 3.5"""
     def __init__(self, refwave, index, waveunits='angstrom', fluxunits='photlam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.wavelength = None
@@ -719,6 +773,7 @@ class Powerlaw(AnalyticSpectrum):
 
 
 class BlackBody(AnalyticSpectrum):
+    """ spec = BlackBody(T in Kelvin)"""
     def __init__(self, temperature):
         self.waveunits=units.Units('angstrom')
         self.fluxunits=units.Units('photlam')
@@ -952,8 +1007,9 @@ class CompositeSpectralElement(SpectralElement):
 
 
 class UniformTransmission(SpectralElement):
-    '''Uniform Transmission Spectral Element.
-    Need to add a GetWaveSet method (or just return None).
+    '''bandpass=UniformTransmission(dimensionless throughput)
+    
+    @todo: Need to add a GetWaveSet method (or just return None).
     '''
     def __init__(self, value, waveunits='angstrom'):
         self.waveunits = units.Units(waveunits)
@@ -981,9 +1037,9 @@ class UniformTransmission(SpectralElement):
 
 
 class TabularSpectralElement(SpectralElement):
-    '''The TabularSpectralElement class handles spectral elements that are
-    stored in tables.
-    '''
+    """bandpass = FileBandpass(FITS or ASCII filename, thrucol= name of
+    column containing throughput values (for FITS tables only)
+    """
     def __init__(self, fileName=None, thrucol='throughput'):
         '''__init__ takes a character string argument that contains the name
         of the file with the spectral element table.
@@ -1117,7 +1173,7 @@ class ThermalSpectralElement(TabularSpectralElement):
 
 
 class Box(SpectralElement):
-
+    """bandpass = Box(central wavelength, width) - both in Angstroms"""
     def __init__(self, center, width):
         ''' Both center and width are assumed to be in Angstrom
             units, according to the synphot definition.
