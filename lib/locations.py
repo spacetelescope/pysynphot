@@ -1,9 +1,13 @@
-import os
+import os, warnings
 
     
 #Replace cdbs_roots lookup with an environment variable
-rootdir   = os.environ['PYSYN_CDBS']
-
+try:
+    rootdir   = os.environ['PYSYN_CDBS']
+except KeyError:
+    warnings.warn("PYSYN_CDBS is undefined; functionality will be SEVERELY crippled.",UserWarning)
+    rootdir = ''
+    
 #Data directory is now installed locally
 specdir   = os.path.join(os.path.dirname(__file__),'data')+os.path.sep
 

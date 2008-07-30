@@ -9,7 +9,8 @@ from pysynphot import extinction, spectrum, units, newetc
 class ticket121(testutil.FPTestCase):
     def setUp(self):
         self.sp=S.BlackBody(30000)
-
+        self.bp = S.ObsBandpass('johnson,v')
+        
     def testintegral(self):
         self.sp.convert('flam')
         self.sp.convert('Angstrom')
@@ -21,6 +22,30 @@ class ticket121(testutil.FPTestCase):
         self.hz=self.sp.trapezoidIntegration(wave,flux)
         self.failUnlessAlmostEqual(self.ang/self.hz,1)
 
+    def testresample_sp(self):
+        #create a spectrum with wavelength in descending order
+        self.sp2=S.ArraySpectrum(wave=self.sp.wave[::-1],
+                                 flux=self.sp.flux[::-1],
+                                 waveunits=self.sp.waveunits,
+                                 fluxunits=self.sp.fluxunits)
+
+        #.flux calls __call__ calls resample
+        ref=self.sp.flux[::-1]
+        tst=self.sp2.flux
+        self.assertEqualNumpy(ref,tst)
+
+    def testresample_bp(self):
+        #create a bandpass with wavelength in descending order
+        self.bp2=S.ArraySpectrum(wave=self.bp.wave[::-1],
+                                 throughput=self.bp.throughput[::-1],
+                                 waveunits=self.sp.waveunits)
+                                
+        
+        #.flux calls __call__ calls resample
+        ref=self.bp.throughput[::-1]
+        tst=self.bp2.throughput
+        self.assertEqualNumpy(ref,tst)
+                                            
 class ticket125(testutil.FPTestCase):
     def setUp(self):
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(nicmos,2,f222m),18,vegamag)"
@@ -168,3 +193,5 @@ class Ticket104(testutil.FPTestCase):
 ##             checkrate.description="%s.testPhotonRate.test%sfunc"%(__name__,u)
 
 ##             yield checkrate, em, 100, u
+
+

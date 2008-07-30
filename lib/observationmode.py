@@ -4,6 +4,7 @@ import string
 import glob
 import re
 import os
+import warnings
 import numpy as N
 import pyfits
 
@@ -30,9 +31,13 @@ def _refTable(template):
     except IndexError:
         msg= "No files found for %s."%os.path.join('PYSYN_CDBS',template)
         raise IOError(msg)
-    
-GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
-COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
+try:
+    GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
+    COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
+except IOError, e:
+    GRAPHTABLE = None
+    COMPTABLE = None
+    warnings.warn("PYSYN_CDBS is undefined; No graph or component tables could be found; functionality will be SEVERELY crippled.",UserWarning)
 try:
     THERMTABLE = _refTable(os.path.join('mtab','*_tmt.fits'))
 except IOError, e:
