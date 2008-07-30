@@ -121,7 +121,8 @@ from catalog import Icat
 #Analytic Spectral Elements
 from spectrum import Box, UniformTransmission
 #Tabular Spectral Elements
-from spectrum import TabularSpectralElement as FileBandpass
+from spectrum import FileSpectralElement as FileBandpass
+from spectrum import ArraySpectralElement as ArrayBandpass
 #Complicated spectral elements
 from obsbandpass import ObsBandpass
 from extinction import Ebmvx

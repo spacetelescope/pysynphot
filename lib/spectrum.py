@@ -640,10 +640,10 @@ class FileSourceSpectrum(TabularSourceSpectrum):
         self._wavetable = fs[1].data.field('wavelength')
         if fluxname == None:
             fluxname = 'flux'
-            self._fluxtable = fs[1].data.field(fluxname)
-            self.waveunits = units.Units(fs[1].header['tunit1'].lower())
-            self.fluxunits = units.Units(fs[1].header['tunit2'].lower())
-            fs.close()
+        self._fluxtable = fs[1].data.field(fluxname)
+        self.waveunits = units.Units(fs[1].header['tunit1'].lower())
+        self.fluxunits = units.Units(fs[1].header['tunit2'].lower())
+        fs.close()
 
     def _readASCII(self, filename):
         """ Ascii files have no headers. Following synphot, this
@@ -809,6 +809,11 @@ class BlackBody(AnalyticSpectrum):
 class SpectralElement(Integrator):
     '''Base class for a Spectral Element (e.g. Filter, Detector...).
     '''
+    def validate_units(self):
+        "Ensure that waveunits are WaveUnits"
+        if (not isinstance(self.waveunits,units.WaveUnits)):
+            raise TypeError("%s is not a valid WaveUnit"%self.waveunits)
+
     def __mul__(self, other):
         '''Permitted to multiply a SpectralElement by another
         SpectralElement, or by a SourceSpectrum.  In the former
@@ -843,7 +848,7 @@ class SpectralElement(Integrator):
         self.waveunits = nunits
 
     
-    def ToInternal():
+    def ToInternal(self):
         '''Convert wavelengths to the internal representation of angstroms..
         Note: This is not yet used, but should be for safety when creating
         TabularSpectralElements from files. It will also be necessary for the
@@ -1107,6 +1112,89 @@ class TabularSpectralElement(SpectralElement):
         '''
         pass
 
+
+class ArraySpectralElement(TabularSpectralElement):
+    """ spec = ArraySpectrum(numpy array containing wavelength table,
+    numpy array containing throughput table, waveunits, 
+    name=human-readable nickname for bandpass.
+    """
+    def __init__(self, wave=None, throughput=None,
+                 waveunits='angstrom', 
+                 name='UnnamedArrayBandpass'):
+
+        """Create a spectrum from arrays.
+        @param wave: Wavelength array
+        @param throughput: Throughput array
+        @type wave,throughput:  Numpy array with numerical data
+
+        @param waveunits: Units of wave
+        @type waveunits:  L{units.WaveUnits} or subclass
+
+        @param name: Description of this spectral element
+        @type name: string
+        """
+        if len(wave)!=len(throughput):
+            raise ValueError("wave and throughput arrays must be of equal length")
+        
+        self._wavetable=wave
+        self._throughputtable=throughput
+        self.waveunits=units.Units(waveunits)
+        self.name=name
+
+        self.validate_units() #must do before validate_fluxtable because it tests against unit type
+        self.validate_wavetable() #must do before ToInternal in case of descending
+            
+        self.ToInternal()
+
+    
+class FileSpectralElement(TabularSpectralElement):
+    """spec = FileSpectrum(filename (FITS or ASCII),
+    throughputname=column name containing throughput (for FITS tables only),
+    keepneg=True to override the default behavior of setting negative
+    throughput values to zero)"""
+
+    def __init__(self, filename, thrucol=None):
+        """Create a bandpass from a file.
+        @param filename: FITS or ASCII file containing the bandpass
+        @type filename: string
+
+        @param thrucol: Column name specifying the throughput (FITS only)
+        @type thrucol: string
+
+        """
+        self._readThroughputFile(filename, thrucol)
+        self.name=filename
+        self.validate_units() 
+        self.validate_wavetable()
+        self.ToInternal()
+
+    def _readThroughputFile(self, filename, throughputname):
+        if filename.endswith('.fits') or filename.endswith('.fit'):
+            self._readFITS(filename, throughputname)
+        else:
+            self._readASCII(filename)
+
+    def _readFITS(self, filename, throughputname):
+        fs = pyfits.open(filename)
+        
+        self._wavetable = fs[1].data.field('wavelength')
+        if throughputname == None:
+            throughputname = 'throughput'
+        self._throughputtable = fs[1].data.field(throughputname)
+        self.waveunits = units.Units(fs[1].header['tunit1'].lower())
+        fs.close()
+
+    def _readASCII(self, filename):
+        """ Ascii files have no headers. Following synphot, this
+        routine will assume the first column is wavelength in Angstroms,
+        and the second column is throughput in Flam."""
+
+        self.waveunits = units.Units('angstrom')
+        wlist,flist = self._columnsFromASCII(filename)
+        self._wavetable=N.array(wlist,dtype=N.float64)
+        self._throughputtable=N.array(flist,dtype=N.float64)
+            
+                                
 
 class InterpolatedSpectralElement(SpectralElement):
     '''The InterpolatedSpectralElement class handles spectral elements
