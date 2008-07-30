@@ -146,7 +146,7 @@ class Integrator(object):
 
 
         #Now check for monotonicity & enforce ascending
-        sorted=N.sort(wave)
+        sorted=N.sort(wave)        
         if not N.alltrue(sorted == wave):
             if N.alltrue(sorted[::-1] == wave):
                 #monotonic descending is allowed
@@ -498,6 +498,12 @@ class TabularSourceSpectrum(SourceSpectrum):
         '''Interpolate flux given a wavelength array that is monotonically
         increasing and the TabularSourceSpectrum object.
         '''
+        ##Check whether the input wavetab is in descending order
+        if resampledWaveTab[0]<resampledWaveTab[-1]:
+            newwave=resampledWaveTab
+        else:
+            newwave=resampledWaveTab[::-1]
+            
         ## Make a new object to hold the resampled spectrum
         resampled = TabularSourceSpectrum()
 
@@ -505,13 +511,18 @@ class TabularSourceSpectrum(SourceSpectrum):
         tapered = self.taper()
 
         ## Linear interpolations from the Python tutorial
-        indices = N.searchsorted(tapered._wavetable,resampledWaveTab)-1
+        if tapered._wavetable[0]<tapered._wavetable[-1]:
+            indices = N.searchsorted(tapered._wavetable,resampledWaveTab)-1
+        else:
+            indices = N.searchsorted(tapered._wavetable[::-1],
+                                 newwave)-1
+            #indices = idx[::-1]
 
         ## Make sure the indices containing the desired points don't go
         ## beyond the ends of the array
         indices = N.clip(indices, 0, tapered._wavetable.size-2)
 
-        fraction = resampledWaveTab - tapered._wavetable[indices]
+        fraction = newwave - tapered._wavetable[indices]
         fraction = fraction / (tapered._wavetable[indices+1] -
                                tapered._wavetable[indices])
 
