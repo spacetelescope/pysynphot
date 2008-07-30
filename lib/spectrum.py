@@ -510,32 +510,19 @@ class TabularSourceSpectrum(SourceSpectrum):
         ## First need to pad the ends of the spectrum with zeros
         tapered = self.taper()
 
-        ## Linear interpolations from the Python tutorial
+        ## Use numpy interpolation function
         if tapered._wavetable[0]<tapered._wavetable[-1]:
-            indices = N.searchsorted(tapered._wavetable,resampledWaveTab)-1
+            ans = N.interp(newwave,tapered._wavetable,
+                           tapered._fluxtable)
         else:
-            indices = N.searchsorted(tapered._wavetable[::-1],
-                                 newwave)-1
-            #indices = idx[::-1]
+            rev = N.interp(newwave,tapered._wavetable[::-1],
+                           tapered._fluxtable[::-1])
+            ans = rev[::-1]
 
-        ## Make sure the indices containing the desired points don't go
-        ## beyond the ends of the array
-        indices = N.clip(indices, 0, tapered._wavetable.size-2)
-
-        fraction = newwave - tapered._wavetable[indices]
-        fraction = fraction / (tapered._wavetable[indices+1] -
-                               tapered._wavetable[indices])
-
-        ## Make sure the fraction is calculated correctly for elements beyond
-        ## the valid regions of the input spectrum
-        fraction = N.clip(fraction, 0.0, 1.0)
-
-        resampled._fluxtable = tapered._fluxtable[indices] + \
-                               fraction * (tapered._fluxtable[indices+1] - \
-                                           tapered._fluxtable[indices])
 
         resampled._wavetable = resampledWaveTab.copy()
         resampled.waveunits = units.Units(str(self.waveunits))
+        resampled._fluxtable = ans.copy()
         resampled.fluxunits = units.Units(str(self.fluxunits))
 
         return resampled
@@ -933,33 +920,34 @@ class SpectralElement(Integrator):
                                                  
     def resample(self, resampledWaveTab):
         '''Interpolate throughput given a wavelength array that is
-        monotonically increasing and the TabularSpectralElement object.
-        '''
+        monotonically increasing and the TabularSpectralElement object.'''
+        ##Check whether the input wavetab is in descending order
+
+        if resampledWaveTab[0]<resampledWaveTab[-1]:
+            newwave=resampledWaveTab
+        else:
+            newwave=resampledWaveTab[::-1]
+        
         ## Make a new object to hold the resampled SpectralElement
         resampled = TabularSpectralElement()
 
-        ## First need to pad the ends with zeros
-        tapered = self.taper()
+        #First need to pad the ends with zeros(?)
+        tapered=self.taper()
+        ## Use numpy interpolation function
+        if tapered._wavetable[0]<tapered._wavetable[-1]:
+            ans = N.interp(newwave,tapered._wavetable,
+                           tapered._throughputtable)
+        else:
+            rev = N.interp(newwave,tapered._wavetable[::-1],
+                           tapered._throughputtable[::-1])
+            ans = rev[::-1]
 
-        ## Linear interpolations from the Python tutorial
-        indices = N.searchsorted(tapered._wavetable, resampledWaveTab)-1
 
-        ## Make sure the indices containing the desired points don't go
-        ## beyond the ends of the array
-        indices = N.clip(indices, 0, tapered._wavetable.size-2)
-        fraction = resampledWaveTab - tapered._wavetable[indices]
-        fraction = fraction / (tapered._wavetable[indices+1] -
-                               tapered._wavetable[indices])
-
-        ## Make sure the fraction is calculated correctly for elements beyond
-        ## the valid regions of the input spectrum
-        fraction = N.clip(fraction, 0.0, 1.0)
-        resampled._throughputtable = tapered._throughputtable[indices] + \
-                                    fraction*(tapered._throughputtable[indices+1] - \
-                                              tapered._throughputtable[indices])
+        resampled._throughputtable = ans.copy()
 
         resampled._wavetable = resampledWaveTab.copy()
-
+        resampled.waveunits = units.Units(str(self.waveunits))
+        
         return resampled
 
     def unitResponse(self):

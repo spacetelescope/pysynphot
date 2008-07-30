@@ -27,7 +27,7 @@ class ticket135(testutil.FPTestCase):
         self.sp=S.BlackBody(30000)
         self.bp = S.ObsBandpass('johnson,v')
 
-     def testresample_sp(self):
+     def testflip_sp(self):
         #create a spectrum with wavelength in descending order
         self.sp2=S.ArraySpectrum(wave=self.sp.wave[::-1],
                                  flux=self.sp.flux[::-1],
@@ -38,21 +38,23 @@ class ticket135(testutil.FPTestCase):
         ref=self.sp.flux[::-1]
         tst=self.sp2.flux
         
-        self.assertApproxNumpy(ref,tst,0.0025)
-        #.....there are weird numeric issues but the arrays are
-        #.....extremely close
+        self.assertApproxNumpy(ref,tst)
 
-     def testresample_bp(self):
+
+     def testflip_bp(self):
         #create a bandpass with wavelength in descending order
         self.bp2=S.ArrayBandpass(wave=self.bp.wave[::-1],
                                  throughput=self.bp.throughput[::-1],
                                  waveunits=self.sp.waveunits)
                                 
         
-        #.flux calls __call__ calls resample
+        #.throughput calls __call__ calls resample
         ref=self.bp.throughput[::-1]
         tst=self.bp2.throughput
-        self.assertApproxNumpy(ref,tst)
+        idxr=N.where(ref != 0)[0]
+        idxt=N.where(tst != 0)[0]
+        self.assertEqualNumpy(idxr,idxt)
+        self.assertApproxNumpy(ref[idxr],tst[idxr])
     
 class ticket125(testutil.FPTestCase):
     def setUp(self):
