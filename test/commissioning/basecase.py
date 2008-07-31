@@ -149,10 +149,10 @@ class calcspecCase(testutil.LogTestCase):
         #Use countrate with a box; use the native waveset as the waveset
 
         self.sptest.convert('photlam')
-        self.sptest.writefits(self.csname)
+        self.sptest.writefits(self.csname.replace('.fits','_pysyn.fits'))
 
         out=open('/tmp/box.cat','w')
-        out.write('box    %s\n'%self.csname)
+        out.write('box    %s\n'%self.csname.replace('.fits','_pysyn.fits'))
         out.close()
         self.run_crbox(self.spectrum,'photlam',
                        output=self.csname,
