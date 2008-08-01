@@ -13,7 +13,7 @@ class Icat(spectrum.TabularSourceSpectrum):
     This class constructs a model from the grid available in catalogs such
     as the Castelli & Kurucz. See the Synphot User's Data Manual, Appendix A,
     for more information
-    U{http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs.html#57}
+    U{http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs4.html#48115}
     """
     def __init__(self,args):
 

@@ -838,25 +838,3 @@ class acsC120(basecase.calcspecCase):
         self.obsmode=None
         self.setglobal(__file__)
         self.runpy()
-
-class acsC121(basecase.calcspecCase):
-    def setUp(self):
-        self.spectrum='rn(icat(ck04models,41000,4.5,0),band(ACS,HRC,G800L,F220W),4.5,vegamag)'
-        self.obsmode=None
-        self.setglobal(__file__)
-        self.runpy()
-
-class acsC122(basecase.calcspecCase):
-    def setUp(self):
-        self.spectrum='rn(icat(ck04models,41000,4.5,0),band(ACS,HRC,G800L,F250W),4.5,vegamag)'
-        self.obsmode=None
-        self.setglobal(__file__)
-        self.runpy()
-
-class acsC123(basecase.calcspecCase):
-    def setUp(self):
-        self.spectrum='rn(icat(ck04models,41000,4.5,0),band(ACS,HRC,G800L,F300W),4.5,vegamag)'
-        self.obsmode=None
-        self.setglobal(__file__)
-        self.runpy()
-

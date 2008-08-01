@@ -26,17 +26,17 @@ endif
 set dirname = {$rname}_r{$revset}
 #...................................................
 # Set up a test directory
-mkdir $dirname
+mkdir -p $dirname
 cd $dirname
 tar -xzf /eng/ssb/syn_pysyn/testdata.tar.gz
 
 #.........................................
 # User may specify the list of tests; if not, use the full set.
 if ( "$2" == "" ) then
-  set tlist = "science_cases acs_etc_cases nicmos_etc_cases stis_etc_cases wfc3_ir_imaging_78_cases wfc3_ir_spec_61_cases wfc3_uvis1_imaging_61_cases wfc3_uvis1_spec_62_cases wfc3_uvis2_imaging_18_cases wfc3_uvis2_spec_18_cases nicmos_etc_thermback_cases wfc3_ir_imaging_80_thermback wfc3_ir_spec_62_thermback"
+  set tlist = "science_cases acs_etc_cases nicmos_etc_cases stis_etc_cases wfc3_ir_imaging_78_cases wfc3_ir_spec_61_cases wfc3_uvis1_imaging_61_cases wfc3_uvis1_spec_62_cases wfc3_uvis2_imaging_18_cases wfc3_uvis2_spec_18_cases nicmos_etc_thermback_cases wfc3_ir_imaging_80_thermback wfc3_ir_spec_62_thermback acs_rn_cases nicmos_rn_cases stis_rn_cases invalid_rn_cases"
 else
   shift 
-  set tlist = $*
+  set tlist = "$*"
 endif
 
 #set tlist = "fewcases science_cases"
