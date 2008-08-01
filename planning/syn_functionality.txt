@@ -17,18 +17,18 @@ Supported: (in 0.3.x / 17.x)
 
 
 Not yet supported:  (1.0)
-  gauss
-  lgauss A passband with normal distribution in the logarithm of the
+  gauss #137
+  lgauss #138 A passband with normal distribution in the logarithm of the
         wavelength.
 
 No plans to support:
   poly: Legendre polynomials
   tilt: Like poly, except mean & fwhm are computed from wavelength
 
-BANDPAR: Not yet supported. (0.9 / OPUS 200x.x)
+BANDPAR: Not yet supported. (0.7; relevant to 0.9 / OPUS 200x.x)
 
 Should be methods on SpectralElement.
-Calculate bandpass parameters:
+Calculate bandpass parameters: #139
             URESP           Flux (in flam) of a star that produces a response
                             of one photon per second in this passband
             PIVWV           Passband pivot wavelength
@@ -53,11 +53,11 @@ Should be methods on Observation (and possibly Spectrum, for effstim
 only)
 
 Supported?
-0.6           EFFSTIM         effective stimulus      (form)
-1.0           AVGLAM          average wavelength      (Angstroms)
-1.0           BARLAM          mean log wavelength     (Angstroms)
-1.0           FWHMLAM         FWHM bandwidth          (Angstroms)
-1.0           RMSLAM          rms bandwidth           (Angstroms)
+0.6   #140    EFFSTIM         effective stimulus      (form)
+0.7  }        AVGLAM          average wavelength      (Angstroms)
+0.7  }        BARLAM          mean log wavelength     (Angstroms)
+0.7  }#141    FWHMLAM         FWHM bandwidth          (Angstroms)
+0.7  }        RMSLAM          rms bandwidth           (Angstroms)
 0.3           EFFLERG         effective wavelength    (Angstroms)
 
 CALCSPEC:
@@ -78,12 +78,12 @@ y 0.3    icat(str1, ...)              1       Interpolate in a catalog of spectr
 n 1.0    lgauss(num1, num2)           0       Log normal curve passband
 y 0.3    pl(num1, num2, str1)         1       Power law spectrum
 n >1.0   poly(num1, num2, num3, ...)  0       Legendre polynomial
-p 0.3/0.6  rn(spec1, band1, num1, str1)  1    Renormalize spectrum
+p 0.3/0.5  rn(spec1, band1, num1, str1)  1    Renormalize spectrum
 y 0.3    spec(str1)                   1       Read a spectrum
 y 0.3    thru(str1)                   0       Read a passband
 n >1.0   tilt(band1, num1, ...)       0       Legendre polynomial product
 y 0.3    unit(num1, str1)             1       Constant spectrum
-p 0.3/0.6  z(spec1, num1)             1       Redshift spectrum
+p 0.3/0.5  z(spec1, num1)             1       Redshift spectrum
 
 COUNTRATE:
 Supported (0.3):
@@ -91,24 +91,24 @@ Supported (0.3):
 
 Not yet supported:
 - can specify exposure time (--; just multiply)
-- flux_tot: total flux through band        (0.6)
-- refwave: a specifically called out flux (0.7)
-- flux_ref: the flux at the reference wavelength (0.7)
+- flux_tot: total flux through band   (--; duplicates calcphot.effstim)
+- refwave: a specifically called out flux (0.7)        }
+- flux_ref: the flux at the reference wavelength (0.7) } #143
 
 
 
 Obsmode: Not yet supported (0.7)
-Fills out a partial obsmode with all its possible completions
+Fills out a partial obsmode with all its possible completions (#144)
 
-Plband-related functionality: (0.6ish)
+Plband-related functionality: (0.7)
 
-- Add a method to SpectralElement.normalize()
+- Add a method to SpectralElement.normalize() (#120)
 
 Showfiles: Supported via a method on bandpass (0.4)
 
-Thermback: (0.6) 
+Thermback: (0.7) 
 now a special newetc task; should be a method on bandpass
-or obsmode
+or obsmode (#145)
 
 ==No need to support:==
 Plband, Plspec: use matplotlib/pylab to directly plot spectra & bandpasses
