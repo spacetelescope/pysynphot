@@ -93,7 +93,7 @@ class GaussianTest(SpecTestCase):
 
 class UnitSpecTest(SpecTestCase):
     def setUp(self):
-        self.sp=S.UnitSpectrum(10)
+        self.sp=S.FlatSpectrum(10)
 
 class PowerLawTest(SpecTestCase):
     def setUp(self):
@@ -112,7 +112,7 @@ class CompositeFileTest(SpecTestCase):
         self.comp1=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
                                             'calspec',
                                             'alpha_lyr_stis_003.fits'))
-        self.comp2=S.UnitSpectrum(10)
+        self.comp2=S.FlatSpectrum(10)
         self.sp=self.comp1+self.comp2
 
 if __name__ == '__main__':

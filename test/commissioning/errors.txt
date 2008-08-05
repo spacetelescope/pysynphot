@@ -28,26 +28,12 @@ NotImplementedError: Sorry, gal2 is not yet implemented
   --> replaced all gal2 by gal1 or gal3
 NotImplementedError: Sorry, gal3 is not yet implemented
 
-Badly parsed obsmodes with numbers in them: [#125; solution not yet defined]
-------------------------------------------
-TypeError: cannot concatenate 'str' and 'float' objects
-  --> This turns out to be a tough problem, given the current
-  architecture, because by the time we know we're trying to construct
-  a bandpass, the original command provided to the parser is long gone.
 
 Obsmode not supported by graph table: [Known issue: pysyn stricter than syn]
 ------------------------------------
 ValueError: Warning: unused keywords set(['f25mama'])
   Note: this identified an error in the ETC specification of the obsmode.
 
-Test sw error [workaround found]:
---------------------------------------
-ValueError: too many values to unpack
----> countrate allows 4 params to specify a wavetab; genwave does not,
-so cannot use genwave to generate the matching wavetab for calcspec to
-use.
-   Workaround: in this case, save the wavetable that pysynphot used
-   and feed it to the synphot task.
 
 ===> Wavelength table is not sorted [No workaround identified]:
     ------------------------------------------------------------------

@@ -261,14 +261,14 @@ class FunctionTestCase(testutil.FPTestCase):
         self.wave = self.an.GetWaveSet()
 
     def testunit1(self):
-        sp = spectrum.UnitSpectrum(1.0,fluxunits='photlam')
+        sp = spectrum.FlatSpectrum(1.0,fluxunits='photlam')
         fluxes = sp(self.wave)
         self.assertApproxFP(fluxes.shape[0], 1.0E+04, accuracy=0.0025)
         self.assertApproxFP(fluxes[0], 1.0, accuracy=0.0025)
         self.assertApproxFP(fluxes[9000], 1.0, accuracy=0.0025)
 
     def testunit2(self):
-        sp = spectrum.UnitSpectrum(1.0,fluxunits='flam')
+        sp = spectrum.FlatSpectrum(1.0,fluxunits='flam')
         fluxes = sp(self.wave)
         self.assertApproxFP(fluxes[0], 2.51701E+10, accuracy=0.0025)
         self.assertApproxFP(fluxes[9000], 8.81633E+11, accuracy=0.0025)
@@ -283,7 +283,7 @@ class FunctionTestCase(testutil.FPTestCase):
         self.assertApproxFP(box._throughputtable[1], 1.0, accuracy=0.0025)
 
     def testmult1(self):
-        sp = spectrum.UnitSpectrum(1.0,fluxunits='photlam')
+        sp = spectrum.FlatSpectrum(1.0,fluxunits='photlam')
         box = spectrum.Box(5500.0,1.0)
         sp = sp * box
         wave = sp.GetWaveSet()
@@ -291,7 +291,7 @@ class FunctionTestCase(testutil.FPTestCase):
         self.assertApproxFP(fluxes.sum(), 20., accuracy=0.0025)
 
     def testmult2(self):
-        sp = spectrum.UnitSpectrum(1.0,fluxunits='flam')
+        sp = spectrum.FlatSpectrum(1.0,fluxunits='flam')
         box = spectrum.Box(5500.0,1.0)
         sp = sp * box
         wave = sp.GetWaveSet()
@@ -788,7 +788,7 @@ class EnforceWaveFile(EnforceWave):
 
 class Ticket87(testutil.FPTestCase):
     def setUp(self):
-        self.sp=S.UnitSpectrum(1)
+        self.sp=S.FlatSpectrum(1)
         self.z=2.5
         self.wavecheck=N.array([550])
 

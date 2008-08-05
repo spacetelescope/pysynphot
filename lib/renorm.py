@@ -2,7 +2,7 @@
 one that works, turn it into a method on the spectrum class."""
 import math
 import numpy as N
-from spectrum import UnitSpectrum, Vega, default_waveset
+from spectrum import FlatSpectrum, Vega, default_waveset
 import units
 
 
@@ -11,21 +11,21 @@ def DefineStdSpectraForUnits():
     renormalizing. This is done here to avoid circular imports."""
     
     #Linear flux-density units
-    units.Flam.StdSpectrum = UnitSpectrum(1,fluxunits='flam')
-    units.Fnu.StdSpectrum = UnitSpectrum(1,fluxunits='fnu')
-    units.Photlam.StdSpectrum = UnitSpectrum(1,fluxunits='photlam')
-    units.Photnu.StdSpectrum = UnitSpectrum(1,fluxunits='photnu')
-    units.Jy.StdSpectrum = UnitSpectrum(1,fluxunits='jy')
-    units.mJy.StdSpectrum = UnitSpectrum(1,fluxunits='mjy')
+    units.Flam.StdSpectrum = FlatSpectrum(1,fluxunits='flam')
+    units.Fnu.StdSpectrum = FlatSpectrum(1,fluxunits='fnu')
+    units.Photlam.StdSpectrum = FlatSpectrum(1,fluxunits='photlam')
+    units.Photnu.StdSpectrum = FlatSpectrum(1,fluxunits='photnu')
+    units.Jy.StdSpectrum = FlatSpectrum(1,fluxunits='jy')
+    units.mJy.StdSpectrum = FlatSpectrum(1,fluxunits='mjy')
 
     #Non-density units
     scale = 1.0/default_waveset.size
-    units.Counts.StdSpectrum = UnitSpectrum(1,fluxunits='counts')*scale
-    units.OBMag.StdSpectrum = UnitSpectrum(1,fluxunits='counts')*scale
+    units.Counts.StdSpectrum = FlatSpectrum(1,fluxunits='counts')*scale
+    units.OBMag.StdSpectrum = FlatSpectrum(1,fluxunits='counts')*scale
 
     #Magnitude flux-density units
-    units.ABMag.StdSpectrum = UnitSpectrum(3.63e-20,fluxunits='fnu')
-    units.STMag.StdSpectrum = UnitSpectrum(3.63e-9, fluxunits='flam')
+    units.ABMag.StdSpectrum = FlatSpectrum(3.63e-20,fluxunits='fnu')
+    units.STMag.StdSpectrum = FlatSpectrum(3.63e-9, fluxunits='flam')
     units.VegaMag.StdSpectrum = Vega
 
 

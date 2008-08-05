@@ -135,8 +135,8 @@ class AddInverseMicron(testutil.FPTestCase):
 class AddMag(testutil.FPTestCase):
     "Ticket #122"
     def setUp(self):
-        self.bright=S.UnitSpectrum(18.0,fluxunits='abmag')
-        self.faint=S.UnitSpectrum(21.0,fluxunits='abmag')
+        self.bright=S.FlatSpectrum(18.0,fluxunits='abmag')
+        self.faint=S.FlatSpectrum(21.0,fluxunits='abmag')
         self.delta=3
 
     def testadd(self):
@@ -156,7 +156,7 @@ class Sample(testutil.FPTestCase):
     "Ticket #99"
 
     def setUp(self):
-        self.sp=S.UnitSpectrum(10,fluxunits='flam')
+        self.sp=S.FlatSpectrum(10,fluxunits='flam')
         self.wave=S.Waveset(1000,11000,1000)
         self.ref=S.ArraySpectrum(wave=self.wave,
                                  flux=self.sp.flux[0]*N.ones(self.wave.shape),
@@ -171,7 +171,7 @@ class Ticket104(testutil.FPTestCase):
     SpectralElements works ok"""
 
     def test1(self):
-        self.sp = S.Ebmvx(0.2,'gal1') #Make an extinction law
+        self.sp = S.Extinction(0.2,'gal1') #Make an extinction law
         self.sp.convert('1/um')       #convert to inverse microns
         refwave = extinction._buildDefaultWaveset()
         testwave = self.sp.wave

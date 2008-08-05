@@ -703,8 +703,8 @@ class GaussianSource(AnalyticSpectrum):
         return N.arange(first, last, increment)
 
 
-class UnitSpectrum(AnalyticSpectrum):
-    """spec = UnitSpectrum(Flux density, waveunits, fluxunits). Defines a
+class FlatSpectrum(AnalyticSpectrum):
+    """spec = FlatSpectrum(Flux density, waveunits, fluxunits). Defines a
     flat spectrum in units of fluxunits."""
     def __init__(self, fluxdensity, waveunits='angstrom', fluxunits='photlam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
@@ -728,11 +728,11 @@ class UnitSpectrum(AnalyticSpectrum):
 
     def redshift(self, z):
         """Call the parent's method, which returns a TabularSourceSpectrum,
-        then use its results to create a new UnitSpectrum with the correct
+        then use its results to create a new FlatSpectrum with the correct
         value. """
         
         tmp=SourceSpectrum.redshift(self,z)
-        ans=UnitSpectrum(tmp.flux.max(),
+        ans=FlatSpectrum(tmp.flux.max(),
                          fluxunits=tmp.fluxunits)
         return ans
 

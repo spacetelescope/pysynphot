@@ -21,7 +21,7 @@ class TMCmismatch(unittest.TestCase):
 class RenormNonsense(unittest.TestCase):
     """Can arise with zero, negative, or nan spectra"""
     def setUp(self):
-        self.sp=S.UnitSpectrum(1)
+        self.sp=S.FlatSpectrum(1)
         self.bp=S.ObsBandpass('johnson,v')
 
     def testneg(self):

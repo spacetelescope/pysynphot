@@ -60,7 +60,7 @@ Power law: refwave 10000.000000, index -2.000000
 >>> print g1
 Gaussian: mu=18000.000000,fwhm=2000.000000,flux=18.300000 abmag
 
->>> unitflux=S.UnitSpectrum(18,fluxunits='abmag')
+>>> unitflux=S.FlatSpectrum(18,fluxunits='abmag')
 >>> print unitflux
 Unit spectrum of 18.000000 abmag
 
@@ -112,7 +112,7 @@ __revstring__  = '$Rev$'
 
 #UI:
 #AnalyticSpectra:
-from spectrum import BlackBody, GaussianSource, UnitSpectrum
+from spectrum import BlackBody, GaussianSource, FlatSpectrum
 from spectrum import Powerlaw as PowerLaw
 #Tabular Spectra
 from spectrum import FileSourceSpectrum as FileSpectrum
@@ -125,7 +125,7 @@ from spectrum import FileSpectralElement as FileBandpass
 from spectrum import ArraySpectralElement as ArrayBandpass
 #Complicated spectral elements
 from obsbandpass import ObsBandpass
-from extinction import Ebmvx
+from extinction import Extinction
 #Observations
 from newobservation import Observation
 #Other constructs

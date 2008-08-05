@@ -210,7 +210,7 @@ class Interpreter(GenericASTMatcher):
         else:
             if fname == 'unit':
                 # constant spectrum
-                tree.value = spectrum.UnitSpectrum(args[0],fluxunits=args[1])
+                tree.value = spectrum.FlatSpectrum(args[0],fluxunits=args[1])
             elif fname == 'bb':
                 # black body
                 tree.value = spectrum.BlackBody(args[0])
@@ -256,12 +256,12 @@ class Interpreter(GenericASTMatcher):
                                  _handleIRAFName(args[0]))
                             tree.value = sp.redshift(args[1])
                         except AttributeError:
-                            tree.value = spectrum.UnitSpectrum(1.0)
+                            tree.value = spectrum.FlatSpectrum(1.0)
                 else:
-                    tree.value = spectrum.UnitSpectrum(1.0)
+                    tree.value = spectrum.FlatSpectrum(1.0)
             elif fname == 'ebmvx':
                 # extinction
-                tree.value = extinction.Ebmvx(args[0], args[1])
+                tree.value = extinction.Extinction(args[0], args[1])
             else:
                 tree.value = "would call %s with the following args: %s" % (fname, repr(args))
             

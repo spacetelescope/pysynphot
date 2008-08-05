@@ -29,7 +29,7 @@ class FileTestCase(testutil.FPTestCase):
 
 class TicketXX(testutil.FPTestCase):
     def setUp(self):
-        self.sp=S.UnitSpectrum(1)
+        self.sp=S.FlatSpectrum(1)
         self.z=2.5
         self.wavecheck=N.array([550])
 

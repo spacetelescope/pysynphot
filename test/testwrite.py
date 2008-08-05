@@ -53,7 +53,7 @@ class ObsBandCase(WriteTestCase):
 
 class UnitCase(WriteTestCase):
     def setUp(self):
-        self.sp=S.UnitSpectrum(10.0,fluxunits='flam')
+        self.sp=S.FlatSpectrum(10.0,fluxunits='flam')
 
 class PLCase(WriteTestCase):
     def setUp(self):

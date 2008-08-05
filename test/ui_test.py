@@ -172,7 +172,7 @@ class BandTestCase(testutil.FPTestCase):
 
 class UnitTestCase(testutil.FPTestCase):
     def setUp(self):
-        self.uspec=S.UnitSpectrum(1.0,fluxunits='flam')
+        self.uspec=S.FlatSpectrum(1.0,fluxunits='flam')
 
     def testfnu(self):
         """Converted to fnu, it should not be flat.
