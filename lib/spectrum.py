@@ -338,6 +338,7 @@ class SourceSpectrum(Integrator):
         copy.fluxunits = units.Units('photnu')
         copy.ToInternal()
         copy.fluxunits = self.fluxunits
+        copy.name="%s at z=%f"%(self.name,z)
 
         return copy
 
