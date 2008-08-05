@@ -1,7 +1,7 @@
 import os
 import testutil
 from pysynphot import locations
-from pysynphot.newobservation import Observation 
+from pysynphot.observation import Observation 
 from pysynphot import observationmode #to freeze comptable
 
 #Freeze the version of the comptable so tests are not susceptible to

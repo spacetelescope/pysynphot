@@ -105,7 +105,7 @@ from pysynphot.client import Client
 #Places used by test code
 userdir   = os.environ['PYSYN_USERDATA']
 
-import pysynphot.newetc as etc
+from pysynphot import etc
 etc.debug = 1
 
 def test():

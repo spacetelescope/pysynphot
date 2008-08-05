@@ -8,7 +8,7 @@ Also contains the Vega object, which is an instance of a FileSourceSpectrum
 that can be imported from this file and used for Vega-related calculations.
 
 Dependencies:
-============
+=============
 pyfits, numpy
 
 

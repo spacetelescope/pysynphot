@@ -1,4 +1,3 @@
-from pysynphot import newetc
 import basecase
 import sys,os
 

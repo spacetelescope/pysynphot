@@ -9,8 +9,8 @@ from pysynphot import spectrum, observationmode
 from pysynphot import locations
 from pysynphot import spparser as P
 from pysynphot import units, planck
-from pysynphot import newetc as etc
-from pysynphot.newobservation import Observation
+from pysynphot import etc
+from pysynphot.observation import Observation
 from pysynphot import renorm
 import pysynphot as S
 

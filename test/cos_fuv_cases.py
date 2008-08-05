@@ -1,5 +1,5 @@
 from pysynphot.etctest_base_class import ETCTestCase
-from pysynphot.newetc import parse_spec
+from pysynphot.etc import parse_spec
 from pysynphot import ObsBandpass, locations
 from pysynphot import observationmode #to check on comptable
 import testutil

@@ -2,7 +2,7 @@
 Not intended for release."""
 
 import os
-from pysynphot import newetc as etc
+from pysynphot import etc
 
 def execute_cline(cline,rpath='.'):
     """execute the command, return the results"""

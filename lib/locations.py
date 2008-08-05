@@ -31,10 +31,10 @@ def getBandFileName(band):
 
 def irafconvert(iraffilename):
     '''Convert the IRAF file name (in directory$file format) to its
-unix equivalent
+    unix equivalent
 
-Input:    string iraffilename
-Output:   returns string unixfilename
+    Input:    string iraffilename
+    Output:   returns string unixfilename
           If '$' not found in the input string, just return
           the input string
           Non-string input raises an AttributeError'''

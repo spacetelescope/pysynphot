@@ -2,7 +2,7 @@ from pytools import testutil
 import pysynphot as S
 import numpy as N
 import pyfits
-from pysynphot import newetc as etc
+from pysynphot import etc
 from pyraf import iraf
 from iraf import stsdas,hst_calib,synphot
 import os,time,re

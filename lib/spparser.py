@@ -4,7 +4,6 @@ import spectrum
 import extinction
 import observationmode
 import locations
-import etc
 import catalog
 import os
 from obsbandpass import ObsBandpass

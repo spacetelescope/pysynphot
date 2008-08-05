@@ -3,12 +3,12 @@ import os
 import tempfile
 
 from pysynphot import spectrum,observationmode
-from pysynphot import newobservation as observation
+from pysynphot import observation
 from pysynphot import ObsBandpass
 from pysynphot import locations
 from pysynphot import spparser as P
 from pysynphot import units, planck
-from pysynphot import newetc as etc
+from pysynphot import etc
 import pysynphot as S
 
 import testutil 

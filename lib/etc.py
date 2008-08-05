@@ -1,204 +1,182 @@
-"""This module defines the ETC interface for pysynphot.
-Although the names of the classes defined here are identical to the
-names of synphot tasks, they do NOT correspond to those tasks. They
-perform a strictly limited subset of the functionality available in
-those tasks.
-
-The tasks in the dictionary at the end of this module map the
-task names provided by the ETC to the classes that perform the
-relevant calculations. It is included by server.py to instantiate
-an ETC server."""
-
-import os
-import time
-
-import pyfits
-
-import spectrum
-import units
-import locations
-import observationmode
-import observation
+"""Module intended to replace the existing etc interface with the
+refactored user interface."""
 import spparser as P
-
-debug = 1
-
-class Calcspec(object):
-
-    def __init__(self, parameters):
-        for parameter in parameters:
-             name,value = parameter.split('=')
-             if name == 'spectrum':
-                 self._spectrum = value.strip('"')
-             elif name == 'output':
-                 self._output = value.strip('"')
-
-    def run(self):
-
-        if self._spectrum == ""      or \
-           self._spectrum == "null"  or \
-           self._output   == ""      or \
-           self._output   == "null":
-            return "NaN"
-
-        t1 = time.time()
-        sp = P.interpret(P.parse(P.scan(self._spectrum)))
-        t2 = time.time()
-
-        if debug >= 1:
-            print 'elapsed time in calcspec: ', str(t2-t1), 'sec.  spectrum is:', \
-                  self._spectrum
-
-        sp.writefits(self._output)
-        return sp
-
-class Calcphot(object):
-
-    def __init__(self, parameters):
-        for parameter in parameters:
-             name,value = parameter.split('=')
-             if name == 'spectrum':
-                 self._spectrum = value.strip('"')
-             elif name == 'obsmode':
-                 self._obsmode = value.strip('"')
-
-    def _compute(self, func):
-
-        if self._spectrum == ""      or \
-           self._spectrum == "null"  or \
-           self._obsmode  == ""      or \
-           self._obsmode  == "null":
-            return "NaN"
-
-        t1 = time.time()
-        ob = self._buildObservation()
-        result = ob.calcphot(func=func)
-        t2 = time.time()
-
-        self.observed_spectrum = ob.observed_spectrum
-
-        if debug >= 1:
-            print 'elapsed time in calcphot: ', str(t2-t1), 'sec.  obsmode is:', \
-                  self._obsmode
-
-        return result
-
-    def _buildObservation(self):
-        self._om = observationmode.ObservationMode(self._obsmode)
-        sp = P.interpret(P.parse(P.scan(self._spectrum)))
-        return observation.Observation(sp, self._om)
-
-    def run(self):
-        efflam = self._compute('efflam')
-
-        if debug >= 2:
-            print "efflam =", str(efflam)
-
-        return efflam
+from pysynphot.observation import Observation
+from pysynphot import ObsBandpass
+from pysynphot.observationmode import ObservationMode
+from pysynphot import observationmode as ommod #needed for tabcheck task
+import os
 
 
-class Countrate(Calcphot):
+def getparms(parlist):
+    """ The ETC presently sends along a bunch of information in key-value
+    pairs that pysynphot utterly ignores. This function builds a dictionary
+    from the few elements it actually uses. """
+    d={}
+    keylist=['spectrum','output','obsmode','instrument','func']
+             
+    for pair in parlist:
+        name,value=pair.split('=')
+        if name in keylist:
+            d[name]=value.strip('"')
+    return d
 
-    def __init__(self, parameters):
-        for parameter in parameters:
-             name,value = parameter.split('=')
-             if name == 'spectrum':
-                 self._spectrum = value.strip('"')
-             elif name == 'instrument':
-                 self._obsmode = value.strip('"')
+def parse_spec(syncommand):
+    """Parse the synphot-classic command and return the resulting spectrum"""
+    sp = P.interpret(P.parse(P.scan(syncommand)))
+    return sp
 
-    def run(self):
-        effstim = self._compute('effstim')
-
-        if debug >= 2:
-            print "effstim =", str(effstim)
-
-        return effstim
-
-##        if self._spectrum.startswith("rn"):
-##            return (0.1759472, 5879.578)
-##        else:
-##            return (32.03496, 5879.578)
-
-
-class SpecSourcerateSpec(Countrate):
+def calcphot(parlist):
+    """Calculate either effstim or efflam, depending on the input argument"""
+    d=getparms(parlist)
+    sp=parse_spec(d['spectrum'])
+    bp=ObsBandpass(d['obsmode'])
+    # obs=bp.observe(sp)
+    try:
+        obs=Observation(sp,bp)
+    except KeyError:
+        obs=Observation(sp,bp,bp.wave)
+    obs.convert('counts')
+    ans=obs.efflam()
     
-    def __init__(self, parameters):
-        Countrate.__init__(self, parameters)
+    return ans
 
-        self._filename = None
+def calcspec(parlist):
+    """Calculate the spectrum & write it to a FITS file"""
+    d=getparms(parlist)
+    sp=parse_spec(d['spectrum'])
+    sp.convert('counts')
+    sp.writefits(d['output'])
+    return d['output']
 
-        for parameter in parameters:
-             name,value = parameter.split('=')
-             if name == 'output':
-                 self._filename = value.strip('"').replace('\\','/')
+def countrate(parlist):
+    """Return the pivot wavelength and countrate of the spectrum as
+    observed through the obsmode, but based on the native waveset"""
+    d=getparms(parlist)
+    sp=parse_spec(d['spectrum'])
+    bp=ObsBandpass(d['instrument'])
+    # obs=bp.observe(sp)
+    try:
+        obs=Observation(sp,bp)
+    except KeyError:
+        obs=Observation(sp,bp,bp.wave)
 
-    def run(self):
+    obs.convert('counts')
+    piv=obs.pivot()
+    ans=obs.countrate(binned=False)
+    return ans,piv
 
-        if self._spectrum == ""      or \
-           self._spectrum == "null"  or \
-           self._obsmode  == ""      or \
-           self._obsmode  == "null":
-            return "NaN;"
+def specrate(parlist):
+    """Return the countrate of the spectrum as observed through the
+    obsmode, based on the binned wavelength set; and write the resulting
+    spectrum to a file, returning the filename."""
 
-        t1 = time.time()
-        ob = self._buildObservation()
-        effstim = ob.calcphot(func='spec')
-        t2 = time.time()
+    d=getparms(parlist)
+    sp=parse_spec(d['spectrum'])
+    bp=ObsBandpass(d['instrument'])
+    # obs=bp.observe(sp)
+    try:
+        obs=Observation(sp,bp)
+    except KeyError:
+        obs=Observation(sp,bp,bp.wave)
 
-        self.observed_spectrum = ob.observed_spectrum
+    obs.convert('counts')
+    try:
+        obs.writefits(d['output'],binned=True)
+    except KeyError:
+        d['output']=None
+    return "%f;%s"%(obs.countrate(),d['output'])
 
-        if self._filename != None:
-            if debug >= 1:
-                print 'elapsed time: ', str(t2-t1), 'sec.  obsmode is:', \
-                      self._obsmode
+def thermback(parlist):
+    """Return the thermal background rate for the obsmode"""
+    d=getparms(parlist)
+    omode=ObservationMode(d['obsmode'])
+    sp=omode.ThermalSpectrum()
+    #Possibly bundle this so we can just do omode.thermback()
+    ans = sp.integrate() * omode.pixscale**2 * omode.area
+    return ans
 
+def updatetabs(dummy):
+    """Check for new GRAPH/COMP/THERM tables"""
+    ommod.GRAPHTABLE = ommod._refTable(os.path.join('mtab','*_tmg.fits'))
+    ommod.COMPTABLE  = ommod._refTable(os.path.join('mtab','*_tmc.fits'))
+    try:
+        ommod.THERMTABLE = ommod._refTable(os.path.join('mtab','*_tmt.fits'))
+        msg="Success"
+    except IOError, e:
+        ommod.THERMTABLE = None
+        msg= """Warning: %s
+        No thermal calculations can be performed."""%str(e)
+    return "%s;%s;%s;%s"%(ommod.GRAPHTABLE, ommod.COMPTABLE,
+                          ommod.THERMTABLE, msg)
 
-            self.observed_spectrum.writefits(self._filename)
-            return str(effstim) + ';' + self._filename
-        else:
-            return str(effstim) + ';None'
+def showfiles(parlist):
+    """For debugging: print tmg/tmc/tmt and showfiles to a file for the
+    given obsmode.
 
-
-class Thermback(Countrate):
-
-    def __init__(self, parameters):
-
-        for parameter in parameters:
-             name,value = parameter.split('=')
-             if name == 'obsmode':
-                 self._obsmode = value.strip('"')
-
-    def _compute(self,func):
-
-        if self._obsmode  == ""      or \
-           self._obsmode  == "null":
-            return "NaN"
-
-        t1 = time.time()
-        self._om = observationmode.ObservationMode(self._obsmode)
-        sp = self._om.ThermalSpectrum()
-        result = sp.integrate() * self._om.pixscale**2 * units.HSTAREA
-        t2 = time.time()
-
-        self.observed_spectrum = sp
-
-        if debug >= 1:
-            print 'elapsed time in calcphot: ', str(t2-t1), 'sec.  obsmode is:', \
-                  self._obsmode
-
-        return str(result)
-
+    For nonserver use:
+    foo='showfiles&obsmode="acs,hrc,f555w"&output="testme2.txt"'
+    etc.showfiles(foo.split('&')[1:])
+    
+    """
+    d=getparms(parlist)
+    obsmode=d['obsmode']
+    fname=d['output']
+    
+    ob=ommod.ObservationMode(obsmode)
+    flist=[x for x in ob._throughput_filenames if x != 'clear']
+    out=open(fname,'w')
+    out.write("TMG: %s\n"%ommod.GRAPHTABLE)
+    out.write("TMC: %s\n"%ommod.COMPTABLE)
+    out.write("TMT: %s\n"%ommod.THERMTABLE)
+    out.write("\nObsmode %s:\n"%obsmode)
+    for fname in flist:
+        out.write("%s\n"%fname)
+    out.close()
+    
 def Suicide(dummy):
     """Kill this process"""
     mypid=os.getpid()
     os.kill(mypid,9)
 
+def version(dummy):
+    """Return version string stashed in versioninfo.dat"""
+    from pysynphot.locations import vfname
+    f=open(vfname)
+    vstring=f.readline()
+    f.close()
+    return vstring.strip()
+
 #This defines the set of tasks available for the ETC server to perform.
-tasks = {'calcphot':           Calcphot,
-         'calcspec':           Calcspec,
-         'countrate':          Countrate,
-         'SpecSourcerateSpec': SpecSourcerateSpec,
-         'thermback':          Thermback,
+#Note that there are two distinct calls to calcphot that we might
+#want to actually discriminate by name, eventually.
+
+tasks = {'calcphot':           calcphot,
+         'calcspec':           calcspec,
+         'countrate':          countrate,
+         'showfiles':          showfiles,
+         'SpecSourcerateSpec': specrate,
+         'thermback':          thermback,
+         'updatetabs':         updatetabs,
+         'version':            version,
          'quit':               Suicide}
 
+#Define an extra task for the IRAF user interface
+
+def etccalc(obsmode, spectrum, filename=None):
+    bp=ObsBandpass(obsmode)
+    sp=parse_spec(spectrum)
+    try:
+        obs=Observation(sp,bp)
+    except KeyError:
+        obs=Observation(sp,bp,bp.wave)
+
+    obs.convert('counts')
+    if (filename is not None):
+        if not filename.endswith('.fits'):
+            filename=filename+'.fits'
+        obs.writefits(filename)
+        sp.writefits(filename.replace('.fits','_sp.fits'))
+        bp.writefits(filename.replace('.fits','_bp.fits'))
+
+    return obs.countrate(), obs.efflam(), obs.pivot()

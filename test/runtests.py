@@ -13,8 +13,7 @@ import testutil
 #=====================================================
 #           CONFIGURE TESTS HERE
 #=====================================================
-tlist=['newobs_cases',
-       'cos_etc_test',
+tlist=['cos_etc_test',
        'cos_fuv_cases',
        'cos_nuv_cases',
        'ui_test',
@@ -36,7 +35,7 @@ for symbol in ('PYSYN_CDBS',):  #,'PYSYN_USERDATA'):
 import numpy
 import pyfits
 import pysynphot
-from pysynphot import newetc
+from pysynphot import etc
 
 
 #open the summary file
@@ -51,7 +50,7 @@ fh.write("%s\n"%time.asctime())
 #Print some useful version information
 fh.write("numpy version: %s\n"%numpy.__version__)
 fh.write("pyfits version: %s\n"%pyfits.__version__)
-fh.write("Pysynphot version: %s\n"%newetc.version(1))
+fh.write("Pysynphot version: %s\n"%etc.version(1))
 
 #
 #Run the tests
@@ -63,6 +62,13 @@ for tname in tlist:
     fh.flush()
     if (len(result.errors) > 0) or (len(result.failures) > 0):
         failed=1
+
+#Don't forget the doctests
+nfail,ntest=pysynphot._test()
+fh.write("__init__ doctests: run=%d failures=%d\n"%(ntest,nfail))
+fh.flush()
+if nfail>0:
+    failed=1
 
 #Clean up & go home
 fh.close()

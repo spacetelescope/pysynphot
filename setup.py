@@ -103,7 +103,7 @@ class smart_install_data(install_data):
 def dosetup():
     print sys.prefix
     r = setup(name = "pysynphot",
-              version = "0.5dev%rs"%revset.strip(),
+              version = "0.45%rs"%revset.strip(),
               description  = 'Python Synthetic Photometry Utilities',
               fullname     = 'AstroLib Pysynphot',
               license      = 'BSD',

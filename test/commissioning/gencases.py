@@ -1,4 +1,4 @@
-from pysynphot import newetc
+from pysynphot import etc
 import sys,os
 
 def run(cmdfile):
@@ -24,7 +24,7 @@ import basecase
         parts=line.split('&')
         cmd=(parts[0])[1:] #strip off leading quote
         count[cmd]+=1
-        kwd=newetc.getparms(parts[1:])
+        kwd=etc.getparms(parts[1:])
         
 
         #do the substitutions

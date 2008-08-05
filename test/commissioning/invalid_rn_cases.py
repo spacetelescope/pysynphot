@@ -1,5 +1,5 @@
 import unittest
-from pysynphot import newetc
+from pysynphot import etc
 
 class C1(unittest.TestCase):
     def setUp(self):
@@ -7,7 +7,7 @@ class C1(unittest.TestCase):
 
     def testinvalid(self):
         self.assertRaises(ValueError,
-                           newetc.parse_spec,
+                           etc.parse_spec,
                            self.sp)
 
 class C2(C1):

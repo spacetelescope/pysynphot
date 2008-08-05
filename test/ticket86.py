@@ -1,5 +1,5 @@
 import pysynphot as S
-from pysynphot.newobservation import Observation
+from pysynphot.observation import Observation
 import os, sys
 import testutil
 import numpy as N
