@@ -1202,8 +1202,11 @@ class InterpolatedSpectralElement(SpectralElement):
 
         fs = pyfits.open(self.name)
 
-        self._wavetable = fs[1].data.field('wavelength')
+        #The wavelength table will have to be adjusted before use
+        wave0 = fs[1].data.field('wavelength')
+        
 
+        #Determine the columns that bracket the desired value
         colNames = fs[1].data.names[2:]
         colWaves = []
         for columnName in colNames:
@@ -1217,21 +1220,39 @@ class InterpolatedSpectralElement(SpectralElement):
 
         if '--' in (str(upper),str(lower)):
             raise NotImplementedError("%f outside of range in %s; extrapolation not yet supported"%(wavelength,fileName))
-        
+
+
         lcol = (colSpec + str(lower)).upper()
         ucol = (colSpec + str(upper)).upper()
 
+        
+
+        #Extract the data from those columns
         lthr = fs[1].data.field(lcol)
         uthr = fs[1].data.field(ucol)
 
         if upper != lower:
+            #Adjust the wavelength table to bracket the range
+            lwave = wave0 + (lower-self.interpval)
+            uwave = wave0 + (upper-self.interpval)
+
+            #Interpolate the columns at those ranges
+            lthr = N.interp(lwave, wave0, fs[1].data.field(lcol))
+            uthr = N.interp(uwave, wave0, fs[1].data.field(ucol))
+
+            #Then interpolate between the two columns
             w = (wavelength - lower) / (upper - lower)
             self._throughputtable = uthr * w + lthr * (1.0 - w)
         else:
+            #Interpolate the matching column to the correct wave range
+            uwave = wave0 + (upper-self.interpval)
+            uthr = N.interp(uwave, wave0, fs[1].data.field(ucol))
             self._throughputtable = uthr
-
+            
+        self._wavetable = wave0
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.throughputunits = 'none'
+
         fs.close()
 
     def __str__(self):

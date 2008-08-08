@@ -53,23 +53,13 @@ class ETC_Imag2(testutil.FPTestCase):
         countrate = etc.countrate(parameters)
         self.assertApproxFP(float(countrate[0]), 28.56996)
 
-    def testtherm3(self):
-        obsmode = "obsmode=nicmos,1,F090M"
-        countrate = etc.thermback([obsmode])
-        synphot_ref=1.98635725923e-12
-        self.assertApproxFP(float(countrate), synphot_ref)
-
-    def testtherm4(self):
-        obsmode = "obsmode=nicmos,1,f190n"
-        countrate = etc.thermback([obsmode])
-        synphot_ref=0.0142158651724
-        self.assertApproxFP(float(countrate), synphot_ref)
 
     def testtherm5(self):
+        #commissioning wfc3_ir_imaging thermbackCase5
         obsmode = "obsmode=wfc3,ir,f110w"
         countrate = etc.thermback([obsmode])
         synphot_ref=0.0342143550515
-        self.assertApproxFP(float(countrate), synphot_ref)
+        self.assertApproxFP(float(countrate), synphot_ref, accuracy=0.01)
 
 
         
