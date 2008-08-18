@@ -126,6 +126,8 @@ flam
 """
 
 
+from svn_version import __svn_version__, __full_svn_info__
+
 __version__ = '0.45'
 __revstring__  = '$Rev$'
 

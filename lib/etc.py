@@ -140,12 +140,9 @@ def Suicide(dummy):
     os.kill(mypid,9)
 
 def version(dummy):
-    """Return version string stashed in versioninfo.dat"""
-    from pysynphot.locations import vfname
-    f=open(vfname)
-    vstring=f.readline()
-    f.close()
-    return vstring.strip()
+    """Return subversion version string"""
+    from pysynphot.svn_version import __svn_version__
+    return __svn_version__
 
 #This defines the set of tasks available for the ETC server to perform.
 #Note that there are two distinct calls to calcphot that we might
