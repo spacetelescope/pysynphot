@@ -141,8 +141,8 @@ def Suicide(dummy):
 
 def version(dummy):
     """Return subversion version string"""
-    from pysynphot.svn_version import __svn_version__
-    return __svn_version__
+    from pysynphot.svn_version import __svn_version__, setupdate
+    return __svn_version__+"; "+str(setupdate)
 
 #This defines the set of tasks available for the ETC server to perform.
 #Note that there are two distinct calls to calcphot that we might
