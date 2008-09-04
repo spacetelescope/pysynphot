@@ -412,10 +412,14 @@ class CompositeSourceSpectrum(SourceSpectrum):
 class TabularSourceSpectrum(SourceSpectrum):
     '''Class for a source spectrum that is read in from a table.
     '''
-    def __init__(self, filename=None, fluxname=None):
+    def __init__(self, filename=None, fluxname=None, keepneg=False):
         if filename:
             self._readSpectrumFile(filename, fluxname)
             self.filename=filename
+            self.validate_units() 
+            self.validate_wavetable()
+            if not keepneg:
+                self.validate_fluxtable()
             self.ToInternal()
             self.name=self.filename
 
@@ -498,7 +502,10 @@ class TabularSourceSpectrum(SourceSpectrum):
     def resample(self, resampledWaveTab):
         '''Interpolate flux given a wavelength array that is monotonically
         increasing and the TabularSourceSpectrum object.
+        @param resampledWaveTab: new wavelength table IN ANGSTROMS
+        @type ressampledWaveTab: ndarray
         '''
+        
         ##Check whether the input wavetab is in descending order
         if resampledWaveTab[0]<resampledWaveTab[-1]:
             newwave=resampledWaveTab
@@ -506,7 +513,7 @@ class TabularSourceSpectrum(SourceSpectrum):
             newwave=resampledWaveTab[::-1]
             
         ## Make a new object to hold the resampled spectrum
-        resampled = TabularSourceSpectrum()
+        #resampled = TabularSourceSpectrum()
 
         ## First need to pad the ends of the spectrum with zeros
         tapered = self.taper()
@@ -520,11 +527,17 @@ class TabularSourceSpectrum(SourceSpectrum):
                            tapered._fluxtable[::-1])
             ans = rev[::-1]
 
-
-        resampled._wavetable = resampledWaveTab.copy()
-        resampled.waveunits = units.Units(str(self.waveunits))
-        resampled._fluxtable = ans.copy()
-        resampled.fluxunits = units.Units(str(self.fluxunits))
+        # NB: these manipulations were done using the internal
+        #tables in Angstrom and photlam, so those are the units
+        #that must be fed to the constructor. 
+        resampled=ArraySourceSpectrum(wave=resampledWaveTab.copy(),
+                                      waveunits = 'angstroms',
+                                      flux = ans.copy(),
+                                      fluxunits = 'photlam',
+                                      keepneg=True)
+        #Use the convert method to set the units desired by the user.
+        resampled.convert(self.waveunits)
+        resampled.convert(self.fluxunits)
 
         return resampled
 
@@ -593,7 +606,7 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
 class FileSourceSpectrum(TabularSourceSpectrum):
     """spec = FileSpectrum(filename (FITS or ASCII),
     fluxname=column name containing flux (for FITS tables only),
-    keepneg=True to override the default behavior of setting negative
+    keepneg=True to override thedefault behavior of setting negative
     flux values to zero)"""
 
     def __init__(self, filename, fluxname=None, keepneg=False):
