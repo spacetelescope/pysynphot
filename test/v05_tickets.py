@@ -4,8 +4,54 @@ import testutil
 import pysynphot as S
 import numpy as N
 from pysynphot.units import Units
-from pysynphot import extinction, spectrum, units, etc
+from pysynphot import extinction, spectrum, units, etc, reddening
 
+class aticket123(testutil.FPTestCase):
+    #Some of the tests below will fail if this is not the FIRST
+    #set of tests to be run;they probe side effects on the Cache.
+    def setUp(self):
+        self.xt=None
+        
+    def test1(self):
+        self.xt=S.Extinction(0.3,'mwdense')
+        self.assert_(isinstance(self.xt,spectrum.SpectralElement))
+
+    def test2(self):
+        #test sideeffect of t1
+        self.xt=S.Cache.RedLaws['mwdense']
+        self.assert_(isinstance(self.xt,reddening.RedLaw))
+
+    def test3(self):
+        foo=S.Cache.RedLaws['smcbar']
+        self.assert_(os.path.isfile(foo))
+
+    def test4(self):
+        self.xt=S.Extinction(0.2,S.Cache.RedLaws['smcbar'])
+        self.assert_(isinstance(self.xt,spectrum.SpectralElement))
+
+    def test5(self):
+        self.assertRaises(ValueError,
+                          S.Extinction,
+                          0.2,
+                          '/foo/bar.fits')
+
+    def test6(self):
+        self.xt=S.Extinction(0.3)
+        self.assert_(isinstance(self.xt,spectrum.SpectralElement))
+        self.assert_('mwavg' in self.xt.name.lower())
+                     
+
+class multi(testutil.FPTestCase):
+    #Holds cases that exercise a number of subsystems
+
+    def testsmc(self):
+        #Uses new extinction functionality
+        self.oldsmc=S.Extinction(0.2,'smc')
+        self.newsmc=S.Extinction(0.2,'smcbar')
+        self.tw=N.array([5500,5550,5600])
+        self.tst=self.newsmc(self.tw)
+        self.assert_(self.tst[-1]>self.tst[0])
+        
 class ticket121(testutil.FPTestCase):
     def setUp(self):
         self.sp=S.BlackBody(30000)
@@ -22,10 +68,39 @@ class ticket121(testutil.FPTestCase):
         self.hz=self.sp.trapezoidIntegration(wave,flux)
         self.failUnlessAlmostEqual(self.ang/self.hz,1)
 
+class ticket135_desc(testutil.FPTestCase):
+    def setUp(self):
+        self.ascending=N.arange(10000,10100,10)
+        self.descending=self.ascending[::-1]
+        self.bp=S.ArrayBandpass(wave=self.descending,
+                                throughput=N.arange(10)+5)
+        self.T=self.bp(self.ascending)
+        
+    def test1(self):
+        self.assert_(N.alltrue(self.bp.throughput == self.bp._throughputtable))
+
+    def test2(self):
+        self.assert_(N.alltrue(self.T == self.bp._throughputtable[::-1]),
+                     str(self.T))
+
+    def test3(self):
+         self.assert_(N.alltrue(self.bp.throughput == self.bp(self.bp.wave)))
+
+class ticket135_asc(ticket135_desc):
+     def setUp(self):
+        self.ascending=N.arange(10000,10100,10)
+        self.descending=self.ascending[::-1]
+        self.bp=S.ArrayBandpass(wave=self.ascending,
+                                throughput=N.arange(10)+5)
+        self.T=self.bp(self.descending)
+    
+                     
 class ticket135(testutil.FPTestCase):
      def setUp(self):
         self.sp=S.BlackBody(30000)
         self.bp = S.ObsBandpass('johnson,v')
+
+
 
      def testflip_sp(self):
         #create a spectrum with wavelength in descending order
@@ -43,8 +118,9 @@ class ticket135(testutil.FPTestCase):
 
      def testflip_bp(self):
         #create a bandpass with wavelength in descending order
+        T=self.bp.throughput
         self.bp2=S.ArrayBandpass(wave=self.bp.wave[::-1],
-                                 throughput=self.bp.throughput[::-1],
+                                 throughput=T[::-1],
                                  waveunits=self.sp.waveunits)
                                 
         

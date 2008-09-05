@@ -1100,6 +1100,15 @@ class TabularSpectralElement(SpectralElement):
         
     def __str__(self):
         return str(self.name)
+    
+    def ToInternal(self):
+        '''Convert wavelengths to the internal representation of angstroms..
+        '''
+        self.validate_units()
+        savewunits = self.waveunits
+        angwave = self.waveunits.Convert(self._wavetable, 'angstrom')
+        self._wavetable = angwave.copy()
+        self.waveunits = savewunits
 
 
     def _readASCII(self,filename):
