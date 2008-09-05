@@ -44,13 +44,19 @@ class aticket123(testutil.FPTestCase):
 class multi(testutil.FPTestCase):
     #Holds cases that exercise a number of subsystems
 
-    def testsmc(self):
+    def setUp(self):
         #Uses new extinction functionality
         self.oldsmc=S.Extinction(0.2,'smc')
         self.newsmc=S.Extinction(0.2,'smcbar')
+
+    def testpoints(self):
         self.tw=N.array([5500,5550,5600])
         self.tst=self.newsmc(self.tw)
         self.assert_(self.tst[-1]>self.tst[0])
+
+    def testproperty(self):
+        self.assertEqualNumpy(self.newsmc.throughput,
+                              self.newsmc._throughputtable)
         
 class ticket121(testutil.FPTestCase):
     def setUp(self):

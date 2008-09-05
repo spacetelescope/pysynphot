@@ -874,6 +874,9 @@ class SpectralElement(Integrator):
     def __call__(self, wavelengths):
         '''This is where the throughput array is calculated for a given
         input wavelength table.
+        @param wavelengths: an array of wavelengths in Angstroms at which the
+                             throughput should be sampled
+        @type wavelengths: ndarray
         '''
         return self.resample(wavelengths)._throughputtable
 
@@ -997,7 +1000,12 @@ class SpectralElement(Integrator):
         return wave
 
     def GetThroughput(self):
-        """Return the throughput for the internal wavetable"""
+        """Return the throughput for the internal wavetable."""
+        ## NB: Throughput never changes units no matter what the
+        ## wavelength does. There is an implicit assumption here that
+        ## the units of the input waveset to the __call__ are always
+        ## Angstroms.
+        self.convert('angstroms') 
         return self.__call__(self.wave)
     
     wave = property(GetWaveSet, doc='Waveset for bandpass')
