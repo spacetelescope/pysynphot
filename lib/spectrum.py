@@ -509,22 +509,32 @@ class TabularSourceSpectrum(SourceSpectrum):
         ##Check whether the input wavetab is in descending order
         if resampledWaveTab[0]<resampledWaveTab[-1]:
             newwave=resampledWaveTab
+            newasc = True
         else:
             newwave=resampledWaveTab[::-1]
-            
+            newasc = False
 
         ## First need to pad the ends of the spectrum with zeros
         tapered = self.taper()
 
         ## Use numpy interpolation function
         if tapered._wavetable[0]<tapered._wavetable[-1]:
+            oldasc = True
             ans = N.interp(newwave,tapered._wavetable,
                            tapered._fluxtable)
         else:
+            oldasc = False
             rev = N.interp(newwave,tapered._wavetable[::-1],
                            tapered._fluxtable[::-1])
             ans = rev[::-1]
 
+ 
+        ## If the new and old waveset don't have the same parity,
+        ## the answer has to be flipped again
+        if (newasc != oldasc):
+            ans=ans[::-1]
+
+        ## Finally, make the new object
         # NB: these manipulations were done using the internal
         #tables in Angstrom and photlam, so those are the units
         #that must be fed to the constructor. 
@@ -533,6 +543,7 @@ class TabularSourceSpectrum(SourceSpectrum):
                                       flux = ans.copy(),
                                       fluxunits = 'photlam',
                                       keepneg=True)
+
         #Use the convert method to set the units desired by the user.
         resampled.convert(self.waveunits)
         resampled.convert(self.fluxunits)
