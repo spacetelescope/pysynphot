@@ -937,21 +937,30 @@ class SpectralElement(Integrator):
 
         if resampledWaveTab[0]<resampledWaveTab[-1]:
             newwave=resampledWaveTab
+            newasc = True
         else:
             newwave=resampledWaveTab[::-1]
-        
+            newasc = False
 
         #First need to pad the ends with zeros(?)
         tapered=self.taper()
         ## Use numpy interpolation function
         if tapered._wavetable[0]<tapered._wavetable[-1]:
+            oldasc = True
             ans = N.interp(newwave,tapered._wavetable,
                            tapered._throughputtable)
         else:
+            oldasc = False
             rev = N.interp(newwave,tapered._wavetable[::-1],
                            tapered._throughputtable[::-1])
             ans = rev[::-1]
 
+        ## If the new and old waveset don't have the same parity,
+        ## the answer has to be flipped again
+        if (newasc != oldasc):
+            ans=ans[::-1]
+
+        # Finally, make the new object.
         # NB: these manipulations were done using the internal
         #tables in Angstrom, so those are the units
         #that must be fed to the constructor. 
