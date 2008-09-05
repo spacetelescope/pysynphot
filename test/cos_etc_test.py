@@ -353,6 +353,13 @@ class ParserTestCase(testutil.FPTestCase):
         integral = sp.integrate(fluxunits='flam')
         self.assertApproxFP(integral, 1.0E-18, accuracy=0.0025)
 
+    def testzeroang(self):
+        self.assertRaises(ValueError,
+                          etc.parse_spec,
+                          'spec(zeroang.dat)')
+        
+
+
     #Add some cos test modes
     def testzodi(self):
         expr = "spec(Zodi.fits)"

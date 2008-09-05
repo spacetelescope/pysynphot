@@ -512,8 +512,6 @@ class TabularSourceSpectrum(SourceSpectrum):
         else:
             newwave=resampledWaveTab[::-1]
             
-        ## Make a new object to hold the resampled spectrum
-        #resampled = TabularSourceSpectrum()
 
         ## First need to pad the ends of the spectrum with zeros
         tapered = self.taper()
@@ -942,8 +940,6 @@ class SpectralElement(Integrator):
         else:
             newwave=resampledWaveTab[::-1]
         
-        ## Make a new object to hold the resampled SpectralElement
-        resampled = TabularSpectralElement()
 
         #First need to pad the ends with zeros(?)
         tapered=self.taper()
@@ -956,12 +952,15 @@ class SpectralElement(Integrator):
                            tapered._throughputtable[::-1])
             ans = rev[::-1]
 
+        # NB: these manipulations were done using the internal
+        #tables in Angstrom, so those are the units
+        #that must be fed to the constructor. 
+        resampled=ArraySpectralElement(wave=resampledWaveTab.copy(),
+                                       waveunits = 'angstroms',
+                                       throughput = ans.copy())
+        #Use the convert method to set the units desired by the user.
+        resampled.convert(self.waveunits)
 
-        resampled._throughputtable = ans.copy()
-
-        resampled._wavetable = resampledWaveTab.copy()
-        resampled.waveunits = units.Units(str(self.waveunits))
-        
         return resampled
 
     def unitResponse(self):
