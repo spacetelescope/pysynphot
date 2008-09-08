@@ -51,15 +51,19 @@ class calcspecCase(testutil.LogTestCase):
                   'SkyLines':self.hasSkyLines()}
         self.tra={}
 
-    def run_crbox(self,spstring,form,output="",wavecat="INDEF"):
+    def run_crbox(self,spstring,form,output="",wavecat="INDEF",
+                  lowave=0,hiwave=30000):
         """Calcspec has a bug. We will use countrate instead, and force it
         to use a box function of uniform transmission as the obsmode."""
 
+        range=hiwave-lowave
+        midwave=range/2.0
         iraf.countrate(spectrum=spstring, magnitude="",
-                       instrument="box(15000,30000)",
+                       instrument="box(%f,%f)"%(midwave,range),
                        form=form,
                        wavecat=wavecat,
                        output=output)
+        
 
     def run_countrate(self,form,output=None):
         if output is None:
@@ -156,7 +160,8 @@ class calcspecCase(testutil.LogTestCase):
         out.close()
         self.run_crbox(self.spectrum,'photlam',
                        output=self.csname,
-                       wavecat='/tmp/box.cat')
+                       wavecat='/tmp/box.cat',
+                       hiwave=self.sptest.wave.max()) 
         
         os.unlink('/tmp/box.cat')
 
