@@ -158,17 +158,31 @@ class calcspecCase(testutil.LogTestCase):
         out=open('/tmp/box.cat','w')
         out.write('box    %s\n'%self.csname.replace('.fits','_pysyn.fits'))
         out.close()
-        self.run_crbox(self.spectrum,'photlam',
-                       output=self.csname,
-                       wavecat='/tmp/box.cat',
-                       hiwave=self.sptest.wave.max()) 
+
+        #Put this in a loop to compensate for an apparent race condition
+        #that sometimes prevents the IRAF task from opening the file.
+        count=0
+        while count<10:
+            try:
+                self.run_crbox(self.spectrum,'photlam',
+                               output=self.csname,
+                               wavecat='/tmp/box.cat',
+                               hiwave=self.sptest.wave.max())
+                break
+            except IrafError,e:
+                count+=1
+                pass
+
+        if count == 10:
+            raise e
         
         os.unlink('/tmp/box.cat')
 
-
+        #Now do the comparison
         spref=S.FileSpectrum(self.csname)
-        rflux=spref.flux
-        tflux=self.sptest(spref.wave)
+        ridx=N.where(spref.wave >= 900.0)
+        rflux=spref.flux[ridx]
+        tflux=self.sptest(spref.wave[ridx])
         self.arraysigtest(tflux,rflux)
         
 class calcphotCase(calcspecCase):
@@ -299,11 +313,13 @@ class countrateCase(calcphotCase):
         obs.convert('photlam')
         self.run_countrate('photlam',self.crname)
         spref=S.FileSpectrum(self.crname)
-        rflux=spref.flux
-        tflux=obs.binflux
+        ridx=N.where(spref.wave >= 900.0)
+        rflux=spref.flux[ridx]
+        tidx=N.where(obs.binwave >= 900.0)
+        tflux=obs.binflux[tidx]
         self.savepysyn(obs.binwave,obs.binflux,
                        self.crname,units='photlam')
-
+        
         self.arraysigtest(tflux,rflux)
 
     def testcrcounts(self):
@@ -311,8 +327,10 @@ class countrateCase(calcphotCase):
         spref=S.FileSpectrum(self.crname.replace('.fits','_counts.fits'))
         obs=S.Observation(self.sptest,self.bp,binset=spref.wave)
         obs.convert('counts')
-        rflux=spref.flux
-        tflux=obs.binflux
+        ridx=N.where(spref.wave >= 900.0)
+        rflux=spref.flux[ridx]
+        tidx=N.where(obs.binwave >= 900.0)
+        tflux=obs.binflux[tidx]
         self.savepysyn(obs.binwave,obs.binflux,
                        self.crname.replace('.fits','_counts.fits'),
                        units='counts')

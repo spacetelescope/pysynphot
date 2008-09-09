@@ -25,10 +25,10 @@ Test sets
 
 The largest test set was derived from the existing set of ETC regression tests for ACS, NICMOS, STIS, and WFC3, as part of the preparation for moving these ETCs to use pysynphot. (No similar set was derived for COS because its ETC was already using pysynphot and its regression tests had already passed.) Each ETC test case resulted in multiple (py)synphot calls; after removing obvious duplicates in function/obsmode/spectrum space, these became the ETC-based test set. 
 
-However, this test set was overwhelmingly larged, and a smaller set was eventually produced by selecting a representative subset for review. (In progress)
+However, this test set was overwhelmingly large, and a smaller set was eventually produced by selecting a representative subset for review. (In progress)
 
 Additional smaller test sets were defined:
-   - from first principles, in conjunction with Bohlin
+   - from first principles
    - from cases with reported problems identified by INS
    - for functionality that is not exercised by the ETC, including more general renormalization and calcphot.effstim functionality
    - from the existing synphot regression test suite (TBD) and cookbook examples in the synphot manual (TBD)
@@ -55,7 +55,8 @@ produced by the two software packages will be different, unless
 special steps are taken to force them onto the same waveset.
 
 testcrspec:
-  This test uses the synphot.countrate task, with a box(15000,30000)
+  This test uses the synphot.countrate task, with a box(R/2,R) where R
+  is the full wavelength range over which the source spectrum is defined,
   to simulate the obsmode to produce the source spectrum unconvolved with the
   instrumental obsmode. The task uses a wavecat file to select the
   wavelength table used based on the obsmode. For this test, a special
@@ -125,7 +126,7 @@ The following problems with synphot were either previously known, or were identi
 - Spectrum differences shortward of 900A due to intersection with Vega waveset (acceptable discrepancy --> modify test to avoid failing (TBD) )
 - Spectrum differences because synphot drops any wavelength bins outside the range defined by the renormalization bandpass (as above)
 - Poor performance in renormalization around suddenly sparse wavelength tables (rework tests)
-- Bug in calcspec not present in countrate (rework tests)
+- Bug in calcspec not present in countrate (reworked tests)
 
 
 
