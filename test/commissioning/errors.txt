@@ -1,5 +1,5 @@
-This file contains an ongoing log of errors encountered by the
-syn_pysyn tests.
+This file contains an ongoing log of errors encountered and not
+yet resolved by the syn_pysyn tests.
 
 
 
@@ -7,6 +7,9 @@ IRAF errors [real calcspec/countrate difference]
 -------------------------------------------------
   ---> renormalization+wavetab has non-overlap for calcspec 
 but not for countrate
+
+Workaround: Abandon use of calcspec in these tests.
+
 
 IRAF errors [mystery: errors occur in large runs, but not when  
              the case is run individually]
@@ -34,9 +37,18 @@ Obsmode not supported by graph table: [Known issue: pysyn stricter than syn]
 ValueError: Warning: unused keywords set(['f25mama'])
   Note: this identified an error in the ETC specification of the obsmode.
 
+Solution: Change cases to 25mama, which is the supported keyword.
 
-===> Wavelength table is not sorted [No workaround identified]:
-    ------------------------------------------------------------------
+
+Wavelength table is not sorted [No workaround identified]:
+------------------------------------------------------------------
+     This problem is observed when an extinction law is used. The
+     computation of the wavelength table for the extinction produces
+     the 499.99999x wavelength entry. The problem appeared when the
+     pysynphot wavetable was fed to the synphot task (a change made as
+     a workaround for the inability of genwave to calculate a
+     wavelength table from four parameters, to be fed to calcspec).
+
      When this workaround is used, sometimes there is an extremely
      small difference between two wavelength elements (say,
      499.9999992343 and 500.0) which are distinguishable in the
@@ -48,9 +60,6 @@ ValueError: Warning: unused keywords set(['f25mama'])
      written out in double precision. But, the problem would still
      occur when synphot read it in. 
 
-     This problem is observed when an extinction law is used. The
-     computation of the wavelength table for the extinction produces
-     the 499.99999x wavelength entry.
 
 Syn/Pysyn produce arrays of different dimensions [no workaround found]
 ---------------------------------------------------------------------
