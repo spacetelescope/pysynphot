@@ -2,15 +2,6 @@ This file contains an ongoing log of errors encountered and not
 yet resolved by the syn_pysyn tests.
 
 
-
-IRAF errors [real calcspec/countrate difference]
--------------------------------------------------
-  ---> renormalization+wavetab has non-overlap for calcspec 
-but not for countrate
-
-Workaround: Abandon use of calcspec in these tests.
-
-
 IRAF errors [mystery: errors occur in large runs, but not when  
              the case is run individually]
 -------------------------------------------------------
@@ -30,14 +21,6 @@ Missing extinction laws: [#127; solution defined]
 NotImplementedError: Sorry, gal2 is not yet implemented
   --> replaced all gal2 by gal1 or gal3
 NotImplementedError: Sorry, gal3 is not yet implemented
-
-
-Obsmode not supported by graph table: [Known issue: pysyn stricter than syn]
-------------------------------------
-ValueError: Warning: unused keywords set(['f25mama'])
-  Note: this identified an error in the ETC specification of the obsmode.
-
-Solution: Change cases to 25mama, which is the supported keyword.
 
 
 Wavelength table is not sorted [No workaround identified]:
