@@ -100,7 +100,8 @@ revision log. This document describes the final approach used.
    elements that were greater than SIGTHRESH*the array maximum. The
    value of SIGTHRESH was tunable for test runs but is typically on
    the order of 0.01. If the two arrays have different sets of
-   significant elements, the test fails.
+   significant elements, a flag is set, and the test continues using
+   the set of elements that were significant in the SYNPHOT array.
 
  - From the set of significant elements, further select the set of
    elements for which the synphot array is nonzero. Then, using this
@@ -137,7 +138,7 @@ The following problems with pysynphot were identified and fixed during this comm
 
 - Incorrect calculation of interpolated spectral elements (#134)
 - Incorrect tapering behavior (TBD #149)
-- FITS files written to single precision by default (TBD #146)
+- FITS files written to single precision by default (#146 in progress)
 - Incorrect parsing of obsmode keywords that look like numbers (#125)
 - Incorrect parsing of band() arguments (#126)
 - Implement gal3 extinction law (#127/123) (In progress)
