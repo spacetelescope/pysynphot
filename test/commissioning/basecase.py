@@ -164,7 +164,8 @@ class calcspecCase(testutil.LogTestCase):
         #Use countrate with a box; use the native waveset as the waveset
         wname='/tmp/%s_box.cat'%os.path.basename(self.name)
         self.sptest.convert('photlam')
-        self.sptest.writefits(self.csname.replace('.fits','_pysyn.fits'))
+        self.sptest.writefits(self.csname.replace('.fits','_pysyn.fits'),
+                              precision='single')
 
         out=open(wname,'w')
         out.write('box    %s\n'%self.csname.replace('.fits','_pysyn.fits'))
