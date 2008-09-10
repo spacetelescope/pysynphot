@@ -3,14 +3,13 @@ import os
 import testutil
 import pysynphot as S
 import pyfits
+import numpy as N
+from pysynphot import etc
 
 class Precision(testutil.FPTestCase):
     def setUp(self):
         self.sp=S.BlackBody(5000)
         
-        self.sp.writefits('/tmp/spdouble.fits',precision='double')
-        self.sp.writefits('/tmp/spdefault.fits')
-
     def tearDown(self):
         os.unlink(self.fname)
         
@@ -33,4 +32,26 @@ class Precision(testutil.FPTestCase):
         self.assert_(f[1].header['tform2'].lower() == 'd')
 
                                         
-                                            
+class Sorted(testutil.FPTestCase):
+    def setUp(self):
+        self.fname='/tmp/epsilon.fits'
+        self.obsmode='wfc3,ir,f160w'
+        self.spstring='rn(spec(/grp/hst/cdbs//grid/bz77/bz_7.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)'
+        self.sp=etc.parse_spec(self.spstring)
+        self.sp.writefits(self.fname,precision='single')
+
+    def tearDown(self):
+        os.unlink(self.fname)
+
+    def testoutputfix(self):
+        sp=S.FileSpectrum(self.fname)
+        idx=N.where(sp.wave == 500)
+        num=len(idx[0])
+        self.failIf(num != 1, "%d occurrences found"%num)
+
+    def testinputfix(self):
+        self.assertRaises(ValueError,
+                          S.ArraySpectrum,
+                          wave=N.array([1,2,3,4,4,5]),
+                          flux=N.ones(6))
+                    

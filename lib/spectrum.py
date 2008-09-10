@@ -239,7 +239,7 @@ class SourceSpectrum(Integrator):
         """Write the spectrum to a FITS file."""
         _precision=precision.lower()[0]
         pcodes={'d':'D','s':'E'}
-        
+            
         if clobber:
             try:
                 os.remove(filename)
@@ -253,7 +253,20 @@ class SourceSpectrum(Integrator):
             wave=self.wave
             flux=self.flux
             
+        #Add a check for single/double precision clash, so
+        #that if written out in single precision, the wavelength table
+        #will still be sorted with no duplicates
+        if flux.dtype == N.float64 and _precision == 's':
+            idx=N.where(abs(wave[1:]-wave[:-1]) > 0.000001)
+        else:
+            idx=N.where(wave) #=> idx=[:]
+
+        wave=wave[idx]
+        flux=flux[idx]
+        
         first,last=0,len(flux)
+
+        
         if trimzero:
             #Keep one zero at each end
             nz = flux.nonzero()[0]
