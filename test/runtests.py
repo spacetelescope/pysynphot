@@ -23,7 +23,8 @@ tlist=['cos_etc_test',
        'spectest',
        'testwrite',
        'ticket86',
-       'wavecat_tests'
+       'wavecat_tests',
+       'ticket146'
        ]
 #=====================================================
 

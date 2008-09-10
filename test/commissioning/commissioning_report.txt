@@ -123,9 +123,9 @@ Identified synphot errors
 The following problems with synphot were either previously known, or were identified during this commissioning process. Tests exhibiting these problems were either deemed acceptable, or reworked to avoid the failure so that a meaningful comparison could be performed:
 
 - Poor performance around very narrow lines or very steep gradients (acceptable discrepancy)
-- Spectrum differences shortward of 900A due to intersection with Vega waveset (acceptable discrepancy --> modify test to avoid failing (TBD) )
-- Spectrum differences because synphot drops any wavelength bins outside the range defined by the renormalization bandpass (as above)
-- Poor performance in renormalization around suddenly sparse wavelength tables (rework tests)
+- Spectrum differences shortward of 900A due to intersection with Vega waveset (acceptable discrepancy --> modify test to avoid failing)
+- Spectrum differences because synphot drops any wavelength bins outside the range defined by the renormalization bandpass (as above:TBD)
+- Poor performance in renormalization around suddenly sparse wavelength tables (rework tests, in progress)
 - Bug in calcspec not present in countrate (reworked tests)
 
 

@@ -235,9 +235,11 @@ class SourceSpectrum(Integrator):
             raise TypeError("%s is not a valid FluxUnit"%self.fluxunits)
 
     def writefits(self, filename, clobber=True, trimzero=True,
-                  binned=False):
+                  binned=False,precision='double'):
         """Write the spectrum to a FITS file."""
-
+        _precision=precision.lower()[0]
+        pcodes={'d':'D','s':'E'}
+        
         if clobber:
             try:
                 os.remove(filename)
@@ -265,11 +267,11 @@ class SourceSpectrum(Integrator):
         cw = pyfits.Column(name='WAVELENGTH',
                            array=wave[first:last],
                            unit=self.waveunits.name,
-                           format='E')
+                           format=pcodes[_precision])
         cf = pyfits.Column(name='FLUX',
                            array=flux[first:last],
                            unit=self.fluxunits.name,
-                           format='E')
+                           format=pcodes[_precision])
         hdu = pyfits.PrimaryHDU()
         hdulist = pyfits.HDUList([hdu])
 
