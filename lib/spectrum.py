@@ -144,7 +144,8 @@ class Integrator(object):
         if N.any(wave <= 0):
             raise ValueError('Zero wavelength occurs in wavelength array: invalid value')
 
-
+        
+        
         #Now check for monotonicity & enforce ascending
         sorted=N.sort(wave)        
         if not N.alltrue(sorted == wave):
@@ -154,6 +155,11 @@ class Integrator(object):
             else:
                 raise ValueError('Wavelength array is not monotonic: invalid')
 
+        #Check for duplicate values
+        dw=sorted[1:]-sorted[:-1]
+        if N.any(dw==0):
+            raise ValueError("Wavelength array contains duplicate entries: invalid")
+        
     def validate_fluxtable(self):
         "Enforce non-negative fluxes"
         if ((not self.fluxunits.isMag) #neg. magnitudes are legal
