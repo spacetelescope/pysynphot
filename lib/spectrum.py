@@ -38,6 +38,11 @@ PC = 3.085678E18              # Parsec
 RADIAN = RSUN / PC /1000.
 RENORM = PI * RADIAN * RADIAN # Normalize to 1 solar radius @ 1 kpc
 
+#Single-precision epsilon value, taken from the synphot FAQ.
+#This is the minimum separation in wavelength value necessary for
+#synphot to read the entries as distinct single-precision numbers.
+syn_epsilon=0.00032 
+        
 def _computeDefaultWaveset():
     minwave = 500.
     maxwave = 26000.
@@ -241,10 +246,14 @@ class SourceSpectrum(Integrator):
             raise TypeError("%s is not a valid FluxUnit"%self.fluxunits)
 
     def writefits(self, filename, clobber=True, trimzero=True,
-                  binned=False,precision='double'):
+                  binned=False,precision=None):
         """Write the spectrum to a FITS file."""
-        _precision=precision.lower()[0]
+        
         pcodes={'d':'D','s':'E'}
+        if precision is None:
+            precision=self.flux.dtype.char
+        _precision=precision.lower()[0]
+        pcodes={'d':'D','s':'E','f':'E'}
             
         if clobber:
             try:
@@ -262,8 +271,10 @@ class SourceSpectrum(Integrator):
         #Add a check for single/double precision clash, so
         #that if written out in single precision, the wavelength table
         #will still be sorted with no duplicates
-        if flux.dtype == N.float64 and _precision == 's':
-            idx=N.where(abs(wave[1:]-wave[:-1]) > 0.000001)
+        #The value of epsilon is taken from the Synphot FAQ.
+
+        if wave.dtype == N.float64 and _precision == 's':
+            idx=N.where(abs(wave[1:]-wave[:-1]) > syn_epsilon)
         else:
             idx=N.where(wave) #=> idx=[:]
 
@@ -925,8 +936,13 @@ class SpectralElement(Integrator):
 
         return OutElement
     
-    def writefits(self, filename, clobber=True, trimzero=True):
+    def writefits(self, filename, clobber=True, trimzero=True,
+                  precision=None):
         """Write the bandpass to a FITS file."""
+        if precision is None:
+            precision=self.throughput.dtype.char
+        _precision=precision.lower()[0]
+        pcodes={'d':'D','s':'E','f':'E'}
 
         if clobber:
             try:
@@ -936,6 +952,20 @@ class SpectralElement(Integrator):
             
         wave=self.wave
         thru=self.throughput
+
+        #Add a check for single/double precision clash, so
+        #that if written out in single precision, the wavelength table
+        #will still be sorted with no duplicates
+        #The value of epsilon is taken from the Synphot FAQ.
+
+        if wave.dtype == N.float64 and _precision == 's':
+            idx=N.where(abs(wave[1:]-wave[:-1]) > syn_epsilon)
+        else:
+            idx=N.where(wave) #=> idx=[:]
+
+        wave=wave[idx]
+        thru=thru[idx]
+
             
         first,last=0,len(thru)
         if trimzero:
@@ -951,11 +981,11 @@ class SpectralElement(Integrator):
         cw = pyfits.Column(name='WAVELENGTH',
                            array=wave[first:last],
                            unit=self.waveunits.name,
-                           format='E')
+                           format=pcodes[_precision])
         cf = pyfits.Column(name='THROUGHPUT',
                            array=thru[first:last],
                            unit='         ',
-                           format='E')
+                           format=pcodes[_precision])
         hdu = pyfits.PrimaryHDU()
         hdulist = pyfits.HDUList([hdu])
 

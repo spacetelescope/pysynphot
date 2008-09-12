@@ -31,6 +31,10 @@ class Precision(testutil.FPTestCase):
         f=pyfits.open(self.fname)
         self.assert_(f[1].header['tform2'].lower() == 'd')
 
+class PrecisionBP(Precision):
+    def setUp(self):
+        self.sp=S.ObsBandpass('acs,hrc,f555w')
+
                                         
 class Sorted(testutil.FPTestCase):
     def setUp(self):
@@ -54,4 +58,22 @@ class Sorted(testutil.FPTestCase):
                           S.ArraySpectrum,
                           wave=N.array([1,2,3,4,4,5]),
                           flux=N.ones(6))
-                    
+
+class SortedBP(Sorted):
+    def setUp(self):
+        self.fname='/tmp/bpesp.fits'
+        self.bp=S.ArrayBandpass(wave=N.array([1,2,3,4,4.0000001,5]),
+                                throughput=N.ones(6))
+        self.bp.writefits(self.fname,precision='single')
+
+    def testoutputfix(self):
+        bp=S.FileBandpass(self.fname)
+        idx=N.where(bp.wave == 4)
+        num=len(idx[0])
+        self.failIf(num != 1, "%d occurrences found"%num)
+
+    def testinputfix(self):
+        self.assertRaises(ValueError,
+                          S.ArrayBandpass,
+                          wave=N.array([1,2,3,4,4,5]),
+                          throughput=N.ones(6))
