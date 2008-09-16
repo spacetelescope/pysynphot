@@ -97,6 +97,7 @@ def format(value):
     return str1+str2
 
 class CalcphotTestCase(testutil.FPTestCase):
+    #Loosened accuracy for r618 (no taper)
     def setUp(self):
         self.sp = S.FileSpectrum(testdata)
         self.obsmode = S.ObsBandpass(values['obsmode'])
@@ -105,13 +106,13 @@ class CalcphotTestCase(testutil.FPTestCase):
     def testcountrate(self):
         "countrate"
         countrate = self.obs.countrate()
-        self.assertApproxFP(countrate, values['countrate'])
+        self.assertApproxFP(countrate, values['countrate'],1e-4)
 
     def testefflam(self):
         "efflam"
         synphot_efflerg = 5304.462
         efflam = self.obs.efflam()
-        self.assertApproxFP(efflam, synphot_efflerg)
+        self.assertApproxFP(efflam, synphot_efflerg, 1e-4)
 
 
 
@@ -240,11 +241,12 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
     #Removed test 4cr2 to other_etc_ticket_cases: ticket #71
 
     def test5cr(self):
+        #Loosened accuracy for r618 (no tapering)
         spectrum = "spectrum=rn(icat(k93models,5770,0.0,4.5),band(johnson,v),20.0,vegamag)"
         instrument = "instrument=acs,sbc,F125LP"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(countrate[0], 0.00015431, accuracy=0.0025)
+        self.assertApproxFP(countrate[0], 0.00015431, accuracy=0.003)
 
 
 class ETCTestCase_Imag2(testutil.FPTestCase):
@@ -296,22 +298,27 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
     #Tests run, but fail comparison.
     
     def test6(self):
+        #Replaced answer for r618 (no tapering)
+        #The throughput files used in this case don't actually go
+        #all the way to zero.
         spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         instrument = "instrument=acs,sbc,F140LP"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 0.0834405)
+        self.assertApproxFP(float(countrate[0]), 0.0877036)
 
 
     #Moved test7 to other_etc_ticket_case: answers disagree
     #Deleted test8: it's an obsolete case.   
 
     def test9(self):
+        #Changed answer for r618 (no tapering): this obsmode doesn't
+        #go all the way to zero with this comptab
         spectrum = "spectrum= rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=stis,ccd"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 36130.9, accuracy=0.0025)
+        self.assertApproxFP(float(countrate[0]), 40470.7, accuracy=0.0025)
 
     def test10(self):
         spectrum = "spectrum=rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
