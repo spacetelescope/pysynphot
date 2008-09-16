@@ -311,16 +311,14 @@ class SourceSpectrum(Integrator):
         hdulist.append(hdu)
         hdu.writeto(filename)
 
-           
-
                                                  
     def integrate(self,fluxunits='photlam'):
+        #Extract the flux in the desired units
         u=self.fluxunits
         self.convert(fluxunits)
-
         wave,flux=self.getArrays()
         self.convert(u)
-            
+        #then do the integration    
         return self.trapezoidIntegration(wave,flux)
     
 
@@ -546,18 +544,15 @@ class TabularSourceSpectrum(SourceSpectrum):
             newwave=resampledWaveTab[::-1]
             newasc = False
 
-        ## First need to pad the ends of the spectrum with zeros
-        tapered = self.taper()
-
         ## Use numpy interpolation function
-        if tapered._wavetable[0]<tapered._wavetable[-1]:
+        if self._wavetable[0]<self._wavetable[-1]:
             oldasc = True
-            ans = N.interp(newwave,tapered._wavetable,
-                           tapered._fluxtable)
+            ans = N.interp(newwave,self._wavetable,
+                           self._fluxtable)
         else:
             oldasc = False
-            rev = N.interp(newwave,tapered._wavetable[::-1],
-                           tapered._fluxtable[::-1])
+            rev = N.interp(newwave,self._wavetable[::-1],
+                           self._fluxtable[::-1])
             ans = rev[::-1]
 
  
@@ -1007,17 +1002,15 @@ class SpectralElement(Integrator):
             newwave=resampledWaveTab[::-1]
             newasc = False
 
-        #First need to pad the ends with zeros(?)
-        tapered=self.taper()
         ## Use numpy interpolation function
-        if tapered._wavetable[0]<tapered._wavetable[-1]:
+        if self._wavetable[0]<self._wavetable[-1]:
             oldasc = True
-            ans = N.interp(newwave,tapered._wavetable,
-                           tapered._throughputtable)
+            ans = N.interp(newwave,self._wavetable,
+                           self._throughputtable)
         else:
             oldasc = False
-            rev = N.interp(newwave,tapered._wavetable[::-1],
-                           tapered._throughputtable[::-1])
+            rev = N.interp(newwave,self._wavetable[::-1],
+                           self._throughputtable[::-1])
             ans = rev[::-1]
 
         ## If the new and old waveset don't have the same parity,
