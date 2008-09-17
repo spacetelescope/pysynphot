@@ -67,16 +67,8 @@ testthru:
   This test samples the pysynphot-computed throughput array on the
   wavelength table used for the synphot-computed throughput.
 
-testcrphotlam:
-  For this test, the synphot.countrate task selects its wavelength
-  table from the wavecat based on the obsmode, and the pysynphot
-  Observation selects its binned wavelength set from the same wavecat
-  based on the obsmode. Thus the synphot spectrum can be compared
-  directly to the binned tables associated with the pysynphot
-  Observation.
-
-testcrcounts:
-  For this test, the wavelength table from the synphot-computed
+testcrcounts, testcrphotlam:
+  For these tests, the wavelength table from the synphot-computed
   spectrum is used as the binned wavelength set when constructing
   the pysynphot Observation.
 
@@ -137,8 +129,8 @@ Identified and repaired pysynphot errors
 The following problems with pysynphot were identified and fixed during this commissioning process:
 
 - Incorrect calculation of interpolated spectral elements (#134)
-- Incorrect tapering behavior (TBD #149)
-- FITS files written to single precision by default (#146 in progress)
+- Incorrect tapering behavior (#149 in progress)
+- FITS files written to single precision by default (#146)
 - Incorrect parsing of obsmode keywords that look like numbers (#125)
 - Incorrect parsing of band() arguments (#126)
 - Implement gal3 extinction law (#127/123) (In progress)

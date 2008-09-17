@@ -123,6 +123,13 @@ class stisS14(basecase.countrateCase):
         self.spectrum="/grp/hst/cdbs/calspec/g191b2b_mod_004.fits"
         self.setglobal(__file__)
         self.runpy()
+class stisV1(basecase.countrateCase):
+    def setUp(self):
+        self.obsmode='stis,ccd'
+        self.spectrum='rn(unit(1,flam),band(johnson,v),15.0,vegamag)'
+        self.setglobal(__file__)
+        self.runpy()
+
 
 class acsS0(basecase.countrateCase):
     def setUp(self):

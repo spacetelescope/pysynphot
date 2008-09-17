@@ -321,10 +321,10 @@ class countrateCase(calcphotCase):
             except OSError:
                 pass
     def testcrphotlam(self):
-        obs=S.Observation(self.sptest,self.bp)
-        obs.convert('photlam')
         self.run_countrate('photlam',self.crname)
         spref=S.FileSpectrum(self.crname)
+        obs=S.Observation(self.sptest,self.bp,binset=spref.wave)
+        obs.convert('photlam')
         ridx=N.where(spref.wave >= 900.0)
         rflux=spref.flux[ridx]
         tidx=N.where(obs.binwave >= 900.0)
