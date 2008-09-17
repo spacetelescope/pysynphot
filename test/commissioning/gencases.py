@@ -18,6 +18,8 @@ import basecase
 
 
     count={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
+    dupcatcher={}
+    dupcounter={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
     for line in f:
     
     #parse the line
@@ -40,7 +42,14 @@ import basecase
             kwd['spectrum']=None
             
         defn=pattern%(cmd,count[cmd],cmd,obsmode,kwd['spectrum'])
-        out.write(defn)
+        ktuple=(cmd,obsmode,kwd['spectrum'])
+        
+        if ktuple in dupcatcher:
+           dupcounter[cmd]+=1
+        else:
+           casename="%sCase%d"%(cmd,count[cmd])
+           dupcatcher[ktuple]=casename
+           out.write(defn)
 
 
     out.write("""\n\n
@@ -54,8 +63,9 @@ if __name__ == '__main__':
     f.close()
 
     for k in count:
-        print "%s:%d"%(k,count[k])
-        out.write("# %s:%d\n"%(k,count[k]))
+        total= "%s:%d-%d=%d\n"%(k,count[k],dupcounter[k],count[k]-dupcounter[k])
+        sys.stdout.write(total)
+        out.write(total)
     out.close()
 
 if __name__ == '__main__':
