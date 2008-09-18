@@ -62,9 +62,9 @@ def countrate(parlist):
         obs=Observation(sp,bp,bp.wave)
 
     obs.convert('counts')
-    piv=obs.pivot()
+    efflam=obs.efflam()
     ans=obs.countrate(binned=False)
-    return ans,piv
+    return ans,efflam
 
 def specrate(parlist):
     """Return the countrate of the spectrum as observed through the
