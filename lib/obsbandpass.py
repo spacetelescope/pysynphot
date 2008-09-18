@@ -43,6 +43,9 @@ class ObsModeBandpass(CompositeSpectralElement):
         self.obsmode=ob
         self.name=self.obsmode._obsmode #str(self.obsmode)
 
+        #Check for valid bounds
+        self._checkbounds()
+
     def __str__(self):
         """Defer to ObservationMode component """
         return self.name #self.obsmode._obsmode
@@ -55,6 +58,9 @@ class ObsModeBandpass(CompositeSpectralElement):
         """Defer to ObservationMode component """
         return self.obsmode.showfiles()
 
-    
-            
+
+    def _checkbounds(self):
+        thru=self.throughput
+        if thru[0] != 0 or thru[-1] != 0:
+            print "Warning: throughput for this obsmode is not bounded by zeros. Endpoints: thru[0]=%g, thru[-1]=%g"%(thru[0],thru[-1])
         
