@@ -318,7 +318,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         instrument = "instrument=stis,ccd"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 40470.7, accuracy=0.0025)
+        self.assertApproxFP(float(countrate[0]), 42195.1, accuracy=0.0025)
 
     def test10(self):
         spectrum = "spectrum=rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
