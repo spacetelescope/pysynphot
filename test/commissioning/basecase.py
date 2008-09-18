@@ -49,6 +49,10 @@ class calcspecCase(testutil.LogTestCase):
                   'Superthresh':self.superthresh,
                   'SigThresh':self.sigthresh,
                   'SkyLines':self.hasSkyLines()}
+        try:
+            self.tda['Subset']=self.subset
+        except AttributeError:
+            pass
         self.tra={}
 
     def run_crbox(self,spstring,form,output="",wavecat="INDEF",
