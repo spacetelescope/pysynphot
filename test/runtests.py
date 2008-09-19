@@ -13,7 +13,8 @@ import testutil
 #=====================================================
 #           CONFIGURE TESTS HERE
 #=====================================================
-tlist=['cos_etc_test',
+tlist=['v05_tickets',
+       'cos_etc_test',
        'cos_fuv_cases',
        'cos_nuv_cases',
        'ui_test',
