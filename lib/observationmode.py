@@ -14,6 +14,7 @@ import locations
 from locations import irafconvert
 import planck
 import wavetable
+from locations import _refTable
 
 #Flag to control verbosity
 DEBUG = False
@@ -23,14 +24,6 @@ datadir = locations.specdir
 wavecat = locations.wavecat
 
 # Component tables are defined here.
-def _refTable(template):
-    names = glob.glob(os.path.join(rootdir,template))
-    names.sort()
-    try:
-        return names[-1]
-    except IndexError:
-        msg= "No files found for %s."%os.path.join('PYSYN_CDBS',template)
-        raise IOError(msg)
 try:
     GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
     COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
@@ -345,6 +338,9 @@ class BaseObservationMode(object):
         c0 = float(coefficients[0])
         c1 = float(coefficients[1])
         c2 = (c1 - c0) / 1999.0    # arbitraily copied from synphot....
+        #In synphot.countrate/calcstep.x, it was NSPEC-1, where
+        #NSPEC was hardcoded to 2000 as the number of bins into
+        #which the wavelength set should be divided by default
         c3 = c2
         if len(coefficients) > 2:
             c2 = float(coefficients[2])

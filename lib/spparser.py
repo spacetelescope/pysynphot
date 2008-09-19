@@ -1,7 +1,7 @@
 from spark import GenericScanner, GenericParser, GenericASTTraversal
 from spark import GenericASTBuilder, GenericASTMatcher
 import spectrum
-import extinction
+import reddening
 import observationmode
 import locations
 import catalog
@@ -260,7 +260,8 @@ class Interpreter(GenericASTMatcher):
                     tree.value = spectrum.FlatSpectrum(1.0)
             elif fname == 'ebmvx':
                 # extinction
-                tree.value = extinction.Extinction(args[0], args[1])
+                tree.value = reddening.Extinction(args[0],args[1])
+                                
             else:
                 tree.value = "would call %s with the following args: %s" % (fname, repr(args))
             

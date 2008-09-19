@@ -146,7 +146,7 @@ from spectrum import FileSpectralElement as FileBandpass
 from spectrum import ArraySpectralElement as ArrayBandpass
 #Complicated spectral elements
 from obsbandpass import ObsBandpass
-from extinction import Extinction
+from reddening import Extinction
 #Observations
 from observation import Observation
 #Other constructs
@@ -154,6 +154,8 @@ from observationmode import ObservationMode as Obsmode
 from numpy import arange as Waveset
 #Get Vega
 from spectrum import Vega
+#Get cache 
+import Cache
 
 def _test():
     "Runs doctest on the examples in this file"

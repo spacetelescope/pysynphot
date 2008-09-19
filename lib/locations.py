@@ -1,6 +1,16 @@
-import os, warnings
+import os, warnings, glob
 
-    
+   
+
+def _refTable(template):
+    names = glob.glob(os.path.join(rootdir,template))
+    names.sort()
+    try:
+        return names[-1]
+    except IndexError:
+        msg= "No files found for %s."%os.path.join('PYSYN_CDBS',template)
+        raise IOError(msg)
+ 
 #Replace cdbs_roots lookup with an environment variable
 try:
     rootdir   = os.environ['PYSYN_CDBS']
@@ -16,15 +26,30 @@ specdir   = os.path.join(os.path.dirname(__file__),'data')+os.path.sep
 CAT_TEMPLATE = os.path.join(rootdir,'grid','*','catalog.fits')
 KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
 
-
+#Vega
 VegaFile = os.path.join(specdir,'alpha_lyr_stis_003.fits')
 
+#Reddening Laws
+extdir=os.path.join(rootdir,'grid','extinction')
 
+
+RedLaws={'mwavg':   'milkyway_diffuse_*.fits',
+         'mwdense': 'milkyway_dense_*.fits',
+         'lmcavg':  'lmc_diffuse_*.fits',
+         'lmc30dor':'lmc_30dorshell_*.fits',
+         'smcbar':  'smc_bar_*.fits',
+         'xgalsb':  'xgal_starburst_*.fits'
+           }
+
+for k in RedLaws:
+    try:
+        RedLaws[k]=_refTable(os.path.join(extdir,RedLaws[k]))
+    except IOError:
+        pass
+    
 #Define wavecat file explicitly
 wavecat = os.path.join(specdir,'wavecat.dat')
 
-def getBandFileName(band):
-    return os.path.join(specdir,band.replace(',','_')+'.fits')
 
 def irafconvert(iraffilename):
     '''Convert the IRAF file name (in directory$file format) to its
