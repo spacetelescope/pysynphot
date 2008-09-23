@@ -34,6 +34,32 @@ Additional smaller test sets were defined:
    - from the existing synphot regression test suite (TBD) and cookbook examples in the synphot manual (TBD)
 
 
+Table of tests run as a function of testcase type:
+
+              |calcphot|calcspec|countrate|specsourcerate|thermback|
+Array tests:  |        |        |         |              |         |
+--------------|--------|--------|---------|--------------|---------|
+testthru      |   X    |        |   X     |     X        |   X     |
+--------------|--------|--------|---------|--------------|---------|
+testcrspec    |   X    |    X   |   X     |     X        |         |
+--------------|--------|--------|---------|--------------|---------|
+testcrphotlam |        |        |   X     |     X        |         |
+--------------|--------|--------|---------|--------------|---------|
+testcrcounts  |        |        |   X     |     X        |         |
+--------------|--------|--------|---------|--------------|---------|
+              |        |        |         |              |         |
+Scalar tests: |        |        |         |              |         |
+--------------|--------|--------|---------|--------------|---------|
+testcountrate |        |        |   X     |     X        |         |
+--------------|--------|--------|---------|--------------|---------|
+testefflam    |   X    |        |   X     |     X        |         |
+--------------|--------|--------|---------|--------------|---------|
+testthermback |        |        |         |              |   X     |
+--------------|--------|--------|---------|--------------|---------|
+
+
+
+
 Comparing quantities
 ----------------------------
 

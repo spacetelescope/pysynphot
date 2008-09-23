@@ -47,6 +47,7 @@ setenv PATH {$PATH}:{$codeplace}
 setenv PYTHONPATH {$PYTHONPATH}:{$codeplace}
 setenv PYSYN_CDBS /grp/hst/cdbs/
 echo $PYTHONPATH
+python -c "import pysynphot ; print pysynphot.__file__"
 
 foreach tname ($tlist)
   echo $tname
