@@ -1,0 +1,114 @@
+PROBLEM:
+=======
+
+Throughput files containing filter throughput curves that decay to a
+very small number, but not actually zero (ie, are not "pinned at zero"
+at the ends) cause problems for Pysynphot that they did not cause for
+SYNPHOT.
+
+
+WHY?
+====
+
+Differences in waveset handling. 
+
+ - SYNPHOT takes the intersection of all wavelength sets defined for all
+   elements of a calculation, and discards all data falling outside the
+   defined range of the intersection.
+
+ - Pysynphot takes the union of all wavelength sets defined for all
+   elements of a calculation, and preserves all data.
+
+Thus, if the last datapoint in a throughput file is at lambda=20000,
+throughput=1e-9:
+ 
+ - SYNPHOT discards all data longward of lambda=20000
+ - Pysynphot extrapolates a constant throughput of 1e-9 instead
+
+
+HOW DOES THE PROBLEM MANIFEST?
+=============================
+
+We have identified two areas in which the problem manifests:
+ - countrate calculations will integrate over the full wavelength domain of
+ the spectrum domain, so the resulting countrate will be larger.
+
+ - renormalization calculations will be performed over the full
+ wavelength domain of the spectrum being renormalized, so the
+ renormalization constant will be smaller
+
+However, there may be more manifestations. The fundamental problem is
+that the throughput curve for these filters are shaped differently for
+Pysynphot than they were for SYNPHOT. This is likely to ripple
+throughout the system.
+
+
+WHY SHOULD WE CHANGE THE FILES?
+WHY DON'T YOU JUST CHANGE THE CODE INSTEAD?
+===========================================
+
+- Taking the union, rather than the intersection, of the wavesets is a
+  fundamental design feature of Pysynphot that was introduced in order to
+  solve other problems with SYNPHOT.
+
+- The throughput files in their current state are not well defined.
+  If the throughput goes to 1e-9 at 20000A, what does it do at 25000? 
+
+- You as the instrument teams will have better control over what
+  Pysynphot should do outside the currently defined ranges if you
+  actually tell it (ie, modify the files so that the behavior is
+  welldefined) than allow it to guess (ie, let the software extrapolate).
+
+
+WHAT ARE THE OPTIONS FOR MODIFICATION?
+======================================
+
+Option 1: Update the throughput tables so they are well defined.
+  Pros:
+   - gives you complete control over the throughput behavior
+   - requires no code changes for us
+   - is "the right thing to do"
+
+  Cons:
+   - requires thinking, editing, testing, and delivering a lot of
+  files
+      - thinking: what is the correct extrapolation behavior?
+      - editing: updating the tables to include them
+      - testing: testing new throughput tables (how?)
+      
+Option 2: Add a header keyword that will tell Pysynphot to taper the
+   throughput curve to zero when the file is read in.
+
+   Pros:
+    - requires less thinking, editing, and testing:
+      - thinking: which files should do this?
+      - editing: identical for all affected files => scripted
+      - testing: easier to test files with a new header keyword that
+   most software ignores, than to test files with actual data table
+   changes
+
+   Cons:
+    - gives you less control over the behavior
+    - requires some well-localized code changes for us
+    - is a bit of a hack
+
+
+   How would the tapering be done?
+   -------------------------------
+
+   One extra point would be added to each end of the table.
+   The wavelengths to use for these extra points are
+   calculated by using the same ratio as for the 2 interior points
+        wcopy[0] = wcopy[1]*wcopy[1]/wcopy[2]
+        wcopy[-1] = wcopy[-2]*wcopy[-2]/wcopy[-3]
+
+   The throughput of the new points would be set to zero.
+
+   This change would be implemented when the file was read in, so that
+   it would be sure to propagate through the entire system. 
+
+   When the resulting throughput curve was used in any calculations,
+   it would be linearly interpolated between the last defined point in
+   the file, and zero at the extra point; longward/shortward of the
+   extra points would then be extrapolated at the constant value of
+   zero.
