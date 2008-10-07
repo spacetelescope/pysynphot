@@ -41,7 +41,7 @@ endif
 
 #set tlist = "fewcases science_cases"
 #.........................................
-irafdev
+#irafdev
 set codeplace = /data/gaudete1/dg1/laidler/ssb/checkout/pysynphot/test/commissioning
 setenv PATH {$PATH}:{$codeplace}
 setenv PYTHONPATH {$PYTHONPATH}:{$codeplace}
