@@ -802,7 +802,16 @@ class Ticket87(testutil.FPTestCase):
     def testminwave(self):
         tst=self.sp.redshift(self.z)
         self.assert_(self.sp.wave.min() == tst.wave.min(),"wave.min=%f"%tst.wave.min())
-                            
+
+
+
+class SrvParserTestCase(testutil.FPTestCase):
+    def testtermamp(self):
+        self.cgistring='SpecSourcerateSpec&spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"&instrument="cos,fuv,g130m,c1309"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV5.fits&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"&'
+        self.tokens=self.cgistring.split('&')
+        d=etc.getparms(self.tokens[1:])
+
+    
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)

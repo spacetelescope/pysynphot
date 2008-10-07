@@ -13,12 +13,17 @@ def getparms(parlist):
     pairs that pysynphot utterly ignores. This function builds a dictionary
     from the few elements it actually uses. """
     d={}
-    keylist=['spectrum','output','obsmode','instrument','func']
+    keylist=['spectrum','output','obsmode','instrument','func','etcid']
              
     for pair in parlist:
-        name,value=pair.split('=')
-        if name in keylist:
-            d[name]=value.strip('"')
+        try:
+            name,value=pair.split('=')
+            if name in keylist:
+                d[name]=value.strip('"')
+        except ValueError,e:
+            #Check to see if the string is empty
+            if len(pair)>0:
+                raise(e)
     return d
 
 def parse_spec(syncommand):
