@@ -909,7 +909,13 @@ class SpectralElement(Integrator):
                              throughput should be sampled
         @type wavelengths: ndarray
         '''
-        return self.resample(wavelengths)._throughputtable
+        if N.isscalar(wavelengths):
+            delta=0.0001
+            ww=N.array([wavelengths-delta,wavelengths,wavelengths+delta])
+            tmp=self.resample(ww)
+            return tmp._throughputtable[1]
+        else:
+            return self.resample(wavelengths)._throughputtable
 
     def taper(self):
         '''Taper the spectrum by adding zeros to each end.
