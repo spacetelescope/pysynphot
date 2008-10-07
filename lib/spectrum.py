@@ -396,6 +396,10 @@ class SourceSpectrum(Integrator):
         from renorm import StdRenorm
         return StdRenorm(self,band,RNval,RNUnits)
 
+    def effstim(self,fluxunits='photlam'):
+        print "?? %s"%fluxunits
+        raise NotImplementedError("Ticket #140: calcphot.effstim functionality")
+
 class CompositeSourceSpectrum(SourceSpectrum):
     '''Composite Source Spectrum object, handles addition, multiplication
     and keeping track of the wavelength set.
@@ -725,7 +729,7 @@ class GaussianSource(AnalyticSpectrum):
         self._input_units = self.fluxunits
         self.sigma = fwhm / math.sqrt(8.0 * math.log(2.0))
         self.factor = flux / (math.sqrt(2.0 * math.pi) * self.sigma)
-        self.name ='Gaussian: mu=%f,fwhm=%f,flux=%f %s'%(self.center,self.input_fwhm,self.input_flux,self._input_units)
+        self.name ='Gaussian: mu=%f,fwhm=%f,flux=%g %s'%(self.center,self.input_fwhm,self.input_flux,self._input_units)
 
     def __str__(self):
         return self.name
@@ -1054,6 +1058,9 @@ class SpectralElement(Integrator):
     
     wave = property(GetWaveSet, doc='Waveset for bandpass')
     throughput = property(GetThroughput, doc='Throughput for bandpass')
+
+    def fwhm(self):
+        raise NotImplementedError("#139: Implement calcband functionality")
 
 
 class CompositeSpectralElement(SpectralElement):

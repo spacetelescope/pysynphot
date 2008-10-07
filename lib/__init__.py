@@ -75,7 +75,7 @@ Power law: refwave 10000.000000, index -2.000000
 
 >>> g1=S.GaussianSource(18.3,18000,2000,fluxunits='abmag')
 >>> print g1
-Gaussian: mu=18000.000000,fwhm=2000.000000,flux=18.300000 abmag
+Gaussian: mu=18000.000000,fwhm=2000.000000,flux=18.3 abmag
 
 >>> unitflux=S.FlatSpectrum(18,fluxunits='abmag')
 >>> print unitflux
