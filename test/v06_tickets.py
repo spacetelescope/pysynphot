@@ -20,3 +20,11 @@ class Ticket128(testutil.FPTestCase):
     def testbp2(self):
         tst=self.bp(3000)
         self.assert_(tst == 0.0)
+        
+    def testbp3(self):
+        tst=self.bp.sample(10000)
+        self.assert_(tst == 1.0)
+
+    def testbp4(self):
+        tst=self.bp.sample(3000)
+        self.assert_(tst == 0.0)

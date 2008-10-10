@@ -917,6 +917,11 @@ class SpectralElement(Integrator):
         else:
             return self.resample(wavelengths)._throughputtable
 
+    def sample(self, wavelengths):
+        """Provide a more normal user interface to the __call__"""
+        return self.__call__(wavelengths)
+
+    
     def taper(self):
         '''Taper the spectrum by adding zeros to each end.
         '''
