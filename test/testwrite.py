@@ -76,7 +76,7 @@ class CompBpCase(WriteTestCase):
 
 class IcatCase(WriteTestCase):
     def setUp(self):
-        self.sp=Icat(('k93models',3500,0.0,4.6))
+        self.sp=Icat('k93models',3500,0.0,4.6)
 
 class UniformBandCase(WriteTestCase):
     def setUp(self):

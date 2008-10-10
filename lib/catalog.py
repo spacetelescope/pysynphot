@@ -15,10 +15,10 @@ class Icat(spectrum.TabularSourceSpectrum):
     for more information
     U{http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs4.html#48115}
     """
-    def __init__(self,args):
+    def __init__(self,catdir,Teff,metallicity,log_g):
 
-        filename = locations.CAT_TEMPLATE.replace('*',args[0])
-        self.name=str(args)
+        filename = locations.CAT_TEMPLATE.replace('*',catdir)
+        self.name="%s(Teff=%g,z=%g,logG=%g)"%(catdir,Teff,metallicity,log_g)
 
         table = pyfits.open(filename)
 
@@ -27,34 +27,34 @@ class Icat(spectrum.TabularSourceSpectrum):
 
         indices = self._getArgs(indexList, filenameList)
 
-        list0,list1 = self._breakList(indices, 0, args[1])
+        list0,list1 = self._breakList(indices, 0, Teff)
 
-        list2,list3 = self._breakList(list0, 1, args[2])
-        list4,list5 = self._breakList(list1, 1, args[2])
+        list2,list3 = self._breakList(list0, 1, metallicity)
+        list4,list5 = self._breakList(list1, 1, metallicity)
 
-        list6,list7   = self._breakList(list2, 2, args[3])
-        list8,list9   = self._breakList(list3, 2, args[3])
-        list10,list11 = self._breakList(list4, 2, args[3])
-        list12,list13 = self._breakList(list5, 2, args[3])
+        list6,list7   = self._breakList(list2, 2, log_g)
+        list8,list9   = self._breakList(list3, 2, log_g)
+        list10,list11 = self._breakList(list4, 2, log_g)
+        list12,list13 = self._breakList(list5, 2, log_g)
 
-        sp1 = self._getSpectrum(list6[0],  args[0])
-        sp2 = self._getSpectrum(list7[0],  args[0])
-        sp3 = self._getSpectrum(list8[0],  args[0])
-        sp4 = self._getSpectrum(list9[0],  args[0])
-        sp5 = self._getSpectrum(list10[0], args[0])
-        sp6 = self._getSpectrum(list11[0], args[0])
-        sp7 = self._getSpectrum(list12[0], args[0])
-        sp8 = self._getSpectrum(list13[0], args[0])
+        sp1 = self._getSpectrum(list6[0],  catdir)
+        sp2 = self._getSpectrum(list7[0],  catdir)
+        sp3 = self._getSpectrum(list8[0],  catdir)
+        sp4 = self._getSpectrum(list9[0],  catdir)
+        sp5 = self._getSpectrum(list10[0], catdir)
+        sp6 = self._getSpectrum(list11[0], catdir)
+        sp7 = self._getSpectrum(list12[0], catdir)
+        sp8 = self._getSpectrum(list13[0], catdir)
 
-        spa1 = self._interpolateSpectrum(sp1, sp2, args[3])
-        spa2 = self._interpolateSpectrum(sp3, sp4, args[3])
-        spa3 = self._interpolateSpectrum(sp5, sp6, args[3])
-        spa4 = self._interpolateSpectrum(sp7, sp8, args[3])
+        spa1 = self._interpolateSpectrum(sp1, sp2, log_g)
+        spa2 = self._interpolateSpectrum(sp3, sp4, log_g)
+        spa3 = self._interpolateSpectrum(sp5, sp6, log_g)
+        spa4 = self._interpolateSpectrum(sp7, sp8, log_g)
 
-        spa5 = self._interpolateSpectrum(spa1, spa2, args[2])
-        spa6 = self._interpolateSpectrum(spa3, spa4, args[2])
+        spa5 = self._interpolateSpectrum(spa1, spa2, metallicity)
+        spa6 = self._interpolateSpectrum(spa3, spa4, metallicity)
 
-        spa7 = self._interpolateSpectrum(spa5, spa6, args[1])
+        spa7 = self._interpolateSpectrum(spa5, spa6, Teff)
 
         sp = spa7[0]
 

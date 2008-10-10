@@ -235,7 +235,7 @@ class Interpreter(GenericASTMatcher):
                 tree.value = spectrum.GaussianSource(args[2],args[0],args[1],fluxunits=args[3])
             elif fname == 'icat':
                 # catalog interpolation
-                tree.value = catalog.Icat(args)
+                tree.value = catalog.Icat(*args)
             elif fname == 'rn':
                 # renormalize
                 sp = args[0]
