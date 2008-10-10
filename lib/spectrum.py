@@ -1121,10 +1121,13 @@ class UniformTransmission(SpectralElement):
     def __init__(self, value, waveunits='angstrom'):
         self.waveunits = units.Units(waveunits)
         self.value = value
-        self.name="Uniform %5.3f"%value
+        self.name=str(self)
         #The ._wavetable is used only by the .writefits() method at this time
         #It is not for general use.
         self._wavetable = N.array([default_waveset[0],default_waveset[-1]])
+
+    def __str__(self):
+        return "%g"%self.value
 
     def GetWaveSet(self):
         return None
