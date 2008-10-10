@@ -368,7 +368,7 @@ class SourceSpectrum(Integrator):
         copy.fluxunits = units.Units('photnu')
         copy.ToInternal()
         copy.fluxunits = self.fluxunits
-        copy.name="%s at z=%f"%(self.name,z)
+        copy.name="%s at z=%g"%(self.name,z)
 
         return copy
 
@@ -397,7 +397,7 @@ class SourceSpectrum(Integrator):
         return StdRenorm(self,band,RNval,RNUnits)
 
     def effstim(self,fluxunits='photlam'):
-        print "?? %s"%fluxunits
+        print "?? %s"%gluxunits
         raise NotImplementedError("Ticket #140: calcphot.effstim functionality")
 
 class CompositeSourceSpectrum(SourceSpectrum):
@@ -729,7 +729,7 @@ class GaussianSource(AnalyticSpectrum):
         self._input_units = self.fluxunits
         self.sigma = fwhm / math.sqrt(8.0 * math.log(2.0))
         self.factor = flux / (math.sqrt(2.0 * math.pi) * self.sigma)
-        self.name ='Gaussian: mu=%f,fwhm=%f,flux=%g %s'%(self.center,self.input_fwhm,self.input_flux,self._input_units)
+        self.name ='Gaussian: mu=%g,fwhm=%g,flux=%g %s'%(self.center,self.input_fwhm,self.input_flux,self._input_units)
 
     def __str__(self):
         return self.name
@@ -765,7 +765,7 @@ class FlatSpectrum(AnalyticSpectrum):
         self.wavelength = None
         self._fluxdensity = fluxdensity
         self._input_units = self.fluxunits
-        self.name="Unit spectrum of %f %s"%(self._fluxdensity,self._input_units)
+        self.name="Unit spectrum of %g %s"%(self._fluxdensity,self._input_units)
     def __str__(self):
         return self.name
     
@@ -804,7 +804,7 @@ class Powerlaw(AnalyticSpectrum):
         self._input_units = self.fluxunits
         self._refwave = refwave
         self._index = index
-        self.name="Power law: refwave %f, index %f"%(self._refwave,self._index)
+        self.name="Power law: refwave %g, index %g"%(self._refwave,self._index)
         
     def __str__(self):
         return self.name
@@ -1333,7 +1333,7 @@ class InterpolatedSpectralElement(SpectralElement):
         lower = MA.maximum(less)
 
         if '--' in (str(upper),str(lower)):
-            raise NotImplementedError("%f outside of range in %s; extrapolation not yet supported"%(wavelength,fileName))
+            raise NotImplementedError("%g outside of range in %s; extrapolation not yet supported"%(wavelength,fileName))
 
 
         lcol = (colSpec + str(lower)).upper()
@@ -1370,7 +1370,7 @@ class InterpolatedSpectralElement(SpectralElement):
         fs.close()
 
     def __str__(self):
-        return "%s#%f"%(self.name,self.interpval)
+        return "%s#%g"%(self.name,self.interpval)
 
 
 class ThermalSpectralElement(TabularSpectralElement):
@@ -1406,7 +1406,7 @@ class Box(SpectralElement):
         upper = center + width / 2.0
         step = 0.05                     # fixed step for now (in A)
 
-        self.name='Box at %f (%f wide)'%(center,width)
+        self.name='Box at %g (%g wide)'%(center,width)
         nwaves = int(((upper - lower) / step)) + 2
         self._wavetable = N.zeros(shape=[nwaves,], dtype=N.float64)
         for i in range(nwaves):

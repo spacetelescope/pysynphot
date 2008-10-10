@@ -90,7 +90,7 @@ def specrate(parlist):
         obs.writefits(d['output'],binned=True)
     except KeyError:
         d['output']=None
-    return "%f;%s"%(obs.countrate(),d['output'])
+    return "%g;%s"%(obs.countrate(),d['output'])
 
 def thermback(parlist):
     """Return the thermal background rate for the obsmode"""
@@ -136,7 +136,7 @@ def showfiles(parlist):
     out.write("TMT: %s\n"%ommod.THERMTABLE)
     out.write("\nObsmode %s:\n"%obsmode)
     for fname in flist:
-        out.write("%s\n"%fname)
+        out.write("%s\n"%gname)
     out.close()
     
 def Suicide(dummy):

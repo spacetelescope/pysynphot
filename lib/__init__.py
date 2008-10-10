@@ -64,7 +64,7 @@ BB(T=40000)
 
 >>> pl=S.PowerLaw(10000,-2)
 >>> print pl
-Power law: refwave 10000.000000, index -2.000000
+Power law: refwave 10000, index -2
 
 ## >>> print pl.wave
 ## [   500.            500.19760122    500.39528054 ...,  25969.1985582
@@ -75,11 +75,11 @@ Power law: refwave 10000.000000, index -2.000000
 
 >>> g1=S.GaussianSource(18.3,18000,2000,fluxunits='abmag')
 >>> print g1
-Gaussian: mu=18000.000000,fwhm=2000.000000,flux=18.3 abmag
+Gaussian: mu=18000,fwhm=2000,flux=18.3 abmag
 
 >>> unitflux=S.FlatSpectrum(18,fluxunits='abmag')
 >>> print unitflux
-Unit spectrum of 18.000000 abmag
+Unit spectrum of 18 abmag
 
 >>> bp1=S.ObsBandpass('acs,hrc,f555w')
 >>> print bp1

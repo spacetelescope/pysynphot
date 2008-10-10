@@ -25,7 +25,7 @@ class CustomRedLaw(object):
         ans=ArraySpectralElement(wave=self.wave,
                                  waveunits=self.waveunits,
                                  throughput=T,
-                                 name='%s(Av=%f)'%(self.name,extval)
+                                 name='%s(Av=%g)'%(self.name,extval)
                                  )
         return ans
 
