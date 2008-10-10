@@ -685,18 +685,24 @@ class IcatTestCase(testutil.FPTestCase):
         self.failUnless(len(failed) == 0,msg)
 
 class WritefitsTestCase(testutil.FPTestCase):
+    def setUp(self):
+        self.filename = os.path.join(tempfile.gettempdir(),"resampler.fits")
+
     def test1(self):
         sp = P.interpret(P.parse(P.scan("icat(k93models,5750,0.0,4.5)")))
-
-        filename = os.path.join(tempfile.gettempdir(),"resampler.fits")
-        sp.writefits(filename)
+        sp.writefits(self.filename)
         
         sp = spectrum.TabularSourceSpectrum(testdata)
 
         (wave, flux) = sp.getArrays()
         i = len(flux)/3
         self.assertApproxFP(flux[i], 9.634403E-13, accuracy=0.0025)
-        
+
+    def tearDown(self):
+        try:
+            os.remove(self.filename)
+        except OSError:
+            pass
 
 class EnforceWave(testutil.FPTestCase):
     """Ticket #85: enforce monotonic ascending wavesets
