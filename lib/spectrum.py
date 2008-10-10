@@ -661,8 +661,8 @@ class FileSourceSpectrum(TabularSourceSpectrum):
         @type keepneg: bool
  
         """
-        self._readSpectrumFile(filename, fluxname)
-        self.name=filename
+        self.name = os.path.expandvars(filename)
+        self._readSpectrumFile(self.name, fluxname)
         self.validate_units() 
         self.validate_wavetable()
         if not keepneg:
@@ -1265,8 +1265,9 @@ class FileSpectralElement(TabularSpectralElement):
         @type thrucol: string
 
         """
-        self._readThroughputFile(filename, thrucol)
-        self.name=filename
+        self.name=os.path.expandvars(filename)
+        self._readThroughputFile(self.name, thrucol)
+
         self.validate_units() 
         self.validate_wavetable()
         self.ToInternal()
@@ -1309,8 +1310,10 @@ class InterpolatedSpectralElement(SpectralElement):
         parameter (poorly named -- it is not always a wavelength) is used to
         interpolate between two columns in the file.
         '''
-        self.name = fileName.split('[')[0]
-        colSpec = fileName.split('[')[1][:-1]
+        xre=re.search('\[(?P<col>.*?)\]',fileName)
+        self.name = os.path.expandvars(fileName[0:(xre.start())])
+        colSpec = xre.group('col')
+
 
         self.interpval = wavelength
 
