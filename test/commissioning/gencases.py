@@ -1,5 +1,6 @@
 from pysynphot import etc
 import sys,os
+import pickle
 
 def run(cmdfile,subsetfile=None):
     """ Generate TestCases from cmdfile according to the pattern in patternfile"""
@@ -12,6 +13,16 @@ def run(cmdfile,subsetfile=None):
         self.setglobal(__file__)
         self.runpy()\n"""
 
+    #Open the (params:casename) dictionary if it exists
+
+    pname=cmdfile.replace('.txt','.pickle')
+    try:
+        f=open(pname)
+        lookup=pickle.load(f)
+        f.close()
+    except IOError:
+        lookup=None
+        
     #Process the subsetfile if present
     subsetflag={}
     if subsetfile is not None:
@@ -41,8 +52,8 @@ import basecase
     for line in f:
     
     #parse the line
-        parts=line.split('&')
-        cmd=(parts[0])[1:] #strip off leading quote
+        parts=line.strip().split('&')
+        cmd=(parts[0].lstrip())[1:] #strip off leading quote
         count[cmd]+=1
         kwd=etc.getparms(parts[1:])
         
@@ -56,23 +67,37 @@ import basecase
         #fix the CDBS specification
         try:
             kwd['spectrum']=kwd['spectrum'].replace('/cdbs',os.environ['PYSYN_CDBS'])
+            kwd['spectrum']=kwd['spectrum'].replace('/usr/stsci/stdata',
+                                                    os.environ['PYSYN_CDBS'])
         except KeyError:
             kwd['spectrum']=None
 
         #Construct the name and pattern
-        casename="%sCase%d"%(cmd,count[cmd])
         ktuple=(cmd,obsmode,kwd['spectrum'])
-        
-
-        
-        if ktuple in dupcatcher:
-           dupcounter[cmd]+=1
-           dupcatcher[ktuple].append(casename)
+        #The old way
+        if lookup is None:
+            casename="%sCase%d"%(cmd,count[cmd])        
+            if ktuple in dupcatcher:
+               dupcounter[cmd]+=1
+               dupcatcher[ktuple].append(casename)
+            else:
+                dupcatcher[ktuple]=[casename]
+                defn=pattern%(cmd,count[cmd],cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False))
+                out.write(defn)
         else:
-           dupcatcher[ktuple]=[casename]
-           defn=pattern%(cmd,count[cmd],cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False))
-           out.write(defn)
-
+        #The new pickled way
+            try:
+                casename=lookup[ktuple][0]
+                if casename != 'Found':
+                   lookup[ktuple]=['Found']
+                   defn=pattern%(cmd,count[cmd],cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False))
+                   out.write(defn)
+                else:
+                   dupcounter[cmd]+=1
+            except KeyError:
+                print "WARNING, unrecognized case------------------"
+                print ktuple
+                
 
     out.write("""\n\n
 if __name__ == '__main__':
@@ -89,7 +114,15 @@ if __name__ == '__main__':
         sys.stdout.write(total)
         out.write(total)
     out.close()
+
+    #Pickle the dictionary if we just created it
+    if not lookup:
+        f=open(pname,'w')
+        pickle.dump(dupcatcher,f)
+        f.close()
+        
     return dupcatcher
 
 if __name__ == '__main__':
     dups = run(*sys.argv[1:])
+    
