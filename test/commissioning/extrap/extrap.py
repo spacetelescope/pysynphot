@@ -33,7 +33,7 @@ def classify_file(f):
     elif len(cols) > 2 and ('ERROR' not in cols.names):
         return (True,False)
     else:
-        raise ValueError("Don't recognize this file case: %s"%str(cols.names))
+        return (False,True)
 
 def run(fname,outdir=None):
 
@@ -47,15 +47,14 @@ def run(fname,outdir=None):
     if nonparam: #just check column 1 = throughput
         t=f[1].data.field(1)
         ok = (t[0]==0.0) and (t[-1]==0.0)
-    elif not nonparam and not error:
+    else:
         ok=False
         cols=f[1].columns
         for k in range(1,len(cols)):
-            t=f[1].data.field[k]
-            ok = ok and ( (t[0]==0.0) and (t[-1]==0.0) )
-    else:
-        f.close()
-        raise NotImplementedError("Don't know how to check param and error, %s"%fname)
+            if 'err' not in cols[k].name.lower():
+                t=f[1].data.field(k)
+                ok = ok and ( (t[0]==0.0) and (t[-1]==0.0) )
+
     if ok:
         f.close()
         return "%s: no change necessary"%fname
@@ -132,3 +131,21 @@ if __name__ == '__main__':
     for fname in sys.argv[1:]:
         retval=run(fname)
         print retval
+
+def buildtmc(tmcname):
+    from pyraf import iraf
+    from iraf import stsdas,hst_calib,synphot
+    out=open('buildtmc.log','w')
+    f=pyfits.open(tmcname)
+    flist=f[1].data.field('filename')
+    iraf.set(crrefer='./') #work locally
+
+    for k in range(len(flist)):
+        oldname=iraf.osfn(flist[k]).split('[')[0]
+        newname=fincre(oldname)
+        if os.path.exists(newname):
+            flist[k]=fincre(flist[k])
+        else:
+            out.write("%s: no change necessary\n"%oldname)
+    f.writeto(tmcname.replace(".fits","_new.fits"))
+    out.close()

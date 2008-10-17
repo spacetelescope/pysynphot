@@ -9,12 +9,11 @@ synphot throughput file to zero.
   will detect that the file does not need to be changed.
 
 - it can handle simple files (wavelength/throughput only),
-  parameterized files (wavelength + many throughput), and simple files
-  with an error column (wave, thru, error). If an error column is
-  present, the error value of the extra points is set to 100. It does
-  not know how to handle the case of a parameterized file with error
-  columns, and will raise an exception if it encounters one.
-
+  parameterized files (wavelength + many throughput) with or without
+  an error column, and simple files with an error column 
+  (wave, thru, error). If an error column is
+  present, the error value of the extra points is set to 100.
+  
 - it automatically updates the version number in the filename and
   writes history into the primary header
 
@@ -51,3 +50,16 @@ Usage:
      flist=glob.glob('/some/dir/*_syn.fits')
      for fname in flist: 
         extrap.run(fname,outdir='other/dir/')
+
+
+Buildtmc:
+========
+
+An extra function was added that can be used to construct a new TMC
+file from an existing TMC file and a directory tree containing a
+mixture of updated and non-updated files. It must be run from within
+python and takes the tmcname as an argument.
+
+  import extrap
+  extrap.buildtmc('uniqname.tmc')
+
