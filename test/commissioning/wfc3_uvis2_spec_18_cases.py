@@ -33,7 +33,7 @@ class SpecSourcerateSpecCase2(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,g280"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),18.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase4(basecase.SpecSourcerateSpecCase):
@@ -257,21 +257,21 @@ class countrateCase3(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,g280,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.1,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase3(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,g280,bkg"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.1,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase29(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,g280"
         self.spectrum="rn(bb(10000),band(johnson,r),23.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase4(basecase.countrateCase):
@@ -362,7 +362,7 @@ class calcspecCase139(basecase.calcspecCase):
     def setUp(self):
         self.obsmode="None"
         self.spectrum="pl(4000.0,-2.0,flam)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase8(basecase.countrateCase):
@@ -383,7 +383,7 @@ class SpecSourcerateSpecCase34(basecase.SpecSourcerateSpecCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,g280"
         self.spectrum="rn(pl(4000.0,-2.0,flam),band(bessell,h),23.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase9(basecase.countrateCase):

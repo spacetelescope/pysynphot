@@ -12,7 +12,7 @@ class calcphotCase1(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f200lp"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase1(basecase.countrateCase):
@@ -453,7 +453,7 @@ class calcphotCase34(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f350lp"
         self.spectrum="rn(icat(k93models,9230,0.0,4.1),band(johnson,v),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase34(basecase.countrateCase):
@@ -2665,7 +2665,7 @@ class countrateCase190(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f606w"
         self.spectrum="rn(icat(k93models,18700,0.0,3.9)*ebmvx(0.12,gal3),band(johnson,b),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase191(basecase.calcphotCase):
@@ -3400,7 +3400,7 @@ class calcphotCase233(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f814w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_11.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase233(basecase.countrateCase):
@@ -3589,7 +3589,7 @@ class countrateCase246(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f814w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_25.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase247(basecase.calcphotCase):
@@ -3771,7 +3771,7 @@ class countrateCase259(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f814w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_69.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase260(basecase.calcphotCase):
@@ -3834,7 +3834,7 @@ class calcphotCase264(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f814w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_34.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase264(basecase.countrateCase):
@@ -4450,7 +4450,7 @@ class calcphotCase308(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f555w"
         self.spectrum="rn(z(spec(spiral.fits),0.3),band(johnson,b),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase308(basecase.countrateCase):
@@ -4548,14 +4548,14 @@ class countrateCase314(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f300x"
         self.spectrum="rn(bb(10000),band(johnson,r),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase315(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f300x"
         self.spectrum="rn(bb(10000),band(johnson,r),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase316(basecase.calcphotCase):
@@ -4604,14 +4604,14 @@ class countrateCase318(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f300x"
         self.spectrum="rn(bb(10000),band(johnson,j),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase319(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f300x"
         self.spectrum="rn(bb(10000),band(johnson,j),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase320(basecase.calcphotCase):
@@ -4660,14 +4660,14 @@ class countrateCase322(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f300x"
         self.spectrum="rn(bb(10000),band(cousins,r),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase323(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f300x"
         self.spectrum="rn(bb(10000),band(cousins,r),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase2263(basecase.calcspecCase):
@@ -4723,14 +4723,14 @@ class countrateCase326(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f850lp"
         self.spectrum="rn(pl(4000.0,-2.0,flam),band(Bessell,j),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase327(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f850lp"
         self.spectrum="rn(pl(4000.0,-2.0,flam),band(Bessell,j),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase328(basecase.calcphotCase):
@@ -4786,7 +4786,7 @@ class calcphotCase331(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f225w"
         self.spectrum="rn(unit(1.0,flam),band(sdss,g),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase331(basecase.countrateCase):
@@ -4821,7 +4821,7 @@ class countrateCase333(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f225w"
         self.spectrum="rn(unit(1.0,flam),band(sdss,i),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase334(basecase.calcphotCase):
@@ -4856,14 +4856,14 @@ class calcphotCase336(basecase.calcphotCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f225w"
         self.spectrum="rn(unit(1.0,fnu),band(sdss,z),28.0,vegamag)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class countrateCase336(basecase.countrateCase):
     def setUp(self):
         self.obsmode="wfc3,uvis2,f225w"
         self.spectrum="rn(unit(1.0,flam),box(5000.0,1.0),1.0e-18,flam)"
-        self.subset=False
+        self.subset=True
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase337(basecase.calcphotCase):
