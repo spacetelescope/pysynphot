@@ -30,7 +30,7 @@ KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
 VegaFile = os.path.join(specdir,'alpha_lyr_stis_003.fits')
 
 #Reddening Laws
-extdir=os.path.join(rootdir,'grid','extinction')
+extdir=os.path.join('grid','extinction')
 
 
 RedLaws={'mwavg':   'milkyway_diffuse_*.fits',
@@ -44,8 +44,8 @@ RedLaws={'mwavg':   'milkyway_diffuse_*.fits',
 for k in RedLaws:
     try:
         RedLaws[k]=_refTable(os.path.join(extdir,RedLaws[k]))
-    except IOError:
-        pass
+    except IOError,e:
+        print 'Cannot open %s: %s'%(RedLaws[k],str(e))
     
 #Define wavecat file explicitly
 wavecat = os.path.join(specdir,'wavecat.dat')
