@@ -5,9 +5,10 @@ from pysynphot.observation import Observation
 from pysynphot import ObsBandpass
 from pysynphot.observationmode import ObservationMode
 from pysynphot import observationmode as ommod #needed for tabcheck task
-import os
+import os, sys
 
-
+mypid=os.getpid()
+    
 def getparms(parlist):
     """ The ETC presently sends along a bunch of information in key-value
     pairs that pysynphot utterly ignores. This function builds a dictionary
@@ -126,23 +127,28 @@ def showfiles(parlist):
     """
     d=getparms(parlist)
     obsmode=d['obsmode']
-    fname=d['output']
+    outname=d['output']
     
     ob=ommod.ObservationMode(obsmode)
     flist=[x for x in ob._throughput_filenames if x != 'clear']
-    out=open(fname,'w')
+    out=open(outname,'w')
     out.write("TMG: %s\n"%ommod.GRAPHTABLE)
     out.write("TMC: %s\n"%ommod.COMPTABLE)
     out.write("TMT: %s\n"%ommod.THERMTABLE)
     out.write("\nObsmode %s:\n"%obsmode)
     for fname in flist:
-        out.write("%s\n"%gname)
+        out.write("%s\n"%fname)
     out.close()
+    return(outname)
     
 def Suicide(dummy):
     """Kill this process"""
-    mypid=os.getpid()
     os.kill(mypid,9)
+
+def ping(dummy):
+    """Respond with my process id so the caller knows I'm alive"""
+    return str(mypid)
+
 
 def version(dummy):
     """Return subversion version string"""
@@ -161,7 +167,8 @@ tasks = {'calcphot':           calcphot,
          'thermback':          thermback,
          'updatetabs':         updatetabs,
          'version':            version,
-         'quit':               Suicide}
+         'quit':               Suicide,
+         'ping':               ping}
 
 #Define an extra task for the IRAF user interface
 

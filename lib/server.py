@@ -18,6 +18,10 @@ import SocketServer
 debug = 1
 default_port = 8881
 
+#Enforce defined PYSYN_CDBS, without which we are useless
+if 'PYSYN_CDBS' not in os.environ:
+    raise OSError('PYSYN_CDBS is not defined.')
+
 class RequestHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         print "Server connected from " + str(self.client_address)

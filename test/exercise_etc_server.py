@@ -111,30 +111,36 @@ etc.debug = 1
 def test():
     cl1 = Client ('localhost',\
         'calcphot&spectrum="rn(unit(1,flam),box(5500.0,1),1.0E-18,flam)"&obsmode="acs,hrc,F220W"')
-    cl1.start()
+    cl1.run()
 
     cl2 = Client ('localhost',\
         'countrate&spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"&instrument="wfc3,ir,f110w"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"')
-    cl2.start()
+    cl2.run()
 
     cl3 = Client ('localhost',\
         'thermback&obsmode="wfc3,ir,f110w"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"')
-    cl3.start()
+    cl3.run()
 
     outfile = os.path.join(userdir,'specOB1.fits')
 
     cl4 = Client ('localhost',\
         'SpecSourcerateSpec&spectrum="rn(unit(1.0,flam),band(johnson,v),15,vegamag)"&instrument="wfc3,uvis1,g280"&output="%s"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"'%outfile)
-    cl4.start()
+    cl4.run()
 
     outfile = os.path.join(userdir,'specAV1.fits')
     cl5 = Client ('localhost',\
                   'calcspec&spectrum="rn(pl(4000.0,-1.0,flam),box(1500,1.0),1.00E-14,flam)"&output="%s"&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"'%outfile)
-    cl5.start()
+    cl5.run()
 
     cl6 = Client('localhost',
                  'showfiles&obsmode="acs,hrc,f555w"&output="testme.txt"')
-    cl6.start()
+    cl6.run()
+
+    cl7 = Client('localhost','ping')
+    cl7.run()
+    
+    cl8 = Client('localhost','quit')
+    cl8.run()
     
 if __name__ == '__main__':
     test()
