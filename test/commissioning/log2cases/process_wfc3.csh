@@ -11,6 +11,7 @@ python ../parselog.py wfc3UVIS1ImagingPysynphotLog.txt
 ln -s wfc3UVIS1ImagingPysynphotLog_parsed.txt wfc3_uvis1_imaging_61_cases_parsed.txt
 ln -s wfc3_uvis1_imaging_61_cases.pickle wfc3_uvis1_imaging_61_cases_parsed.pickle
 #Generate from the new logfile
+echo ""
 echo "# New"
 python ../gencases.py wfc3_uvis1_imaging_61_cases_parsed.txt wfc3_uvis1_imaging_61_cases_subset.txt
 
@@ -27,6 +28,7 @@ python ../parselog.py wfc3UVIS2ImagingPysynphotLog.txt
 ln -s wfc3UVIS2ImagingPysynphotLog_parsed.txt wfc3_uvis2_imaging_18_cases_parsed.txt
 ln -s wfc3_uvis2_imaging_18_cases.pickle wfc3_uvis2_imaging_18_cases_parsed.pickle
 #Generate from the new logfile
+echo ""
 echo "# New"
 python ../gencases.py wfc3_uvis2_imaging_18_cases_parsed.txt wfc3_uvis2_imaging_18_cases_subset.txt
 
@@ -42,6 +44,7 @@ python ../parselog.py wfc3UVIS1SpecPysynphotLog.txt
 ln -s wfc3UVIS1SpecPysynphotLog_parsed.txt wfc3_uvis1_spec_62_cases_parsed.txt
 ln -s wfc3_uvis1_spec_62_cases.pickle wfc3_uvis1_spec_62_cases_parsed.pickle
 #Generate from the new logfile
+echo ""
 echo "# New"
 python ../gencases.py wfc3_uvis1_spec_62_cases_parsed.txt wfc3_uvis1_spec_62_cases_subset.txt
 
@@ -57,6 +60,7 @@ python ../parselog.py wfc3UVIS2SpecPysynphotLog.txt
 ln -s wfc3UVIS2SpecPysynphotLog_parsed.txt wfc3_uvis2_spec_18_cases_parsed.txt
 ln -s wfc3_uvis2_spec_18_cases.pickle wfc3_uvis2_spec_18_cases_parsed.pickle
 #Generate from the new logfile
+echo ""
 echo "# New"
 python ../gencases.py wfc3_uvis2_spec_18_cases_parsed.txt wfc3_uvis2_spec_18_cases_subset.txt
 
@@ -80,6 +84,7 @@ python ../gencases.py wfc3_ir_imaging_78_cases.txt
 ln -s wfc3_irim_cases_parsed.txt wfc3_ir_imaging_78_cases_parsed.txt
 ln -s wfc3_irim_cases_parsed.pickle wfc3_ir_imaging_78_cases_parsed.pickle
 #Generate from the new logfile
+echo ""
 echo "# New non-thermback"
 python ../gencases.py wfc3_ir_imaging_78_cases_parsed.txt wfc3_ir_imaging_78_cases_subset.txt
 #
@@ -93,6 +98,7 @@ python ../gencases.py wfc3_ir_imaging_80_thermback.txt
 ln -s wfc3_irim_thermback_parsed.txt wfc3_ir_imaging_80_thermback_parsed.txt
 ln -s wfc3_irim_thermback_parsed.pickle wfc3_ir_imaging_80_thermback_parsed.pickle
 #Generate from the new logfile.
+echo ""
 echo "# New thermback"
 python ../gencases.py wfc3_ir_imaging_80_thermback_parsed.txt wfc3_ir_imaging_80_thermback_subset.txt
 
@@ -116,6 +122,7 @@ python ../gencases.py wfc3_ir_spec_61_cases.txt
 ln -s wfc3_irsp_cases_parsed.txt wfc3_ir_spec_61_cases_parsed.txt
 ln -s wfc3_irsp_cases_parsed.pickle wfc3_ir_spec_61_cases_parsed.pickle
 #Generate from the new logfile
+echo ""
 echo "# New non-thermback"
 python ../gencases.py wfc3_ir_spec_61_cases_parsed.txt wfc3_ir_spec_61_cases_subset.txt
 #
@@ -129,5 +136,6 @@ python ../gencases.py wfc3_ir_spec_62_thermback.txt
 ln -s wfc3_irsp_thermback_parsed.txt wfc3_ir_spec_62_thermback_parsed.txt
 ln -s wfc3_irsp_thermback_parsed.pickle wfc3_ir_spec_62_thermback_parsed.pickle
 #Generate from the new logfile. There are no subsets for this class.
+echo ""
 echo "# New thermback"
 python ../gencases.py wfc3_ir_spec_62_thermback_parsed.txt 

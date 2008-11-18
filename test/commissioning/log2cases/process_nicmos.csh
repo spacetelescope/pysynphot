@@ -14,6 +14,7 @@ python ../gencases.py nicmos_etc_cases.txt
 ln -s nicmos_etc_cases_13oct_parsed.txt nicmos_etc_cases_parsed.txt
 ln -s nicmos_etc_cases.pickle nicmos_etc_cases_parsed.pickle
 #Generate from the new logfile
+echo ""
 echo "# New non-thermback"
 python ../gencases.py nicmos_etc_cases_parsed.txt nicmos_etc_cases_subset.txt
 #
@@ -27,5 +28,6 @@ ln -s nicmos_etc_thermback_cases_13oct_parsed.txt nicmos_etc_thermback_cases_par
 ln -s nicmos_etc_thermback_cases.pickle nicmos_etc_thermback_cases_parsed.pickle
 #Generate from the new logfile.
 #Subset info is in the same main subset file.
+echo ""
 echo "# New thermback"
 python ../gencases.py nicmos_etc_thermback_cases_parsed.txt nicmos_etc_cases_subset.txt
