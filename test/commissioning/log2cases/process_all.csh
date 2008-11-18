@@ -1,5 +1,4 @@
 #! /bin/csh 
-setenv PYTHONPATH ../:{$PYTHONPATH}
 set inst = (acs stis nicmos wfc3)
 foreach k ($inst)
    echo "####### $k ########"
