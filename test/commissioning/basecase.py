@@ -45,6 +45,7 @@ class calcspecCase(testutil.LogTestCase):
         self.discrep=-99
         self.tda={'Obsmode':self.obsmode,
                  'Spectrum':self.spectrum,
+                  'ETCid':self.etcid,
                  'Thresh':self.thresh,
                   'Superthresh':self.superthresh,
                   'SigThresh':self.sigthresh,
