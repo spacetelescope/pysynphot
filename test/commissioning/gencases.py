@@ -5,11 +5,12 @@ import pickle
 def run(cmdfile,subsetfile=None):
     """ Generate TestCases from cmdfile according to the pattern in patternfile"""
     #Define the test case pattern
-    pattern="""class %sCase%d(basecase.%sCase):
+    pattern="""class %s(basecase.%sCase):
     def setUp(self):
         self.obsmode="%s"
         self.spectrum="%s"
         self.subset=%s
+        self.etcid=%s
         self.setglobal(__file__)
         self.runpy()\n"""
 
@@ -47,7 +48,7 @@ import basecase
     count={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
     dupcatcher={}
     dupcounter={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
-
+    unrec={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
     #Now start the main loop
     for line in f:
     
@@ -72,6 +73,7 @@ import basecase
         except KeyError:
             kwd['spectrum']=None
 
+
         #Construct the name and pattern
         ktuple=(cmd,obsmode,kwd['spectrum'])
         #The old way
@@ -82,7 +84,7 @@ import basecase
                dupcatcher[ktuple].append(casename)
             else:
                 dupcatcher[ktuple]=[casename]
-                defn=pattern%(cmd,count[cmd],cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False))
+                defn=pattern%(casename,cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False),kwd.get('etcid',None))
                 out.write(defn)
         else:
         #The new pickled way
@@ -90,13 +92,14 @@ import basecase
                 casename=lookup[ktuple][0]
                 if casename != 'Found':
                    lookup[ktuple]=['Found']
-                   defn=pattern%(cmd,count[cmd],cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False))
+                   defn=pattern%(casename,cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False),kwd.get('etcid',None))
                    out.write(defn)
                 else:
                    dupcounter[cmd]+=1
             except KeyError:
                 print "WARNING, unrecognized case------------------"
                 print ktuple
+                unrec[cmd]+=1
                 
 
     out.write("""\n\n
@@ -110,7 +113,7 @@ if __name__ == '__main__':
     f.close()
 
     for k in count:
-        total= "#%s:%d-%d=%d\n"%(k,count[k],dupcounter[k],count[k]-dupcounter[k])
+        total= "#%s:%d - %d dup - %d unrec =%d\n"%(k,count[k],dupcounter[k],unrec[k],count[k]-dupcounter[k]-unrec[k])
         sys.stdout.write(total)
         out.write(total)
     out.close()
