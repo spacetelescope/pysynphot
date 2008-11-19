@@ -45,13 +45,17 @@ class calcspecCase(testutil.LogTestCase):
         self.discrep=-99
         self.tda={'Obsmode':self.obsmode,
                  'Spectrum':self.spectrum,
-                  'ETCid':self.etcid,
+                  'ETCid':None, #placeholder
                  'Thresh':self.thresh,
                   'Superthresh':self.superthresh,
                   'SigThresh':self.sigthresh,
                   'SkyLines':self.hasSkyLines()}
         try:
             self.tda['Subset']=self.subset
+        except AttributeError:
+            pass
+        try:
+            self.tda['ETCid']=self.etcid
         except AttributeError:
             pass
         self.tra={}
