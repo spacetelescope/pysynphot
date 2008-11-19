@@ -78,8 +78,8 @@ class ServerDispatcher(threading.Thread):
         global queueManager
         queueManager = QueueManager()
         port=int(os.environ.get('PYSYN_PORT',default_port))
+        SocketServer.ThreadingTCPServer.allow_reuse_address = True
         srv = SocketServer.ThreadingTCPServer(('',port),RequestHandler)
-        srv.allow_reuse_address = True
         print "Creating TCP server: %s on port %d"%(str(srv),port)
         srv.serve_forever()
 
