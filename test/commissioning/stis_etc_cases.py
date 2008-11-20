@@ -6,7 +6,7 @@ class countrateCase1(basecase.countrateCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase1(basecase.calcphotCase):
@@ -14,7 +14,7 @@ class calcphotCase1(basecase.calcphotCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase2(basecase.calcphotCase):
@@ -22,7 +22,7 @@ class calcphotCase2(basecase.calcphotCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(unit(1.0,flam),band(johnson,v),15,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase2(basecase.countrateCase):
@@ -30,7 +30,7 @@ class countrateCase2(basecase.countrateCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(unit(1.0,flam),band(johnson,v),15,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase4(basecase.countrateCase):
@@ -38,7 +38,7 @@ class countrateCase4(basecase.countrateCase):
         self.obsmode="stis,ccd,s03x005nd"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISACQ1983b'
+        self.etcid="STISACQ1983b"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase5(basecase.calcphotCase):
@@ -46,7 +46,7 @@ class calcphotCase5(basecase.calcphotCase):
         self.obsmode="stis,ccd,s03x005nd"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISACQ1983b'
+        self.etcid="STISACQ1983b"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase6(basecase.calcphotCase):
@@ -54,7 +54,7 @@ class calcphotCase6(basecase.calcphotCase):
         self.obsmode="stis,ccd,s03x005nd"
         self.spectrum="rn(unit(1.0,flam),band(johnson,v),15,vegamag)"
         self.subset=False
-        self.etcid='STISACQ1983b'
+        self.etcid="STISACQ1983b"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase5(basecase.countrateCase):
@@ -62,7 +62,7 @@ class countrateCase5(basecase.countrateCase):
         self.obsmode="stis,ccd,s03x005nd"
         self.spectrum="rn(unit(1.0,flam),band(johnson,v),15,vegamag)"
         self.subset=False
-        self.etcid='STISACQ1983b'
+        self.etcid="STISACQ1983b"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase1(basecase.calcspecCase):
@@ -70,7 +70,7 @@ class calcspecCase1(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="icat(k93models,44500,0.0,5.0)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase7(basecase.calcphotCase):
@@ -78,7 +78,7 @@ class calcphotCase7(basecase.calcphotCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),10,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase6(basecase.countrateCase):
@@ -86,7 +86,7 @@ class countrateCase6(basecase.countrateCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),10,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase7(basecase.countrateCase):
@@ -94,7 +94,7 @@ class countrateCase7(basecase.countrateCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase8(basecase.calcphotCase):
@@ -102,7 +102,7 @@ class calcphotCase8(basecase.calcphotCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase9(basecase.calcphotCase):
@@ -110,7 +110,7 @@ class calcphotCase9(basecase.calcphotCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),20,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase8(basecase.countrateCase):
@@ -118,7 +118,7 @@ class countrateCase8(basecase.countrateCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),20,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase9(basecase.countrateCase):
@@ -126,7 +126,7 @@ class countrateCase9(basecase.countrateCase):
         self.obsmode="stis,ccd,s03x005nd"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISACQ1908'
+        self.etcid="STISACQ1908"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase10(basecase.calcphotCase):
@@ -134,7 +134,7 @@ class calcphotCase10(basecase.calcphotCase):
         self.obsmode="stis,ccd,s03x005nd"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISACQ1908'
+        self.etcid="STISACQ1908"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase11(basecase.calcphotCase):
@@ -142,7 +142,7 @@ class calcphotCase11(basecase.calcphotCase):
         self.obsmode="stis,ccd,s03x005nd"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),4,vegamag)"
         self.subset=True
-        self.etcid='STISACQ1908'
+        self.etcid="STISACQ1908"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase10(basecase.countrateCase):
@@ -150,7 +150,7 @@ class countrateCase10(basecase.countrateCase):
         self.obsmode="stis,ccd,s03x005nd"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),4,vegamag)"
         self.subset=True
-        self.etcid='STISACQ1908'
+        self.etcid="STISACQ1908"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase11(basecase.countrateCase):
@@ -158,7 +158,7 @@ class countrateCase11(basecase.countrateCase):
         self.obsmode="stis,ccd,f25nd5"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISACQ1943'
+        self.etcid="STISACQ1943"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase12(basecase.calcphotCase):
@@ -166,7 +166,7 @@ class calcphotCase12(basecase.calcphotCase):
         self.obsmode="stis,ccd,f25nd5"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISACQ1943'
+        self.etcid="STISACQ1943"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase13(basecase.calcphotCase):
@@ -174,7 +174,7 @@ class calcphotCase13(basecase.calcphotCase):
         self.obsmode="stis,ccd,f25nd5"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),4,vegamag)"
         self.subset=False
-        self.etcid='STISACQ1943'
+        self.etcid="STISACQ1943"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase12(basecase.countrateCase):
@@ -182,7 +182,7 @@ class countrateCase12(basecase.countrateCase):
         self.obsmode="stis,ccd,f25nd5"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),4,vegamag)"
         self.subset=True
-        self.etcid='STISACQ1943'
+        self.etcid="STISACQ1943"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase14(basecase.calcphotCase):
@@ -190,7 +190,7 @@ class calcphotCase14(basecase.calcphotCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase13(basecase.countrateCase):
@@ -198,7 +198,7 @@ class countrateCase13(basecase.countrateCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase15(basecase.calcphotCase):
@@ -206,7 +206,7 @@ class calcphotCase15(basecase.calcphotCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),band(johnson,v),10,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase14(basecase.countrateCase):
@@ -214,7 +214,7 @@ class countrateCase14(basecase.countrateCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),band(johnson,v),10,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase15(basecase.countrateCase):
@@ -222,7 +222,7 @@ class countrateCase15(basecase.countrateCase):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1257'
+        self.etcid="STISIMAG1257"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase16(basecase.calcphotCase):
@@ -230,7 +230,7 @@ class calcphotCase16(basecase.calcphotCase):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1257'
+        self.etcid="STISIMAG1257"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase17(basecase.calcphotCase):
@@ -238,7 +238,7 @@ class calcphotCase17(basecase.calcphotCase):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISIMAG1257'
+        self.etcid="STISIMAG1257"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase16(basecase.countrateCase):
@@ -246,7 +246,7 @@ class countrateCase16(basecase.countrateCase):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISIMAG1257'
+        self.etcid="STISIMAG1257"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase17(basecase.countrateCase):
@@ -254,7 +254,7 @@ class countrateCase17(basecase.countrateCase):
         self.obsmode="stis,ccd,f28x50oii"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1258'
+        self.etcid="STISIMAG1258"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase18(basecase.calcphotCase):
@@ -262,7 +262,7 @@ class calcphotCase18(basecase.calcphotCase):
         self.obsmode="stis,ccd,f28x50oii"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1258'
+        self.etcid="STISIMAG1258"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase19(basecase.calcphotCase):
@@ -270,7 +270,7 @@ class calcphotCase19(basecase.calcphotCase):
         self.obsmode="stis,ccd,f28x50oii"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=True
-        self.etcid='STISIMAG1258'
+        self.etcid="STISIMAG1258"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase18(basecase.countrateCase):
@@ -278,7 +278,7 @@ class countrateCase18(basecase.countrateCase):
         self.obsmode="stis,ccd,f28x50oii"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISIMAG1258'
+        self.etcid="STISIMAG1258"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase19(basecase.countrateCase):
@@ -286,7 +286,7 @@ class countrateCase19(basecase.countrateCase):
         self.obsmode="stis,ccd,f28x50oiii"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1259'
+        self.etcid="STISIMAG1259"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase20(basecase.calcphotCase):
@@ -294,7 +294,7 @@ class calcphotCase20(basecase.calcphotCase):
         self.obsmode="stis,ccd,f28x50oiii"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1259'
+        self.etcid="STISIMAG1259"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase21(basecase.calcphotCase):
@@ -302,7 +302,7 @@ class calcphotCase21(basecase.calcphotCase):
         self.obsmode="stis,ccd,f28x50oiii"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISIMAG1259'
+        self.etcid="STISIMAG1259"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase20(basecase.countrateCase):
@@ -310,7 +310,7 @@ class countrateCase20(basecase.countrateCase):
         self.obsmode="stis,ccd,f28x50oiii"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISIMAG1259'
+        self.etcid="STISIMAG1259"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase21(basecase.countrateCase):
@@ -318,7 +318,7 @@ class countrateCase21(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25qtz"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1260'
+        self.etcid="STISIMAG1260"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase22(basecase.calcphotCase):
@@ -326,7 +326,7 @@ class calcphotCase22(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25qtz"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1260'
+        self.etcid="STISIMAG1260"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase23(basecase.calcphotCase):
@@ -334,7 +334,7 @@ class calcphotCase23(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25qtz"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),20,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1260'
+        self.etcid="STISIMAG1260"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase22(basecase.countrateCase):
@@ -342,7 +342,7 @@ class countrateCase22(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25qtz"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),20,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1260'
+        self.etcid="STISIMAG1260"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase24(basecase.calcphotCase):
@@ -350,7 +350,7 @@ class calcphotCase24(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25qtz"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1263'
+        self.etcid="STISIMAG1263"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase23(basecase.countrateCase):
@@ -358,7 +358,7 @@ class countrateCase23(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25qtz"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1263'
+        self.etcid="STISIMAG1263"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase24(basecase.countrateCase):
@@ -366,7 +366,7 @@ class countrateCase24(basecase.countrateCase):
         self.obsmode="stis,fuvmama,25mama"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase25(basecase.calcphotCase):
@@ -374,7 +374,7 @@ class calcphotCase25(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,25mama"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase26(basecase.calcphotCase):
@@ -382,7 +382,7 @@ class calcphotCase26(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,25mama"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),20,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase25(basecase.countrateCase):
@@ -390,7 +390,7 @@ class countrateCase25(basecase.countrateCase):
         self.obsmode="stis,fuvmama,25mama"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),20,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase28(basecase.calcphotCase):
@@ -398,7 +398,7 @@ class calcphotCase28(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,25mama"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18.5,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase27(basecase.countrateCase):
@@ -406,7 +406,7 @@ class countrateCase27(basecase.countrateCase):
         self.obsmode="stis,fuvmama,25mama"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18.5,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase28(basecase.countrateCase):
@@ -414,7 +414,7 @@ class countrateCase28(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25mgii"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1271'
+        self.etcid="STISIMAG1271"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase29(basecase.calcphotCase):
@@ -422,7 +422,7 @@ class calcphotCase29(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25mgii"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1271'
+        self.etcid="STISIMAG1271"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase30(basecase.calcphotCase):
@@ -430,7 +430,7 @@ class calcphotCase30(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25mgii"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1271'
+        self.etcid="STISIMAG1271"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase29(basecase.countrateCase):
@@ -438,7 +438,7 @@ class countrateCase29(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25mgii"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1271'
+        self.etcid="STISIMAG1271"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase30(basecase.countrateCase):
@@ -446,7 +446,7 @@ class countrateCase30(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25cn270"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1273'
+        self.etcid="STISIMAG1273"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase31(basecase.calcphotCase):
@@ -454,7 +454,7 @@ class calcphotCase31(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25cn270"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1273'
+        self.etcid="STISIMAG1273"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase32(basecase.calcphotCase):
@@ -462,7 +462,7 @@ class calcphotCase32(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25cn270"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1273'
+        self.etcid="STISIMAG1273"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase31(basecase.countrateCase):
@@ -470,7 +470,7 @@ class countrateCase31(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25cn270"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1273'
+        self.etcid="STISIMAG1273"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase32(basecase.countrateCase):
@@ -478,7 +478,7 @@ class countrateCase32(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25ciii"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1275'
+        self.etcid="STISIMAG1275"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase33(basecase.calcphotCase):
@@ -486,7 +486,7 @@ class calcphotCase33(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25ciii"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1275'
+        self.etcid="STISIMAG1275"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase34(basecase.calcphotCase):
@@ -494,7 +494,7 @@ class calcphotCase34(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25ciii"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1275'
+        self.etcid="STISIMAG1275"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase33(basecase.countrateCase):
@@ -502,7 +502,7 @@ class countrateCase33(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25ciii"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1275'
+        self.etcid="STISIMAG1275"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase34(basecase.countrateCase):
@@ -510,7 +510,7 @@ class countrateCase34(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25cn182"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1277'
+        self.etcid="STISIMAG1277"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase35(basecase.calcphotCase):
@@ -518,7 +518,7 @@ class calcphotCase35(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25cn182"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1277'
+        self.etcid="STISIMAG1277"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase36(basecase.calcphotCase):
@@ -526,7 +526,7 @@ class calcphotCase36(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25cn182"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1277'
+        self.etcid="STISIMAG1277"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase35(basecase.countrateCase):
@@ -534,7 +534,7 @@ class countrateCase35(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25cn182"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1277'
+        self.etcid="STISIMAG1277"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase36(basecase.countrateCase):
@@ -542,7 +542,7 @@ class countrateCase36(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25nd3"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1279'
+        self.etcid="STISIMAG1279"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase37(basecase.calcphotCase):
@@ -550,7 +550,7 @@ class calcphotCase37(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25nd3"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1279'
+        self.etcid="STISIMAG1279"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase38(basecase.calcphotCase):
@@ -558,7 +558,7 @@ class calcphotCase38(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25nd3"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1279'
+        self.etcid="STISIMAG1279"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase37(basecase.countrateCase):
@@ -566,7 +566,7 @@ class countrateCase37(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25nd3"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1279'
+        self.etcid="STISIMAG1279"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase38(basecase.countrateCase):
@@ -574,7 +574,7 @@ class countrateCase38(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25nd5"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1281'
+        self.etcid="STISIMAG1281"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase39(basecase.calcphotCase):
@@ -582,7 +582,7 @@ class calcphotCase39(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25nd5"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1281'
+        self.etcid="STISIMAG1281"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase40(basecase.calcphotCase):
@@ -590,7 +590,7 @@ class calcphotCase40(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25nd5"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1281'
+        self.etcid="STISIMAG1281"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase39(basecase.countrateCase):
@@ -598,7 +598,7 @@ class countrateCase39(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25nd5"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1281'
+        self.etcid="STISIMAG1281"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase40(basecase.countrateCase):
@@ -606,7 +606,7 @@ class countrateCase40(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25ndq1"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1282'
+        self.etcid="STISIMAG1282"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase41(basecase.calcphotCase):
@@ -614,7 +614,7 @@ class calcphotCase41(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25ndq1"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1282'
+        self.etcid="STISIMAG1282"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase42(basecase.calcphotCase):
@@ -622,7 +622,7 @@ class calcphotCase42(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25ndq1"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1282'
+        self.etcid="STISIMAG1282"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase41(basecase.countrateCase):
@@ -630,7 +630,7 @@ class countrateCase41(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25ndq1"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1282'
+        self.etcid="STISIMAG1282"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase42(basecase.countrateCase):
@@ -638,7 +638,7 @@ class countrateCase42(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25ndq2"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1286'
+        self.etcid="STISIMAG1286"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase43(basecase.calcphotCase):
@@ -646,7 +646,7 @@ class calcphotCase43(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25ndq2"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1286'
+        self.etcid="STISIMAG1286"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase44(basecase.calcphotCase):
@@ -654,7 +654,7 @@ class calcphotCase44(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25ndq2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1286'
+        self.etcid="STISIMAG1286"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase43(basecase.countrateCase):
@@ -662,7 +662,7 @@ class countrateCase43(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25ndq2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1286'
+        self.etcid="STISIMAG1286"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase44(basecase.countrateCase):
@@ -670,7 +670,7 @@ class countrateCase44(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25ndq3"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1288'
+        self.etcid="STISIMAG1288"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase45(basecase.calcphotCase):
@@ -678,7 +678,7 @@ class calcphotCase45(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25ndq3"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1288'
+        self.etcid="STISIMAG1288"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase46(basecase.calcphotCase):
@@ -686,7 +686,7 @@ class calcphotCase46(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25ndq3"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1288'
+        self.etcid="STISIMAG1288"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase45(basecase.countrateCase):
@@ -694,7 +694,7 @@ class countrateCase45(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25ndq3"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1288'
+        self.etcid="STISIMAG1288"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase46(basecase.countrateCase):
@@ -702,7 +702,7 @@ class countrateCase46(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25ndq4"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1290'
+        self.etcid="STISIMAG1290"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase47(basecase.calcphotCase):
@@ -710,7 +710,7 @@ class calcphotCase47(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25ndq4"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1290'
+        self.etcid="STISIMAG1290"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase48(basecase.calcphotCase):
@@ -718,7 +718,7 @@ class calcphotCase48(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25ndq4"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1290'
+        self.etcid="STISIMAG1290"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase47(basecase.countrateCase):
@@ -726,7 +726,7 @@ class countrateCase47(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25ndq4"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1290'
+        self.etcid="STISIMAG1290"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase48(basecase.countrateCase):
@@ -734,7 +734,7 @@ class countrateCase48(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25lya"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1291'
+        self.etcid="STISIMAG1291"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase49(basecase.calcphotCase):
@@ -742,7 +742,7 @@ class calcphotCase49(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25lya"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=True
-        self.etcid='STISIMAG1291'
+        self.etcid="STISIMAG1291"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase50(basecase.calcphotCase):
@@ -750,7 +750,7 @@ class calcphotCase50(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25lya"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1291'
+        self.etcid="STISIMAG1291"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase49(basecase.countrateCase):
@@ -758,7 +758,7 @@ class countrateCase49(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25lya"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1291'
+        self.etcid="STISIMAG1291"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase21(basecase.calcspecCase):
@@ -766,7 +766,7 @@ class calcspecCase21(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="icat(k93models,5770,0.0,4.5)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase51(basecase.calcphotCase):
@@ -774,7 +774,7 @@ class calcphotCase51(basecase.calcphotCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(icat(k93models,5770,0.0,4.5),band(johnson,v),28,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase50(basecase.countrateCase):
@@ -782,7 +782,7 @@ class countrateCase50(basecase.countrateCase):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(icat(k93models,5770,0.0,4.5),band(johnson,v),28,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase22(basecase.calcspecCase):
@@ -790,7 +790,7 @@ class calcspecCase22(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="icat(k93models,30000,0.0,4.0)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase51(basecase.countrateCase):
@@ -798,7 +798,7 @@ class countrateCase51(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25srf2"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1295'
+        self.etcid="STISIMAG1295"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase52(basecase.calcphotCase):
@@ -806,7 +806,7 @@ class calcphotCase52(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25srf2"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1295'
+        self.etcid="STISIMAG1295"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase53(basecase.calcphotCase):
@@ -814,7 +814,7 @@ class calcphotCase53(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25srf2"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0),band(johnson,v),26,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1295'
+        self.etcid="STISIMAG1295"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase52(basecase.countrateCase):
@@ -822,7 +822,7 @@ class countrateCase52(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25srf2"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0),band(johnson,v),26,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1295'
+        self.etcid="STISIMAG1295"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase53(basecase.countrateCase):
@@ -830,7 +830,7 @@ class countrateCase53(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25qtz"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1297'
+        self.etcid="STISIMAG1297"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase54(basecase.calcphotCase):
@@ -838,7 +838,7 @@ class calcphotCase54(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25qtz"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1297'
+        self.etcid="STISIMAG1297"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase55(basecase.calcphotCase):
@@ -846,7 +846,7 @@ class calcphotCase55(basecase.calcphotCase):
         self.obsmode="stis,fuvmama,f25qtz"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0),band(johnson,v),26,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1297'
+        self.etcid="STISIMAG1297"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase54(basecase.countrateCase):
@@ -854,7 +854,7 @@ class countrateCase54(basecase.countrateCase):
         self.obsmode="stis,fuvmama,f25qtz"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0),band(johnson,v),26,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1297'
+        self.etcid="STISIMAG1297"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase55(basecase.countrateCase):
@@ -862,7 +862,7 @@ class countrateCase55(basecase.countrateCase):
         self.obsmode="stis,nuvmama,25mama"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase56(basecase.calcphotCase):
@@ -870,7 +870,7 @@ class calcphotCase56(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,25mama"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase57(basecase.calcphotCase):
@@ -878,7 +878,7 @@ class calcphotCase57(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,25mama"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0),band(johnson,v),26,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase56(basecase.countrateCase):
@@ -886,7 +886,7 @@ class countrateCase56(basecase.countrateCase):
         self.obsmode="stis,nuvmama,25mama"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0),band(johnson,v),26,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase57(basecase.countrateCase):
@@ -894,7 +894,7 @@ class countrateCase57(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25srf2"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1302'
+        self.etcid="STISIMAG1302"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase58(basecase.calcphotCase):
@@ -902,7 +902,7 @@ class calcphotCase58(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25srf2"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG1302'
+        self.etcid="STISIMAG1302"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase59(basecase.calcphotCase):
@@ -910,7 +910,7 @@ class calcphotCase59(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,f25srf2"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0),band(johnson,v),26,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG1302'
+        self.etcid="STISIMAG1302"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase58(basecase.countrateCase):
@@ -918,7 +918,7 @@ class countrateCase58(basecase.countrateCase):
         self.obsmode="stis,nuvmama,f25srf2"
         self.spectrum="rn(icat(k93models,30000,0.0,4.0),band(johnson,v),26,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG1302'
+        self.etcid="STISIMAG1302"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase26(basecase.calcspecCase):
@@ -926,7 +926,7 @@ class calcspecCase26(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="icat(k93models,5860,0.0,4.4)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase59(basecase.countrateCase):
@@ -934,7 +934,7 @@ class countrateCase59(basecase.countrateCase):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=True
-        self.etcid='STISIMAG110509'
+        self.etcid="STISIMAG110509"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase60(basecase.calcphotCase):
@@ -942,7 +942,7 @@ class calcphotCase60(basecase.calcphotCase):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISIMAG110509'
+        self.etcid="STISIMAG110509"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase61(basecase.calcphotCase):
@@ -950,7 +950,7 @@ class calcphotCase61(basecase.calcphotCase):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="rn(icat(k93models,5860,0.0,4.4),band(johnson,v),5,vegamag)"
         self.subset=True
-        self.etcid='STISIMAG110509'
+        self.etcid="STISIMAG110509"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase60(basecase.countrateCase):
@@ -958,7 +958,7 @@ class countrateCase60(basecase.countrateCase):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="rn(icat(k93models,5860,0.0,4.4),band(johnson,v),5,vegamag)"
         self.subset=False
-        self.etcid='STISIMAG110509'
+        self.etcid="STISIMAG110509"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase63(basecase.calcphotCase):
@@ -966,7 +966,7 @@ class calcphotCase63(basecase.calcphotCase):
         self.obsmode="stis,nuvmama,25mama"
         self.spectrum="rn(icat(k93models,5860,0.0,4.4),band(johnson,v),5,vegamag)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase62(basecase.countrateCase):
@@ -974,7 +974,7 @@ class countrateCase62(basecase.countrateCase):
         self.obsmode="stis,nuvmama,25mama"
         self.spectrum="rn(icat(k93models,5860,0.0,4.4),band(johnson,v),5,vegamag)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase1(basecase.SpecSourcerateSpecCase):
@@ -982,7 +982,7 @@ class SpecSourcerateSpecCase1(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='['STISSPEC1264', 'STISSPEC1242']'
+        self.etcid="['STISSPEC1264', 'STISSPEC1242']"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase2(basecase.SpecSourcerateSpecCase):
@@ -990,7 +990,7 @@ class SpecSourcerateSpecCase2(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/grw_70d5824_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1264'
+        self.etcid="STISSPEC1264"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase3(basecase.SpecSourcerateSpecCase):
@@ -998,7 +998,7 @@ class SpecSourcerateSpecCase3(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230l"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1266'
+        self.etcid="STISSPEC1266"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase4(basecase.SpecSourcerateSpecCase):
@@ -1006,7 +1006,7 @@ class SpecSourcerateSpecCase4(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230l,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/grw_70d5824_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1266'
+        self.etcid="STISSPEC1266"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase5(basecase.SpecSourcerateSpecCase):
@@ -1014,7 +1014,7 @@ class SpecSourcerateSpecCase5(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230m,c2818"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1269'
+        self.etcid="STISSPEC1269"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase6(basecase.SpecSourcerateSpecCase):
@@ -1022,7 +1022,7 @@ class SpecSourcerateSpecCase6(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230m,c2818,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=True
-        self.etcid='STISSPEC1269'
+        self.etcid="STISSPEC1269"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase7(basecase.SpecSourcerateSpecCase):
@@ -1030,7 +1030,7 @@ class SpecSourcerateSpecCase7(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140m,c1567"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1370'
+        self.etcid="STISSPEC1370"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase8(basecase.SpecSourcerateSpecCase):
@@ -1038,7 +1038,7 @@ class SpecSourcerateSpecCase8(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140m,c1567,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1370'
+        self.etcid="STISSPEC1370"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase9(basecase.SpecSourcerateSpecCase):
@@ -1046,7 +1046,7 @@ class SpecSourcerateSpecCase9(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,prism"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='['STISSPEC1272', 'STISSPEC1396']'
+        self.etcid="['STISSPEC1272', 'STISSPEC1396']"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase10(basecase.SpecSourcerateSpecCase):
@@ -1054,7 +1054,7 @@ class SpecSourcerateSpecCase10(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,prism,s52x2"
         self.spectrum="spec(HS20270651.dat)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase11(basecase.SpecSourcerateSpecCase):
@@ -1062,7 +1062,7 @@ class SpecSourcerateSpecCase11(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='['STISSPEC1346', 'STISSPEC1274']'
+        self.etcid="['STISSPEC1346', 'STISSPEC1274']"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase12(basecase.SpecSourcerateSpecCase):
@@ -1070,7 +1070,7 @@ class SpecSourcerateSpecCase12(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425,s02x02"
         self.spectrum="spec(/grp/hst/cdbs//calspec/bd_28d4211_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1274'
+        self.etcid="STISSPEC1274"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase13(basecase.SpecSourcerateSpecCase):
@@ -1078,7 +1078,7 @@ class SpecSourcerateSpecCase13(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140h,c1416"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1278'
+        self.etcid="STISSPEC1278"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase14(basecase.SpecSourcerateSpecCase):
@@ -1086,7 +1086,7 @@ class SpecSourcerateSpecCase14(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140h,c1416,s02x02"
         self.spectrum="spec(/grp/hst/cdbs//calspec/bd_28d4211_stis_001.fits)"
         self.subset=True
-        self.etcid='STISSPEC1278'
+        self.etcid="STISSPEC1278"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase15(basecase.SpecSourcerateSpecCase):
@@ -1094,7 +1094,7 @@ class SpecSourcerateSpecCase15(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230m,c1978"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1280'
+        self.etcid="STISSPEC1280"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase16(basecase.SpecSourcerateSpecCase):
@@ -1102,7 +1102,7 @@ class SpecSourcerateSpecCase16(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230m,c1978,s02x02"
         self.spectrum="spec(/grp/hst/cdbs//calspec/bd_28d4211_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1280'
+        self.etcid="STISSPEC1280"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase17(basecase.SpecSourcerateSpecCase):
@@ -1110,7 +1110,7 @@ class SpecSourcerateSpecCase17(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1372'
+        self.etcid="STISSPEC1372"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase18(basecase.SpecSourcerateSpecCase):
@@ -1118,7 +1118,7 @@ class SpecSourcerateSpecCase18(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263,s02x02"
         self.spectrum="spec(/grp/hst/cdbs//calspec/bd_28d4211_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1372'
+        self.etcid="STISSPEC1372"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase20(basecase.SpecSourcerateSpecCase):
@@ -1126,7 +1126,7 @@ class SpecSourcerateSpecCase20(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,prism,s52x01"
         self.spectrum="spec(HS20270651.dat)"
         self.subset=True
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase21(basecase.SpecSourcerateSpecCase):
@@ -1134,7 +1134,7 @@ class SpecSourcerateSpecCase21(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g230lb"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1305'
+        self.etcid="STISSPEC1305"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase22(basecase.SpecSourcerateSpecCase):
@@ -1142,7 +1142,7 @@ class SpecSourcerateSpecCase22(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g230lb,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1305'
+        self.etcid="STISSPEC1305"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase23(basecase.SpecSourcerateSpecCase):
@@ -1150,7 +1150,7 @@ class SpecSourcerateSpecCase23(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430l"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1307'
+        self.etcid="STISSPEC1307"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase24(basecase.SpecSourcerateSpecCase):
@@ -1158,7 +1158,7 @@ class SpecSourcerateSpecCase24(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430l,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1307'
+        self.etcid="STISSPEC1307"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase25(basecase.SpecSourcerateSpecCase):
@@ -1166,7 +1166,7 @@ class SpecSourcerateSpecCase25(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='['STISSPEC1308', 'STISSPEC1319']'
+        self.etcid="['STISSPEC1308', 'STISSPEC1319']"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase26(basecase.SpecSourcerateSpecCase):
@@ -1174,7 +1174,7 @@ class SpecSourcerateSpecCase26(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1308'
+        self.etcid="STISSPEC1308"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase27(basecase.SpecSourcerateSpecCase):
@@ -1182,7 +1182,7 @@ class SpecSourcerateSpecCase27(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430m,c4194"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1310'
+        self.etcid="STISSPEC1310"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase28(basecase.SpecSourcerateSpecCase):
@@ -1190,7 +1190,7 @@ class SpecSourcerateSpecCase28(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430m,c4194,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1310'
+        self.etcid="STISSPEC1310"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase29(basecase.SpecSourcerateSpecCase):
@@ -1198,7 +1198,7 @@ class SpecSourcerateSpecCase29(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750m,c7283"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1374'
+        self.etcid="STISSPEC1374"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase30(basecase.SpecSourcerateSpecCase):
@@ -1206,7 +1206,7 @@ class SpecSourcerateSpecCase30(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750m,c7283,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=False
-        self.etcid='STISSPEC1374'
+        self.etcid="STISSPEC1374"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase31(basecase.SpecSourcerateSpecCase):
@@ -1214,7 +1214,7 @@ class SpecSourcerateSpecCase31(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g230mb,c1995"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1400'
+        self.etcid="STISSPEC1400"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase32(basecase.SpecSourcerateSpecCase):
@@ -1222,7 +1222,7 @@ class SpecSourcerateSpecCase32(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g230mb,c1995,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
         self.subset=True
-        self.etcid='STISSPEC1400'
+        self.etcid="STISSPEC1400"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase33(basecase.SpecSourcerateSpecCase):
@@ -1230,7 +1230,7 @@ class SpecSourcerateSpecCase33(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1316'
+        self.etcid="STISSPEC1316"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase34(basecase.SpecSourcerateSpecCase):
@@ -1238,7 +1238,7 @@ class SpecSourcerateSpecCase34(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),band(johnson,v),12.77,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1316'
+        self.etcid="STISSPEC1316"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase36(basecase.SpecSourcerateSpecCase):
@@ -1246,7 +1246,7 @@ class SpecSourcerateSpecCase36(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751,s52x02"
         self.spectrum="rn(z(spec(qso_template.fits),0.03),band(johnson,v),18,vegamag)"
         self.subset=True
-        self.etcid='STISSPEC1319'
+        self.etcid="STISSPEC1319"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase37(basecase.SpecSourcerateSpecCase):
@@ -1254,7 +1254,7 @@ class SpecSourcerateSpecCase37(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751,s52x02"
         self.spectrum="rn(z(spec(qso_template.fits),1.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1320'
+        self.etcid="STISSPEC1320"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase38(basecase.SpecSourcerateSpecCase):
@@ -1262,7 +1262,7 @@ class SpecSourcerateSpecCase38(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751,s52x02"
         self.spectrum="rn(z(spec(qso_template.fits),3.0),band(johnson,v),18,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1321'
+        self.etcid="STISSPEC1321"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase39(basecase.SpecSourcerateSpecCase):
@@ -1270,7 +1270,7 @@ class SpecSourcerateSpecCase39(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263,s02x02"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/bd_28d4211_stis_001.fits),band(johnson,v),10.516,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1376'
+        self.etcid="STISSPEC1376"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase40(basecase.SpecSourcerateSpecCase):
@@ -1278,7 +1278,7 @@ class SpecSourcerateSpecCase40(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263,s02x02"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),10.516,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1377'
+        self.etcid="STISSPEC1377"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase29(basecase.calcspecCase):
@@ -1286,7 +1286,7 @@ class calcspecCase29(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="bb(50000)"
         self.subset=True
-        self.etcid='STISSPEC1378'
+        self.etcid="STISSPEC1378"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase41(basecase.SpecSourcerateSpecCase):
@@ -1294,7 +1294,7 @@ class SpecSourcerateSpecCase41(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263,s02x02"
         self.spectrum="rn(bb(50000),band(johnson,v),10.516,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1378'
+        self.etcid="STISSPEC1378"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase42(basecase.SpecSourcerateSpecCase):
@@ -1302,7 +1302,7 @@ class SpecSourcerateSpecCase42(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263,s02x02"
         self.spectrum="rn(unit(1.0,flam),band(johnson,v),10.516,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1379'
+        self.etcid="STISSPEC1379"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase30(basecase.calcspecCase):
@@ -1310,7 +1310,7 @@ class calcspecCase30(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="pl(4000.0,0.0,flam)"
         self.subset=True
-        self.etcid='STISSPEC1380'
+        self.etcid="STISSPEC1380"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase43(basecase.SpecSourcerateSpecCase):
@@ -1318,7 +1318,7 @@ class SpecSourcerateSpecCase43(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263,s02x02"
         self.spectrum="rn(pl(4000.0,0.0,flam),band(johnson,v),10.516,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1380'
+        self.etcid="STISSPEC1380"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase31(basecase.calcspecCase):
@@ -1326,7 +1326,7 @@ class calcspecCase31(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="pl(4000.0,-1.0,flam)"
         self.subset=True
-        self.etcid='STISSPEC1381'
+        self.etcid="STISSPEC1381"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase44(basecase.SpecSourcerateSpecCase):
@@ -1334,7 +1334,7 @@ class SpecSourcerateSpecCase44(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263,s02x02"
         self.spectrum="rn(pl(4000.0,-1.0,flam),band(johnson,v),10.516,vegamag)"
         self.subset=True
-        self.etcid='STISSPEC1381'
+        self.etcid="STISSPEC1381"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase45(basecase.SpecSourcerateSpecCase):
@@ -1342,7 +1342,7 @@ class SpecSourcerateSpecCase45(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230h,c2263,s02x02"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/bd_28d4211_stis_001.fits),box(2000.0,1.0),1.0e-12,flam)"
         self.subset=True
-        self.etcid='STISSPEC1382'
+        self.etcid="STISSPEC1382"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase46(basecase.SpecSourcerateSpecCase):
@@ -1350,7 +1350,7 @@ class SpecSourcerateSpecCase46(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230l"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1322'
+        self.etcid="STISSPEC1322"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase47(basecase.SpecSourcerateSpecCase):
@@ -1358,7 +1358,7 @@ class SpecSourcerateSpecCase47(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0)*ebmvx(0.5,gal1),band(johnson,v),15,vegamag)"
         self.subset=True
-        self.etcid='STISSPEC1322'
+        self.etcid="STISSPEC1322"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase48(basecase.SpecSourcerateSpecCase):
@@ -1366,7 +1366,7 @@ class SpecSourcerateSpecCase48(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0)*ebmvx(0.5,smc),band(johnson,v),15,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1323'
+        self.etcid="STISSPEC1323"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase49(basecase.SpecSourcerateSpecCase):
@@ -1374,7 +1374,7 @@ class SpecSourcerateSpecCase49(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0)*ebmvx(0.5,lmc),band(johnson,v),15,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1324'
+        self.etcid="STISSPEC1324"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase50(basecase.SpecSourcerateSpecCase):
@@ -1382,7 +1382,7 @@ class SpecSourcerateSpecCase50(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0)*ebmvx(0.5,xgal),band(johnson,v),15,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1325'
+        self.etcid="STISSPEC1325"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase36(basecase.calcspecCase):
@@ -1390,7 +1390,7 @@ class calcspecCase36(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="icat(k93models,11900,0.0,4.0)"
         self.subset=False
-        self.etcid='None'
+        self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase51(basecase.SpecSourcerateSpecCase):
@@ -1398,7 +1398,7 @@ class SpecSourcerateSpecCase51(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425,s02x02"
         self.spectrum="rn(icat(k93models,11900,0.0,4.0),band(johnson,v),6,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1099'
+        self.etcid="STISSPEC1099"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase52(basecase.SpecSourcerateSpecCase):
@@ -1406,7 +1406,7 @@ class SpecSourcerateSpecCase52(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425,s02x02"
         self.spectrum="rn(icat(k93models,11900,0.0,4.0),band(johnson,v),7,vegamag)"
         self.subset=True
-        self.etcid='STISSPEC1101'
+        self.etcid="STISSPEC1101"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase53(basecase.SpecSourcerateSpecCase):
@@ -1414,7 +1414,7 @@ class SpecSourcerateSpecCase53(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),13,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1239'
+        self.etcid="STISSPEC1239"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase54(basecase.SpecSourcerateSpecCase):
@@ -1422,7 +1422,7 @@ class SpecSourcerateSpecCase54(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),14,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1240'
+        self.etcid="STISSPEC1240"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase55(basecase.SpecSourcerateSpecCase):
@@ -1430,7 +1430,7 @@ class SpecSourcerateSpecCase55(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),14.1,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1241'
+        self.etcid="STISSPEC1241"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase57(basecase.SpecSourcerateSpecCase):
@@ -1438,7 +1438,7 @@ class SpecSourcerateSpecCase57(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l,s52x01"
         self.spectrum="rn(spec(ngc1068_template.fits),band(johnson,v),9,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1242'
+        self.etcid="STISSPEC1242"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase58(basecase.SpecSourcerateSpecCase):
@@ -1446,7 +1446,7 @@ class SpecSourcerateSpecCase58(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430l"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='['STISSPEC1341', 'STISSPEC1243']'
+        self.etcid="['STISSPEC1341', 'STISSPEC1243']"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase59(basecase.SpecSourcerateSpecCase):
@@ -1454,7 +1454,7 @@ class SpecSourcerateSpecCase59(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430l,s52x2"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),band(johnson,v),10,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1243'
+        self.etcid="STISSPEC1243"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase60(basecase.SpecSourcerateSpecCase):
@@ -1462,7 +1462,7 @@ class SpecSourcerateSpecCase60(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425,s02x02"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),22,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1254'
+        self.etcid="STISSPEC1254"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase61(basecase.SpecSourcerateSpecCase):
@@ -1470,7 +1470,7 @@ class SpecSourcerateSpecCase61(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,e230m,c1978,s02x02"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18.5,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1256'
+        self.etcid="STISSPEC1256"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase62(basecase.SpecSourcerateSpecCase):
@@ -1478,7 +1478,7 @@ class SpecSourcerateSpecCase62(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),27.5,vegamag)"
         self.subset=True
-        self.etcid='STISSPEC1292'
+        self.etcid="STISSPEC1292"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase63(basecase.SpecSourcerateSpecCase):
@@ -1486,7 +1486,7 @@ class SpecSourcerateSpecCase63(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,nuvmama,g230l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),24,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1294'
+        self.etcid="STISSPEC1294"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase64(basecase.SpecSourcerateSpecCase):
@@ -1494,7 +1494,7 @@ class SpecSourcerateSpecCase64(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g230lb"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1296'
+        self.etcid="STISSPEC1296"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase65(basecase.SpecSourcerateSpecCase):
@@ -1502,7 +1502,7 @@ class SpecSourcerateSpecCase65(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g230lb,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),22,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1296'
+        self.etcid="STISSPEC1296"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase66(basecase.SpecSourcerateSpecCase):
@@ -1510,7 +1510,7 @@ class SpecSourcerateSpecCase66(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430l,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),23.5,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1298'
+        self.etcid="STISSPEC1298"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase67(basecase.SpecSourcerateSpecCase):
@@ -1518,7 +1518,7 @@ class SpecSourcerateSpecCase67(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1300'
+        self.etcid="STISSPEC1300"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase68(basecase.SpecSourcerateSpecCase):
@@ -1526,7 +1526,7 @@ class SpecSourcerateSpecCase68(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),24.5,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC1300'
+        self.etcid="STISSPEC1300"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase69(basecase.SpecSourcerateSpecCase):
@@ -1534,7 +1534,7 @@ class SpecSourcerateSpecCase69(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751,s52x2"
         self.spectrum="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),23,vegamag)"
         self.subset=True
-        self.etcid='STISSPEC1329'
+        self.etcid="STISSPEC1329"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase70(basecase.SpecSourcerateSpecCase):
@@ -1542,7 +1542,7 @@ class SpecSourcerateSpecCase70(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.1,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1332'
+        self.etcid="STISSPEC1332"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase71(basecase.SpecSourcerateSpecCase):
@@ -1550,7 +1550,7 @@ class SpecSourcerateSpecCase71(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),23.3,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1333'
+        self.etcid="STISSPEC1333"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase72(basecase.SpecSourcerateSpecCase):
@@ -1558,7 +1558,7 @@ class SpecSourcerateSpecCase72(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751"
         self.spectrum="spec(earthshine.fits)+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*2.0"
         self.subset=False
-        self.etcid='STISSPEC1336'
+        self.etcid="STISSPEC1336"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase73(basecase.SpecSourcerateSpecCase):
@@ -1566,7 +1566,7 @@ class SpecSourcerateSpecCase73(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g750l,c7751"
         self.spectrum="rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)*0.2+spec(el1302a.fits)*0.01333333333+spec(el1356a.fits)*0.012+spec(el2471a.fits)*0.01)"
         self.subset=False
-        self.etcid='STISSPEC1337'
+        self.etcid="STISSPEC1337"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase74(basecase.SpecSourcerateSpecCase):
@@ -1574,7 +1574,7 @@ class SpecSourcerateSpecCase74(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425"
         self.spectrum="spec(earthshine.fits)+rn(spec(Zodi.fits),band(johnson,v),23.3,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*2.0"
         self.subset=True
-        self.etcid='STISSPEC1338'
+        self.etcid="STISSPEC1338"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase75(basecase.SpecSourcerateSpecCase):
@@ -1582,7 +1582,7 @@ class SpecSourcerateSpecCase75(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425"
         self.spectrum="rn(spec(Zodi.fits),band(johnson,v),23.3,vegamag)+(spec(el1215a.fits)*0.2+spec(el1302a.fits)*0.01333333333+spec(el1356a.fits)*0.012+spec(el2471a.fits)*0.01)"
         self.subset=False
-        self.etcid='STISSPEC1339'
+        self.etcid="STISSPEC1339"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase77(basecase.SpecSourcerateSpecCase):
@@ -1590,7 +1590,7 @@ class SpecSourcerateSpecCase77(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430l"
         self.spectrum="rn(icat(k93models,5860,0.0,4.4),band(johnson,v),5,vegamag)"
         self.subset=True
-        self.etcid='['STISSPEC1341', 'STISSPEC1343']'
+        self.etcid="['STISSPEC1341', 'STISSPEC1343']"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase79(basecase.SpecSourcerateSpecCase):
@@ -1598,7 +1598,7 @@ class SpecSourcerateSpecCase79(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425,s02x02"
         self.spectrum="rn(icat(k93models,11900,0.0,4.0),band(johnson,v),10,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC110506'
+        self.etcid="STISSPEC110506"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase80(basecase.SpecSourcerateSpecCase):
@@ -1606,7 +1606,7 @@ class SpecSourcerateSpecCase80(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430l"
         self.spectrum="rn(spec(Zodi.fits),band(johnson,v),23.3,vegamag)+(spec(el1215a.fits)*0.2+spec(el1302a.fits)*0.01333333333+spec(el1356a.fits)*0.012+spec(el2471a.fits)*0.01)"
         self.subset=False
-        self.etcid='STISSPEC1344'
+        self.etcid="STISSPEC1344"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase81(basecase.SpecSourcerateSpecCase):
@@ -1614,7 +1614,7 @@ class SpecSourcerateSpecCase81(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430l"
         self.spectrum="em(4300.0,1.0,1.0E-12,flam)"
         self.subset=False
-        self.etcid='STISSPEC1344'
+        self.etcid="STISSPEC1344"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase82(basecase.SpecSourcerateSpecCase):
@@ -1622,7 +1622,7 @@ class SpecSourcerateSpecCase82(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430m,c4194"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.subset=False
-        self.etcid='STISSPEC1345'
+        self.etcid="STISSPEC1345"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase83(basecase.SpecSourcerateSpecCase):
@@ -1630,7 +1630,7 @@ class SpecSourcerateSpecCase83(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,ccd,g430m,c4194,s52x2"
         self.spectrum="em(4300.0,1.0,1.0E-12,flam)"
         self.subset=False
-        self.etcid='STISSPEC1345'
+        self.etcid="STISSPEC1345"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase85(basecase.SpecSourcerateSpecCase):
@@ -1638,7 +1638,7 @@ class SpecSourcerateSpecCase85(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425,s02x006"
         self.spectrum="em(1425.0,1.0,1.0E-10,flam)"
         self.subset=False
-        self.etcid='STISSPEC1346'
+        self.etcid="STISSPEC1346"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase86(basecase.SpecSourcerateSpecCase):
@@ -1646,7 +1646,7 @@ class SpecSourcerateSpecCase86(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,e140m,c1425,s02x006"
         self.spectrum="em(1425.0,0.043487548828125,1.0E-10,flam)"
         self.subset=False
-        self.etcid='STISSPEC1347'
+        self.etcid="STISSPEC1347"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase87(basecase.SpecSourcerateSpecCase):
@@ -1654,7 +1654,7 @@ class SpecSourcerateSpecCase87(basecase.SpecSourcerateSpecCase):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/grw_70d5824_stis_001.fits),band(johnson,v),10.516,vegamag)"
         self.subset=False
-        self.etcid='STISSPEC4422'
+        self.etcid="STISSPEC4422"
         self.setglobal(__file__)
         self.runpy()
 

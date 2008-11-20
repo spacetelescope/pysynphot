@@ -6,7 +6,7 @@ class thermbackCase1(basecase.thermbackCase):
         self.obsmode="wfc3,ir,g102,bkg"
         self.spectrum="None"
         self.subset=False
-        self.etcid='irsp006.tab:0000'
+        self.etcid="irsp006.tab:0000"
         self.setglobal(__file__)
         self.runpy()
 class thermbackCase3(basecase.thermbackCase):
@@ -14,7 +14,7 @@ class thermbackCase3(basecase.thermbackCase):
         self.obsmode="wfc3,ir,g141,bkg"
         self.spectrum="None"
         self.subset=False
-        self.etcid='irsp006.tab:0030'
+        self.etcid="irsp006.tab:0030"
         self.setglobal(__file__)
         self.runpy()
 

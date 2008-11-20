@@ -10,7 +10,7 @@ def run(cmdfile,subsetfile=None, lookupfile=None):
         self.obsmode="%s"
         self.spectrum="%s"
         self.subset=%s
-        self.etcid='%s'
+        self.etcid="%s"
         self.setglobal(__file__)
         self.runpy()\n"""
 
