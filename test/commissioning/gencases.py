@@ -46,7 +46,7 @@ import basecase
     count={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
     dupcatcher={}
     dupcounter={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
-    unrec={'countrate':0,'calcspec':0,'calcphot':0,'SpecSourcerateSpec':0,'thermback':0}
+    
     #Now start the main loop
     for line in f:
     
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     f.close()
 
     for k in count:
-        total= "#%s:%d - %d dup - %d unrec =%d\n"%(k,count[k],dupcounter[k],unrec[k],count[k]-dupcounter[k]-unrec[k])
+        total= "#%s:%d - %d dup =%d\n"%(k,count[k],dupcounter[k],count[k]-dupcounter[k])
         sys.stdout.write(total)
         out.write(total)
     out.close()
