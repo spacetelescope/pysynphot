@@ -2,7 +2,7 @@ from pysynphot import etc
 import sys,os
 import pickle
 
-def run(cmdfile,subsetfile=None):
+def run(cmdfile,subsetfile=None, lookupfile=None):
     """ Generate TestCases from cmdfile according to the pattern in patternfile"""
     #Define the test case pattern
     pattern="""class %s(basecase.%sCase):
@@ -14,15 +14,13 @@ def run(cmdfile,subsetfile=None):
         self.setglobal(__file__)
         self.runpy()\n"""
 
-    #Open the (params:casename) dictionary if it exists
-
-    pname=cmdfile.replace('.txt','.pickle')
-    try:
-        f=open(pname)
+    #Open the (params:etcid) dictionary if it exists
+    if lookupfile is not None:
+        f=open(lookupfile)
         lookup=pickle.load(f)
         f.close()
-    except IOError:
-        lookup=None
+    else:
+        lookup={}
         
     #Process the subsetfile if present
     subsetflag={}
@@ -53,54 +51,20 @@ import basecase
     for line in f:
     
     #parse the line
-        parts=line.strip().split('&')
-        cmd=(parts[0].lstrip())[1:] #strip off leading quote
+        ktuple=line2ktuple(line)
+        cmd,obsmode,spectrum=ktuple
         count[cmd]+=1
-        kwd=etc.getparms(parts[1:])
-        
-
-        #do the substitutions
-        try:
-           obsmode=kwd['instrument']
-        except KeyError:
-           obsmode=kwd.get('obsmode','None')
-
-        #fix the CDBS specification
-        try:
-            kwd['spectrum']=kwd['spectrum'].replace('/cdbs',os.environ['PYSYN_CDBS'])
-            kwd['spectrum']=kwd['spectrum'].replace('/usr/stsci/stdata',
-                                                    os.environ['PYSYN_CDBS'])
-        except KeyError:
-            kwd['spectrum']=None
-
-
-        #Construct the name and pattern
-        ktuple=(cmd,obsmode,kwd['spectrum'])
-        #The old way
-        if lookup is None:
-            casename="%sCase%d"%(cmd,count[cmd])        
-            if ktuple in dupcatcher:
-               dupcounter[cmd]+=1
-               dupcatcher[ktuple].append(casename)
-            else:
-                dupcatcher[ktuple]=[casename]
-                defn=pattern%(casename,cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False),kwd.get('etcid',None))
-                out.write(defn)
+        casename="%sCase%d"%(cmd,count[cmd])        
+        if ktuple in dupcatcher:
+            dupcounter[cmd]+=1
+            dupcatcher[ktuple].append(casename)
         else:
-        #The new pickled way
-            try:
-                casename=lookup[ktuple][0]
-                if casename != 'Found':
-                   lookup[ktuple]=['Found']
-                   defn=pattern%(casename,cmd,obsmode,kwd['spectrum'],subsetflag.get(casename,False),kwd.get('etcid',None))
-                   out.write(defn)
-                else:
-                   dupcounter[cmd]+=1
-            except KeyError:
-                print "WARNING, unrecognized case------------------"
-                print ktuple
-                unrec[cmd]+=1
-                
+            dupcatcher[ktuple]=[casename]
+            etcid=lookup.get(ktuple,None)
+            if etcid is not None and len(etcid) == 1:
+                etcid=etcid[0]
+            defn=pattern%(casename,cmd,obsmode,spectrum,subsetflag.get(casename,False),etcid)
+            out.write(defn)
 
     out.write("""\n\n
 if __name__ == '__main__':
@@ -118,13 +82,32 @@ if __name__ == '__main__':
         out.write(total)
     out.close()
 
-    #Pickle the dictionary if we just created it
-    if not lookup:
-        f=open(pname,'w')
-        pickle.dump(dupcatcher,f)
-        f.close()
         
     return dupcatcher
+
+def line2ktuple(line):
+    parts=line.strip().split('&')
+    cmd=(parts[0].lstrip())[1:] #strip off leading quote
+    kwd=etc.getparms(parts[1:])
+    
+    #do the substitutions
+    try:
+        obsmode=kwd['instrument']
+    except KeyError:
+        obsmode=kwd.get('obsmode','None')
+        
+    #fix the CDBS specification
+    try:
+        kwd['spectrum']=kwd['spectrum'].replace('/cdbs',os.environ['PYSYN_CDBS'])
+        kwd['spectrum']=kwd['spectrum'].replace('/usr/stsci/stdata',
+                                                os.environ['PYSYN_CDBS'])
+    except KeyError:
+        kwd['spectrum']=None
+        
+        
+    #Construct the name and pattern
+    ktuple=(cmd,obsmode,kwd['spectrum'])
+    return ktuple
 
 if __name__ == '__main__':
     dups = run(*sys.argv[1:])
