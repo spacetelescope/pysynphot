@@ -3,12 +3,13 @@ import os, warnings, glob
    
 
 def _refTable(template):
-    names = glob.glob(os.path.join(rootdir,template))
+    names = glob.glob(os.path.join(os.environ['PYSYN_CDBS'], template))
     names.sort()
     try:
         return names[-1]
     except IndexError:
-        msg= "No files found for %s."%os.path.join('PYSYN_CDBS',template)
+        msg= "No files found for %s."%os.path.join(os.environ['PYSYN_CDBS'],
+                                                   template)
         raise IOError(msg)
  
 #Replace cdbs_roots lookup with an environment variable
