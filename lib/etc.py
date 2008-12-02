@@ -143,7 +143,12 @@ def showfiles(parlist):
     
 def Suicide(dummy):
     """Kill this process"""
-    os.kill(mypid,9)
+
+    try:
+        os.kill(mypid,9)
+    except AttributeError, e:
+        #We're probably on a Windows platform. Try this instead:
+        os.popen('TASKKILL /PID '+str(mypid)+' /F')
 
 def ping(dummy):
     """Respond with my process id so the caller knows I'm alive"""
