@@ -29,8 +29,9 @@ class Client(threading.Thread):
         print hr,"Client connected to server.  "
         sock.sendall(self._line)
         print "Client sent:  ", self._line
-        response = sock.recv(8192)
-        print "%s Client sent: %s \n Client received: %s"%(hr,self._line, response)
+        self._response = sock.recv(8192)
+        print "%s Client sent: %s \n Client received: %s"%(hr,self._line,
+                                                           self._response)
         sock.close()
 
 
