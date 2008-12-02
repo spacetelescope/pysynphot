@@ -397,7 +397,7 @@ class SourceSpectrum(Integrator):
         return StdRenorm(self,band,RNval,RNUnits)
 
     def effstim(self,fluxunits='photlam'):
-        print "?? %s"%gluxunits
+        print "?? %s"%fluxunits
         raise NotImplementedError("Ticket #140: calcphot.effstim functionality")
 
 class CompositeSourceSpectrum(SourceSpectrum):
