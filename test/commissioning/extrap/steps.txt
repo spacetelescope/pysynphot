@@ -30,6 +30,6 @@ bluelist.close
 outb.close()
 
 5. Create the new TMC file
-os.chdir('/eng/ssb/syn_pysyn/cdbs_pinned/mtab/')
-extrap.buildtmc('currentname_tmc.fits')
+os.chdir('/eng/ssb/syn_pysyn/cdbs_pinned/')
+extrap.buildtmc('mtab/s5s19011m_tmc.fits')
     
