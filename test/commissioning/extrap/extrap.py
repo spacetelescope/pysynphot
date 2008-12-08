@@ -15,7 +15,7 @@ import re, time, os, sys
 import pyfits
 import numpy as N
 
-__version__='1.0d'
+__version__='1.1d'
 
 
 def classify_file(f):
@@ -106,6 +106,91 @@ def run(fname,outdir=None):
     #Update the primary header
     f[0].header.add_history(time.asctime())
     f[0].header.add_history("..Added a point with throughput=0 at each end of the")
+    f[0].header.add_history("..throughput curves (dLambda=.001A) using the script")
+    f[0].header.add_history("..extrap.py v%s. V. Laidler"%__version__)
+
+    #And write out the new file
+    if outdir is not None:
+        newname=os.path.join(outdir,fincre(fname))
+    else:
+        newname=fincre(fname)
+    f.writeto(newname)
+
+    return("%s -> %s"%(fname, newname))
+
+
+
+def blue(fname,outdir=None):
+    """Cut&pasted from run, but to operate only on blue end."""
+    if outdir is not None and not os.path.isdir(outdir):
+        os.mkdir(outdir)
+        
+    dwave=0.001
+    f=pyfits.open(fname)
+    nonparam,error=classify_file(f)
+    #Check whether a fix is needed
+    if nonparam: #just check column 1 = throughput
+        t=f[1].data.field(1)
+        ok = (t[0]==0.0) and (t[-1]==0.0)
+    else:
+        ok=False
+        cols=f[1].columns
+        for k in range(1,len(cols)):
+            if 'err' not in cols[k].name.lower():
+                t=f[1].data.field(k)
+                ok = ok and ( (t[0]==0.0) and (t[-1]==0.0) )
+
+    if ok:
+        f.close()
+        return "%s: no change necessary"%fname
+    
+
+    #If not ok, we fall through to here.
+    #We're going to have to make a new hdu
+    clist=[]
+    #And we need column info from the existing hdu
+    cols=f[1].columns
+    #Always make a new wavelength array
+    w=f[1].data.field(0)
+    nrows=len(w)
+    wave=N.zeros((nrows+1,),dtype=w.dtype)
+    wave[1:]=w
+    wave[0]=w[0]-dwave
+
+    wc=pyfits.Column(name=cols[0].name,
+                     format=cols[0].format,
+                     array=wave)
+    clist.append(wc)
+    #Stick zeros on the ends of all other columns, unless
+    #there's an "ERR" in their name
+
+    padval={True:100,False:0}
+    for k in range(1,len(cols)):
+        t=f[1].data.field(k)
+        thru=N.zeros((nrows+1,),dtype=t.dtype)
+        thru[1:]=t
+        pv=padval[("err" in cols.names[k].lower())]
+        thru[0]=pv
+        tc=pyfits.Column(name=cols[k].name,
+                         format=cols[k].format,
+                         array=thru)
+        clist.append(tc)
+
+    #Now we have all the columns; put them in an HDU
+    tbhdu=pyfits.new_table(clist)
+    #and copy in the header information we need
+    h=f[1].header.copy()
+    h.update('NAXIS1',tbhdu.header['NAXIS1'])
+    h.update('NAXIS2',tbhdu.header['NAXIS2'])
+    tbhdu.header=h
+
+
+    #Replace the HDU
+    f[1]=tbhdu
+
+    #Update the primary header
+    f[0].header.add_history(time.asctime())
+    f[0].header.add_history("..Added a point with throughput=0 at blue end of the")
     f[0].header.add_history("..throughput curves (dLambda=.001A) using the script")
     f[0].header.add_history("..extrap.py v%s. V. Laidler"%__version__)
 

@@ -10,17 +10,26 @@ ln -s /grp/hst/cdbs/calspec/ /eng/ssb/syn_pysyn/cdbs_pinned
 
 3. Loop over the pinlist from within the shell
 flist=open('combined_pinlist.txt')
-import extrap
+bluelist=open('combined_bluelist.txt')
+out=open('combined_pinlist.log','w')
+outb=open('combined_bluelist.log','w')
+import extrap,os
+os.chdir('/eng/ssb/syn_pysyn/cdbs_pinned')
 for fname in flist:
-    extrap.run(fname)
+    x=extrap.run(fname.strip())
+    out.write("%s\n"%x)
 flist.close()
+out.close()
 
 4. Loop over the blueside-only list
-flist=open('combined_bluelist.txt')
-for fname in flist:
-    extrap.blue(fname)
-flist.close
+
+for fname in bluelist:
+    x=extrap.blue(fname.strip())
+    outb.write("%s\n"%x)
+bluelist.close
+outb.close()
 
 5. Create the new TMC file
+os.chdir('/eng/ssb/syn_pysyn/cdbs_pinned/mtab/')
 extrap.buildtmc('currentname_tmc.fits')
     
