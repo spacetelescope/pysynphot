@@ -31,5 +31,5 @@ outb.close()
 
 5. Create the new TMC file
 os.chdir('/eng/ssb/syn_pysyn/cdbs_pinned/')
-extrap.buildtmc('mtab/s5s19011m_tmc.fits')
-    
+extrap.buildtmc('mtab/s8i22541m_tmc.fits')
+mv mtab/s8i22541m_tmc_new.fits mtab/zzz_s8i22541m_tmc.fits
