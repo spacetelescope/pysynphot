@@ -45,9 +45,15 @@ endif
 set codeplace = /data/gaudete1/dg1/laidler/ssb/checkout/pysynphot/test/commissioning
 setenv PATH {$PATH}:{$codeplace}
 setenv PYTHONPATH {$PYTHONPATH}:{$codeplace}
-setenv PYSYN_CDBS /grp/hst/cdbs/
+
+if ( ! $?PYSYN_CDBS ) then
+  echo PYSYN_CDBS must be defined.... aborting.
+  exit 1
+endif
+
 echo $PYTHONPATH
 python -c "import pysynphot ; print pysynphot.__file__"
+echo $PYSYN_CDBS
 
 foreach tname ($tlist)
   echo $tname
