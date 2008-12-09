@@ -24,11 +24,6 @@ if ( "$revset" == "") then
 endif 
 
 set dirname = {$rname}_r{$revset}
-#...................................................
-# Set up a test directory
-mkdir -p $dirname
-cd $dirname
-tar -xzf /eng/ssb/syn_pysyn/testdata.tar.gz
 
 #.........................................
 # User may specify the list of tests; if not, use the full set.
@@ -53,8 +48,14 @@ endif
 
 echo $PYTHONPATH
 python -c "import pysynphot ; print pysynphot.__file__"
+python printversion.py
 echo $PYSYN_CDBS
-
+#...................................................
+# Set up a test directory
+mkdir -p $dirname
+cd $dirname
+tar -xzf /eng/ssb/syn_pysyn/testdata.tar.gz
+#....................................................
 foreach tname ($tlist)
   echo $tname
 ###  nosetests $tname >& `echo "$tname" | sed 's/.py/.log/'`
