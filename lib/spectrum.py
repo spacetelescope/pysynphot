@@ -443,6 +443,16 @@ class CompositeSourceSpectrum(SourceSpectrum):
 
         return MergeWaveSets(waveset1, waveset2)
 
+    def tabulate(self):
+        """Evaluate the spectrum in order to return a tabular source
+        spectrum"""
+        sp=ArraySourceSpectrum(wave=self.wave,
+                               flux=self.flux,
+                               waveunits=self.waveunits,
+                               fluxunits=self.fluxunits,
+                               name='%s (tabulated)'%self.name)
+        return sp
+
 class TabularSourceSpectrum(SourceSpectrum):
     '''Class for a source spectrum that is read in from a table.
     '''
