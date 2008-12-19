@@ -255,7 +255,7 @@ class calcphotCase(calcspecCase):
 
         
 
-class thermbackCase(calcphotCase):
+class thermbackCase(calcspecCase):
         
     def runpy(self):
 
@@ -272,23 +272,26 @@ class thermbackCase(calcphotCase):
                 pass
         self.discrep=-99
 
+        #Both tests need this
+        omode=ObservationMode(self.obsmode)
+        self.sptest=omode.ThermalSpectrum()
+        self.ttherm=self.sptest.integrate()*omode.pixscale**2*omode.area
+        self.sptest.convert('counts')
+
+
+    def testcrspec(self):
         iraf.thermback(obsmode=self.obsmode,form='counts',
                        output=self.csname)
 
-        omode=ObservationMode(self.obsmode)
-        self.sp=omode.ThermalSpectrum()
-        self.ttherm=self.sp.integrate()*omode.pixscale**2*omode.area
-        self.sp.convert('counts')
-        self.savepysyn(self.sp.wave,self.sp.flux,self.csname,units='counts')
+        spref=S.FileSpectrum(self.csname)
+        self.savepysyn(spref.wave,self.sptest.sample(spref.wave),
+                       self.csname,units='counts')
 
-    def testspecphotlam(self):
-        __test__ = False
+        ridx=N.where(spref.wave >= 900.0)
+        rflux=spref.flux[ridx]
+        tflux=self.sptest.sample(spref.wave[ridx])
+        self.arraysigtest(tflux,rflux)
 
-    def testcrspec(self):
-        __test__ = False
-        
-    def testefflam(self):
-        __test__ = False
 
 ##-----------------------------------------------------------------------
 ## The wave arrays are never equal; comment out this test.
@@ -300,6 +303,7 @@ class thermbackCase(calcphotCase):
 ##         self.arraysigtest(self.sp.flux,ref.flux)
         
     def testthermback(self):
+        iraf.thermback(obsmode=self.obsmode,form='counts')
         rtherm=iraf.thermback.getParam('thermback.thermflux',native=1)
         ttherm=self.ttherm
         if rtherm != 0:
