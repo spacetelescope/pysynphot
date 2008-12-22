@@ -486,11 +486,11 @@
 ##[BatchLogTest.run] starting 'ImagingA:00010'.
 ##[BatchLogTest.run] starting 'ImagingA:00011'.
 ##[BatchLogTest.run] starting 'ImagingA:00012'.
-##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bz77/bz_23.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV1.fits"'.
+##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_20.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV1.fits"'.
 ##[PysynphotRunner.doRun] request took 75
-##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_23.fits),box(10000.0,1.0),1.00E-13,flam)"'.
+##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_20.fits),box(10000.0,1.0),1.00E-13,flam)"'.
 ##[PysynphotRunner.doRun] request took 2927
-##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_23.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
+##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_20.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 2780
 ##[BatchLogTest.run] starting 'ImagingA:00013'.
 ##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bpgs/bpgs_35.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV2.fits"'.
@@ -500,18 +500,18 @@
 ##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bpgs/bpgs_35.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 2812
 ##[BatchLogTest.run] starting 'ImagingA:00014'.
-##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bz77/bz_41.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV3.fits"'.
+##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_63.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV3.fits"'.
 ##[PysynphotRunner.doRun] request took 80
-##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_41.fits),box(10000.0,1.0),1.00E-13,flam)"'.
+##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_63.fits),box(10000.0,1.0),1.00E-13,flam)"'.
 ##[PysynphotRunner.doRun] request took 3208
-##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_41.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
+##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_63.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 2846
 ##[BatchLogTest.run] starting 'ImagingA:00015'.
-##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bz77/bz_71.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV4.fits"'.
+##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_121.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV4.fits"'.
 ##[PysynphotRunner.doRun] request took 68
-##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_71.fits),box(10000.0,1.0),1.00E-13,flam)"'.
+##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_121.fits),box(10000.0,1.0),1.00E-13,flam)"'.
 ##[PysynphotRunner.doRun] request took 3047
-##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_71.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
+##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_121.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 3027
 ##[BatchLogTest.run] starting 'NIC.EXT.IMAG.004'.
 ##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(bb(5500),band(bessell,h),20,vegamag)"'.
@@ -519,11 +519,11 @@
 ##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(bb(5500),band(bessell,h),20,vegamag)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 3651
 ##[BatchLogTest.run] starting 'ImagingA:00016'.
-##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bz77/bz_76.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV5.fits"'.
+##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_127.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV5.fits"'.
 ##[PysynphotRunner.doRun] request took 72
-##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_76.fits),box(10000.0,1.0),1.00E-13,flam)"'.
+##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_127.fits),box(10000.0,1.0),1.00E-13,flam)"'.
 ##[PysynphotRunner.doRun] request took 2912
-##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_76.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
+##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_127.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 3060
 ##[BatchLogTest.run] starting 'ImagingA:00017'.
 ##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(icat(ck04models,6250,0.0,4.5),box(10000.0,1.0),1.00E-13,flam)"'.
@@ -592,24 +592,24 @@
 ##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(icat(k93models,4850,0.0,1.1),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 3786
 ##[BatchLogTest.run] starting 'ImagingA:00028'.
-##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_23.fits),box(10000.0,1.0),1.00E-13,flam)"'.
+##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_20.fits),box(10000.0,1.0),1.00E-13,flam)"'.
 ##[PysynphotRunner.doRun] request took 2837
-##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_23.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
+##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_20.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 2729
 ##[BatchLogTest.run] starting 'ImagingA:00029'.
-##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_41.fits),box(10000.0,1.0),1.00E-13,flam)"'.
+##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_63.fits),box(10000.0,1.0),1.00E-13,flam)"'.
 ##[PysynphotRunner.doRun] request took 9256
-##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_41.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
+##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_63.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 5679
 ##[BatchLogTest.run] starting 'ImagingA:00030'.
-##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_71.fits),box(10000.0,1.0),1.00E-13,flam)"'.
+##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_121.fits),box(10000.0,1.0),1.00E-13,flam)"'.
 ##[PysynphotRunner.doRun] request took 5994
-##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_71.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
+##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_121.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 7839
 ##[BatchLogTest.run] starting 'ImagingA:00031'.
-##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_76.fits),box(10000.0,1.0),1.00E-13,flam)"'.
+##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_127.fits),box(10000.0,1.0),1.00E-13,flam)"'.
 ##[PysynphotRunner.doRun] request took 7802
-##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_76.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
+##[PysynphotRunner.doRun] command is 'countrate&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_127.fits),box(10000.0,1.0),1.00E-13,flam)"&instrument="nicmos,1,f110w"'.
 ##[PysynphotRunner.doRun] request took 7916
 ##[BatchLogTest.run] starting 'ImagingA:00032'.
 ##[PysynphotRunner.doRun] command is 'calcphot&obsmode="nicmos,1,f110w"&spectrum="rn(spec(/usr/stsci/stdata/calspec/gd71_mod_005.fits),box(10000.0,1.0),1.00E-13,flam)"'.
@@ -981,19 +981,19 @@
 ##[PysynphotRunner.doRun] request took 3260
 ##[BatchLogTest.run] starting 'ImagingB:94'.
 ##[BatchLogTest.run] starting 'ImagingB:95'.
-##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bz77/bz_23.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV11.fits"'.
+##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_20.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV11.fits"'.
 ##[PysynphotRunner.doRun] request took 56
 ##[BatchLogTest.run] starting 'ImagingB:96'.
 ##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bpgs/bpgs_35.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV12.fits"'.
 ##[PysynphotRunner.doRun] request took 98
 ##[BatchLogTest.run] starting 'ImagingB:97'.
-##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bz77/bz_41.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV13.fits"'.
+##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_63.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV13.fits"'.
 ##[PysynphotRunner.doRun] request took 88
 ##[BatchLogTest.run] starting 'ImagingB:98'.
-##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bz77/bz_71.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV14.fits"'.
+##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_121.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV14.fits"'.
 ##[PysynphotRunner.doRun] request took 58
 ##[BatchLogTest.run] starting 'ImagingB:99'.
-##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/bz77/bz_76.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV15.fits"'.
+##[PysynphotRunner.doRun] command is 'calcspec&spectrum="spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_127.fits)"&output="/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV15.fits"'.
 ##[PysynphotRunner.doRun] request took 56
 ##[BatchLogTest.run] starting 'SpecA:S001'.
 ##[PysynphotRunner.doRun] command is 'thermback&obsmode="nicmos,3,g096"'.
@@ -1237,7 +1237,7 @@
 ##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(icat(k93models,7200,0.0,4.3),band(nicmos,2,f110w),13,vegamag)"&instrument="nicmos,3,g096"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV58.fits'.
 ##[PysynphotRunner.doRun] request took 2392
 ##[BatchLogTest.run] starting 'SpecA:S066'.
-##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_13.fits),band(nicmos,2,f110w),13,vegamag)"&instrument="nicmos,3,g096"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV59.fits'.
+##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_9.fits),band(nicmos,2,f110w),13,vegamag)"&instrument="nicmos,3,g096"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV59.fits'.
 ##[PysynphotRunner.doRun] request took 1132
 ##[BatchLogTest.run] starting 'SpecA:S067'.
 ##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(bb(5000.0),band(nicmos,2,f110w),13,vegamag)"&instrument="nicmos,3,g096"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV60.fits'.
@@ -1264,16 +1264,16 @@
 ##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(icat(k93models,7200,0.0,4.3)*ebmvx(5.0,gal1),band(nicmos,2,f110w),13,vegamag)"&instrument="nicmos,3,g206"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV67.fits'.
 ##[PysynphotRunner.doRun] request took 2408
 ##[BatchLogTest.run] starting 'SpecA:S075'.
-##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_24.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-13,flam)"&instrument="nicmos,3,g141"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV68.fits'.
+##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-13,flam)"&instrument="nicmos,3,g141"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV68.fits'.
 ##[PysynphotRunner.doRun] request took 782
 ##[BatchLogTest.run] starting 'SpecA:S076'.
-##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_24.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-12,flam)"&instrument="nicmos,3,g141"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV69.fits'.
+##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-12,flam)"&instrument="nicmos,3,g141"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV69.fits'.
 ##[PysynphotRunner.doRun] request took 769
 ##[BatchLogTest.run] starting 'SpecA:S077'.
-##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_24.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-06,jy)"&instrument="nicmos,3,g141"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV70.fits'.
+##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-06,jy)"&instrument="nicmos,3,g141"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV70.fits'.
 ##[PysynphotRunner.doRun] request took 777
 ##[BatchLogTest.run] starting 'SpecA:S078'.
-##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/bz77/bz_24.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-05,jy)"&instrument="nicmos,3,g141"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV71.fits'.
+##[PysynphotRunner.doRun] command is 'SpecSourcerateSpec&spectrum="rn(spec(/usr/stsci/stdata/grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-05,jy)"&instrument="nicmos,3,g141"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV71.fits'.
 ##[PysynphotRunner.doRun] request took 578
 ##[BatchLogTest.run] starting 'NICIMAG920'.
 ##[BatchLogTest.run] starting 'NICIMAG921'.
