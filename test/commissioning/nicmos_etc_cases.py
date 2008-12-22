@@ -614,7 +614,7 @@ class calcspecCase25(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_20.fits)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="['ImagingA:00012', 'ImagingB:95']"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase39(basecase.calcphotCase):
@@ -622,7 +622,7 @@ class calcphotCase39(basecase.calcphotCase):
         self.obsmode="nicmos,1,f110w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_20.fits),box(10000.0,1.0),1.00E-13,flam)"
         self.subset=False
-        self.etcid="ImagingA:00021"
+        self.etcid="['ImagingA:00012', 'ImagingA:00021', 'ImagingA:00028']"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase39(basecase.countrateCase):
@@ -630,7 +630,7 @@ class countrateCase39(basecase.countrateCase):
         self.obsmode="nicmos,1,f110w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_20.fits),box(10000.0,1.0),1.00E-13,flam)"
         self.subset=False
-        self.etcid="ImagingA:00021"
+        self.etcid="['ImagingA:00012', 'ImagingA:00021', 'ImagingA:00028']"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase26(basecase.calcspecCase):
@@ -662,7 +662,7 @@ class calcspecCase27(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_63.fits)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="['ImagingA:00014', 'ImagingB:97']"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase41(basecase.calcphotCase):
@@ -670,7 +670,7 @@ class calcphotCase41(basecase.calcphotCase):
         self.obsmode="nicmos,1,f110w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_63.fits),box(10000.0,1.0),1.00E-13,flam)"
         self.subset=False
-        self.etcid="ImagingA:00022"
+        self.etcid="['ImagingA:00014', 'ImagingA:00022', 'ImagingA:00029']"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase41(basecase.countrateCase):
@@ -678,7 +678,7 @@ class countrateCase41(basecase.countrateCase):
         self.obsmode="nicmos,1,f110w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_63.fits),box(10000.0,1.0),1.00E-13,flam)"
         self.subset=False
-        self.etcid="ImagingA:00022"
+        self.etcid="['ImagingA:00014', 'ImagingA:00022', 'ImagingA:00029']"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase28(basecase.calcspecCase):
@@ -686,7 +686,7 @@ class calcspecCase28(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_121.fits)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="['ImagingA:00015', 'ImagingB:98']"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase42(basecase.calcphotCase):
@@ -694,7 +694,7 @@ class calcphotCase42(basecase.calcphotCase):
         self.obsmode="nicmos,1,f110w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_121.fits),box(10000.0,1.0),1.00E-13,flam)"
         self.subset=False
-        self.etcid="ImagingA:00023"
+        self.etcid="['ImagingA:00015', 'ImagingA:00023', 'ImagingA:00030']"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase42(basecase.countrateCase):
@@ -702,7 +702,7 @@ class countrateCase42(basecase.countrateCase):
         self.obsmode="nicmos,1,f110w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_121.fits),box(10000.0,1.0),1.00E-13,flam)"
         self.subset=False
-        self.etcid="ImagingA:00023"
+        self.etcid="['ImagingA:00015', 'ImagingA:00023', 'ImagingA:00030']"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase29(basecase.calcspecCase):
@@ -710,7 +710,7 @@ class calcspecCase29(basecase.calcspecCase):
         self.obsmode="None"
         self.spectrum="spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_127.fits)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="['ImagingA:00016', 'ImagingB:99']"
         self.setglobal(__file__)
         self.runpy()
 class calcphotCase43(basecase.calcphotCase):
@@ -718,7 +718,7 @@ class calcphotCase43(basecase.calcphotCase):
         self.obsmode="nicmos,1,f110w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_127.fits),box(10000.0,1.0),1.00E-13,flam)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="['ImagingA:00016', 'ImagingA:00031']"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase43(basecase.countrateCase):
@@ -726,7 +726,7 @@ class countrateCase43(basecase.countrateCase):
         self.obsmode="nicmos,1,f110w"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_127.fits),box(10000.0,1.0),1.00E-13,flam)"
         self.subset=True
-        self.etcid="None"
+        self.etcid="['ImagingA:00016', 'ImagingA:00031']"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase30(basecase.calcspecCase):
@@ -2878,7 +2878,7 @@ class SpecSourcerateSpecCase66(basecase.SpecSourcerateSpecCase):
         self.obsmode="nicmos,3,g096"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_9.fits),band(nicmos,2,f110w),13,vegamag)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="SpecA:S066"
         self.setglobal(__file__)
         self.runpy()
 class calcspecCase59(basecase.calcspecCase):
@@ -2958,7 +2958,7 @@ class SpecSourcerateSpecCase75(basecase.SpecSourcerateSpecCase):
         self.obsmode="nicmos,3,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-13,flam)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="SpecA:S075"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase76(basecase.SpecSourcerateSpecCase):
@@ -2966,7 +2966,7 @@ class SpecSourcerateSpecCase76(basecase.SpecSourcerateSpecCase):
         self.obsmode="nicmos,3,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-12,flam)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="SpecA:S076"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase77(basecase.SpecSourcerateSpecCase):
@@ -2974,7 +2974,7 @@ class SpecSourcerateSpecCase77(basecase.SpecSourcerateSpecCase):
         self.obsmode="nicmos,3,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-06,jy)"
         self.subset=False
-        self.etcid="None"
+        self.etcid="SpecA:S077"
         self.setglobal(__file__)
         self.runpy()
 class SpecSourcerateSpecCase78(basecase.SpecSourcerateSpecCase):
@@ -2982,7 +2982,7 @@ class SpecSourcerateSpecCase78(basecase.SpecSourcerateSpecCase):
         self.obsmode="nicmos,3,g141"
         self.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-05,jy)"
         self.subset=True
-        self.etcid="None"
+        self.etcid="SpecA:S078"
         self.setglobal(__file__)
         self.runpy()
 class countrateCase159(basecase.countrateCase):
