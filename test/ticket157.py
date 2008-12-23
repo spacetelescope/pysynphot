@@ -14,6 +14,10 @@ class OverlapBug(testutil.FPTestCase):
         self.refwave=4005
         self.refval=0.75
 
+    def testoverlap(self):
+        ans=self.sp.overlap(self.bp)
+        self.failUnless(ans='partial')
+        
     def testtaper(self):
         self.obs=S.Observation(self.sp,self.bp,force='taper')
         idx=N.where(self.obs.wave==self.refwave)
@@ -59,3 +63,21 @@ class DiscoveryCase(OverlapBug):
 ##         testval=self.obs.flux[idx[0]]
 ##         self.failUnless(testval == 0,'obs[%d]==%g'%(self.refwave,testval))
         
+class BPOverlap(testutil.FPTestCase):
+    def setUp(self):
+        self.a=S.Box(4000,100)
+        self.disjoint=S.Box(6000,100)
+        self.full=S.Box(4000,50)
+        self.partial=S.Box(4050,200)
+        
+    def testdisjoint(self):
+        stat=self.a.overlapstat(self.disjoint)
+        self.failUnless(stat == 'none')
+
+    def testfull(self):
+        stat=self.a.overlapstat(self.full)
+        self.failUnless(stat == 'full')
+
+    def testpartial(self):
+        stat=self.a.overlapstat(self.partial)
+        self.failUnless(stat == 'partial')
