@@ -174,6 +174,37 @@ class Integrator(object):
             print "Warning, %d of %d bins contained negative fluxes; they have been set to zero."%(len(idx[0]),len(self._fluxtable))
 
 
+    def check_overlap(self,other):
+        """Determine wavelength overlap status of self and other.
+        Returns 'full', 'partial', or 'none'. """
+
+        #Access the wavetables and set it so that amin <= bmin, whichever
+        #the relation is between self and other
+        awave=self.wave
+        bwave=other.wave
+        if awave.min()>bwave.min():
+            awave=other.wave
+            bwave=self.wave
+
+        #Name the endpoints
+        a1,a2=awave.min(),awave.max()
+        b1,b2=bwave.min(),bwave.max()
+        
+        #Check for disjoint
+        if a2<b1:
+            ans='none'
+        #Check for full
+        elif a1<=b1 and b2<=a2:
+            ans='full'
+        #Check for partial
+        elif a1<=b1 and (b1<a2<b2):
+            ans='partial'
+
+        else:
+            raise(ValueError("Alien geometry: a1,a2=%g,%g; b1,b2=%g,%g"%(a1,a2,b1,b2)))
+
+        return ans
+               
 class SourceSpectrum(Integrator):
     '''Base class for the Source Spectrum object.
     '''

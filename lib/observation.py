@@ -20,13 +20,19 @@ class Observation(spectrum.CompositeSourceSpectrum):
     An Observation is the end point of a chain of spectral manipulation."""
     
 
-    def __init__(self,spec,band,binset=None):
+    def __init__(self,spec,band,binset=None,force=None):
         """The normal means of producing an Observation is by means of the
         .observe() method on the spectral element."""
 
-        spectrum.CompositeSourceSpectrum.__init__(self, spec, band, 'multiply')
-        self.spectrum = self.component1
-        self.bandpass = self.component2
+        self.spectrum = spec
+        self.bandpass = band
+        self.validate_overlap(force)
+        
+        spectrum.CompositeSourceSpectrum.__init__(self,
+                                                  self.spectrum,
+                                                  self.bandpass,
+                                                  'multiply')
+
 
         #The natural waveset of the observation is the merge of the
         #natural waveset of the spectrum with the natural waveset of the
@@ -35,6 +41,32 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         self.initbinset(binset)
         self.initbinflux()
+
+    def validate_overlap(self,force):
+        """By default, it is required that the spectrum and bandpass fully
+        overlap. Partial overlap will raise an error in the absence of the
+        force keyword, which may be set to "taper" or "extrap". """
+
+       
+        if force is None:
+            stat=self.spectrum.check_overlap(self.bandpass)
+            if stat=='full':
+                pass
+            elif stat == 'partial':
+                raise(ValueError('Spectrum and bandpass do not fully overlap. You may use force=[extrap|taper] to force this Observation anyway.'))
+            elif stat == 'none':
+                raise(ValueError('Spectrum and bandpass are disjoint'))
+            
+        elif force.lower() == 'taper':
+            try:
+                self.spectrum=self.spectrum.taper()
+            except AttributeError:
+                self.spectrum=self.spectrum.tabulate().taper()
+        elif force.lower().startswith('extrap'):
+            pass #default behavior works
+
+        else:
+            raise(KeyError("Illegal value force=%s; legal values=('taper','extrap')"%force))
 
     def initbinset(self,binset=None):
         if binset is None:

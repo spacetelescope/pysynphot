@@ -15,20 +15,20 @@ class OverlapBug(testutil.FPTestCase):
         self.refval=0.75
 
     def testoverlap(self):
-        ans=self.sp.overlap(self.bp)
-        self.failUnless(ans='partial')
+        ans=self.sp.check_overlap(self.bp)
+        self.failUnless(ans=='partial')
         
     def testtaper(self):
         self.obs=S.Observation(self.sp,self.bp,force='taper')
         idx=N.where(self.obs.wave==self.refwave)
-        test=self.obs.flux[idx[0]]
+        test=self.obs.flux.item(idx[0])
         self.assert_(test==0,'Expected 0, got %f'%test)
 
     def testextrap(self):
         self.obs=S.Observation(self.sp,self.bp,force='extrap')
         idx=N.where(self.obs.wave==self.refwave)
-        test=self.obs.flux[idx[0]]
-        self.assert_(test==self.refval,'Expected %f, got %f'%(self.refval,test))
+        test=self.obs.flux.item(idx[0])
+        self.assertAlmostEqual(test,self.refval,msg='Expected %f, got %f'%(self.refval,test))
         
 ##     def testrange(self):
 ##         self.wt=N.array([3090, 3095, 4000,4005, 4010])
@@ -37,7 +37,7 @@ class OverlapBug(testutil.FPTestCase):
 ##         self.assertEqualNumpy(self.ref,ans)
 
     def testraise(self):
-        self.assertRaises(KeyError,
+        self.assertRaises(ValueError,
                           S.Observation,
                           self.sp, self.bp)
 
@@ -50,7 +50,7 @@ class DiscoveryCase(OverlapBug):
         self.sp.convert('photlam')
         self.bp=S.ObsBandpass('stis,ccd,g750l,c7751,s52x02')
         self.refwave=6200
-        self.refval=4.44878989e-05
+        self.refval=2.97759742e-06
 
 ##     def testorig(self):
 ##         #This test fails unless the Observation has the "expected"
@@ -71,13 +71,31 @@ class BPOverlap(testutil.FPTestCase):
         self.partial=S.Box(4050,200)
         
     def testdisjoint(self):
-        stat=self.a.overlapstat(self.disjoint)
+        stat=self.a.check_overlap(self.disjoint)
         self.failUnless(stat == 'none')
 
     def testfull(self):
-        stat=self.a.overlapstat(self.full)
+        stat=self.a.check_overlap(self.full)
         self.failUnless(stat == 'full')
 
     def testpartial(self):
-        stat=self.a.overlapstat(self.partial)
+        stat=self.a.check_overlap(self.partial)
         self.failUnless(stat == 'partial')
+
+class BPO2(BPOverlap):
+    def setUp(self):
+        self.a=S.Box(4000,100)
+        self.disjoint=S.Box(6000,100)
+        self.full=S.Box(4000,50)
+        self.partial=S.Box(3950,100)
+
+class BP03(BPOverlap):
+    def setUp(self):
+        self.a=S.ArraySpectrum(wave=N.arange(4000,5000),
+                               flux=N.ones(1000))
+        self.disjoint=S.Box(1000,100)
+        self.full=S.ArrayBandpass(wave=N.arange(3000,6000),
+                                  throughput=N.ones(3000))
+        self.partial=S.ArrayBandpass(wave=N.arange(500,4500),
+                                     throughput=N.ones(4000))
+                                     
