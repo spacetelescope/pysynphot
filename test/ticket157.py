@@ -65,10 +65,10 @@ class DiscoveryCase(OverlapBug):
         
 class BPOverlap(testutil.FPTestCase):
     def setUp(self):
-        self.a=S.Box(4000,100)
+        self.a=S.Box(4000,50)
         self.disjoint=S.Box(6000,100)
-        self.full=S.Box(4000,50)
-        self.partial=S.Box(4050,200)
+        self.full=S.Box(4000,100)
+        self.partial=S.Box(4050,50)
         
     def testdisjoint(self):
         stat=self.a.check_overlap(self.disjoint)
@@ -82,12 +82,6 @@ class BPOverlap(testutil.FPTestCase):
         stat=self.a.check_overlap(self.partial)
         self.failUnless(stat == 'partial')
 
-class BPO2(BPOverlap):
-    def setUp(self):
-        self.a=S.Box(4000,100)
-        self.disjoint=S.Box(6000,100)
-        self.full=S.Box(4000,50)
-        self.partial=S.Box(3950,100)
 
 class BP03(BPOverlap):
     def setUp(self):

@@ -909,6 +909,11 @@ class SpectralElement(Integrator):
         extends past the limits of 'other', this will return a partial
         overlap.
         """
+
+        if other.isAnalytic:
+            #then it's defined everywhere
+            return 'full'
+        
         swave=self.wave[N.where(self.throughput != 0)]
         s1,s2=swave.min(),swave.max()
         
