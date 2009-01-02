@@ -422,6 +422,7 @@ class CompositeSourceSpectrum(SourceSpectrum):
             self.waveunits = source2.waveunits
             self.fluxunits = source2.fluxunits
 
+        self.isAnalytic = source1.isAnalytic and source2.isAnalytic
 
     def __str__(self):
         opdict = {'add':'+','multiply':'*'}
@@ -459,6 +460,7 @@ class TabularSourceSpectrum(SourceSpectrum):
     '''Class for a source spectrum that is read in from a table.
     '''
     def __init__(self, filename=None, fluxname=None, keepneg=False):
+        self.isAnalytic=False
         if filename:
             self._readSpectrumFile(filename, fluxname)
             self.filename=filename
@@ -468,6 +470,7 @@ class TabularSourceSpectrum(SourceSpectrum):
                 self.validate_fluxtable()
             self.ToInternal()
             self.name=self.filename
+            self.isAnalytic=False
 
         else:
             self._wavetable = None
@@ -646,6 +649,7 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
         self.waveunits=units.Units(waveunits)
         self.fluxunits=units.Units(fluxunits)
         self.name=name
+        self.isAnalytic=False
 
         self.validate_units() #must do before validate_fluxtable because it tests against unit type
         self.validate_wavetable() #must do before ToInternal in case of descending
@@ -680,6 +684,7 @@ class FileSourceSpectrum(TabularSourceSpectrum):
         if not keepneg:
             self.validate_fluxtable()
         self.ToInternal()
+        self.isAnalytic=False
 
     def _readSpectrumFile(self, filename, fluxname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
@@ -722,6 +727,7 @@ class AnalyticSpectrum(SourceSpectrum):
         self.waveunits = units.Units(waveunits)
         self.fluxunits = units.Units(fluxunits)
         self.validate_units()
+        self.isAnalytic=True
         
     def GetWaveSet(self):
         global default_waveset
@@ -839,8 +845,9 @@ class Powerlaw(AnalyticSpectrum):
 class BlackBody(AnalyticSpectrum):
     """ spec = BlackBody(T in Kelvin)"""
     def __init__(self, temperature):
-        self.waveunits=units.Units('angstrom')
-        self.fluxunits=units.Units('photlam')
+        waveunits=units.Units('angstrom')
+        fluxunits=units.Units('photlam')
+        AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.wavelength = None
         self.temperature = temperature
         self.name='BB(T=%d)'%self.temperature
@@ -1124,6 +1131,7 @@ class CompositeSpectralElement(SpectralElement):
             raise TypeError("Arguments must be SpectralElements")
         self.component1 = component1
         self.component2 = component2
+        self.isAnalytic = component1.isAnalytic and component2.isAnalytic
         if component1.waveunits.name == component2.waveunits.name:
             self.waveunits = component1.waveunits
         else:
@@ -1161,6 +1169,7 @@ class UniformTransmission(SpectralElement):
         self.waveunits = units.Units(waveunits)
         self.value = value
         self.name=str(self)
+        self.isAnalytic=True
         #The ._wavetable is used only by the .writefits() method at this time
         #It is not for general use.
         self._wavetable = N.array([default_waveset[0],default_waveset[-1]])
@@ -1193,6 +1202,7 @@ class TabularSpectralElement(SpectralElement):
         '''__init__ takes a character string argument that contains the name
         of the file with the spectral element table.
         '''
+        self.isAnalytic=False
         if fileName:
             if fileName.endswith('.fits') or fileName.endswith('.fit'):
                 self._readFITS(fileName, thrucol)
@@ -1282,6 +1292,7 @@ class ArraySpectralElement(TabularSpectralElement):
         self._throughputtable=throughput
         self.waveunits=units.Units(waveunits)
         self.name=name
+        self.isAnalytic=False
 
         self.validate_units() #must do before validate_fluxtable because it tests against unit type
         self.validate_wavetable() #must do before ToInternal in case of descending
@@ -1310,6 +1321,7 @@ class FileSpectralElement(TabularSpectralElement):
         self.validate_units() 
         self.validate_wavetable()
         self.ToInternal()
+        self.isAnalytic=False
 
     def _readThroughputFile(self, filename, throughputname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
@@ -1353,7 +1365,8 @@ class InterpolatedSpectralElement(SpectralElement):
         self.name = os.path.expandvars(fileName[0:(xre.start())])
         colSpec = xre.group('col')
 
-
+        self.analytic=False
+        
         self.interpval = wavelength
 
         fs = pyfits.open(self.name)
@@ -1462,7 +1475,7 @@ class Box(SpectralElement):
         self._throughputtable[0]  = 0.0
         self._throughputtable[-1] = 0.0
 
-        
+        self.isAnalytic=False
         
 
 Vega = FileSourceSpectrum(locations.VegaFile)

@@ -186,6 +186,7 @@ class Extinction(spectrum.SpectralElement):
         self.name=law.name
         self.citation=law.citation
         self.waveunits=units.Units('angstrom')
+        self.isAnalytic=False
 
     def options():
         print "Supported reddening laws:"

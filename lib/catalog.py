@@ -17,6 +17,8 @@ class Icat(spectrum.TabularSourceSpectrum):
     """
     def __init__(self,catdir,Teff,metallicity,log_g):
 
+        self.isAnalytic=False
+        
         filename = locations.CAT_TEMPLATE.replace('*',catdir)
         self.name="%s(Teff=%g,z=%g,logG=%g)"%(catdir,Teff,metallicity,log_g)
 
