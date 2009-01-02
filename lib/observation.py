@@ -49,7 +49,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
        
         if force is None:
-            stat=self.spectrum.check_overlap(self.bandpass)
+            stat=self.bandpass.check_overlap(self.spectrum)
             if stat=='full':
                 pass
             elif stat == 'partial':

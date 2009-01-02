@@ -174,36 +174,7 @@ class Integrator(object):
             print "Warning, %d of %d bins contained negative fluxes; they have been set to zero."%(len(idx[0]),len(self._fluxtable))
 
 
-    def check_overlap(self,other):
-        """Determine wavelength overlap status of self and other.
-        Returns 'full', 'partial', or 'none'. """
 
-        #Access the wavetables and set it so that amin <= bmin, whichever
-        #the relation is between self and other
-        awave=self.wave
-        bwave=other.wave
-        if awave.min()>bwave.min():
-            awave=other.wave
-            bwave=self.wave
-
-        #Name the endpoints
-        a1,a2=awave.min(),awave.max()
-        b1,b2=bwave.min(),bwave.max()
-        
-        #Check for disjoint
-        if a2<b1:
-            ans='none'
-        #Check for full
-        elif a1<=b1 and b2<=a2:
-            ans='full'
-        #Check for partial
-        elif a1<=b1 and (b1<a2<b2):
-            ans='partial'
-
-        else:
-            raise(ValueError("Alien geometry: a1,a2=%g,%g; b1,b2=%g,%g"%(a1,a2,b1,b2)))
-
-        return ans
                
 class SourceSpectrum(Integrator):
     '''Base class for the Source Spectrum object.
@@ -920,6 +891,33 @@ class SpectralElement(Integrator):
     def __rmul__(self, other):
         return self.__mul__(other)
 
+
+    def check_overlap(self, other):
+        """Check whether the wavelength range of other is defined everywhere
+        that the wavelength range of self is defined.
+        Returns "full", "partial", "none".
+        Normally used for checking whether a spectrum is fully defined over
+        the range of a bandpass.
+        Note that the full overlap case is asymmetric: if the range of 'self'
+        extends past the limits of 'other', this will return a partial
+        overlap.
+        """
+        swave=self.wave[N.where(self.throughput != 0)]
+        s1,s2=swave.min(),swave.max()
+        
+        owave=other.wave
+        o1,o2=owave.min(),owave.max()
+
+        if (s1>=o1 and s2<=o2):
+            ans='full'
+
+        elif (s2<o1) or (o2<s1):
+            ans='none'
+
+        else:
+            ans='partial'
+
+        return ans
 
     def convert(self, targetunits):
         '''Convert to other units. This method actually just changes the
