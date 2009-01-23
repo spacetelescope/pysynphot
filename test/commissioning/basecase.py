@@ -207,7 +207,7 @@ class calcspecCase(testutil.LogTestCase):
         self.arraysigtest(tflux,rflux)
         
 class calcphotCase(calcspecCase):
-        
+    Extrap=None
     def runpy(self):
         self.sptest=etc.parse_spec(self.spectrum)
         self.bp=S.ObsBandpass(self.obsmode)
@@ -239,7 +239,7 @@ class calcphotCase(calcspecCase):
         iraf.calcphot(obsmode=self.obsmode,spectrum=self.spectrum,
                       form='photlam', func='efflerg')
         rlam=iraf.calcphot.getParam('calcphot.result',native=1)
-        obs=S.Observation(self.sptest,self.bp)
+        obs=S.Observation(self.sptest,self.bp,force=self.Extrap)
         tlam=obs.efflam()
         if rlam != 0:
             self.discrep=(tlam-rlam)/rlam
@@ -318,9 +318,10 @@ class thermbackCase(calcspecCase):
 
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
 
-        
+
 
 class countrateCase(calcphotCase):
+    Extrap=None
     def runpy(self):
         self.sptest=etc.parse_spec(self.spectrum)
         self.bp=S.ObsBandpass(self.obsmode)
@@ -336,7 +337,7 @@ class countrateCase(calcphotCase):
     def testcrphotlam(self):
         self.run_countrate('photlam',self.crname)
         spref=S.FileSpectrum(self.crname)
-        obs=S.Observation(self.sptest,self.bp,binset=spref.wave)
+        obs=S.Observation(self.sptest,self.bp,binset=spref.wave,force=self.Extrap)
         obs.convert('photlam')
         ridx=N.where(spref.wave >= 900.0)
         rflux=spref.flux[ridx]
@@ -350,7 +351,7 @@ class countrateCase(calcphotCase):
     def testcrcounts(self):
         self.run_countrate('counts',self.crname.replace('.fits','_counts.fits'))
         spref=S.FileSpectrum(self.crname.replace('.fits','_counts.fits'))
-        obs=S.Observation(self.sptest,self.bp,binset=spref.wave)
+        obs=S.Observation(self.sptest,self.bp,binset=spref.wave,force=self.Extrap)
         obs.convert('counts')
         ridx=N.where(spref.wave >= 900.0)
         rflux=spref.flux[ridx]
@@ -365,7 +366,7 @@ class countrateCase(calcphotCase):
         self.arraysigtest(tflux,rflux)
 
     def testcountrate(self):
-        obs=S.Observation(self.sptest,self.bp)
+        obs=S.Observation(self.sptest,self.bp,force=self.Extrap)
         self.run_countrate('counts')
         rval=iraf.countrate.getParam('flux_tot',native=1)
         tval=obs.countrate()
@@ -379,7 +380,14 @@ class countrateCase(calcphotCase):
         if abs(self.discrep)>self.superthresh:
             self.tra['Extreme']=True
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
-      
+
+class countrateOverlapCase(countrateCase):
+    Extrap='taper'
+
 class SpecSourcerateSpecCase(countrateCase):
+    Extrap=None
     def placeholder(self):
         pass
+
+class SpecSourcerateSpecOverlapCase(countrateCase):
+    Extrap='taper'
