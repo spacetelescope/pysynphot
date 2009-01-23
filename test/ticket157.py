@@ -5,6 +5,27 @@ import os, sys
 import testutil
 import numpy as N
 
+from pysynphot import locations, observationmode
+
+#Places used by test code
+userdir   = os.path.join(os.path.dirname(__file__),'data')
+testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
+testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
+
+#Freeze the version of the comptable so tests are not susceptible to
+# updates to CDBS
+cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
+observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+print "%s:"%os.path.basename(__file__)
+print "  Tests are being run with %s"%observationmode.COMPTABLE
+print "  Synphot comparison results were computed with r1j2146sm_tmc.fits"
+#Synphot comparison results are identified with the varname synphot_ref.
+
+#Also set the version of Vega for similar reasons
+locations.VegaFile=os.path.join(testdir,
+                                'alpha_lyr_stis_002.fits')
+print "Using Vega spectrum: %s"%locations.VegaFile
+
 class OverlapBug(testutil.FPTestCase):
     def setUp(self):
         self.sp=S.ArraySpectrum(wave=N.arange(3000,4000),
@@ -128,6 +149,94 @@ class AnalyticCase(testutil.FPTestCase):
     def testcomp3(self):
         x=self.flat*2.6
         self.assert_(x.isAnalytic)
+
+#These tests were part of the original nightly pysynphot test suite
+#that began failing when #157 was implemented because they really
+#did have partial overlap.
+
+class CalcphotTestCase(testutil.FPTestCase):
+    #Loosened accuracy for r618 (no taper)
+    def setUp(self):
+        testdata  = os.path.join(locations.rootdir,'calspec',
+                                 'feige66_002.fits')
+        self.sp = S.FileSpectrum(testdata)
+        self.bandpass = S.ObsBandpass('acs,hrc,f555w')
+        self.refrate = 8.30680E+05
+        self.reflam = 5304.462
+        
+    def testraises(self):
+        self.assertRaises(ValueError,
+                          S.Observation,
+                          self.sp, self.bandpass)
+
+    def testefflam(self):
+        obs=S.Observation(self.sp, self.bandpass, force='extrap')
+        tst=obs.efflam()
+        self.assertApproxFP(tst, self.reflam, 1e-4)
+
+
+    def testcountrate(self):
+        obs=S.Observation(self.sp, self.bandpass, force='taper')
+        tst=obs.countrate()
+        self.assertApproxFP(tst, self.refrate, 1e-4)
+        
+
+class ETCTestCase_Imag2(testutil.FPTestCase):
+    
+    def setUp(self):
+        self.oldpath=os.path.abspath(os.curdir)
+        os.chdir(locations.specdir)
+        self.spectrum = "((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
+        self.obsmode = "acs,sbc,F140LP"
+        self.refrate=0.0877036
+        self.setup2()
+
+    def setup2(self):
+       try:
+            self.oldpath=os.path.abspath(os.curdir)
+            os.chdir(locations.specdir)
+            self.sp=etc.parse_spec(self.spectrum)
+            self.bp=S.ObsBandpass(self.obsmode)
+            self.parameters=["spectrum=%s"%self.spectrum,
+                             "instrument=%s"%self.obsmode]
+       except AttributeError:
+           pass
+       
+    def tearDown(self):
+        os.chdir(self.oldpath)
+
+    def testraises(self):
+        #Replaced answer for r618 (no tapering)
+        #The throughput files used in this case don't actually go
+        #all the way to zero.
+        self.assertRaises(ValueError,
+                          etc.countrate,
+                          self.parameters)
+
+    def testrate(self):
+        # will fail till the change to the etc module is made
+        tstrate=etc.countrate(self.parameters,extrap='taper')
+        self.assertApproxFP(float(tstrate[0]),self.refrate)
+
+        
+    def tearDown(self):
+        os.chdir(self.oldpath)
+
+
+
+class ETCTestCase_Spec2a(ETCTestCase_Imag2):
+    def setUp(self):
+        self.spectrum = "(spec(crcalspec$grw_70d5824_stis_001.fits))"
+        self.obsmode = "stis,fuvmama,g140l,s52x2"
+        self.refrate = 28935.7
+        self.setup2()
+
+
+    def testflux(self):
+        self.obs=S.Observation(self.sp,self.bp,extrap='taper')
+        self.obs.convert('counts')
+
+        self.assertApproxFP(float(self.obs.binflux[500]), 35.5329)
 
 ## class ETC01(OverlapBug):
 

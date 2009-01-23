@@ -96,24 +96,6 @@ def format(value):
 
     return str1+str2
 
-class CalcphotTestCase(testutil.FPTestCase):
-    #Loosened accuracy for r618 (no taper)
-    def setUp(self):
-        self.sp = S.FileSpectrum(testdata)
-        self.obsmode = S.ObsBandpass(values['obsmode'])
-        self.obs = observation.Observation(self.sp, self.obsmode)
-
-    def testcountrate(self):
-        "countrate"
-        countrate = self.obs.countrate()
-        self.assertApproxFP(countrate, values['countrate'],1e-4)
-
-    def testefflam(self):
-        "efflam"
-        synphot_efflerg = 5304.462
-        efflam = self.obs.efflam()
-        self.assertApproxFP(efflam, synphot_efflerg, 1e-4)
-
 
 
 class ObsmodeTestCase(testutil.FPTestCase):
@@ -297,16 +279,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
     #Moved thermtest5 to other_etc_ticket_cases
     #Tests run, but fail comparison.
     
-    def test6(self):
-        #Replaced answer for r618 (no tapering)
-        #The throughput files used in this case don't actually go
-        #all the way to zero.
-        spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
-        instrument = "instrument=acs,sbc,F140LP"
-        parameters = [spectrum, instrument]
-        countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 0.0877036)
-
+    #Moved test6 to ticket157.
 
     #Moved test7 to other_etc_ticket_case: answers disagree
     #Deleted test8: it's an obsolete case.   
@@ -428,19 +401,6 @@ class ETCTestCase_Spec1e(ETCTestCase):
     def testflux(self):
         self.assertApproxFP(float(self.obs.binflux[50]), 7.03327)
 
-class ETCTestCase_Spec2a(ETCTestCase):
-    def setUp(self):
-        self.spectrum = "(spec(crcalspec$grw_70d5824_stis_001.fits))"
-        self.obsmode = "stis,fuvmama,g140l,s52x2"
-        ETCTestCase.setUp(self)
-
-
-    def testrate(self):
-        countrate = etc.specrate(self.parameters)
-        self.assertApproxFP(float(countrate.split(';')[0]), 28935.7)
-
-    def testflux(self):
-        self.assertApproxFP(float(self.obs.binflux[500]), 35.5329)
 
 class ETCTestCase_Spec2b(ETCTestCase):
     def setUp(self):

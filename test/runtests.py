@@ -25,7 +25,8 @@ tlist=['v05_tickets',
        'testwrite',
        'ticket86',
        'wavecat_tests',
-       'ticket146'
+       'ticket146',
+       'ticket126'
        ]
 #=====================================================
 
