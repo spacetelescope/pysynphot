@@ -4705,7 +4705,7 @@ class calcphotCase284(basecase.calcphotCase):
         self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase284(basecase.countrateCase):
+class countrateCase284(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),0.05),band(johnson,b),28.0,vegamag)"
@@ -4713,7 +4713,7 @@ class countrateCase284(basecase.countrateCase):
         self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase285(basecase.calcphotCase):
+class calcphotCase285(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),0.05),band(johnson,b),28.0,vegamag)"
@@ -4817,7 +4817,7 @@ class calcphotCase291(basecase.calcphotCase):
         self.etcid="uvim1006.tab:7334"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase291(basecase.countrateCase):
+class countrateCase291(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd108_005.fits),0.1),band(johnson,b),28.0,vegamag)"
@@ -4825,7 +4825,7 @@ class countrateCase291(basecase.countrateCase):
         self.etcid="uvim1006.tab:7335"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase292(basecase.calcphotCase):
+class calcphotCase292(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd108_005.fits),0.1),band(johnson,b),28.0,vegamag)"
@@ -4897,7 +4897,7 @@ class calcphotCase296(basecase.calcphotCase):
         self.etcid="uvim1006.tab:7339"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase296(basecase.countrateCase):
+class countrateCase296(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/hz4_stis_001.fits),0.05),band(johnson,b),28.0,vegamag)"
@@ -4905,7 +4905,7 @@ class countrateCase296(basecase.countrateCase):
         self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase297(basecase.calcphotCase):
+class calcphotCase297(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/hz4_stis_001.fits),0.05),band(johnson,b),28.0,vegamag)"
@@ -4993,7 +4993,7 @@ class calcphotCase302(basecase.calcphotCase):
         self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase302(basecase.countrateCase):
+class countrateCase302(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/ngc7293_005.fits),0.05),band(johnson,b),28.0,vegamag)"
@@ -5001,7 +5001,7 @@ class countrateCase302(basecase.countrateCase):
         self.etcid="uvim1006.tab:7346"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase303(basecase.calcphotCase):
+class calcphotCase303(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/ngc7293_005.fits),0.05),band(johnson,b),28.0,vegamag)"
@@ -5057,7 +5057,7 @@ class calcphotCase306(basecase.calcphotCase):
         self.etcid="uvim1006.tab:7349"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase306(basecase.countrateCase):
+class countrateCase306(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(orion.fits),0.25),band(johnson,b),28.0,vegamag)"
@@ -5065,7 +5065,7 @@ class countrateCase306(basecase.countrateCase):
         self.etcid="uvim1006.tab:7350"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase307(basecase.calcphotCase):
+class calcphotCase307(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(orion.fits),0.25),band(johnson,b),28.0,vegamag)"
@@ -5137,7 +5137,7 @@ class calcphotCase311(basecase.calcphotCase):
         self.etcid="uvim1006.tab:7354"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase311(basecase.countrateCase):
+class countrateCase311(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(qso_template.fits),0.2),band(johnson,b),28.0,vegamag)"
@@ -5145,7 +5145,7 @@ class countrateCase311(basecase.countrateCase):
         self.etcid="uvim1006.tab:7355"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase312(basecase.calcphotCase):
+class calcphotCase312(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="wfc3,uvis1,f555w"
         self.spectrum="rn(z(spec(qso_template.fits),0.2),band(johnson,b),28.0,vegamag)"
