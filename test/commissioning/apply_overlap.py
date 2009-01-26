@@ -17,16 +17,20 @@
 # directory.
 
 import os, stat
+import re
 
-pat = "sed -i '/%s/ s:countrateCase):countrateOverlapCase):' %s.py \n"
+pat = "sed -i '/%s/ s:%s):%s):' %s.py \n"
 cshname='apply_overlap.csh'
 f=open('apply_overlap_input.txt')
 out=open(cshname,'w')
 out.write('#! /bin/csh \n')
+x=re.compile('[0-9]')
+
 
 for line in f:
     fname,cname=line.strip().split()
-    cmd=pat%(cname,fname)
+    ctype=re.split(x,cname)[0]
+    cmd=pat%(cname,ctype,ctype.replace('Case','OverlapCase'),fname)
     out.write(cmd)
 out.close()
 

@@ -253,7 +253,9 @@ class calcphotCase(calcspecCase):
 
         self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
 
-        
+class calcphotOverlapCase(calcphotCase):
+    Extrap='taper'
+
 
 class thermbackCase(calcspecCase):
         
