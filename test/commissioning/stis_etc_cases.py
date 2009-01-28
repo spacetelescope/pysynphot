@@ -185,7 +185,7 @@ class countrateCase12(basecase.countrateCase):
         self.etcid="STISACQ1943"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase14(basecase.calcphotCase):
+class calcphotCase14(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -193,7 +193,7 @@ class calcphotCase14(basecase.calcphotCase):
         self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase13(basecase.countrateCase):
+class countrateCase13(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -201,7 +201,7 @@ class countrateCase13(basecase.countrateCase):
         self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase15(basecase.calcphotCase):
+class calcphotCase15(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),band(johnson,v),10,vegamag)"
@@ -209,7 +209,7 @@ class calcphotCase15(basecase.calcphotCase):
         self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase14(basecase.countrateCase):
+class countrateCase14(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,50ccd"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),band(johnson,v),10,vegamag)"
@@ -233,7 +233,7 @@ class calcphotCase16(basecase.calcphotCase):
         self.etcid="STISIMAG1257"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase17(basecase.calcphotCase):
+class calcphotCase17(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -241,7 +241,7 @@ class calcphotCase17(basecase.calcphotCase):
         self.etcid="STISIMAG1257"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase16(basecase.countrateCase):
+class countrateCase16(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,f28x50lp"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -297,7 +297,7 @@ class calcphotCase20(basecase.calcphotCase):
         self.etcid="STISIMAG1259"
         self.setglobal(__file__)
         self.runpy()
-class calcphotCase21(basecase.calcphotCase):
+class calcphotCase21(basecase.calcphotOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,f28x50oiii"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -305,7 +305,7 @@ class calcphotCase21(basecase.calcphotCase):
         self.etcid="STISIMAG1259"
         self.setglobal(__file__)
         self.runpy()
-class countrateCase20(basecase.countrateCase):
+class countrateCase20(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,f28x50oiii"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -985,7 +985,7 @@ class SpecSourcerateSpecCase1(basecase.SpecSourcerateSpecCase):
         self.etcid="['STISSPEC1264', 'STISSPEC1242']"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase2(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase2(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/grw_70d5824_stis_001.fits)"
@@ -1049,7 +1049,7 @@ class SpecSourcerateSpecCase9(basecase.SpecSourcerateSpecCase):
         self.etcid="['STISSPEC1272', 'STISSPEC1396']"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase10(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase10(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,nuvmama,prism,s52x2"
         self.spectrum="spec(HS20270651.dat)"
@@ -1065,7 +1065,7 @@ class SpecSourcerateSpecCase11(basecase.SpecSourcerateSpecCase):
         self.etcid="['STISSPEC1346', 'STISSPEC1274']"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase12(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase12(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,fuvmama,e140m,c1425,s02x02"
         self.spectrum="spec(/grp/hst/cdbs//calspec/bd_28d4211_stis_001.fits)"
@@ -1121,7 +1121,7 @@ class SpecSourcerateSpecCase18(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1372"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase20(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase20(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,nuvmama,prism,s52x01"
         self.spectrum="spec(HS20270651.dat)"
@@ -1129,7 +1129,7 @@ class SpecSourcerateSpecCase20(basecase.SpecSourcerateSpecCase):
         self.etcid="None"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase21(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase21(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g230lb"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
@@ -1137,7 +1137,7 @@ class SpecSourcerateSpecCase21(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1305"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase22(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase22(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g230lb,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -1145,7 +1145,7 @@ class SpecSourcerateSpecCase22(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1305"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase23(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase23(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g430l"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
@@ -1153,7 +1153,7 @@ class SpecSourcerateSpecCase23(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1307"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase24(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase24(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g430l,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -1161,7 +1161,7 @@ class SpecSourcerateSpecCase24(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1307"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase25(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase25(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g750l,c7751"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
@@ -1169,7 +1169,7 @@ class SpecSourcerateSpecCase25(basecase.SpecSourcerateSpecCase):
         self.etcid="['STISSPEC1308', 'STISSPEC1319']"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase26(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase26(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g750l,c7751,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -1177,7 +1177,7 @@ class SpecSourcerateSpecCase26(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1308"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase27(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase27(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g430m,c4194"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)"
@@ -1185,7 +1185,7 @@ class SpecSourcerateSpecCase27(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1310"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase28(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase28(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g430m,c4194,s52x2"
         self.spectrum="spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits)"
@@ -1193,7 +1193,7 @@ class SpecSourcerateSpecCase28(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1310"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase29(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase29(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g750m,c7283"
         self.spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
@@ -1233,7 +1233,7 @@ class SpecSourcerateSpecCase33(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1316"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase34(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase34(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),band(johnson,v),12.77,vegamag)"
@@ -1649,7 +1649,7 @@ class SpecSourcerateSpecCase86(basecase.SpecSourcerateSpecCase):
         self.etcid="STISSPEC1347"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase87(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase87(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,fuvmama,g140l,s52x2"
         self.spectrum="rn(spec(/grp/hst/cdbs//calspec/grw_70d5824_stis_001.fits),band(johnson,v),10.516,vegamag)"
