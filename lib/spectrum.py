@@ -411,7 +411,7 @@ class CompositeSourceSpectrum(SourceSpectrum):
         self.component2 = source2
         self.operation = operation
         self.name=str(self)
-
+        self.warnings={}
         # for now we keep these attributes here, in spite of the internal
         # units model. There is code that still breaks down if these attributes
         # are not here.
@@ -461,6 +461,7 @@ class TabularSourceSpectrum(SourceSpectrum):
     '''
     def __init__(self, filename=None, fluxname=None, keepneg=False):
         self.isAnalytic=False
+        self.warnings={}
         if filename:
             self._readSpectrumFile(filename, fluxname)
             self.filename=filename
@@ -650,7 +651,8 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
         self.fluxunits=units.Units(fluxunits)
         self.name=name
         self.isAnalytic=False
-
+        self.warnings={}
+        
         self.validate_units() #must do before validate_fluxtable because it tests against unit type
         self.validate_wavetable() #must do before ToInternal in case of descending
         if not keepneg:
@@ -685,7 +687,8 @@ class FileSourceSpectrum(TabularSourceSpectrum):
             self.validate_fluxtable()
         self.ToInternal()
         self.isAnalytic=False
-
+        self.warnings={}
+        
     def _readSpectrumFile(self, filename, fluxname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
             self._readFITS(filename, fluxname)
@@ -728,6 +731,7 @@ class AnalyticSpectrum(SourceSpectrum):
         self.fluxunits = units.Units(fluxunits)
         self.validate_units()
         self.isAnalytic=True
+        self.warnings={}
         
     def GetWaveSet(self):
         global default_waveset
@@ -1144,6 +1148,7 @@ class CompositeSpectralElement(SpectralElement):
             raise NotImplementedError(msg)
         self.throughputunits = None
         self.name="(%s * %s)"%(str(self.component1),str(self.component2))
+        self.warnings={}
         
     def __call__(self, wavelength):
         '''This is where the throughput calculation is delegated.
@@ -1175,6 +1180,7 @@ class UniformTransmission(SpectralElement):
         self.value = value
         self.name=str(self)
         self.isAnalytic=True
+        self.warnings={}
         #The ._wavetable is used only by the .writefits() method at this time
         #It is not for general use.
         self._wavetable = N.array([default_waveset[0],default_waveset[-1]])
@@ -1208,6 +1214,7 @@ class TabularSpectralElement(SpectralElement):
         of the file with the spectral element table.
         '''
         self.isAnalytic=False
+        self.warnings={}
         if fileName:
             if fileName.endswith('.fits') or fileName.endswith('.fit'):
                 self._readFITS(fileName, thrucol)
@@ -1298,7 +1305,8 @@ class ArraySpectralElement(TabularSpectralElement):
         self.waveunits=units.Units(waveunits)
         self.name=name
         self.isAnalytic=False
-
+        self.warnings={}
+        
         self.validate_units() #must do before validate_fluxtable because it tests against unit type
         self.validate_wavetable() #must do before ToInternal in case of descending
             
@@ -1327,7 +1335,8 @@ class FileSpectralElement(TabularSpectralElement):
         self.validate_wavetable()
         self.ToInternal()
         self.isAnalytic=False
-
+        self.warnings={}
+        
     def _readThroughputFile(self, filename, throughputname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
             self._readFITS(filename, throughputname)
@@ -1371,6 +1380,7 @@ class InterpolatedSpectralElement(SpectralElement):
         colSpec = xre.group('col')
 
         self.analytic=False
+        self.warnings={}
         
         self.interpval = wavelength
 
@@ -1447,6 +1457,7 @@ class ThermalSpectralElement(TabularSpectralElement):
     def __init__(self, fileName):
 
         TabularSpectralElement.__init__(self, fileName=fileName, thrucol='emissivity')
+        self.warnings={}
 
     def getHeaderKeywords(self, header):
         ''' Overrides base class in order to get thermal keywords.
@@ -1481,6 +1492,6 @@ class Box(SpectralElement):
         self._throughputtable[-1] = 0.0
 
         self.isAnalytic=False
-        
+        self.warnings={}
 
 Vega = FileSourceSpectrum(locations.VegaFile)

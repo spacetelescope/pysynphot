@@ -8,7 +8,13 @@ from pysynphot import observationmode as ommod #needed for tabcheck task
 import os, sys
 
 mypid=os.getpid()
-    
+
+owarn={'partial':'Spectrum and bandpass only partially overlap. The spectrum was tapered to zero to perform the calculation',
+       'none':'Spectrum and bandpass were disjoint!'}
+odict={'partial':'taper',
+       'none':None,
+       'full':None}
+
 def getparms(parlist):
     """ The ETC presently sends along a bunch of information in key-value
     pairs that pysynphot utterly ignores. This function builds a dictionary
@@ -62,15 +68,23 @@ def countrate(parlist):
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['instrument'])
     # obs=bp.observe(sp)
+
+    #Check overlap status & proceed accordingly
+    ostat=bp.check_overlap(sp)
+    
     try:
-        obs=Observation(sp,bp)
+        obs=Observation(sp,bp,force=odict[ostat])
     except KeyError:
-        obs=Observation(sp,bp,bp.wave)
+        obs=Observation(sp,bp,bp.wave,force=odict[ostat])
 
     obs.convert('counts')
     efflam=obs.efflam()
     ans=obs.countrate(binned=False)
-    return ans,efflam
+
+    if ostat == 'full':
+        return ans,efflam
+    else:
+        return ans, efflam, owarn[ostat]
 
 def specrate(parlist):
     """Return the countrate of the spectrum as observed through the

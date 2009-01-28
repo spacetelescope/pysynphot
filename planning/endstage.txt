@@ -24,7 +24,7 @@ DONE: (altho extinction curves may need tuning)
   #149: tapering behavior
   #129: etc.countrate() should return effective wavelength
   #157: partial overlap should raise an exception
-  #???: etc.py should taper in case of a partial overlap exception
+  #158: etc.py should taper in case of a partial overlap exception
 
 
 2. Changes to test definitions
@@ -38,10 +38,10 @@ DONE: (altho extinction curves may need tuning)
     - requires signoff from instrument teams
     - may require extra work for WFC3
 
-2d. Modify test definitions for partial overlap cases to apply taper
+2d. Modify test definitions for partial overlap cases to apply taper DONE
 
 2e. Create a special "pinned" version of CDBS throughput files to be
-used for endstage testing.
+used for endstage testing. DONE
 
 With these tickets, test definitions, and data changes, there should be no
 more test errors.

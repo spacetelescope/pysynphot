@@ -4,9 +4,20 @@ Pysynphot Commissioning Report
 Goals and methodology
 -------------------------------
 
-The purpose of this commissioning process was to demonstrate to the Instruments branch, and by extension other potential pysynphot users, that the answers produced by pysynphot are at least as accurate as those produced by synphot.
+The purpose of this commissioning process was to demonstrate to the
+Instruments branch, and by extension other potential pysynphot users,
+that the answers produced by pysynphot are at least as accurate as
+those produced by synphot.
 
-Because synphot has known deficiencies, and pysynphot was developed in part to address those deficiencies, we began by comparing synphot and pysynphot results, but examined cases that failed this comparison to determine whether the differences could be explained by known differences in the two packages. If so, the outcome was deemed acceptable; if not, further investigation was undertaken to determine which package was less correct, producing either a bug report and corresponding corrective action for pysynphot, or a bug report and no further action for synphot.
+Because synphot has known deficiencies, and pysynphot was developed in
+part to address those deficiencies, we began by comparing synphot and
+pysynphot results, but examined cases that failed this comparison to
+determine whether the differences could be explained by known
+differences in the two packages. If so, the outcome was deemed
+acceptable; if not, further investigation was undertaken to determine
+which package was less correct, producing either a bug report and
+corresponding corrective action for pysynphot, or a bug report and no
+further action for synphot.
 
 
 Test software
@@ -23,15 +34,25 @@ test/commissioning. The test sets are also stored in this repository.
 Test sets
 -------------
 
-The largest test set was derived from the existing set of ETC regression tests for ACS, NICMOS, STIS, and WFC3, as part of the preparation for moving these ETCs to use pysynphot. (No similar set was derived for COS because its ETC was already using pysynphot and its regression tests had already passed.) Each ETC test case resulted in multiple (py)synphot calls; after removing obvious duplicates in function/obsmode/spectrum space, these became the ETC-based test set. 
+The largest test set was derived from the existing set of ETC
+regression tests for ACS, NICMOS, STIS, and WFC3, as part of the
+preparation for moving these ETCs to use pysynphot. (No similar set
+was derived for COS because its ETC was already using pysynphot and
+its regression tests had already passed.) Each ETC test case resulted
+in multiple (py)synphot calls; after removing obvious duplicates in
+function/obsmode/spectrum space, these became the ETC-based test set.
 
-However, this test set was overwhelmingly large, and a smaller set was eventually produced by selecting a representative subset for review. (In progress)
+However, this test set was overwhelmingly large, and a smaller set was
+eventually produced by selecting a representative subset for
+review. (In progress)
 
 Additional smaller test sets were defined:
    - from first principles
    - from cases with reported problems identified by INS
-   - for functionality that is not exercised by the ETC, including more general renormalization and calcphot.effstim functionality
-   - from the existing synphot regression test suite (TBD) and cookbook examples in the synphot manual (TBD)
+   - for functionality that is not exercised by the ETC, including
+   more general renormalization and calcphot.effstim functionality
+   - from the existing synphot regression test suite (TBD) and
+   cookbook examples in the synphot manual (TBD)
 
 
 Table of tests run as a function of testcase type:
@@ -63,11 +84,27 @@ testthermback |        |        |         |              |   X     |
 Comparing quantities
 ----------------------------
 
-For each test case (synphot function/obsmode/spectrum), several quantities were compared, depending on the synphot functionality being tested. Initial or intermediate quantities were compared as well as final quantities; for example, a test case involving the countrate functionality generated tests that compared not only the final scalar count rate, but the throughput for the specified obsmode, the spectrum alone, and the spectrum-throughput combination, both in counts and in photlam (the flux unit used internally by both synphot and pysynphot). This procedure ensured that any problems could be quickly localized and more easily investigated.
+For each test case (synphot function/obsmode/spectrum), several
+quantities were compared, depending on the synphot functionality being
+tested. Initial or intermediate quantities were compared as well as
+final quantities; for example, a test case involving the countrate
+functionality generated tests that compared not only the final scalar
+count rate, but the throughput for the specified obsmode, the spectrum
+alone, and the spectrum-throughput combination, both in counts and in
+photlam (the flux unit used internally by both synphot and
+pysynphot). This procedure ensured that any problems could be quickly
+localized and more easily investigated.
 
-After the initial testing period, the review procedure was modified to investigate only cases for which the throughput or count rate comparisons failed, and review the other quantities only as part of an ongoing investigation. This was necessary in order to reduce the amount of work to better match available resources. (In progress.)
+After the initial testing period, the review procedure was modified to
+investigate only cases for which the throughput or count rate
+comparisons failed, and review the other quantities only as part of an
+ongoing investigation. This was necessary in order to reduce the
+amount of work to better match available resources. (In progress.)
 
-While comparing scalar quantities, such as the count rate and effective wavelength, was relatively straightforward, writing tests to compare array results from synphot and pysynphot was difficult. The problem had two elements:
+While comparing scalar quantities, such as the count rate and
+effective wavelength, was relatively straightforward, writing tests to
+compare array results from synphot and pysynphot was difficult. The
+problem had two elements:
 
   - produce arrays to be compared on the same waveset
   - devise a comparison that was reasonably insensitive to numerical noise
@@ -139,12 +176,19 @@ revision log. This document describes the final approach used.
 Identified synphot errors
 --------------------------------
 
-The following problems with synphot were either previously known, or were identified during this commissioning process. Tests exhibiting these problems were either deemed acceptable, or reworked to avoid the failure so that a meaningful comparison could be performed:
+The following problems with synphot were either previously known, or
+were identified during this commissioning process. Tests exhibiting
+these problems were either deemed acceptable, or reworked to avoid the
+failure so that a meaningful comparison could be performed:
 
-- Poor performance around very narrow lines or very steep gradients (acceptable discrepancy)
-- Spectrum differences shortward of 900A due to intersection with Vega waveset (acceptable discrepancy --> modify test to avoid failing)
-- Spectrum differences because synphot drops any wavelength bins outside the range defined by the renormalization bandpass (as above:TBD)
-- Poor performance in renormalization around suddenly sparse wavelength tables (rework tests)
+- Poor performance around very narrow lines or very steep gradients
+ (acceptable discrepancy)
+- Spectrum differences shortward of 900A due to intersection with Vega 
+ waveset (acceptable discrepancy --> modify test to avoid failing)
+- Spectrum differences because synphot drops any wavelength bins
+ outside the range defined by the renormalization bandpass (as above:TBD)
+- Poor performance in renormalization around suddenly sparse
+ wavelength tables (rework tests)
 - Bug in calcspec not present in countrate (reworked tests)
 
 
@@ -152,7 +196,8 @@ The following problems with synphot were either previously known, or were identi
 Identified and repaired pysynphot errors
 -----------------------------------------------------
 
-The following problems with pysynphot were identified and fixed during this commissioning process:
+The following problems with pysynphot were identified and fixed during
+this commissioning process:
 
 - Incorrect calculation of interpolated spectral elements (#134)
 - Incorrect tapering behavior (#149 in progress)

@@ -26,14 +26,17 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         self.spectrum = spec
         self.bandpass = band
+        self.warnings={}
         self.validate_overlap(force)
-        
+
+        keep=self.warnings
         spectrum.CompositeSourceSpectrum.__init__(self,
                                                   self.spectrum,
                                                   self.bandpass,
                                                   'multiply')
 
-
+        self.warnings.update(keep)
+        
         #The natural waveset of the observation is the merge of the
         #natural waveset of the spectrum with the natural waveset of the
         #bandpass. Because the Observation inherits from a
@@ -62,8 +65,13 @@ class Observation(spectrum.CompositeSourceSpectrum):
                 self.spectrum=self.spectrum.taper()
             except AttributeError:
                 self.spectrum=self.spectrum.tabulate().taper()
+                self.warnings['PartialOverlap']=True
+                
         elif force.lower().startswith('extrap'):
-            pass #default behavior works
+            #default behavior works, but check the overlap so we can set the warning
+            stat=self.bandpass.check_overlap(self.spectrum)
+            if stat == 'partial':
+                self.warnings['PartialOverlap']=True
 
         else:
             raise(KeyError("Illegal value force=%s; legal values=('taper','extrap')"%force))
