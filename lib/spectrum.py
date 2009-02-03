@@ -349,31 +349,22 @@ class SourceSpectrum(Integrator):
     def redshift(self, z):
         ''' Returns a new redshifted spectrum.
         '''
-        # begin by building a copy of self, but in Tabular format.
-        copy = TabularSourceSpectrum()
-        copy.fluxunits = self.fluxunits
-        copy.waveunits = self.waveunits
-        copy._wavetable = self.GetWaveSet()
-        copy._fluxtable = self(copy._wavetable)
-
-        # flux expressed in photnu is invariant wrt redshift; convert
-        # the copy to photnu and extract its flux array.
-        copy.convert('photnu')
-        (dummy, flux_photnu) = copy.getArrays()
-
-        # convert wavelenght array in the copy, to the redshifted frame.
-        copy._wavetable *= 1.0 + z
-
-        # now comes the trick: put back the flux array in photnu units
-        # into the copy, and convert it back to internal units.
-        copy._fluxtable = flux_photnu
-        copy.fluxunits = units.Units('photnu')
-        copy.ToInternal()
-        copy.fluxunits = self.fluxunits
-        copy.name="%s at z=%g"%(self.name,z)
-
+        
+        #By default, apply only the doppler shift.
+        
+        waveunits=self.waveunits
+        self.convert('angstrom')
+        newwave=self.wave*(1.0+z)
+        copy = ArraySourceSpectrum(wave=newwave,
+                                   flux=self.flux,
+                                   waveunits=self.waveunits,
+                                   fluxunits=self.fluxunits,
+                                   name="%s at z=%g"%(self.name,z)
+                                   )
+        
+        self.convert(waveunits)
         return copy
-
+        
     def setMagnitude(self, band, value):
         '''Makes the magnitude of the source in the band equal to value.
         band is a SpectralElement.
