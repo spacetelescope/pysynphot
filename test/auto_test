@@ -81,6 +81,8 @@ cd $d/run
 find . ! -mtime -14 -exec rm -f {} ';'
 
 echo $PATH
+echo $PYTHONPATH
+which python
 
 ( cd $d/test ; svn update )
 
