@@ -467,15 +467,15 @@ class VegaMag(LogFluxUnits):
     def __init__(self):
         LogFluxUnits.__init__(self)
         self.name = 'vegamag'
-        
+        self.vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
     
     def ToPhotlam(self, wave, flux):
-        vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
-        resampled = vegaspec.resample(wave)
+        resampled = self.vegaspec.resample(wave)
         return resampled.flux * 10.0**(-0.4 * flux)
 
     def unitResponse(self,band):
-        total=band.calcVegaFlux()
+        sp=band*self.vegaspec
+        total=sp.integrate()
         return 2.5*math.log10(total)
 
 class Counts(FluxUnits):

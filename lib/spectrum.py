@@ -349,19 +349,18 @@ class SourceSpectrum(Integrator):
     def redshift(self, z):
         ''' Returns a new redshifted spectrum.
         '''
-        
         #By default, apply only the doppler shift.
-        
+
         waveunits=self.waveunits
         self.convert('angstrom')
         newwave=self.wave*(1.0+z)
         copy = ArraySourceSpectrum(wave=newwave,
-                                   flux=self.flux,
-                                   waveunits=self.waveunits,
-                                   fluxunits=self.fluxunits,
-                                   name="%s at z=%g"%(self.name,z)
-                                   )
-        
+                             flux=self.flux,
+                             waveunits=self.waveunits,
+                             fluxunits=self.fluxunits,
+                             name="%s at z=%g"%(self.name,z)
+                             )
+
         self.convert(waveunits)
         return copy
         
@@ -428,6 +427,15 @@ class CompositeSourceSpectrum(SourceSpectrum):
         if self.operation == 'multiply':
             return self.component1(wavelength) * self.component2(wavelength)
 
+    def complist(self):
+        ans=[]
+        for comp in (self.component1, self.component2):
+            try:
+                ans.extend(comp.complist())
+            except AttributeError:
+                ans.append(comp)
+        return ans
+    
     def GetWaveSet(self):
         '''Obtain the wavelength set for the composite source by forming
         the union of wavelengths from each component.
@@ -1148,6 +1156,15 @@ class CompositeSpectralElement(SpectralElement):
 
     def __str__(self):
         return self.name
+
+    def complist(self):
+        ans=[]
+        for comp in (self.component1, self.component2):
+            try:
+                ans.extend(comp.complist())
+            except AttributeError:
+                ans.append(comp)
+        return ans
 
     def GetWaveSet(self):
         '''This method returns a wavelength set appropriate for a composite

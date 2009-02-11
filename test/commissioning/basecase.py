@@ -58,6 +58,11 @@ class calcspecCase(testutil.LogTestCase):
             self.tda['ETCid']=self.etcid
         except AttributeError:
             pass
+        try:
+            self.tda['form']=self.form
+        except AttributeError:
+            pass
+        
         self.tra={}
 
     def run_crbox(self,spstring,form,output="",wavecat="INDEF",
@@ -256,6 +261,30 @@ class calcphotCase(calcspecCase):
 class calcphotOverlapCase(calcphotCase):
     Extrap='taper'
 
+class effstimCase(calcphotCase):
+    def testeffstim(self):
+        iraf.calcphot(obsmode=self.obsmode,spectrum=self.spectrum,
+                      form=self.form,func='effstim')
+        rcounts=iraf.calcphot.getParam('calcphot.result',native=1)
+        obs=S.Observation(self.sptest,self.bp)
+        tcounts=obs.effstim(self.form)
+        self.tra['Syn']=rcounts
+        self.tra['Pysyn']=tcounts
+
+        if rcounts != 0:
+            self.discrep=(tcounts-rcounts)/rcounts
+        else:
+            self.discrep=tcounts-rcounts
+        self.tra['Discrep']=self.discrep
+        if abs(self.discrep)>self.superthresh:
+            self.tra['Extreme']=True
+
+        self.failUnless(abs(self.discrep) < self.thresh,msg="Discrep=%f"%self.discrep)
+    def testthru(self):
+        __test__ = False
+    def testefflam(self):
+        __test__ = False
+        
 
 class thermbackCase(calcspecCase):
         

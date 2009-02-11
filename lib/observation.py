@@ -172,6 +172,44 @@ class Observation(spectrum.CompositeSourceSpectrum):
         self.convert(myfluxunits)
         return ans
 
+    def effstim(self,fluxunits='photlam'):
+        """Compute effective stimulation in specified units"""
+
+        oldunits=self.fluxunits
+        self.convert(fluxunits)
+        x=units.Units(fluxunits)
+        try:
+            if x.isDensity:
+                rate=self.integrate()
+                self._fluxcheck(rate)
+                if x.isMag:
+                    ans=x.unitResponse(self.bandpass) - 2.5*math.log10(rate)
+                else:
+                    ans=rate*x.unitResponse(self.bandpass)
+            else:
+                if x.isMag:
+                    #its linear unit must be counts
+                    self.convert('counts')
+                    total=self.flux.sum()
+                    self._fluxcheck(total)
+                    ans=-2.5*math.log10(total)
+                else:
+                    ans=self.flux.sum()
+                    self._fluxcheck(ans)
+        finally:
+            self.convert(oldunits)
+            del x
+        return ans
+
+    def _fluxcheck(self,totalflux):
+        if totalflux <= 0.0:
+            raise ValueError('Integrated flux is <= 0')
+        if N.isnan(totalflux):
+            raise ValueError('Integrated flux is NaN')
+        if N.isinf(totalflux):
+            raise ValueError('Integrated flux is infinite')
+                            
+    
     def pivot(self):
         """This is the calculation performed when the ETC invokes calcphot.
         Does this need to be calculated on binned waveset, or may
