@@ -44,7 +44,7 @@ function/obsmode/spectrum space, these became the ETC-based test set.
 
 However, this test set was overwhelmingly large, and a smaller set was
 eventually produced by selecting a representative subset for
-review. (In progress)
+review. 
 
 Additional smaller test sets were defined:
    - from first principles
@@ -60,9 +60,9 @@ Table of tests run as a function of testcase type:
               |calcphot|calcspec|countrate|specsourcerate|thermback|
 Array tests:  |        |        |         |              |         |
 --------------|--------|--------|---------|--------------|---------|
-testthru      |   X    |        |   X     |     X        |   X     |
+testthru      |   X    |        |   X     |     X        |         |
 --------------|--------|--------|---------|--------------|---------|
-testcrspec    |   X    |    X   |   X     |     X        |         |
+testcrspec    |   X    |    X   |   X     |     X        |   X     |
 --------------|--------|--------|---------|--------------|---------|
 testcrphotlam |        |        |   X     |     X        |         |
 --------------|--------|--------|---------|--------------|---------|
@@ -78,7 +78,17 @@ testefflam    |   X    |        |   X     |     X        |         |
 testthermback |        |        |         |              |   X     |
 --------------|--------|--------|---------|--------------|---------|
 
+The final test set included 15701 tests. Of these, 1456 constituted
+the subset that received more careful scrutiny, as did all
+testcountrate and testthru tests. Additionally, any 'extreme" failures
+in a given run were reviewed.
 
+Table of test breakdown:
+
+Total tests     15701
+Repr. subset     1456
+testcountrate    1769
+testthru         3218
 
 
 Comparing quantities
@@ -200,9 +210,11 @@ The following problems with pysynphot were identified and fixed during
 this commissioning process:
 
 - Incorrect calculation of interpolated spectral elements (#134)
-- Incorrect tapering behavior (#149 in progress)
+- Incorrect tapering behavior (#149)
 - FITS files written to single precision by default (#146)
 - Incorrect parsing of obsmode keywords that look like numbers (#125)
 - Incorrect parsing of band() arguments (#126)
-- Implement gal3 extinction law (#127/123) (In progress)
+- Implement gal3 extinction law (#127/123) 
+- Improve behavior in case of partial overlap (#157)
+- Handle partial overlap cases in the etc.py interface (#158)
 - Performance issues when simulating an Observation (TBD #130)
