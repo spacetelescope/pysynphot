@@ -26,6 +26,10 @@ DONE: (altho extinction curves may need tuning)
   #157: partial overlap should raise an exception
   #158: etc.py should taper in case of a partial overlap exception
 
+Code changes were also committed pertinent to the redshift (#106) and
+effstim (#140) calculations: while these were not high-priority
+tickets for purposes of the ETC, they involved changes to fundamental
+classes so it was desirable to include them in this round of testing.
 
 2. Changes to test definitions
 ================================
@@ -33,7 +37,7 @@ DONE: (altho extinction curves may need tuning)
     - change Bruzual models to Pickles 
     - change gal2 to gal1 or gal3 
     - remove duplicate cases 
-2b. Make the changes in the syn_pysyn tests (almost DONE: WFC3 in prog.)
+2b. Make the changes in the syn_pysyn tests: DONE
 2c. Make the changes in the ETC regression tests: DONE
     - requires signoff from instrument teams
     - may require extra work for WFC3
@@ -41,7 +45,9 @@ DONE: (altho extinction curves may need tuning)
 2d. Modify test definitions for partial overlap cases to apply taper DONE
 
 2e. Create a special "pinned" version of CDBS throughput files to be
-used for endstage testing. DONE
+used for endstage testing. (Note that this was done in two stages;
+additional STIS detector files were identified as needing to be pinned
+in Feb 09.) DONE
 
 With these tickets, test definitions, and data changes, there should be no
 more test errors.
