@@ -4,6 +4,8 @@
 # the syn_pysyn test suite.
 set root = /data/gaudete1/dg2/pysyn_version_compare/
 setenv PYSYN_CDBS /eng/ssb/syn_pysyn/cdbs_pinned/
+setenv crrefer $PYSYN_CDBS
+
 if $1 == '' then
   echo "You must specify a revision"
   exit

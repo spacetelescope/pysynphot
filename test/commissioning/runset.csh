@@ -46,6 +46,8 @@ if ( ! $?PYSYN_CDBS ) then
   exit 1
 endif
 
+echo crrefer is $crrefer
+
 echo $PYTHONPATH
 python -c "import pysynphot ; print pysynphot.__file__"
 python printversion.py
