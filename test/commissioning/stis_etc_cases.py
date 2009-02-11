@@ -1241,7 +1241,7 @@ class SpecSourcerateSpecCase34(basecase.SpecSourcerateSpecOverlapCase):
         self.etcid="STISSPEC1316"
         self.setglobal(__file__)
         self.runpy()
-class SpecSourcerateSpecCase36(basecase.SpecSourcerateSpecCase):
+class SpecSourcerateSpecCase36(basecase.SpecSourcerateSpecOverlapCase):
     def setUp(self):
         self.obsmode="stis,ccd,g750l,c7751,s52x02"
         self.spectrum="rn(z(spec(qso_template.fits),0.03),band(johnson,v),18,vegamag)"

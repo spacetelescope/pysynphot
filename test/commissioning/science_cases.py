@@ -672,7 +672,7 @@ class acsS89(basecase.countrateCase):
         self.setglobal(__file__)
         self.runpy()
 
-class e1(basecase.countrateCase):
+class e1(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode='stis,g140l,fuvmama,s52x2'
         self.spectrum="el1215a.fits"
@@ -680,21 +680,21 @@ class e1(basecase.countrateCase):
         self.runpy()
 
 
-class e2(basecase.countrateCase):
+class e2(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode='stis,g140l,fuvmama,s52x2'
         self.spectrum="el1302a.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class e3(basecase.countrateCase):
+class e3(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode='stis,g140l,fuvmama,s52x2'
         self.spectrum="el1356a.fits"
         self.setglobal(__file__)
         self.runpy()
 
-class e4(basecase.countrateCase):
+class e4(basecase.countrateOverlapCase):
     def setUp(self):
         self.obsmode='stis,g140l,fuvmama,s52x2'
         self.spectrum="el2471a.fits"

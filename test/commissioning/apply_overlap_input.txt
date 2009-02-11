@@ -37,3 +37,8 @@ stis_etc_cases SpecSourcerateSpecCase20
 stis_etc_cases SpecSourcerateSpecCase26
 stis_etc_cases SpecSourcerateSpecCase34
 stis_etc_cases SpecSourcerateSpecCase87
+stis_etc_cases SpecSourcerateSpecCase36
+science_cases e1
+science_cases e2
+science_cases e3
+science_cases e4
