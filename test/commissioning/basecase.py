@@ -49,6 +49,8 @@ class calcspecCase(testutil.LogTestCase):
                  'Thresh':self.thresh,
                   'Superthresh':self.superthresh,
                   'SigThresh':self.sigthresh,
+                  'crrefer':iraf.osfn('crrefer$'),
+                  'pysyn_cdbs':os.environ['PYSYN_CDBS'],
                   'SkyLines':self.hasSkyLines()}
         try:
             self.tda['Subset']=self.subset
