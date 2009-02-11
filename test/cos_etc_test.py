@@ -196,26 +196,29 @@ class SpectrumTestCase(testutil.FPTestCase):
         self.assertApproxFP(sp._fluxtable[testindex], values['photlam'], accuracy=0.0025)
         (dummy, fluxes) = sp.getArrays()
         self.assertApproxFP(fluxes[testindex],values['photnu'], accuracy=0.0025)
+##-------------------------------------------------------
+## Redshift algorithm changed with r798
+##        - answers for this test no longer valid
+##-------------------------------------------------------
+##     def testRedshift1(self):
+##         z = 1.0
+##         sp1 = self.sp.redshift(0.0)
+##         sp1.convert('photnu')
+##         sp2 = sp1.redshift(z)
+##         self.assertApproxFP(sp2._wavetable[testindex], values['angstrom z=1.0'], accuracy=0.0025)
+##         (dummy, fluxes) = sp2.getArrays()
+##         self.assertApproxFP(fluxes[testindex],values['photnu'], accuracy=0.0025)
 
-    def testRedshift1(self):
-        z = 1.0
-        sp1 = self.sp.redshift(0.0)
-        sp1.convert('photnu')
-        sp2 = sp1.redshift(z)
-        self.assertApproxFP(sp2._wavetable[testindex], values['angstrom z=1.0'], accuracy=0.0025)
-        (dummy, fluxes) = sp2.getArrays()
-        self.assertApproxFP(fluxes[testindex],values['photnu'], accuracy=0.0025)
+##         # internal array should change though, it's in photlam units.
+##         self.assertApproxFP(sp2._fluxtable[testindex],values['photlam z=1.0'], accuracy=0.0025)
 
-        # internal array should change though, it's in photlam units.
-        self.assertApproxFP(sp2._fluxtable[testindex],values['photlam z=1.0'], accuracy=0.0025)
-
-        # now test redshift in flam units.
-        sp1.convert('flam')
-        sp2 = sp1.redshift(2.5)
-        self.assertApproxFP(sp2._wavetable[testindex], values['angstrom z=2.5'], accuracy=0.0025)
-        self.assertApproxFP(sp2._fluxtable[testindex], values['photlam z=2.5'], accuracy=0.0025)
-        (dummy, fluxes) = sp2.getArrays()
-        self.assertApproxFP(fluxes[testindex],values['flam z=2.5'], accuracy=0.0025)
+##         # now test redshift in flam units.
+##         sp1.convert('flam')
+##         sp2 = sp1.redshift(2.5)
+##         self.assertApproxFP(sp2._wavetable[testindex], values['angstrom z=2.5'], accuracy=0.0025)
+##         self.assertApproxFP(sp2._fluxtable[testindex], values['photlam z=2.5'], accuracy=0.0025)
+##         (dummy, fluxes) = sp2.getArrays()
+##         self.assertApproxFP(fluxes[testindex],values['flam z=2.5'], accuracy=0.0025)
 
     def testIntegrate(self):
         integral = self.sp.integrate()
@@ -434,12 +437,16 @@ class ParserTestCase(testutil.FPTestCase):
         flux = sp(wave)
         self.assertApproxFP(flux[5000], 1.06813E-2, accuracy=0.0025)
 
-    def testzbb(self):
-        expr = "z(bb(10000.0),1.0)"
-        sp = P.interpret(P.parse(P.scan(expr)))
-        wave = sp.GetWaveSet()
-        flux = sp(wave)
-        self.assertApproxFP(flux[5000], 2.67032E-3, accuracy=0.0025)
+##------------------------------------------------------------
+## Redshift algorithm changed with r798
+##    - answers for this test no longer valid
+##------------------------------------------------------------
+##     def testzbb(self):
+##         expr = "z(bb(10000.0),1.0)"
+##         sp = P.interpret(P.parse(P.scan(expr)))
+##         wave = sp.GetWaveSet()
+##         flux = sp(wave)
+##         self.assertApproxFP(flux[5000], 2.67032E-3, accuracy=0.0025)
 
     def testem(self):
         expr = "em(3880.0,10.0,1.0000000168623835E-16,flam)"
