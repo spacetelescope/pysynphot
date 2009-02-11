@@ -139,3 +139,6 @@ comp/stis/stis_e230m_015_syn.fits
 comp/stis/stis_g230m_008_syn.fits
 comp/stis/stis_g750m_010_syn.fits
 comp/stis/stis_e140m_015_syn.fits
+comp/stis/stis_ccd_004_syn.fits
+comp/stis/stis_mama1_004_syn.fits
+comp/stis/stis_mama2_004_syn.fits
