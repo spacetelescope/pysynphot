@@ -55,12 +55,12 @@ more test errors.
 3. Representative subset
 ========================
 3a. Identify the subset of representative test cases 
-......(WFC3 in progress, all others DONE)
+......DONE
 3b. Modify the test code to include a flag identifying this subset
 ......DONE
 3c. Modify the test assessment tools to generate useful reports of
     only this subset
-......In Progress
+......DONE
 
 
 4. Run the last test set
