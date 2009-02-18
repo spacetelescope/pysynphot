@@ -67,7 +67,7 @@ def countrate(parlist):
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['instrument'])
-    # obs=bp.observe(sp)
+
 
     #Check overlap status & proceed accordingly
     ostat=bp.check_overlap(sp)
@@ -94,18 +94,26 @@ def specrate(parlist):
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['instrument'])
-    # obs=bp.observe(sp)
+    
+    #Check overlap status & proceed accordingly
+    ostat=bp.check_overlap(sp)
+
     try:
-        obs=Observation(sp,bp)
+        obs=Observation(sp,bp,force=odict[ostat])
     except KeyError:
-        obs=Observation(sp,bp,bp.wave)
+        obs=Observation(sp,bp,bp.wave,force=odict[ostat])
 
     obs.convert('counts')
     try:
         obs.writefits(d['output'],binned=True)
     except KeyError:
         d['output']=None
-    return "%g;%s"%(obs.countrate(),d['output'])
+
+    if ostat == 'full':
+        return "%g;%s"%(obs.countrate(),d['output'])
+    else:
+        return "%g;%s;%s"%(obs.countrate(),d['output'],owarn[ostat])
+    
 
 def thermback(parlist):
     """Return the thermal background rate for the obsmode"""
