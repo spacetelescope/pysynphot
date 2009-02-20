@@ -44,14 +44,22 @@ def calcphot(parlist):
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['obsmode'])
     # obs=bp.observe(sp)
+    
+    ostat=bp.check_overlap(sp)
+    
     try:
-        obs=Observation(sp,bp)
+        obs=Observation(sp,bp,force=odict[ostat])
     except KeyError:
-        obs=Observation(sp,bp,bp.wave)
+        obs=Observation(sp,bp,bp.wave,force=odict[ostat])
+
     obs.convert('counts')
     ans=obs.efflam()
-    
-    return ans
+
+    if ostat == 'full':
+        return ans
+    else:
+        return ans, owarn[ostat]
+
 
 def calcspec(parlist):
     """Calculate the spectrum & write it to a FITS file"""

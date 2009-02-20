@@ -21,7 +21,8 @@ class ETCTestCase(testutil.FPTestCase):
             self.sp=etc.parse_spec(self.spectrum)
             self.bp=S.ObsBandpass(self.obsmode)
             self.parameters=["spectrum=%s"%self.spectrum,
-                             "instrument=%s"%self.obsmode]
+                             "instrument=%s"%self.obsmode,
+                             "obsmode=%s"%self.obsmode]
         except AttributeError:
             pass
         
@@ -33,6 +34,11 @@ class ETCTestCase(testutil.FPTestCase):
         self.assert_('PartialOverlap' in obs.warnings)
 
     def testspecrate(self):
-        ans=etc.specrate(self.parameters)
-        self.failIf('partial' in ans[-1])
+        result=etc.specrate(self.parameters)
+        #ans structure is different
+        ans=result.split(';')
+        self.failUnless('partial' in ans[-1])
 
+    def testcalcphot(self):
+        ans=etc.calcphot(self.parameters)
+        self.failUnless('partial' in ans[-1])
