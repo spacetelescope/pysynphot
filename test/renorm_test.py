@@ -85,7 +85,14 @@ def testRenormSynPysyn():
                 q=abs(1-rat[2:-2])
                 qtrunc=(10**4*q).astype(N.int)
                 assert N.alltrue(qtrunc<110),"Min/max ratio = %f,%f"%(q.min(),q.max())
-
+                #Clean up after yourself
+                try:
+                    os.unlink(oname)
+                    os.unlink(fname)
+                    os.unlink(wname)
+                except OSError:
+                    pass
+                
             renorm_compare.description="%s.test%s_%s_%s"%(__name__,
                                                                  rnfuncs[method],foo[sp],u)
 
