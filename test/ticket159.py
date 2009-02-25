@@ -41,7 +41,11 @@ class ETCTestCase(testutil.FPTestCase):
         obs=S.Observation(self.sp,self.bp,force='taper')
         self.assert_('PartialOverlap' in obs.warnings)
 
-    def testcountrate(self):
+    def testcrwarn(self):
         ans=etc.countrate(self.parameters)
         self.assert_('partial' in ans[-1])
 
+    def testcountrate(self):
+        ans=etc.countrate(self.parameters)
+        q=(float(ans[0])-self.refrate)/self.refrate
+        self.failIf(abs(q)>0.01)

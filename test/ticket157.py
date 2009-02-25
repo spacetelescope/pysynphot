@@ -65,7 +65,7 @@ class OverlapBug(testutil.FPTestCase):
 
 class DiscoveryCase(OverlapBug):
     def setUp(self):
-        fname='qso_template.fits'
+        fname=os.path.join(testdir,'qso_template.fits')
         self.spstring='rn(z(spec(%s),0.03),band(johnson,v),18,vegamag)' %fname
         self.sp=etc.parse_spec(self.spstring)
         self.sp.convert('photlam')
@@ -210,13 +210,13 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         #The throughput files used in this case don't actually go
         #all the way to zero.
         self.assertRaises(ValueError,
-                          etc.countrate,
-                          self.parameters)
+                          S.Observation,
+                          self.sp, self.bp)
 
     def testrate(self):
-        # will fail till the change to the etc module is made
-        tstrate=etc.countrate(self.parameters,extrap='taper')
-        self.assertApproxFP(float(tstrate[0]),self.refrate)
+        tstrate=etc.countrate(self.parameters)
+        q=(float(tstrate[0])-self.refrate)/self.refrate
+        self.failIf(abs(q)>0.01)
 
         
     def tearDown(self):
@@ -228,12 +228,14 @@ class ETCTestCase_Spec2a(ETCTestCase_Imag2):
     def setUp(self):
         self.spectrum = "(spec(crcalspec$grw_70d5824_stis_001.fits))"
         self.obsmode = "stis,fuvmama,g140l,s52x2"
+        self.syn_pysyn_id = 'stis_etc_cases:SpecSourcerateSpecCase2'
         self.refrate = 28935.7
         self.setup2()
+        
 
 
     def testflux(self):
-        self.obs=S.Observation(self.sp,self.bp,extrap='taper')
+        self.obs=S.Observation(self.sp,self.bp,force='taper')
         self.obs.convert('counts')
 
         self.assertApproxFP(float(self.obs.binflux[500]), 35.5329)
