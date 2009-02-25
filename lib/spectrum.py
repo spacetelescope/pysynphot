@@ -1402,8 +1402,15 @@ class InterpolatedSpectralElement(SpectralElement):
         colNames = fs[1].data.names[2:]
         colWaves = []
         for columnName in colNames:
-            colWaves.append(float(columnName.split('#')[1]))
-
+            try:
+                colWaves.append(float(columnName.split('#')[1]))
+            except IndexError,e:
+                #make sure this is the case we know about
+                if columnName.lower().startswith('error'):
+                    pass
+                else:
+                    raise e
+                
         waves = MA.array(colWaves)
         greater = MA.masked_less(waves, wavelength)
         less = MA.masked_greater(waves, wavelength)
