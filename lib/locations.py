@@ -3,8 +3,14 @@ import os, warnings, glob
    
 
 def _refTable(template):
-    names = glob.glob(os.path.join(os.environ['PYSYN_CDBS'], template))
-    names.sort()
+    try:
+        names = glob.glob(os.path.join(os.environ['PYSYN_CDBS'], template))
+        names.sort()
+    except KeyError:
+        warnings.warn("PYSYN_CDBS is undefined; cannot find %s file"%template,
+                      UserWarning)
+        return None
+    
     try:
         return names[-1]
     except IndexError:
