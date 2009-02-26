@@ -155,7 +155,7 @@ class ticket125_b(ticket125):
 class ticket125_c(ticket125):
     def setUp(self):
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
-        self.spstring="rn(/grp/hst/cdbs/calspec/bd_75d325_stis_001.fits,band(u),9.5,vegamag)*band(fos,blue,4.3,g160l)"
+        self.spstring="rn(data/bd_75d325_stis_001.fits,band(u),9.5,vegamag)*band(fos,blue,4.3,g160l)"
         
 class AddInverseMicron(testutil.FPTestCase):
     def setUp(self):
