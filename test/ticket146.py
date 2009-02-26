@@ -40,7 +40,7 @@ class Sorted(testutil.FPTestCase):
     def setUp(self):
         self.fname='/tmp/epsilon.fits'
         self.obsmode='wfc3,ir,f160w'
-        self.spstring='rn(spec(/grp/hst/cdbs//grid/bz77/bz_7.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)'
+        self.spstring='rn(spec(data/bz_7.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)'
         self.sp=etc.parse_spec(self.spstring)
         self.sp.writefits(self.fname,precision='single')
 
