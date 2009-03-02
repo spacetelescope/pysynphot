@@ -11,8 +11,8 @@ setupargs = {
     'url'           :  		"http://projects.scipy.org/astropy/astrolib",
     'platforms'     :      	["Linux","Solaris","Mac OS X", "Win"],
     'requires'      :       ['pyfits','numpy'],
-    'data_files'    :     	[ ( pkg+'/data', [ 'data/generic/*', 'data/wavecat/*' ] ),
-                                ('pysynphot', [ 'test/etctest_base_class.py' ] )
+    'data_files'    :     	[ ( pkg+'/data', [ 'data/generic/*', 'data/wavecat/*' ] )
+                                
                             ]
     }
 
