@@ -1,4 +1,4 @@
-from pysynphot.etctest_base_class import ETCTestCase
+import etctest_base_class 
 from pysynphot.etc import parse_spec
 from pysynphot import ObsBandpass
 from pysynphot import observationmode #to check on comptable
@@ -10,7 +10,7 @@ print "   Tests are being run with %s"%observationmode.COMPTABLE
 print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
 
 
-class C1(ETCTestCase):
+class C1(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g185m,c1786')
@@ -19,7 +19,7 @@ class C1(ETCTestCase):
         self.fname='specAV1.fits'
         self.accuracy=1e-2
 
-class C2(ETCTestCase):
+class C2(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(icat(k93models,44500,0.0,5.0),box(2000.0,1.0),2.00E-13,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c1786')
@@ -28,7 +28,7 @@ class C2(ETCTestCase):
         self.fname='specAV2.fits'
 
 
-class C3(ETCTestCase):
+class C3(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g185m,c1817')
@@ -38,7 +38,7 @@ class C3(ETCTestCase):
         self.accuracy=1e-2
 
 
-class C4(ETCTestCase):
+class C4(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(icat(k93models,44500,0.0,5.0),box(2000.0,1.0),2.00E-13,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c1817')
@@ -47,7 +47,7 @@ class C4(ETCTestCase):
         self.fname='specAV4.fits'
 
 
-class C5(ETCTestCase):
+class C5(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g185m,c1835')
@@ -56,7 +56,7 @@ class C5(ETCTestCase):
         self.fname='specAV5.fits'
         self.accuracy=1e-2
 
-class C6(ETCTestCase):
+class C6(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(icat(k93models,44500,0.0,5.0),box(2000.0,1.0),2.00E-13,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c1835')
@@ -65,7 +65,7 @@ class C6(ETCTestCase):
         self.fname='specAV6.fits'
 
 
-class C7(ETCTestCase):
+class C7(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g185m,c1850')
@@ -74,7 +74,7 @@ class C7(ETCTestCase):
         self.fname='specAV7.fits'
         self.accuracy=1e-2
 
-class C8(ETCTestCase):
+class C8(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(icat(k93models,44500,0.0,5.0),box(2000.0,1.0),2.00E-13,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c1850')
@@ -83,7 +83,7 @@ class C8(ETCTestCase):
         self.fname='specAV8.fits'
 
 
-class C9(ETCTestCase):
+class C9(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g185m,c1864')
@@ -92,7 +92,7 @@ class C9(ETCTestCase):
         self.fname='specAV9.fits'
         self.accuracy=1e-2
 
-class C10(ETCTestCase):
+class C10(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(icat(k93models,44500,0.0,5.0),box(2000.0,1.0),2.00E-13,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c1864')
@@ -101,7 +101,7 @@ class C10(ETCTestCase):
         self.fname='specAV10.fits'
 
 
-class C11(ETCTestCase):
+class C11(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g185m,c1882')
@@ -110,7 +110,7 @@ class C11(ETCTestCase):
         self.fname='specAV11.fits'
         self.accuracy=1e-2
 
-class C12(ETCTestCase):
+class C12(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(icat(k93models,44500,0.0,5.0),box(2000.0,1.0),2.00E-13,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c1882')
@@ -119,7 +119,7 @@ class C12(ETCTestCase):
         self.fname='specAV12.fits'
 
 
-class C13(ETCTestCase):
+class C13(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g185m,c1890')
@@ -128,7 +128,7 @@ class C13(ETCTestCase):
         self.fname='specAV13.fits'
         self.accuracy=1e-2
 
-class C14(ETCTestCase):
+class C14(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(spec(qso_template.fits),box(1850.0,1.0),1.00E-14,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c2010')
@@ -137,7 +137,7 @@ class C14(ETCTestCase):
         self.fname='specAV92.fits'
 
 
-class C15(ETCTestCase):
+class C15(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(z(spec(qso_template.fits),0.2),box(1850.0,1.0),1.00E-14,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c2010')
@@ -146,7 +146,7 @@ class C15(ETCTestCase):
         self.fname='specAV93.fits'
 
 
-class C16(ETCTestCase):
+class C16(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(pl(4000.0,-1.0,flam),box(1850.0,1.0),1.00E-14,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c2010')
@@ -155,7 +155,7 @@ class C16(ETCTestCase):
         self.fname='specAV94.fits'
 
 
-class C17(ETCTestCase):
+class C17(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(pl(4000.0,-1.5,flam),box(1850.0,1.0),1.00E-14,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c2010')
@@ -164,7 +164,7 @@ class C17(ETCTestCase):
         self.fname='specAV95.fits'
 
 
-class C18(ETCTestCase):
+class C18(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(bb(10000.0),box(1850.0,1.0),1.00E-14,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c2010')
@@ -173,7 +173,7 @@ class C18(ETCTestCase):
         self.fname='specAV96.fits'
 
 
-class C19(ETCTestCase):
+class C19(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(bb(40000.0),box(1850.0,1.0),1.00E-14,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c2010')
@@ -182,7 +182,7 @@ class C19(ETCTestCase):
         self.fname='specAV97.fits'
 
 
-class C20(ETCTestCase):
+class C20(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(icat(k93models,44500,0.0,5.0)*ebmvx(0.1,gal1),box(1850.0,1.0),2.00E-13,flam)')
         self.bp=ObsBandpass('cos,nuv,g185m,c1786')
@@ -191,7 +191,7 @@ class C20(ETCTestCase):
         self.fname='specAV98.fits'
 
 
-class C21(ETCTestCase):
+class C21(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),23.3,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g225m,c2186')
@@ -200,7 +200,7 @@ class C21(ETCTestCase):
         self.fname='specAV104.fits'
         self.accuracy=1e-2
 
-class C22(ETCTestCase):
+class C22(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(icat(k93models,25400,0.0,3.9),box(2000.0,1.0),2.00E-13,flam)')
         self.bp=ObsBandpass('cos,nuv,g225m,c2186')
@@ -209,7 +209,7 @@ class C22(ETCTestCase):
         self.fname='specAV105.fits'
 
 
-class C23(ETCTestCase):
+class C23(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.1,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g225m,c2186')
@@ -218,7 +218,7 @@ class C23(ETCTestCase):
         self.fname='specAV106.fits'
         self.accuracy=1e-2
 
-class C24(ETCTestCase):
+class C24(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g225m,c2186')
@@ -227,7 +227,7 @@ class C24(ETCTestCase):
         self.fname='specAV107.fits'
         self.accuracy=1e-2
 
-class C25(ETCTestCase):
+class C25(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g225m,c2186')
@@ -236,7 +236,7 @@ class C25(ETCTestCase):
         self.fname='specAV108.fits'
         self.accuracy=1e-2
 
-class C26(ETCTestCase):
+class C26(etctest_base_class.ETCTestCase):
     def setparms(self):
         self.sp=parse_spec('spec(earthshine.fits)*2.0+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5')
         self.bp=ObsBandpass('cos,nuv,g225m,c2186')
