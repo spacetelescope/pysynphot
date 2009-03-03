@@ -603,7 +603,7 @@ class ParserTestCase(testutil.FPTestCase):
         flux = sp(wave)
         self.assertApproxFP(flux[2000], 4.37347E-5, accuracy=0.0025)
 
-class etctest_base_class.ETCTestCase_Imag1(testutil.FPTestCase):
+class ETCTestCase_Imag1(testutil.FPTestCase):
 
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
@@ -612,7 +612,7 @@ class etctest_base_class.ETCTestCase_Imag1(testutil.FPTestCase):
        
     def tearDown(self):
         os.chdir(self.oldpath)
-class etctest_base_class.ETCTestCase_Imag2(testutil.FPTestCase):
+class ETCTestCase_Imag2(testutil.FPTestCase):
     
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
@@ -622,7 +622,7 @@ class etctest_base_class.ETCTestCase_Imag2(testutil.FPTestCase):
         os.chdir(self.oldpath)
 
 
-class etctest_base_class.ETCTestCase_Spec1(testutil.FPTestCase):
+class ETCTestCase_Spec1(testutil.FPTestCase):
 
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
@@ -631,7 +631,7 @@ class etctest_base_class.ETCTestCase_Spec1(testutil.FPTestCase):
     def tearDown(self):
         os.chdir(self.oldpath)
 
-class etctest_base_class.ETCTestCase_Spec3(testutil.FPTestCase):
+class ETCTestCase_Spec3(testutil.FPTestCase):
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
         os.chdir(locations.specdir)
