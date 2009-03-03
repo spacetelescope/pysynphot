@@ -22,7 +22,7 @@ setenv PYTHONPATH ${PYSYN_BUILDDIR}/lib/python/:${root}/${revset}/pysynphot/test
 
 #check out
 cd $revset
-svn checkout http://astropy.scipy.org/svn/astrolib/trunk/pysynphot@{$revset}
+svn checkout https://www.stsci.edu/svn/ssb/astrolib/trunk/pysynphot@{$revset}
 
 #build
 cd pysynphot
