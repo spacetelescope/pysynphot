@@ -18,7 +18,7 @@ mkdir $revset
 mkdir install/$revset
 
 # set path: stick pyssg on the end so we don't lose nose
-setenv PYTHONPATH ${PYSYN_BUILDDIR}/lib/python/:${root}/${revset}/pysynphot/test/commissioning/:/usr/stsci/pyssgdev/2.5.1:/usr/stsci/pyssg/2.5.1/
+setenv PYTHONPATH ${PYSYN_BUILDDIR}/lib/python/:${root}/${revset}/pysynphot/commissioning/:/usr/stsci/pyssgdev/2.5.1:/usr/stsci/pyssg/2.5.1/
 
 #check out
 cd $revset
@@ -30,7 +30,7 @@ python setup.py install --home=$PYSYN_BUILDDIR
 #
 #
 # take the path stuff OUT of runset
-cd test/commissioning
+cd commissioning
 grep -v codeplace runset.csh > runset_clean.csh
 chmod +x runset_clean.csh
 #
