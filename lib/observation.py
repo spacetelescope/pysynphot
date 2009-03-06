@@ -210,11 +210,14 @@ class Observation(spectrum.CompositeSourceSpectrum):
             raise ValueError('Integrated flux is infinite')
                             
     
-    def pivot(self):
+    def pivot(self,binned=True):
         """This is the calculation performed when the ETC invokes calcphot.
         Does this need to be calculated on binned waveset, or may
         it be calculated on native waveset?"""
-        wave = self.wave
+        if binned:
+            wave = self.binwave
+        else:
+            wave = self.wave
 
         countmulwave = self(wave)*wave
         countdivwave = self(wave)/wave
@@ -228,14 +231,18 @@ class Observation(spectrum.CompositeSourceSpectrum):
         return math.sqrt(num/den)
 
 
-    def efflam(self):
+    def efflam(self,binned=True):
         """Calculation performed based on observation.py
         _EfflamCalculator, which produces EFFLPHOT results!."""
 
         myfluxunits=self.fluxunits.name
         self.convert('flam')
-        wave=self.binwave
-        flux=self.binflux
+        if binned:
+            wave=self.binwave
+            flux=self.binflux
+        else:
+            wave=self.wave
+            flux=self.flux
 
         num = self.trapezoidIntegration(wave,flux*wave*wave)
         den = self.trapezoidIntegration(wave,flux*wave)
