@@ -240,8 +240,7 @@ class Photlam(FluxUnits):
 
     def ToVegaMag(self, wave, flux):
 
-        vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
-        resampled = vegaspec.resample(wave)
+        resampled = spectrum.Vega.resample(wave)
         normalized = flux / resampled._fluxtable
         return -2.5 * N.log10(normalized)
 
@@ -467,7 +466,7 @@ class VegaMag(LogFluxUnits):
     def __init__(self):
         LogFluxUnits.__init__(self)
         self.name = 'vegamag'
-        self.vegaspec = spectrum.TabularSourceSpectrum(locations.VegaFile)
+        self.vegaspec = spectrum.Vega
     
     def ToPhotlam(self, wave, flux):
         resampled = self.vegaspec.resample(wave)
