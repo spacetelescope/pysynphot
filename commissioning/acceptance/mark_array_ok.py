@@ -61,6 +61,11 @@ def run(test_run,maxoutliers=50,maxdev=0.015):
                         #If it passes the test, update the attention flag
                         db.execute("""UPDATE result_scalar SET attn = 'N'
                                       WHERE key_id = ?""",(key,))
+                        #and insert the reason
+                        db.execute("""INSERT INTO result_tra
+                               ( key_id, name, value ) values (?, ?, ? )""" ,
+                   ( key, "attn_code", "autoaccept") )
+
 
     db.commit()
     db.close()
