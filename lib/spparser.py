@@ -242,7 +242,9 @@ class Interpreter(GenericASTMatcher):
                 if not isinstance(sp,spectrum.SourceSpectrum):
                     name=_handleIRAFName(args[0])
                     sp = spectrum.TabularSourceSpectrum(name)
-                tree.value = sp.renorm(args[2],args[3],args[1])
+                #Always force the renormalization to occur: prevent exceptions
+                #in case of partial overlap. Less robust but duplicates synphot.
+                tree.value = sp.renorm(args[2],args[3],args[1],force=True)
             elif fname == 'z':
                 # redshift
                 if args[0] != 'null': # the ETC generates junk sometimes....

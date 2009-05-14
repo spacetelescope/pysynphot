@@ -379,14 +379,14 @@ class SourceSpectrum(Integrator):
 
         return self * factor
 
-    def renorm(self, RNval, RNUnits, band):
+    def renorm(self, RNval, RNUnits, band, force=False):
         """Renormalize the spectrum to the specified value (in the specified
         flux units) in the specified band.
         Calls a function in another module to alleviate circular import
         issues."""
 
         from renorm import StdRenorm
-        return StdRenorm(self,band,RNval,RNUnits)
+        return StdRenorm(self,band,RNval,RNUnits,force=force)
 
     def effstim(self,fluxunits='photlam'):
         print "?? %s"%fluxunits

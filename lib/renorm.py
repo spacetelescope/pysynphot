@@ -33,8 +33,20 @@ def DefineStdSpectraForUnits():
 DefineStdSpectraForUnits()
 
 
-def StdRenorm(spectrum, band, RNval, RNunitstring):
+def StdRenorm(spectrum, band, RNval, RNunitstring,force=False):
     """Another approach to renormalization"""
+
+    #Validate the overlap
+    if not force:
+        stat=band.check_overlap(spectrum)
+        if stat=='full':
+            pass
+        elif stat == 'partial':
+            raise(ValueError("Spectrum and renormalization band do not fully overlap. You may use force=True to force the renormalization to proceed."))
+        elif stat == 'none':
+            raise(ValueError('Spectrum and renormalization band are disjoint'))
+
+                                                                     
 
     #Compute the flux of the spectrum through the bandpass and make sure
     #the result makes sense.

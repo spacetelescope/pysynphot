@@ -47,9 +47,18 @@ class RenormOverlap(testutil.FPTestCase):
     def testfull(self):
         jv=S.ObsBandpass('johnson,v')
         try:
-            sp2=sp.renorm(17.0,'abmag',jv)
+            sp2=self.sp.renorm(17.0,'abmag',jv)
         except ValueError,e:
-            self.fail(e.msg)
+            self.fail(e.message)
       
 
                        
+class SmarterOverlap(RenormOverlap):
+    #If 99% of throughput on spectrum, go ahead but print warning
+    def testsmart(self):
+        #does not yet test warning
+        acs=S.ObsBandpass('acs,hrc,f555w')
+        try:
+            sp2=self.sp.renorm(17.0,'abmag',acs)
+        except ValueError,e:
+            self.fail(e.message)
