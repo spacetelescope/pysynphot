@@ -108,13 +108,16 @@ class Integrator(object):
     '''
     def trapezoidIntegration(self,x,y):
         npoints = x.size
-        indices = N.arange(npoints)[:-1]
-        deltas = x[indices+1] - x[indices]
-        integrand = 0.5*(y[indices+1] + y[indices])*deltas
-        sum = integrand.sum()
-        if x[-1]<x[0]:
-            sum*= -1.0
-        return sum
+        if npoints > 0:
+            indices = N.arange(npoints)[:-1]
+            deltas = x[indices+1] - x[indices]
+            integrand = 0.5*(y[indices+1] + y[indices])*deltas
+            sum = integrand.sum()
+            if x[-1]<x[0]:
+                sum*= -1.0
+            return sum
+        else:
+            return 0.0
 
     def _columnsFromASCII(self, filename):
         """ Following synphot/TABLES, ASCII files may contain blank lines,
@@ -902,6 +905,48 @@ class SpectralElement(Integrator):
         return self.__mul__(other)
 
 
+    def integrate(self,wave=None):
+        """Integrate the throughput over the specified waveset,
+        if None, integrate over the full waveset."""
+        if  wave is None:
+            wave=self.wave
+        ans=self.trapezoidIntegration(wave,self(wave))
+        return ans
+        
+
+    def check_sig(self, other):
+        """Only call this if check_overlap returns 'partial'."""
+
+        swave=self.wave[N.where(self.throughput != 0)]
+        s1,s2=swave.min(),swave.max()
+        
+        owave=other.wave
+        o1,o2=owave.min(),owave.max()
+
+        lorange=sorted([s1,o1])
+        hirange=sorted([s2,o2])
+
+        #Get the full throughput
+        total=self.integrate()
+        
+        #Now get the other two pieces
+        #We cannot yet do
+        #low=self[slice(*lowrange)].integrate()
+        idxs=[N.searchsorted(self._wavetable, lorange, 'left'),
+              N.searchsorted(self._wavetable, hirange, 'left')]
+
+        excluded=0.0
+        for idx in idxs:
+            try:
+                excluded+=self.integrate(wave=self._wavetable[slice(*idx)])
+            except IndexError:
+                pass #If the range is zero, do nothing
+
+        if excluded/total < 0.01:
+            return True
+        else:
+            return False
+        
     def check_overlap(self, other):
         """Check whether the wavelength range of other is defined everywhere
         that the wavelength range of self is defined.
