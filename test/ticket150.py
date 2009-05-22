@@ -101,7 +101,7 @@ class BPIntegrate(testutil.FPTestCase):
         self.assert_(abs(self.ref/2.0-tst)<=0.025)
 
 
-class OVBase(testutil.FPTestCase):
+class OVBase(object):
     #Base class for the variants we can imagine
     #Implement all methods here
     def defarrays(self):
@@ -126,7 +126,7 @@ class OVBase(testutil.FPTestCase):
         else:
             pass
         
-class SpBp(OVBase):
+class SpBp(OVBase,testutil.FPTestCase):
     #SPdef fully encloses BPdef: "full" overlap. Pass.
     def setUp(self):
         self.sprange=(1000,10000)
@@ -137,7 +137,7 @@ class SpBp(OVBase):
         self.cref='full'
         self.sref=True
         
-class BpSp(OVBase):
+class BpSp(OVBase,testutil.FPTestCase):
     #BPdef fully encloses SPdef: Insufficient overlap. Fail.
     def setUp(self):
         self.sprange=(5000,6000)
@@ -148,7 +148,7 @@ class BpSp(OVBase):
         self.cref='partial'
         self.sref=False
         
-class SpPartial(OVBase):
+class SpPartial(OVBase,testutil.FPTestCase):
     #Partial overlap: return partial, require further processing
     def setUp(self):
         self.sprange=(1000,8000)
@@ -161,7 +161,7 @@ class SpPartial(OVBase):
         
 #Now do variants where nonzero is different from range
 
-class SpBpNz(OVBase):
+class SpBpNz(OVBase,testutil.FPTestCase):
     #BP defined zero some places: still acceptable
     def setUp(self):
         self.sprange=(1000,10000)
@@ -172,7 +172,7 @@ class SpBpNz(OVBase):
         self.cref='full'
         self.sref=True
         
-class BpSpNz(OVBase):
+class BpSpNz(OVBase,testutil.FPTestCase):
     #Passes per current defn that looks at bp.nonzero, sp.def
     def setUp(self):
         self.sprange=(5000,6000)
@@ -183,7 +183,7 @@ class BpSpNz(OVBase):
         self.cref='full'
         self.sref=True
         
-class SpPartialNz1(OVBase):
+class SpPartialNz1(OVBase,testutil.FPTestCase):
     #Passes per current defn that looks at bp.nonzero, sp.def
     def setUp(self):
         self.sprange=(1000,8000)
@@ -194,7 +194,7 @@ class SpPartialNz1(OVBase):
         self.cref='full'
         self.sref=True
         
-class SpPartialNz2(OVBase):
+class SpPartialNz2(OVBase,testutil.FPTestCase):
     #This is still not acceptable:
     #the bandpass is nonzero in places where the spectrum is undefined.
     def setUp(self):
@@ -210,7 +210,7 @@ class SpPartialNz2(OVBase):
 #Use the toy wrange object for this for now.
 import wrange
 
-class Bpvary(OVBase):
+class Bpvary(OVBase,testutil.FPTestCase):
     def setUp(self):
         self.sprange=(1000,5000)
         self.spnonzero=self.sprange

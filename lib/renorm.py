@@ -42,7 +42,10 @@ def StdRenorm(spectrum, band, RNval, RNunitstring,force=False):
         if stat=='full':
             pass
         elif stat == 'partial':
-            raise(ValueError("Spectrum and renormalization band do not fully overlap. You may use force=True to force the renormalization to proceed."))
+            if band.check_sig(spectrum):
+                print "Warning: Spectrum is not defined everywhere in renormalization bandpass. At least 99% of the band throughput has data, therefore proceeding anyway. Spectrum will be extrapolated at constant value."
+            else:
+                raise(ValueError("Spectrum and renormalization band do not fully overlap. You may use force=True to force the renormalization to proceed."))
         elif stat == 'none':
             raise(ValueError('Spectrum and renormalization band are disjoint'))
 
