@@ -915,7 +915,9 @@ class SpectralElement(Integrator):
         
 
     def check_sig(self, other):
-        """Only call this if check_overlap returns 'partial'."""
+        """Only call this if check_overlap returns 'partial'.
+        Returns True if the LACK of overlap is INsignificant:
+        i.e., it is ok to go ahead and do whatever we are doing."""
 
         swave=self.wave[N.where(self.throughput != 0)]
         s1,s2=swave.min(),swave.max()
@@ -932,13 +934,14 @@ class SpectralElement(Integrator):
         #Now get the other two pieces
         #We cannot yet do
         #low=self[slice(*lowrange)].integrate()
-        idxs=[N.searchsorted(self._wavetable, lorange, 'left'),
-              N.searchsorted(self._wavetable, hirange, 'left')]
+        wave=self.wave
+        idxs=[N.searchsorted(wave, lorange, 'left'),
+              N.searchsorted(wave, hirange, 'left')]
 
         excluded=0.0
         for idx in idxs:
             try:
-                excluded+=self.integrate(wave=self._wavetable[slice(*idx)])
+                excluded+=self.integrate(wave=wave[slice(*idx)])
             except IndexError:
                 pass #If the range is zero, do nothing
 
