@@ -1,6 +1,5 @@
 [default]
-PYSYN_CDBS = /grp/hst/cdbs/
 
-[os=Darwin]
-PYSYN_CDBS = $HOME/CentralStore/grp/hst/cdbs/
+[hostname=ekky]
+PYSYN_CDBS=$CDBS
 
