@@ -1,5 +1,3 @@
 [default]
-
-[hostname=ekky]
 PYSYN_CDBS=$CDBS
 
