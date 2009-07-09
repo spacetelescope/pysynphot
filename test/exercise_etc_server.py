@@ -1,3 +1,4 @@
+from __future__ import division
 """
 
 At present, this test suite does not compare results to reference values.

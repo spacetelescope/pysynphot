@@ -1,3 +1,4 @@
+from __future__ import division
 from spark import GenericScanner, GenericParser, GenericASTTraversal
 from spark import GenericASTBuilder, GenericASTMatcher
 import spectrum

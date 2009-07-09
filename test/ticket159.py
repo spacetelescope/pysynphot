@@ -1,3 +1,4 @@
+from __future__ import division
 import os
 import testutil
 import pysynphot as S

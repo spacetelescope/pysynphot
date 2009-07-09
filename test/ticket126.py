@@ -1,3 +1,4 @@
+from __future__ import division
 """Applies to both #125 and #126.
 Test raises an error if the bug has not been fixed."""
 import sys

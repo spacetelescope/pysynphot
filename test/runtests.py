@@ -1,3 +1,4 @@
+from __future__ import division
 """Initial test-running script for pysynphot.
  -->> *** You must set PYSYN_CDBS and PYSYN_USERDATA for these tests to run!!
  -->> *** Stdout and Stderr from this script should be piped to a log file.

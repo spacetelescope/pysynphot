@@ -1,3 +1,4 @@
+from __future__ import division
 import pysynphot as S
 from pysynphot.observation import Observation
 import os, sys

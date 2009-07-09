@@ -1,3 +1,4 @@
+from __future__ import division
 import etctest_base_class 
 from pysynphot.etc import parse_spec
 from pysynphot import ObsBandpass

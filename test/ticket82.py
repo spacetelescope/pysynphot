@@ -1,3 +1,4 @@
+from __future__ import division
 """Tests varying legal cases for ASCII file spectrum data"""
 import pysynphot as S
 import os, sys

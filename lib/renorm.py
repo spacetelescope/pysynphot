@@ -1,3 +1,4 @@
+from __future__ import division
 """Segregate all the renormalization functions here. Once we have
 one that works, turn it into a method on the spectrum class."""
 import math

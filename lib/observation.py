@@ -1,3 +1,4 @@
+from __future__ import division
 """This will ultimately replace the observation.py module. It defines
 a new Observation class, subclassed from CompositeSourceSpectrum,
 that has some special methods and attributes and explicitly removes

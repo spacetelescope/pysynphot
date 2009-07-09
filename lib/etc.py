@@ -1,3 +1,4 @@
+from __future__ import division
 """Module intended to replace the existing etc interface with the
 refactored user interface."""
 import spparser as P

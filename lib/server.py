@@ -1,3 +1,4 @@
+from __future__ import division
 """This module contains the machinery necessary to run a server. At
 present it is an ETC-specific server, but the ETC functionality is
 encapsulated in a single method of the QueuManager.

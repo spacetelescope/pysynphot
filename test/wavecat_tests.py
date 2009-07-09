@@ -1,3 +1,4 @@
+from __future__ import division
 import os, sys
 import pysynphot as S
 from pysynphot import wavetable

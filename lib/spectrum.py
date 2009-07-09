@@ -1,3 +1,4 @@
+from __future__ import division
 """
 Module: spectrum.py
 

@@ -1,3 +1,4 @@
+from __future__ import division
 """
 Units class hierarchy: is used to manage both wavelength and flux
 unit conversions

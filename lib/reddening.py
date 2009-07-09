@@ -1,3 +1,4 @@
+from __future__ import division
 """This module defines classes used to define reddening laws and
 extinctions."""
 import pyfits

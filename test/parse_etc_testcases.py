@@ -1,3 +1,4 @@
+from __future__ import division
 """Utility functions to work with ETC-style test files.
 Not intended for release."""
 

@@ -1,3 +1,4 @@
+from __future__ import division
 """Defines a Client class that can be used to communicate with the
 Server class defined in server.py.
 

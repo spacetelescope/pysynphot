@@ -1,3 +1,4 @@
+from __future__ import division
 """ This module handles the wavecat.dat table presently used by the
 synphot countrate task (and thus the ETC) to select an appropriate wavelength
 set for a given obsmode. """

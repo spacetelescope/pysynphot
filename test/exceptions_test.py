@@ -1,3 +1,4 @@
+from __future__ import division
 """Test that exceptions really are raised when they should be."""
 import unittest,sys,os
 import testutil

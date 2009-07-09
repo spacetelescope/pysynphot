@@ -1,3 +1,4 @@
+from __future__ import division
 """The ObsBandpass user interface needs to support either the usual
 (acs,hrc,f555w) obsmode style that produce a set of chained throughput
 files; or something like (johnson,v) that has a single throughput file.
