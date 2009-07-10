@@ -1470,9 +1470,9 @@ class InterpolatedSpectralElement(SpectralElement):
             raise NotImplementedError("%g outside of range in %s; extrapolation not yet supported"%(wavelength,fileName))
 
 
-        lcol = (colSpec + str(lower)).upper()
-        ucol = (colSpec + str(upper)).upper()
-
+        #Construct the column names                              
+        lcol = colNames[MA.argmax(less)]
+        ucol = colNames[MA.argmin(greater)]
         
 
         #Extract the data from those columns
