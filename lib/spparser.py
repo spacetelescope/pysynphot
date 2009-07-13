@@ -312,7 +312,7 @@ def _handleIRAFName(name):
     utilities floating around in our system. """
     
     if name.rfind('$') > -1:
-        return locations.irafconvert(name.split('/')[-1])
+        return locations.irafconvert(name)
     elif name.rfind('/') > -1 or name.rfind('\\') > -1:
         return name
     else:
