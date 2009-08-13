@@ -1,2 +1,2 @@
-package = pysynphot
-__init__.py
+# to run doctests, put the name of the module/package to import here
+pysynphot.__init__
