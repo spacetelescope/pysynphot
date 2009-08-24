@@ -252,8 +252,18 @@ class SourceSpectrum(Integrator):
             raise TypeError("%s is not a valid FluxUnit"%self.fluxunits)
 
     def writefits(self, filename, clobber=True, trimzero=True,
-                  binned=False,precision=None):
-        """Write the spectrum to a FITS file."""
+                  binned=False,precision=None,hkeys=None):
+        """Write the spectrum to a FITS file.
+        filename:      name of file to write to
+        clobber=True:  Will clobber existing file by default
+        trimzero=True: Will trim zero-flux elements from both ends
+                   by default
+        binned=False:  Will write in native waveset by default
+        precision:     Will write in native precision by default; can be
+                   set to "single" or "double"
+        hkeys:         Optional dictionary of {keyword:(value,comment)}
+                   to be added to primary FITS header
+        """
         
         pcodes={'d':'D','s':'E'}
         if precision is None:
@@ -311,13 +321,18 @@ class SourceSpectrum(Integrator):
         hdu = pyfits.PrimaryHDU()
         hdulist = pyfits.HDUList([hdu])
 
+        #Add the header keywords
+        if hkeys is not None:
+            for key,val in hkeys.items():
+                hdu.header.update(key, *val)
+
         #Write the file
         cols = pyfits.ColDefs([cw, cf])
         hdu = pyfits.new_table(cols)
         hdulist.append(hdu)
-        hdu.writeto(filename)
+        hdulist.writeto(filename)
 
-                                                 
+
     def integrate(self,fluxunits='photlam'):
         #Extract the flux in the desired units
         u=self.fluxunits
@@ -1050,8 +1065,18 @@ class SpectralElement(Integrator):
         return OutElement
     
     def writefits(self, filename, clobber=True, trimzero=True,
-                  precision=None):
-        """Write the bandpass to a FITS file."""
+                  precision=None, hkeys=None):
+        """Write the bandpass to a FITS file.
+        filename:      name of file to write to
+        clobber=True:  Will clobber existing file by default
+        trimzero=True: Will trim zero-flux elements from both ends
+                   by default
+        precision:     Will write in native precision by default; can be
+                   set to "single" or "double"
+        hkeys:         Optional dictionary of {keyword:(value,comment)}
+                   to be added to primary FITS header
+
+        """
         if precision is None:
             precision=self.throughput.dtype.char
         _precision=precision.lower()[0]
@@ -1102,11 +1127,19 @@ class SpectralElement(Integrator):
         hdu = pyfits.PrimaryHDU()
         hdulist = pyfits.HDUList([hdu])
 
+        #Add the header keywords
+        if hkeys is not None:
+            for key,val in hkeys.items():
+                hdu.header.update(key, *val)
+
+
         #Write the file
         cols = pyfits.ColDefs([cw, cf])
         hdu = pyfits.new_table(cols)
         hdulist.append(hdu)
-        hdu.writeto(filename)
+        hdulist.writeto(filename)
+
+
                                                  
     def resample(self, resampledWaveTab):
         '''Interpolate throughput given a wavelength array that is
