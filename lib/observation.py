@@ -150,13 +150,15 @@ class Observation(spectrum.CompositeSourceSpectrum):
     def redshift(self,z):
         raise NotImplementedError('Observations cannot be redshifted')
 
-    def writefits(self,fname,clobber=True, trimzero=True, binned=True):
+    def writefits(self,fname,clobber=True, trimzero=True, binned=True,
+                  hkeys=None):
         """All we really want to do here is flip the default value of
         'binned' from the vanilla spectrum case."""
         spectrum.CompositeSourceSpectrum.writefits(self,fname,
                                                    clobber=clobber,
                                                    trimzero=trimzero,
-                                                   binned=binned)
+                                                   binned=binned,
+                                                   hkeys=None)
             
     def countrate(self,binned=True):
         """This is the calculation performed when the ETC invokes countrate.
