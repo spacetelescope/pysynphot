@@ -1177,8 +1177,7 @@ class SpectralElement(Integrator):
         #There are also some keys to be written to the extension
         #header
 
-        bkeys=dict(expr=(str(self),'pysyn expression'),
-                   filename=(os.path.basename(filename),'name of file'))
+        bkeys=dict(expr=(str(self),'pysyn expression'))
 
         try:
             bkeys['grftable']=(os.path.basename(self.obsmode.gtname),

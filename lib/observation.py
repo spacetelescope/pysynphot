@@ -162,7 +162,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
                                                    clobber=clobber,
                                                    trimzero=trimzero,
                                                    binned=binned,
-                                                   hkeys=bkeys)
+                                                   hkeys=hkeys)
             
     def countrate(self,binned=True):
         """This is the calculation performed when the ETC invokes countrate.
