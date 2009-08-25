@@ -4,6 +4,8 @@ a new Observation class, subclassed from CompositeSourceSpectrum,
 that has some special methods and attributes and explicitly removes
 certain other methods."""
 
+import os
+
 import spectrum
 import units
 import numpy as N
@@ -153,12 +155,14 @@ class Observation(spectrum.CompositeSourceSpectrum):
     def writefits(self,fname,clobber=True, trimzero=True, binned=True,
                   hkeys=None):
         """All we really want to do here is flip the default value of
-        'binned' from the vanilla spectrum case."""
+        'binned' from the vanilla spectrum case.
+        """
+
         spectrum.CompositeSourceSpectrum.writefits(self,fname,
                                                    clobber=clobber,
                                                    trimzero=trimzero,
                                                    binned=binned,
-                                                   hkeys=None)
+                                                   hkeys=bkeys)
             
     def countrate(self,binned=True):
         """This is the calculation performed when the ETC invokes countrate.

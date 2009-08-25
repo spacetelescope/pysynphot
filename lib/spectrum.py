@@ -28,7 +28,7 @@ import units
 import observationmode
 import locations
 import planck
-
+from pysynphot import __version__, __svn_version__
 
 
 
@@ -318,17 +318,43 @@ class SourceSpectrum(Integrator):
                            array=flux[first:last],
                            unit=self.fluxunits.name,
                            format=pcodes[_precision])
+
+        #Make the primary header
         hdu = pyfits.PrimaryHDU()
         hdulist = pyfits.HDUList([hdu])
 
-        #Add the header keywords
+        #User-provided keys are written to the primary header
+        #so are filename and origin
+        bkeys = dict(filename=(os.path.basename(filename),'name of file'),
+                     origin=('pysynphot',
+                             'Version (%s, %s)'%(__version__,__svn_version__)))
+        #User-values if present may override default values
         if hkeys is not None:
-            for key,val in hkeys.items():
-                hdu.header.update(key, *val)
+            bkeys.update(hkeys)
 
-        #Write the file
+        #Now update the primary header
+        for key,val in bkeys.items():
+            hdu.header.update(key, *val)
+
+
+        #Make the extension HDU
         cols = pyfits.ColDefs([cw, cf])
         hdu = pyfits.new_table(cols)
+
+        #There are some standard keywords that should be added
+        #to the extension header.
+        bkeys=dict(expr    =(str(self),'pysyn expression'))
+
+        try:
+            bkeys['grftable']=(self.bandpass.obsmode.gtname,)
+            bkeys['cmptable']=(self.bandpass.obsmode.ctname,)
+        except AttributeError:
+            pass #Not all spectra have these
+
+        for key,val in bkeys.items():
+            hdu.header.update(key,*val)
+
+        #Add the header to the list, and write the file
         hdulist.append(hdu)
         hdulist.writeto(filename)
 
@@ -1124,18 +1150,48 @@ class SpectralElement(Integrator):
                            array=thru[first:last],
                            unit='         ',
                            format=pcodes[_precision])
+
+        #Make the primary header
         hdu = pyfits.PrimaryHDU()
         hdulist = pyfits.HDUList([hdu])
 
-        #Add the header keywords
+            
+        #User-provided keys are written to the primary header;
+        #so are filename and origin
+        bkeys = dict(filename=(os.path.basename(filename),'name of file'),
+                     origin=('pysynphot',
+                             'Version (%s, %s)'%(__version__,__svn_version__)))
+        #User-values if present may override default values
         if hkeys is not None:
-            for key,val in hkeys.items():
-                hdu.header.update(key, *val)
+            bkeys.update(hkeys)
+
+        #Now update the primary header
+        for key,val in bkeys.items():
+            hdu.header.update(key, *val)
 
 
-        #Write the file
+        #Make the extension HDU
         cols = pyfits.ColDefs([cw, cf])
         hdu = pyfits.new_table(cols)
+
+        #There are also some keys to be written to the extension
+        #header
+
+        bkeys=dict(expr=(str(self),'pysyn expression'),
+                   filename=(os.path.basename(filename),'name of file'))
+
+        try:
+            bkeys['grftable']=(os.path.basename(self.obsmode.gtname),
+                               'graph table used')
+            bkeys['cmptable']=(os.path.basename(self.obsmode.ctname),
+                               'component table used')
+        except AttributeError:
+            pass #Not all bandpasses have these
+
+        for key,val in bkeys.items():
+            hdu.header.update(key, *val)
+
+        #Add the extension to the list, and write to file.
         hdulist.append(hdu)
         hdulist.writeto(filename)
 
