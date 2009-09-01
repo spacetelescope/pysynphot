@@ -5,6 +5,7 @@ that has some special methods and attributes and explicitly removes
 certain other methods."""
 
 import os
+import types
 
 import spectrum
 import units
@@ -48,6 +49,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
         self.initbinset(binset)
         self.initbinflux()
 
+        
     def validate_overlap(self,force):
         """By default, it is required that the spectrum and bandpass fully
         overlap. Partial overlap will raise an error in the absence of the
@@ -98,16 +100,30 @@ class Observation(spectrum.CompositeSourceSpectrum):
     def initbinflux(self):
         """This routine performs the integration of the spectrum
         on the specified binned waveset. It uses the natural waveset
-        of the spectrum in performing this integration."""
+        of the spectrum in performing this integration.
 
-        # compute endpoints of each summation bin.
-        midpoints = (self.binwave[1:] + self.binwave[:-1]) / 2.0
-        endpoints = N.empty(shape=[len(midpoints)+2,],dtype=N.float64)
-        endpoints[1:-1] = midpoints
-        endpoints[0]  = self.binwave[0] - (midpoints[0] - self.binwave[0])
-        endpoints[-1] = self.binwave[-1] + (self.binwave[-1] - midpoints[-1])
+        NOTE: This method is implemented under the assumption that the
+        wavelength values in the binned waveset are the *centers* of the bins.
 
-        # merge the endpoints in with the natural waveset 
+        By contrast, the native wave/flux arrays should be considered
+        samples of a continuous function.
+
+        Thus, it makes sense to interpolate .wave/.flux; it does not
+        make sense to interpolate .binwave/.binflux.
+        
+        """
+
+        # compute endpoints of each summation bin from their centers.
+        bin_edges = (self.binwave[1:] + self.binwave[:-1]) / 2.0
+        endpoints = N.empty(shape=[len(bin_edges)+2,],
+                            dtype=N.float64)
+        endpoints[1:-1] = bin_edges
+        
+        #compute the first and last by making them symmetric
+        endpoints[0]  = self.binwave[0]  - (bin_edges[0]   - self.binwave[0])
+        endpoints[-1] = self.binwave[-1] + (self.binwave[-1] - bin_edges[-1])
+
+        # merge these endpoints in with the natural waveset 
         spwave = spectrum.MergeWaveSets(self.wave, endpoints)
         spwave = spectrum.MergeWaveSets(spwave,self.binwave)
 
@@ -124,6 +140,8 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         
         # sum over each bin.
+        #Note that, like all Python striding, the range over which
+        #we integrate is [first:last).
         self._binflux = N.empty(shape=self.binwave.shape,dtype=N.float64)
         self._intwave = N.empty(shape=self.binwave.shape,dtype=N.float64)
         for i in range(len(self._indices)):
@@ -132,7 +150,13 @@ class Observation(spectrum.CompositeSourceSpectrum):
             self._binflux[i]=(avflux[first:last]*self._deltaw[first:last]).sum()/self._deltaw[first:last].sum()
             self._intwave[i]=self._deltaw[first:last].sum()
 
+        #Save the endpoints for future use
+        self._bin_edges = endpoints
+
     def _getBinfluxProp(self):
+        if self._binflux is None:
+            self.initbinflux()
+            
         binflux = units.Photlam().Convert(self.binwave,
                                           self._binflux,
                                           self.fluxunits.name)
@@ -259,3 +283,49 @@ class Observation(spectrum.CompositeSourceSpectrum):
             return 0.0
 
         return num/den
+
+    def sample(self, swave, binned=True, fluxunits='counts'):
+        """Samples the observation at the wavelength(s) swave, specified in
+        waveunits. The binned keyword determines whether the sampling is
+        performed on binwave/binflux, in which case no interpolation is
+        performed, or on the native wave/flux, in which case interpolation
+        is performed.
+        """
+
+        if fluxunits != 'counts':
+            raise NotImplementedError("Sorry, only counts are supported at this time")
+        else:
+            #Save current fluxunits, in case they're different
+            saveunits=None
+            if not units.ismatch('counts', self.fluxunits):
+                saveunits=self.fluxunits
+                self.convert('counts')
+
+                
+        if binned:
+            #Then we don't interpolate, just return the appropriate values
+            #from binflux
+            if not isinstance(swave,(types.IntType, types.FloatType)):
+                #The logic for this case doesn't yet work on arrays
+                raise NotImplementedError("Sorry, only scalar samples are supported at this time")
+            else:
+                #Find the bin in which it belongs.
+                #The relationship here is that
+                #_bin_edges[i] corresponds to binwave[i+1]
+                idx = N.where(swave >= self._bin_edges)[0]
+                ans = self.binflux[idx[-1]+1]
+
+        else:
+            #Then we do interpolate on wave/flux
+            if isinstance(swave,(types.IntType, types.FloatType)):
+                delta=0.00001
+                wv=N.array([swave-delta, swave, swave+delta])
+                ans = N.interp(wv, self.wave, self.flux)[1]
+            else:
+                ans = N.interp(wv, self.wave, self.flux)
+
+            
+        #Change units back, if necessary, then return
+        if saveunits is not None:
+            self.convert(saveunits)
+        return ans
