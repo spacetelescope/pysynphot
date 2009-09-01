@@ -343,7 +343,11 @@ class SourceSpectrum(Integrator):
 
         #There are some standard keywords that should be added
         #to the extension header.
-        bkeys=dict(expr    =(str(self),'pysyn expression'))
+        bkeys=dict(expr    =(str(self),'pysyn expression'),
+                   tdisp1  =('G15.7',),
+                   tdisp2  =('G15.7',)
+                   )
+
 
         try:
             bkeys['grftable']=(self.bandpass.obsmode.gtname,)
@@ -1184,7 +1188,10 @@ class SpectralElement(Integrator):
         #There are also some keys to be written to the extension
         #header
 
-        bkeys=dict(expr=(str(self),'pysyn expression'))
+        bkeys=dict(expr  =(str(self),'pysyn expression'),
+                   tdisp1=('G15.7',),
+                   tdisp2=('G15.7',)
+                   )
 
         try:
             bkeys['grftable']=(os.path.basename(self.obsmode.gtname),
