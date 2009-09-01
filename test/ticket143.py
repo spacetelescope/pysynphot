@@ -176,3 +176,14 @@ class TestStisDef(unittest.TestCase):
         self.tda['ref']=ref
         self.tra['test']=tst
         self.assert_(self.tra['discrep']<=self.tda['thresh'])
+
+    def testlast(self):
+        self.refwave=self.obs.binwave[-1]
+        ref = self.obs.binflux[-1]
+        tst = self.obs.sample(self.refwave,
+                              binned=False,
+                              fluxunits='counts')
+        self.tra['discrep']=(ref-tst)/ref
+        self.tda['ref']=ref
+        self.tra['test']=tst
+        self.assert_(self.tra['discrep']<=self.tda['thresh'])

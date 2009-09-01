@@ -313,7 +313,10 @@ class Observation(spectrum.CompositeSourceSpectrum):
                 #The relationship here is that
                 #_bin_edges[i] corresponds to binwave[i+1]
                 idx = N.where(swave >= self._bin_edges)[0]
-                ans = self.binflux[idx[-1]+1]
+                try:
+                    ans = self.binflux[idx[-1]+1]
+                except IndexError:
+                    raise ValueError("Value out of range: wavelength %g not contained in range [%g, %g]"%(swave,self.binwave[0],self.binwave[-1]))
 
         else:
             #Then we do interpolate on wave/flux
