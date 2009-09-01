@@ -568,7 +568,14 @@ class TabularSourceSpectrum(SourceSpectrum):
         wavelength array. Returns an array of flux values calculated at
         the wavelength values input.
         '''
-        return self.resample(wavelengths)._fluxtable
+        if N.isscalar(wavelengths):
+            delta=0.0001
+            ww=N.array([wavelengths-delta,wavelengths,wavelengths+delta])
+            tmp=self.resample(ww)
+            return tmp._fluxtable[1]
+        else:
+            return self.resample(wavelengths)._fluxtable
+
 
     def taper(self):
         '''Taper the spectrum by adding zeros to each end.
