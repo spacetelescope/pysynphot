@@ -44,21 +44,33 @@ def ismatch(a,b):
     """Method to allow smart comparisons between classes, instances,
     and string representations of units and give the right answer."""
     match=False
+    #Try the easy case
     if a == b:
         return True
     else:
+        #Try isinstance in both orders
         try:
             if isinstance(a,b):
                 return True
-        except AttributeError:
+        except TypeError:
             try:
                 if isinstance(b,a):
                     return True
-            except AttributeError:
-                if str(a).lower() == str(b).lower():
-                    return True
-                else:
-                    return False
+            except TypeError:
+                #Try isinstance(a, type(b)) in both orders
+                try:
+                    if isinstance(a,type(b)):
+                        return True
+                except TypeError:
+                    try:
+                        if isinstance(b,type(a)):
+                            return True
+                    except TypeError:
+                        #Try the string representation
+                        if str(a).lower() == str(b).lower():
+                            return True
+                        else:
+                            return False
             
 #......................................................................
 #Base classes
