@@ -93,7 +93,7 @@ class BaseScanner(GenericScanner):
         r' \d+ '
         self.rv.append(Token(type='INTEGER', attr=s))
     def t_identifier(self, s):
-        r' [a-z_A-Z/\//][\w/\.\$]*'
+        r' [$a-z_A-Z/\//][\w/\.\$:]*'
         self.rv.append(Token(type='IDENTIFIER', attr=s))
     def t_filelist(self, s):
         r' @\w+'
