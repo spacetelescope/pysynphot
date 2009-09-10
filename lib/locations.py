@@ -71,6 +71,10 @@ def irafconvert(iraffilename):
     ## This dictionary maps IRAF-specific directory names for synphot
     ## directories into their Unix equivalents.
 
+    #BUG: supports only a single variable in a string
+    #............basically this is a weak routine that should be made
+    #............more robust
+    #BUG: this dictionary should be in a data file
     convertdic = {'crrefer':rootdir,
                   'crotacomp':os.path.join(rootdir,'comp','ota'),
                   'cracscomp':os.path.join(rootdir,'comp','acs'),
@@ -111,11 +115,22 @@ def irafconvert(iraffilename):
                   'crgridkc96':os.path.join(rootdir,'grid','kc96'),
                   'synphot': os.path.dirname(__file__)+os.path.sep}
 
-    ## If no $ sign found, just return the filename unchanged
-    if '$' in iraffilename:
+    
+
+    #BUG: supports environment variables only as the leading element in the
+    #     filename
+    if iraffilename.startswith('$'):
+        #Then this is an environment variable.
+        dirname,basename = iraffilename.split(os.path.sep,1)
+        unixdir = os.environ[dirname[1:]]
+        unixfilename = os.path.join(unixdir, basename)
+        return unixfilename
+    elif '$' in iraffilename:
+        #Then it's an iraf-style variable
         irafdir,basename=iraffilename.split('$')
         unixdir=convertdic[irafdir]
         unixfilename=os.path.join(unixdir,basename)
         return unixfilename
     else:
+        #If no $ sign found, just return the filename unchanged
         return iraffilename

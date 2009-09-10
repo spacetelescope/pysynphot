@@ -306,17 +306,9 @@ def ptokens(tlist):
 
 
 def _handleIRAFName(name):
-    """ If there's a $, call irafconvert; if there's a / or a \\, just
-    return what you got; otherwise prepend locations.specdir.
-    This should be replaced by one of the many IRAF filename conversion
-    utilities floating around in our system. """
-    
-    if name.rfind('$') > -1:
-        return locations.irafconvert(name)
-    elif name.rfind('/') > -1 or name.rfind('\\') > -1:
-        return name
-    else:
-        return name
+    """Calls locations.irafconvert() to translate shell or iraf variables"""
+
+    return locations.irafconvert(name)
 
 def _handleThroughputFiles(name):
     #Most files will be spectrum files, but some will be throughput files.
