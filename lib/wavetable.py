@@ -67,7 +67,7 @@ class Wavetable(object):
                 k,j=srtlen[-2:]
                 if setlens[k] == setlens[j]:
                     #It's really ambiguous
-                    raise KeyError("Ambiguous key %s; candidates %s"%(setkey, candidates))
+                    raise ValueError("Ambiguous key %s; candidates %s"%(setkey, candidates))
                 else:
                     #We have a winner
                     k=candidates[srtlen[-1]]

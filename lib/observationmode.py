@@ -278,6 +278,10 @@ class BaseObservationMode(object):
         try:
             self.binset = wavetable.wavetable[obm]
         except KeyError,e:
+            #If zero candidates were found, that's ok.
+            pass
+        except ValueError,e:
+            #wavetable will raise a ValueError if the key was ambiguous
             print "Warning, %s"%str(e)
 
 
