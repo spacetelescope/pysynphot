@@ -12,10 +12,10 @@ import pyfits
 import spectrum
 import units
 import locations
-from locations import irafconvert
+from locations import irafconvert, _refTable
 import planck
 import wavetable
-from locations import _refTable
+
 
 #Flag to control verbosity
 DEBUG = False
@@ -24,21 +24,81 @@ rootdir = locations.rootdir
 datadir = locations.specdir
 wavecat = locations.wavecat
 
-# Component tables are defined here.
-try:
-    GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
-    COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
-except IOError, e:
-    GRAPHTABLE = None
-    COMPTABLE = None
-    warnings.warn("PYSYN_CDBS is undefined; No graph or component tables could be found; functionality will be SEVERELY crippled.",UserWarning)
-try:
-    THERMTABLE = _refTable(os.path.join('mtab','*_tmt.fits'))
-except IOError, e:
-    THERMTABLE = None
-    print "Warning: %s"%str(e)
-    print "         No thermal calculations can be performed."
+#Constants to hold tables.
+GRAPHTABLE= ''
+COMPTABLE = ''
+THERMTABLE = ''
+HSTAREA = 45238.93416  # cm^2
+
+def _set_default_refdata():
+    global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA
+    # Component tables are defined here.
+
+    try:
+        GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
+        COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
+    except IOError, e:
+        GRAPHTABLE = None
+        COMPTABLE = None
+        warnings.warn("PYSYN_CDBS is undefined; No graph or component tables could be found; functionality will be SEVERELY crippled.",UserWarning)
+    try:
+        THERMTABLE = _refTable(os.path.join('mtab','*_tmt.fits'))
+    except IOError, e:
+        THERMTABLE = None
+        print "Warning: %s"%str(e)
+        print "         No thermal calculations can be performed."
+
+    HSTAREA = 45238.93416  # cm^2
     
+#Do this on import
+_set_default_refdata()
+
+
+def setref(graphtable=None, comptable=None, thermtable=None, 
+           area=None):
+    """provide user access to global reference data.
+    Graph/comp/therm table names must be fully specified."""
+
+    global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA
+    #Check for all None, which means reset
+    kwds=set([graphtable,comptable,thermtable,area])
+    if kwds == set([None]):
+        #then we should reset everything.
+        _set_default_refdata()
+        return
+    
+    #Otherwise, check them all separately
+    if graphtable is not None:
+        GRAPHTABLE = irafconvert(graphtable)
+
+    if comptable is not None:
+        COMPTABLE = irafconvert(comptable)
+
+    if thermtable is not None:
+        THERMTABLE = irafconvert(thermtable)
+
+
+    #Area is a bit different:
+    if area is not None:
+        HSTAREA = area
+
+    #That's it.
+    return
+
+def getref():
+    """Collects & returns the current refdata as a dictionary"""
+    ans=dict(graphtable=GRAPHTABLE,
+             comptable=COMPTABLE,
+             thermtable=THERMTABLE,
+             area=HSTAREA)
+    return ans
+
+def showref():
+    """Prints the values settable by setref"""
+    refdata = getref()
+    for k, v in refdata.items():
+        print "%10s: %s"%(k,v)
+        
 CLEAR = 'clear'
 
 
@@ -245,7 +305,7 @@ class BaseObservationMode(object):
         if graphtable is None:
             graphtable=GRAPHTABLE
 
-        self.area = units.HSTAREA
+        self.area = HSTAREA
 
         # For sensitivity calculations: 5.03411762e7 is hc in
         # the appropriate units

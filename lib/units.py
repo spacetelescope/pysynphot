@@ -10,6 +10,8 @@ imports.
 import math
 import numpy as N
 import locations, spectrum #Circular import
+
+from observationmode import HSTAREA
         
 C = 2.99792458e18 # speed of light in Angstrom/sec
 H = 6.62620E-27   # Planck's constant
@@ -17,7 +19,7 @@ HC = H * C
 ABZERO = -48.60   # magnitude zero points
 STZERO = -21.10
 
-HSTAREA = 45238.93416  # cm^2
+
 
 
 def Units(uname):
