@@ -734,7 +734,7 @@ class FileSourceSpectrum(TabularSourceSpectrum):
         @type keepneg: bool
  
         """
-        self.name = os.path.expandvars(filename)
+        self.name = locations.irafconvert(filename)
         self._readSpectrumFile(self.name, fluxname)
         self.validate_units() 
         self.validate_wavetable()
@@ -1487,7 +1487,7 @@ class FileSpectralElement(TabularSpectralElement):
         @type thrucol: string
 
         """
-        self.name=os.path.expandvars(filename)
+        self.name = locations.irafconvert(filename)
         self._readThroughputFile(self.name, thrucol)
 
         self.validate_units() 

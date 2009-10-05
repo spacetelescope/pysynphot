@@ -39,8 +39,43 @@ class TicketXX(testutil.FPTestCase):
         tst=self.sp.redshift(self.z)
         tstpt=tst(self.wavecheck)[0]
         self.assert_(tst.flux.max() == tstpt,"tstpt=%f"%tstpt)
-        
 
+class FileSpecIRAF(testutil.FPTestCase):
+    def setUp(self):
+        self.opener = S.FileSpectrum
+        self.name='crcalspec$hz2_005.fits'
+        self.ref=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
+                                             'calspec',
+                                             'hz2_005.fits'))
+    def test1(self):
+        self.tst = self.opener(self.name)
+        self.assertEqual(os.path.normpath(self.ref.name),
+                         os.path.normpath(self.tst.name))
+
+class FileSpecEnv(FileSpecIRAF):
+    def setUp(self):
+        self.opener = S.FileSpectrum
+        self.name='$PYSYN_CDBS/calspec/hz2_005.fits'
+        self.ref=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
+                                             'calspec',
+                                             'hz2_005.fits'))
+
+class FileBandIRAF(FileSpecIRAF):
+    def setUp(self):
+        self.opener = S.FileBandpass
+        self.name = 'crotacomp$hst_ota_007_syn.fits'
+        self.ref = S.FileBandpass(os.path.join(os.environ['PYSYN_CDBS'],
+                                               'comp','ota',
+                                               'hst_ota_007_syn.fits'))
+
+class FileBandEnv(FileSpecIRAF):
+    def setUp(self):
+        self.opener = S.FileBandpass
+        self.name = '$PYSYN_CDBS/comp/ota/hst_ota_007_syn.fits'
+        self.ref = S.FileBandpass(os.path.join(os.environ['PYSYN_CDBS'],
+                                               'comp','ota',
+                                               'hst_ota_007_syn.fits'))
+    
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
