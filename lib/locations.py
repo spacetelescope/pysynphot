@@ -113,6 +113,7 @@ def irafconvert(iraffilename):
                   'crgridagn':os.path.join(rootdir,'grid','agn'),
                   'crgridgalactic':os.path.join(rootdir,'grid','galactic'),
                   'crgridkc96':os.path.join(rootdir,'grid','kc96'),
+                  'mtab':os.path.join(rootdir,'mtab'),
                   'synphot': os.path.dirname(__file__)+os.path.sep}
 
     
@@ -134,3 +135,5 @@ def irafconvert(iraffilename):
     else:
         #If no $ sign found, just return the filename unchanged
         return iraffilename
+
+        
