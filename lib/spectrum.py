@@ -966,7 +966,93 @@ class SpectralElement(Integrator):
         ans=self.trapezoidIntegration(wave,self(wave))
         return ans
         
+#..................................................................
+# Methods to implement bandpar functionality go here
+#..................................................................
+    def avgwave(self):
+        """Implement the equation for lambda nought as defined
+        in Koornneef et al 1987, p 836.
+        Should be equivalent to bandpar.avglam = bandpar.avgwv"""
+        
+        mywaveunits = self.waveunits.name
+        self.convert('angstroms')
+        
+        wave=self.wave
+        thru=self.throughput
+        self.convert(mywaveunits)
+        
+        num = self.trapezoidIntegration(wave, thru*wave)
+        den = self.trapezoidIntegration(wave, thru)
 
+
+        if 0.0 in (num, den):
+            return 0.0
+        else:
+            return num/den
+
+    def rmswidth(self, floor=0):
+        """Defines the lambda sub rms from Koornneef et al 1987,
+        p 836; should be definition of bandpar.bandw"""
+
+        mywaveunits = self.waveunits.name
+        self.convert('angstroms')
+        
+        wave=self.wave
+        thru=self.throughput
+        self.convert(mywaveunits)
+
+        if floor != 0:
+            idx = N.where(thru >= floor)
+            wave = wave[idx]
+            thru = thru[idx]
+            
+        integrand = (wave-self.avgwave())**2 * thru
+        num = self.trapezoidIntegration(wave, integrand)
+        den = self.trapezoidIntegration(wave, thru)
+
+        if 0.0 in (num, den):
+            return 0.0
+        else:
+            ans = math.sqrt(num/den)
+            return ans
+
+    def rectwidth(self):            
+        """RECTW = INT(THRU) / MAX(THRU)"""
+        mywaveunits = self.waveunits.name
+        self.convert('angstroms')
+        
+        wave=self.wave
+        thru=self.throughput
+        self.convert(mywaveunits)
+
+        num = self.trapezoidIntegration(wave, thru)
+        den = thru.max()
+
+        if 0.0 in (num, den):
+            return 0.0
+        else:
+            return num/den
+
+    def equivwidth(self):
+        """ EQUVW = INT(THRU)        """
+
+        return self.integrate()
+
+    def efficiency(self):
+        """QTLAM = dimensionless efficience
+                 = INT(THRU / LAM)
+        """
+        mywaveunits = self.waveunits.name
+        self.convert('angstroms')
+        
+        wave=self.wave
+        thru=self.throughput
+        self.convert(mywaveunits)
+
+        ans = self.trapezoidIntegration(wave, thru/wave)
+        return ans
+        
+#..................................................................
     def check_sig(self, other):
         """Only call this if check_overlap returns 'partial'.
         Returns True if the LACK of overlap is INsignificant:
