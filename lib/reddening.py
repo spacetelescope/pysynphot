@@ -45,7 +45,20 @@ class RedLaw(CustomRedLaw):
         f.close()
 
 def Extinction(extval,name=None):
-   """Factory function to return the right kind of reddening"""
+   """Factory function to return the right kind of reddening.
+   If no name is provided, the average Milky Way extinction will
+   be used. Extinction laws are defined in data files that must be
+   installed with the CDBS files. Presently, the following extinction
+   laws are supported:
+     gal3      Cardelli, Clayton, & Mathis (1989, ApJ, 345, 245) R_V = 3.10.
+     lmc30dor  Gordon et al. (2003, ApJ, 594, 279) R_V = 2.76.
+     lmcavg    Gordon et al. (2003, ApJ, 594, 279) R_V = 3.41.
+     mwavg     Cardelli, Clayton, & Mathis (1989, ApJ, 345, 245) R_V = 3.10.
+     mwdense   Cardelli, Clayton, & Mathis (1989, ApJ, 345, 245) R_V = 5.00.
+     smcbar    Gordon et al. (2003, ApJ, 594, 279) R_V=2.74.
+     xgalsb    Calzetti et al. (2000. ApJ, 533, 682)
+
+   """
    try:
        ext=Cache.RedLaws[name].reddening(extval)
    except AttributeError:
