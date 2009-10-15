@@ -28,6 +28,7 @@ class CustomRedLaw(object):
                                  throughput=T,
                                  name='%s(Av=%g)'%(self.name,extval)
                                  )
+        ans.citation = self.litref
         return ans
 
 class RedLaw(CustomRedLaw):
