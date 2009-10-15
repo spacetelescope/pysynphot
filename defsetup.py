@@ -2,7 +2,7 @@
 pkg = 'pysynphot'
 
 setupargs = {
-    'version'       :      	"0.60d",
+    'version'       :      	"0.7",
     'description'   :       'Python Synthetic Photometry Utilities',
     'fullname'      :       'AstroLib Pysynphot',
     'license'       :       'BSD',
