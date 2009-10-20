@@ -5,6 +5,9 @@ import os, sys
 import testutil
 import numpy as N
 
+#Specify a TMC file
+S.setref(comptable='mtab$t921857im_tmc.fits')
+
 testdir   = os.path.join(os.path.dirname(__file__),'data')
 class Keepneg(testutil.FPTestCase):
     def setUp(self):
