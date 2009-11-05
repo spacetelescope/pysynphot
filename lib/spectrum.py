@@ -842,7 +842,8 @@ class FlatSpectrum(AnalyticSpectrum):
         self.wavelength = None
         self._fluxdensity = fluxdensity
         self._input_units = self.fluxunits
-        self.name="Unit spectrum of %g %s"%(self._fluxdensity,self._input_units)
+        self.name="Flat spectrum of %g %s"%(self._fluxdensity,
+                                            self._input_units)
     def __str__(self):
         return self.name
     
