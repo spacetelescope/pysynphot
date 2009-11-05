@@ -35,7 +35,7 @@ U{http://incubator.stsci.edu/mediawiki/index.php/Telescopedia:pysynphot}.
 >>> import pysynphot as S
 >>> import os
 >>> print S.__version__
-0.7
+0.8d
 >>> #Read a spectrum from a file
 >>> vega=S.FileSpectrum(S.locations.VegaFile)
 
@@ -129,7 +129,7 @@ flam
 
 from svn_version import __svn_version__, __full_svn_info__, setupdate
 
-__version__ = '0.7'
+__version__ = '0.8d'
 __revstring__  = '$Rev$'
 
 #UI:
