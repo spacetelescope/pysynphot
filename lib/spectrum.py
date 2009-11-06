@@ -766,6 +766,13 @@ class FileSourceSpectrum(TabularSourceSpectrum):
         self._fluxtable = fs[1].data.field(fluxname)
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.fluxunits = units.Units(fs[1].header['tunit2'].lower())
+
+        #Retain the header information as a convenience for the user.
+        #If duplicate keywords exist, the value in the extension
+        #header will override that in the primary. 
+        self.fheader = dict(fs[0].header)
+        self.fheader.update(dict(fs[1].header))
+
         fs.close()
 
     def _readASCII(self, filename):
@@ -778,7 +785,9 @@ class FileSourceSpectrum(TabularSourceSpectrum):
         wlist,flist = self._columnsFromASCII(filename)
         self._wavetable=N.array(wlist,dtype=N.float64)
         self._fluxtable=N.array(flist,dtype=N.float64)
-            
+
+        #We don't support headers from ascii files
+        self.fheader = dict()
                                 
                                                         
 class AnalyticSpectrum(SourceSpectrum):
@@ -1598,12 +1607,19 @@ class FileSpectralElement(TabularSpectralElement):
 
     def _readFITS(self, filename, throughputname):
         fs = pyfits.open(filename)
-        
+
         self._wavetable = fs[1].data.field('wavelength')
         if throughputname == None:
             throughputname = 'throughput'
         self._throughputtable = fs[1].data.field(throughputname)
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
+
+        #Retain the header information as a convenience for the user.
+        #If duplicate keywords exist, the value in the extension
+        #header will override that in the primary. 
+        self.fheader = dict(fs[0].header)
+        self.fheader.update(dict(fs[1].header))
+        
         fs.close()
 
     def _readASCII(self, filename):
@@ -1616,8 +1632,9 @@ class FileSpectralElement(TabularSpectralElement):
         self._wavetable=N.array(wlist,dtype=N.float64)
         self._throughputtable=N.array(flist,dtype=N.float64)
             
-                                
-
+        #We don't support headers from asii files
+        self.fheader = dict()
+        
 class InterpolatedSpectralElement(SpectralElement):
     '''The InterpolatedSpectralElement class handles spectral elements
     that are interpolated from columns stored in FITS tables

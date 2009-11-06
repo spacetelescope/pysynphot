@@ -16,6 +16,21 @@ from pysynphot.units import WaveUnits, FluxUnits
 ## ui_test.FileTestCase('testwave').debug()
 
 
+
+class FitsHdrCase(testutil.FPTestCase):
+    def setUp(self):
+        self.sp=S.FileSpectrum(os.path.join(os.path.dirname(__file__),
+                                            'data',
+                                            'alpha_lyr_stis_002.fits')
+                               )
+
+    def testheader(self):
+        self.assert_(len(self.sp.fheader) > 0)
+
+    def testhval(self):
+        self.assertEqual(self.sp.fheader['TARGETID'],
+                         'ALPHA_LYR')
+        
 class SpecTestCase(testutil.FPTestCase):
     def setUp(self):
         self.sp=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
