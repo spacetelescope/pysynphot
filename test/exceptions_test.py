@@ -29,7 +29,7 @@ class RenormNonsense(unittest.TestCase):
         sp2=self.sp*(-10)
         self.assertRaises(ValueError,
                           sp2.renorm,
-                          self.bp, 15, 'vegamag')
+                          15, 'vegamag', self.bp)
 
 
         
