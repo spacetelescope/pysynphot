@@ -72,7 +72,7 @@ class TestMulti(unittest.TestCase):
     def setUp(self):
         setref()
         self.gref=irafconvert('mtab$t2605492m_tmg.fits')
-        self.cref='/grp/hst/cdbs/work/vicki/t260548pm_tmc.fits'
+        self.cref=irafconvert('mtab$t260548pm_tmc.fits')
         setref(graphtable=self.gref,
                comptable =self.cref)
         self.pick=getref()
