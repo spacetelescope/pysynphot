@@ -206,28 +206,30 @@ class SpPartialNz2(OVBase,testutil.FPTestCase):
         OVBase.defarrays(self)
         self.cref='partial'
         self.sref=False
+## The following test relies on a subsequently abandoned spike
+## using this toy wrange class. It doesn't run, so am abandoning it.
 
 #Now let's make some that are complicated
 #Use the toy wrange object for this for now.
-import wrange
+## import wrange
 
-class Bpvary(OVBase,testutil.FPTestCase):
-    def setUp(self):
-        self.sprange=(1000,5000)
-        self.spnonzero=self.sprange
-        self.bprange=(4100,5100)
-        self.bpnonzero=self.bprange
-        OVBase.defarrays(self)
-        bp=wrange.Foobar(self.bp.wave,self.bp.throughput)
-        bp[4100:5000]=0.9
-        bp[5000:]=0.001
-        bp[4100]=0
-        bp[5099]=0 #must still use Python range rules
-        self.bp._throughputtable=bp.f
+## class Bpvary(OVBase,testutil.FPTestCase):
+##     def setUp(self):
+##         self.sprange=(1000,5000)
+##         self.spnonzero=self.sprange
+##         self.bprange=(4100,5100)
+##         self.bpnonzero=self.bprange
+##         OVBase.defarrays(self)
+##         bp=wrange.Foobar(self.bp.wave,self.bp.throughput)
+##         bp[4100:5000]=0.9
+##         bp[5000:]=0.001
+##         bp[4100]=0
+##         bp[5099]=0 #must still use Python range rules
+##         self.bp._throughputtable=bp.f
 
-        self.cref='partial'
-        self.sref=True
+##         self.cref='partial'
+##         self.sref=True
 
-    def testconstructed(self):
-        thru=self.bp.throughput
-        self.assert_(N.all(N.array([.001,.001,0.0]) == thru[-3:]))
+##     def testconstructed(self):
+##         thru=self.bp.throughput
+##         self.assert_(N.all(N.array([.001,.001,0.0]) == thru[-3:]))
