@@ -13,7 +13,12 @@ class ETCTestCase(testutil.FPTestCase):
         os.chdir(locations.specdir)
         self.spectrum = "spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"
         self.obsmode = "cos,fuv,g140l,c1105"
+        #These tests were defined using this graph table
+        S.setref(comptable='$PYSYN_CDBS/mtab/tad1851am_tmc.fits')
         self.setup2()
+        self.tda=dict(obsmode=self.obsmode,
+                      spectrum=self.spectrum)
+        self.tda.update(S.observationmode.getref())
 
     def setup2(self):
         try:
@@ -38,8 +43,12 @@ class ETCTestCase(testutil.FPTestCase):
         result=etc.specrate(self.parameters)
         #ans structure is different
         ans=result.split(';')
-        self.failUnless('partial' in ans[-1])
+        self.failUnless('partial' in ans[-1], 'error message: %s'%ans[-1])
 
     def testcalcphot(self):
         ans=etc.calcphot(self.parameters)
-        self.failUnless('partial' in ans[-1])
+        try:
+            self.failUnless('partial' in ans[-1])
+        except IndexError, e:
+            #Then we didn't get an error message: fail
+            self.fail('No error message generated')
