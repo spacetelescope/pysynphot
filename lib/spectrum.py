@@ -193,6 +193,12 @@ class SourceSpectrum(Integrator):
 
         return CompositeSourceSpectrum(self, other, 'add')
 
+    def __sub__(self, other):
+        """ Source Spectra can be subtracted, which is just another way
+        of adding."""
+
+        return self.__add__(-1.0*other)
+    
     def __mul__(self, other):
         '''Source Spectra can be multiplied, by constants or by
         SpectralElement objects.
