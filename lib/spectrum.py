@@ -203,9 +203,10 @@ class SourceSpectrum(Integrator):
         '''Source Spectra can be multiplied, by constants or by
         SpectralElement objects.
         '''
-        #Ack!! There has to be a better way to do this
-        if type(other) in [type(1), type(1.0),N.float64]:
+        #Multiplying by numeric constants is allowed
+        if isinstance(other, (int, float) ):
             other = UniformTransmission(other)
+        #so is by SpectralElements. Otherwise, raise an exception.
         if not isinstance(other, SpectralElement):
             raise TypeError("SourceSpectrum objects can only be multiplied by SpectralElement objects or constants; %s type detected"%type(other))
 
@@ -954,7 +955,7 @@ class SpectralElement(Integrator):
 
         ## Multiplying by a constant is the same as multiplying by a
         ## UniformTransmission object
-        if type(other) in [type(1), type(1.0)]:
+        if isinstance(other, (int, float)):
             return CompositeSpectralElement(self, UniformTransmission(other))
 
         else:
