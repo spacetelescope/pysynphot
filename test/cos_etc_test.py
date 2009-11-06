@@ -474,6 +474,11 @@ class ParserTestCase(testutil.FPTestCase):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
+        self.tda = dict(expr=expr,sp=str(sp),
+                        ref=1.53329E-7,
+                        epsilon=0.0025,
+                        tst=flux[5000])
+        self.tda.update(S.observationmode.getref())
         self.assertApproxFP(flux[5000], 1.53329E-7, accuracy=0.0025)
 
     def testuserdir2(self):
