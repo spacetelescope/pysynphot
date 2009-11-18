@@ -7,8 +7,8 @@ import pysynphot as S
 from pysynphot import etc
 
 class ParentCase(object):
-    #@classmethod
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         """Always overridden by the child cases, but let's put some
         real values in here to test with"""
         self.obsmode=None
@@ -17,47 +17,47 @@ class ParentCase(object):
         self.sp=None
         self.obs=None
         self.setup2()
-        
-    def setup2(self):
+
+    @classmethod    
+    def setup2(cls):
         #Do the common setup here.
-        print "hi, setup2"
-        self.sigthresh = 0.01
-        self.thresh = 0.01
-        self.tda=dict(obsmode=self.obsmode,
-                      spectrum=self.spectrum,
-                      thresh=self.thresh,
-                      sigthresh=self.sigthresh)
-        self.tra=dict()
+        cls.sigthresh = 0.01
+        cls.thresh = 0.01
+        cls.tda=dict(obsmode=cls.obsmode,
+                      spectrum=cls.spectrum,
+                      thresh=cls.thresh,
+                      sigthresh=cls.sigthresh)
+        cls.tra=dict()
         
-        if self.obsmode != "None":
-            self.bp=S.ObsBandpass(self.obsmode)
-            self.bp.writefits(self.fname%'bp', clobber=True,
+        if cls.obsmode != "None":
+            cls.bp=S.ObsBandpass(cls.obsmode)
+            cls.bp.writefits(cls.fname%'bp', clobber=True,
                               trimzero=False)
-            self.tra['bp']=self.bp.name
+            cls.tra['bp']=cls.bp.name
         else:
-            self.bp = None
+            cls.bp = None
 
             
-        if self.spectrum != "None":
-            self.sp=etc.parse_spec(self.spectrum)
-            self.sp.writefits(self.fname%'sp', clobber=True,
+        if cls.spectrum != "None":
+            cls.sp=etc.parse_spec(cls.spectrum)
+            cls.sp.writefits(cls.fname%'sp', clobber=True,
                               trimzero=False)
-            self.tra['sp']=self.sp.name
+            cls.tra['sp']=cls.sp.name
         else:
-            self.sp = None
+            cls.sp = None
 
             
-        if "None" not in (self.obsmode, self.spectrum):
-            self.obs = S.Observation(self.sp, self.bp)
-            self.obs.convert('counts')
-            x = dict(PSCNTRAT = (self.obs.countrate(),'countrate'),
-                     PSEFFLAM = (self.obs.efflam(),'efflam'))
-            self.obs.writefits(self.fname%'obs', hkeys=x, clobber=True,
+        if "None" not in (cls.obsmode, cls.spectrum):
+            cls.obs = S.Observation(cls.sp, cls.bp)
+            cls.obs.convert('counts')
+            x = dict(PSCNTRAT = (cls.obs.countrate(),'countrate'),
+                     PSEFFLAM = (cls.obs.efflam(),'efflam'))
+            cls.obs.writefits(cls.fname%'obs', hkeys=x, clobber=True,
                                trimzero=False)
-            self.tra['obs']=self.obs.name
-            self.tra.update(x)
+            cls.tra['obs']=cls.obs.name
+            cls.tra.update(x)
         else:
-            self.obs = None
+            cls.obs = None
 
     def testthru(self):
         if self.bp:
@@ -156,9 +156,9 @@ class ParentCase(object):
 
 
 class Testing(ParentCase):
-    #@classmethod
-    def setUp(self):
-        self.obsmode="stis,e230h,i1913"
-        self.spectrum="bb(30000)"
-        self.fname="T1_%s.fits"
-        self.setup2()
+    @classmethod
+    def setUpClass(cls):
+        cls.obsmode="stis,e230h,i1913"
+        cls.spectrum="bb(30000)"
+        cls.fname="T1_%s.fits"
+        cls.setup2()

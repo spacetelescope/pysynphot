@@ -4,12 +4,13 @@ import sqlite3
 def run(casefile,subsetfile=None, lookupfile=None):
     """ Generate TestCases from cmdfile according to the pattern in patternfile"""
     #Define the test case pattern
-    pattern="""class CommCase%d(ParentCase):
-    def setUp(self):
-        self.obsmode="%s"
-        self.spectrum="%s"
-        self.fname="C%s_%s.fits"
-        self.setup2()\n\n"""
+    pattern="""class CommCase%d(conv_base.ParentCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.obsmode="%s"
+        cls.spectrum="%s"
+        cls.fname="C%s_%s.fits"
+        cls.setup2()\n\n"""
 
     #Open the database
     db = sqlite3.connect("/ssbwebv1/data1/pandokia/pdk/c3/db/pdk.db")
@@ -18,9 +19,8 @@ def run(casefile,subsetfile=None, lookupfile=None):
     #Open the main output files
 
     out=open(casefile,'w')
-    out.write("""from pytools import testutil
-import sys
-import basecase
+    out.write("""import sys
+import conv_base
 
 """)
 
@@ -39,14 +39,6 @@ import basecase
        count+=1
        defn=pattern%(count,obsmode,spectrum,count,"%s")
        out.write(defn)
-
-    out.write("""\n\n
-if __name__ == '__main__':
-    if 'debug' in sys.argv:
-        testutil.debug(__name__)
-    else:
-        testutil.testall(__name__,2)
-""")
 
     out.close()
 
