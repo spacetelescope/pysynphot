@@ -1,2 +1,2 @@
-cd c:\python24\Lib\site-packages\pysynphot\data
-C:\python24\python -c "import server" 
+cd c:\python25\Lib\site-packages\pysynphot\data
+c:\python25\python -c "import server" 
