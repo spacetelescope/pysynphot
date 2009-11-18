@@ -3,8 +3,13 @@ import sqlite3
 
 def run(casefile,subsetfile=None, lookupfile=None):
     """ Generate TestCases from cmdfile according to the pattern in patternfile"""
+    #Define the import statements
+    impheader = """import sys
+import conv_base
+
+"""
     #Define the test case pattern
-    pattern="""class CommCase%d(conv_base.ParentCase):
+    pattern="""class TestComm%d(conv_base.ParentCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="%s"
@@ -12,17 +17,27 @@ def run(casefile,subsetfile=None, lookupfile=None):
         cls.fname="C%s_%s.fits"
         cls.setup2()\n\n"""
 
+
+    #We're going to split these by obsmode.
+    outfiles = {'None':'sponly/sponly.py',
+                'acs':'acs/acs.py',
+                'nicmos':'nicmos/nicmos.py',
+                'stis':'stis/stis.py',
+                'wfc3,ir':'wfc3_ir/wfc3_ir.py',
+                'wfc3,uvis1':'wfc3_uvis1/wfc3_uvis1.py',
+                'wfc3,uvis2':'wfc3_uvis2/wfc3_uvis2.py',
+                'oops':'oops/oops.py'
+                }
+                
     #Open the database
     db = sqlite3.connect("/ssbwebv1/data1/pandokia/pdk/c3/db/pdk.db")
 
 
-    #Open the main output files
-
-    out=open(casefile,'w')
-    out.write("""import sys
-import conv_base
-
-""")
+    #Open and initialize the output files
+    setdirs(outfiles)
+    for k in outfiles:
+        outfiles[k] = open(outfiles[k], 'w')
+        outfiles[k].write(impheader)
 
     count=0
 
@@ -38,12 +53,31 @@ import conv_base
        obsmode, spectrum = x
        count+=1
        defn=pattern%(count,obsmode,spectrum,count,"%s")
-       out.write(defn)
+       outkey=pickname(obsmode,outfiles)
+       outfiles[outkey].write(defn)
 
-    out.close()
+    #Close all the files
+    for k in outfiles:
+        outfiles[k].close()
 
+def setdirs(outfiles):
+    """Create the directories if need be"""
+    for k in outfiles:
+        fname=outfiles[k]
+        dname= os.path.dirname(fname)
+        if not os.path.isdir(dname):
+            os.mkdir(dname)
 
+def pickname(obsmode, outfiles):
+    """The obsmode string starts with one of the keys of outfiles.
+    Pick the right one and return it."""
 
+    for k in outfiles:
+        if obsmode.startswith(k):
+            return k
+
+    return 'oops'
+            
 if __name__ == '__main__':
     run(*sys.argv[1:])
     

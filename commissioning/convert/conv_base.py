@@ -1,11 +1,20 @@
 """Contains ParentCase used by commissioning_cases.CommCase*.
 Defines all the common setup and testing.
 """
-from pytools import testutil
+
+import os
+
 import numpy as N
 import pysynphot as S
 from pysynphot import etc
 
+#BUG: find a better way
+HERE = os.getcwd()
+DATADIR = os.path.join(os.path.dirname(HERE),
+                       'data')
+
+#TODO: set a specified graph/comp/therm table set in a module setup
+                                       
 class ParentCase(object):
     @classmethod
     def setUpClass(cls):
@@ -28,7 +37,8 @@ class ParentCase(object):
                       thresh=cls.thresh,
                       sigthresh=cls.sigthresh)
         cls.tra=dict()
-        
+
+
         if cls.obsmode != "None":
             cls.bp=S.ObsBandpass(cls.obsmode)
             cls.bp.writefits(cls.fname%'bp', clobber=True,
@@ -39,7 +49,11 @@ class ParentCase(object):
 
             
         if cls.spectrum != "None":
+        #All the data lives in a parallel directory, so go sit there
+        #in case we need a file
+            os.chdir(DATADIR)
             cls.sp=etc.parse_spec(cls.spectrum)
+            os.chdir(HERE)
             cls.sp.writefits(cls.fname%'sp', clobber=True,
                               trimzero=False)
             cls.tra['sp']=cls.sp.name
