@@ -7,6 +7,8 @@ import os
 import numpy as N
 import pysynphot as S
 from pysynphot import etc
+#For thermal classes only
+from pysynphot.observationmode import ObservationMode
 
 #BUG: find a better way
 HERE = os.getcwd()
@@ -43,7 +45,7 @@ class SpecCase(object):
             cls.bp=S.ObsBandpass(cls.obsmode)
             cls.bp.writefits(cls.fname%'thru', clobber=True,
                               trimzero=False)
-            cls.tra['bp']=cls.bp.name
+            cls.tra['thru']=cls.bp.name
         else:
             cls.bp = None
 
@@ -145,13 +147,13 @@ class SpecCase(object):
 
     def testspec(self):
         if self.sp:
-            self.spref = S.FileSpectrum((self.fname%'sp').replace('.fits','_ref.fits'))
+            self.spref = S.FileSpectrum((self.fname%'spec').replace('.fits','_ref.fits'))
             self.arraytest(self.spref.flux, self.sp.flux)
 
 class CommCase(SpecCase):
     #In the default case, we also do throughput and observation tests
     def testthru(self):
-            self.bpref = S.FileBandpass((self.fname%'bp').replace('.fits','_ref.fits'))
+            self.bpref = S.FileBandpass((self.fname%'thru').replace('.fits','_ref.fits'))
             self.arraytest(self.bpref.throughput, self.bp.throughput)
 
 
@@ -171,9 +173,33 @@ class CommCase(SpecCase):
 
 class ThermCase(CommCase):
     #In the thermal case, we also do thermal tests.
-    #TODO: add thermal stuff
-    pass
 
+    @classmethod
+    def setup2(cls):
+        #First call the parent
+        super(CommCase,cls).setup2()
+
+        #Then do the thermal stuff
+        cls.omode=ObservationMode(cls.obsmode)
+        cls.thspec=cls.omode.ThermalSpectrum()
+        cls.tra['thspec']=cls.thspec.name
+        
+        cls.thspec.convert('counts')
+        cls.thermback=cls.thspec.integrate()*cls.omode.pixscale**2*cls.omode.area
+        x = dict(PSTHMBCK = (cls.thermback,'thermback'))
+        cls.thspec.writefits(cls.fname%'therm', clobber=True,
+                              trimzero=False, hkeys=x)
+        
+    def testthspec(self):
+        self.thref = S.FileSpectrum((self.fname%'therm').replace('.fits','_ref.fits'))
+        self.arraytest(self.thref.flux, self.thspec.flux)
+                                    
+
+    def testhermback(self):
+        self.thref = S.FileSpectrum((self.fname%'therm').replace('.fits','_ref.fits'))
+        self.tcompare(self.thref.fheader['PSTHMBCK'],
+                      self.thermback)
+        
 class Testing(CommCase):
     @classmethod
     def setUpClass(cls):
