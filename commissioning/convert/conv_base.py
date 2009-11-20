@@ -71,7 +71,6 @@ class SpecCase(object):
             cls.obs.writefits(cls.fname%'obs', hkeys=x, clobber=True,
                                trimzero=False)
             cls.tra['obs']=cls.obs.name
-            cls.tra.update(x)
         else:
             cls.obs = None
 
@@ -107,8 +106,7 @@ class SpecCase(object):
         return ans
 
     def arraytest(self,ref,test):
-        #Exclude the endpoints where the gradient is very steep
-        self.adiscrep=self.arraydiff(test,ref)#[2:-2]
+        self.adiscrep=self.arraydiff(test,ref)
         count=N.where(abs(self.adiscrep)>self.thresh)[0].size
         try:
             self.tra['Discrepfrac']=float(count)/self.adiscrep.size
