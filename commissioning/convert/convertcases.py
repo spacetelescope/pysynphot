@@ -1,7 +1,7 @@
 import sys,os
 import sqlite3
 
-def run(casefile,subsetfile=None, lookupfile=None):
+def run():
     """ Generate TestCases from cmdfile according to the pattern in patternfile"""
     #Define the import statements
     impheader = """import sys
@@ -9,7 +9,7 @@ import conv_base
 
 """
     #Define the test case pattern
-    pattern="""class TestComm%d(conv_base.ParentCase):
+    pattern="""class Test%d(conv_base.%sCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="%s"
@@ -28,6 +28,12 @@ import conv_base
                 'wfc3,uvis2':'wfc3_uvis2/wfc3_uvis2.py',
                 'oops':'oops/oops.py'
                 }
+
+    #And subclass for spectrum-only and thermal cases based on obsmode.
+    casetype = {"None": "Spec",
+                "nicmos": "Therm",
+                "wfc3,ir": "Therm"}
+    #Use with default=Comm
                 
     #Open the database
     db = sqlite3.connect("/ssbwebv1/data1/pandokia/pdk/c3/db/pdk.db")
@@ -43,17 +49,24 @@ import conv_base
 
     #Select unique (obsmode,spectrum) pairs from our database table of
     #commissioning tests. Sort them by obsmode.
-    
+
+    #Omit cases where spectrum is None, because we've verified that all
+    #those obsmodes are duplicated elsewhere.
+
+    #First the bp only. The purpose of these is thermal.
     c = db.execute(""" SELECT DISTINCT obsmode, spectrum
                        FROM synpysyn
+                       WHERE spectrum != "None"
                        ORDER BY obsmode""")
 
     #Now loop over them, and define test cases.
     for x in c:
        obsmode, spectrum = x
        count+=1
-       defn=pattern%(count,obsmode,spectrum,count,"%s")
        outkey=pickname(obsmode,outfiles)
+       defn=pattern%(count,
+                     casetype.get(outkey, "Comm"),
+                     obsmode,spectrum,count,"%s")
        outfiles[outkey].write(defn)
 
     #Close all the files
@@ -79,5 +92,5 @@ def pickname(obsmode, outfiles):
     return 'oops'
             
 if __name__ == '__main__':
-    run(*sys.argv[1:])
+    run()
     

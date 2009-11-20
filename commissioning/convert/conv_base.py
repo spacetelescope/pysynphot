@@ -1,4 +1,4 @@
-"""Contains ParentCase used by commissioning_cases.CommCase*.
+"""Contains SpecCase used by commissioning_cases.CommCase*.
 Defines all the common setup and testing.
 """
 
@@ -15,7 +15,7 @@ DATADIR = os.path.join(os.path.dirname(HERE),
 
 #TODO: set a specified graph/comp/therm table set in a module setup
                                        
-class ParentCase(object):
+class SpecCase(object):
     @classmethod
     def setUpClass(cls):
         """Always overridden by the child cases, but let's put some
@@ -41,7 +41,7 @@ class ParentCase(object):
 
         if cls.obsmode != "None":
             cls.bp=S.ObsBandpass(cls.obsmode)
-            cls.bp.writefits(cls.fname%'bp', clobber=True,
+            cls.bp.writefits(cls.fname%'thru', clobber=True,
                               trimzero=False)
             cls.tra['bp']=cls.bp.name
         else:
@@ -54,7 +54,7 @@ class ParentCase(object):
             os.chdir(DATADIR)
             cls.sp=etc.parse_spec(cls.spectrum)
             os.chdir(HERE)
-            cls.sp.writefits(cls.fname%'sp', clobber=True,
+            cls.sp.writefits(cls.fname%'spec', clobber=True,
                               trimzero=False)
             cls.tra['sp']=cls.sp.name
         else:
@@ -72,35 +72,6 @@ class ParentCase(object):
             cls.tra.update(x)
         else:
             cls.obs = None
-
-    def testthru(self):
-        if self.bp:
-            self.bpref = S.FileBandpass((self.fname%'bp').replace('.fits','_ref.fits'))
-            self.arraytest(self.bpref.throughput, self.bp.throughput)
-
-    def testflux(self):
-        if self.sp:
-            self.spref = S.FileSpectrum((self.fname%'sp').replace('.fits','_ref.fits'))
-            self.arraytest(self.spref.flux, self.sp.flux)
-
-    def testcounts(self):
-        if self.obs:
-            self.obsref = S.FileSpectrum((self.fname%'obs').replace('.fits','_ref.fits'))
-            self.arraytest(self.obsref.flux, self.obs.binflux)
-
-    def testcntrate(self):
-        if self.obs:
-            self.obsref = S.FileSpectrum((self.fname%'obs').replace('.fits','_ref.fits'))
-            self.tcompare(self.obsref.fheader['PSCNTRAT'],
-                          self.obs.countrate())
-
-    def testefflam(self):
-        if self.obs:
-            self.obsref = S.FileSpectrum((self.fname%'obs').replace('.fits','_ref.fits'))
-            self.tcompare(self.obsref.fheader['PSEFFLAM'],
-                          self.obs.efflam())
-
-    #TODO: add thermal stuff
 
 #Helper methods for arrays
     def count_outliers(self,Nsigma=3):
@@ -169,7 +140,41 @@ class ParentCase(object):
         if not expr: raise self.failureException, msg
 
 
-class Testing(ParentCase):
+#The actual tests start here.
+#In the parent case, we do spectrum-only tests.
+
+    def testspec(self):
+        if self.sp:
+            self.spref = S.FileSpectrum((self.fname%'sp').replace('.fits','_ref.fits'))
+            self.arraytest(self.spref.flux, self.sp.flux)
+
+class CommCase(SpecCase):
+    #In the default case, we also do throughput and observation tests
+    def testthru(self):
+            self.bpref = S.FileBandpass((self.fname%'bp').replace('.fits','_ref.fits'))
+            self.arraytest(self.bpref.throughput, self.bp.throughput)
+
+
+    def testobs(self):
+            self.obsref = S.FileSpectrum((self.fname%'obs').replace('.fits','_ref.fits'))
+            self.arraytest(self.obsref.flux, self.obs.binflux)
+
+    def testcntrate(self):
+            self.obsref = S.FileSpectrum((self.fname%'obs').replace('.fits','_ref.fits'))
+            self.tcompare(self.obsref.fheader['PSCNTRAT'],
+                          self.obs.countrate())
+
+    def testefflam(self):
+            self.obsref = S.FileSpectrum((self.fname%'obs').replace('.fits','_ref.fits'))
+            self.tcompare(self.obsref.fheader['PSEFFLAM'],
+                          self.obs.efflam())
+
+class ThermCase(CommCase):
+    #In the thermal case, we also do thermal tests.
+    #TODO: add thermal stuff
+    pass
+
+class Testing(CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,e230h,i1913"
