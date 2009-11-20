@@ -1,5 +1,5 @@
 from __future__ import division
-import os, warnings, glob
+import os, warnings, glob, re
 
    
 
@@ -122,8 +122,12 @@ def irafconvert(iraffilename):
     #     filename
     if iraffilename.startswith('$'):
         #Then this is an environment variable.
-        dirname,basename = iraffilename.split(os.path.sep,1)
-        unixdir = os.environ[dirname[1:]]
+        #Use a regex to pull off the front piece.
+        pat = re.compile('\$(\w*)')
+        match = re.match(pat,iraffilename)
+        dirname = match.group(1)
+        unixdir = os.environ[dirname]
+        basename = iraffilename[match.end()+1:] #1 to omit leading slash
         unixfilename = os.path.join(unixdir, basename)
         return unixfilename
     elif '$' in iraffilename:

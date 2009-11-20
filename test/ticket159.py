@@ -19,6 +19,43 @@ class SuccessCase(testutil.FPTestCase):
     def testok(self):
         obs=S.Observation(self.sp,self.bp)
         self.assert_('PartialOverlap' not in obs.warnings)
+
+class RenormCase(testutil.FPTestCase):
+    def setUp(self):
+        tplace=os.path.dirname(__file__)
+        self.spectrum="data/qso_template.fits"
+        self.obsmode="cos,fuv,g140l,c1230,PSA"
+        self.bp=S.ObsBandpass(self.obsmode)
+        self.sp=S.FileSpectrum(os.path.join(tplace,self.spectrum))
+        self.tst=self.sp.renorm(17.0,'vegamag',self.bp)
+
+        self.tda=dict(spectrum=self.spectrum,
+                      obsmode=self.obsmode,
+                      file=S.__file__)
+
+    def testwarn(self):
+        self.tra=dict(name=str(self.tst),
+                      spwarn=str(self.tst.warnings))
+        self.failUnless(self.tst.warnings.get('PartialRenorm'),False)
+        
+class ParserRenormCase(testutil.FPTestCase):
+    def setUp(self):
+        tplace=os.path.dirname(__file__)
+        self.spectrum="data/qso_template.fits"
+        self.obsmode="cos,fuv,g140l,c1230,PSA"
+        self.syncmd="rn(spec(%s),band(%s),17.0,vegamag)"%(os.path.join(tplace,
+                                                                       self.spectrum),
+                                                          self.obsmode)
+        self.tda=dict(spectrum=self.spectrum,
+                      obsmode=self.obsmode,
+                      syncmd=self.syncmd,
+                      file=S.__file__)
+
+    def testwarn(self):
+        self.sp=etc.parse_spec(self.syncmd)
+        self.tra=dict(spwarn=str(self.sp.warnings),
+                      name=str(self.sp))
+        self.failUnless(self.sp.warnings.get('PartialRenorm',False))
         
 class ETCTestCase(testutil.FPTestCase):
 
@@ -64,3 +101,4 @@ class ETCTestCase(testutil.FPTestCase):
         q=(float(ans[0])-self.refrate)/self.refrate
         self.tra=dict(ans=ans, discrep=q)
         self.failIf(abs(q)>0.01)
+
