@@ -6,16 +6,21 @@
 TSR 2009-02: Choppy source plot in ETC 18.0
 ============================================
 
-Contents:
+.. abstract::
+   :author: Victoria G. Laidler
+   :date: 26 October 2009
+
+   A source spectrum plot in ETC 18.0 was observed to appear strange
+   and choppy compared to the corresponding file in CDBS. The choppy
+   appearance is an artifact of the uneven wavelength spacing in the
+   source spectrum, which is preserved by pysynphot but was not
+   preserved by SYNPHOT, together with the fact that a spectrum in
+   counts is integrated over the bin width.
+
 
 .. toctree::
    :maxdepth: 2
 
    main.rst
    commands.rst
-
-Indices and tables
-==================
-
-* :ref:`search`
 

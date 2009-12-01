@@ -11,6 +11,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+from stsci_sphinxext.conf import *
+
 import sys, os
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -22,7 +24,7 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.pngmath']
+# extensions = ['sphinx.ext.pngmath']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -91,7 +93,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = 'default'
+# html_theme = 'default'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -167,13 +169,13 @@ htmlhelp_basename = 'TSR2009-02doc'
 #latex_paper_size = 'letter'
 
 # The font size ('10pt', '11pt' or '12pt').
-#latex_font_size = '10pt'
+latex_font_size = '11pt'
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'TSR2009-02.tex', u'TSR 2009-02 Documentation',
-   u'Victoria G. Laidler', 'manual'),
+  ('index', 'TSR2009-02.tex', u'Choppy source plot in ETC 18.0',
+   u'Victoria G. Laidler', 'tsr'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
