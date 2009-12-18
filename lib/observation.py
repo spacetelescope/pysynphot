@@ -188,18 +188,68 @@ class Observation(spectrum.CompositeSourceSpectrum):
                                                    binned=binned,
                                                    hkeys=hkeys)
             
-    def countrate(self,binned=True):
+    def countrate(self,binned=True,range=None):
         """This is the calculation performed when the ETC invokes countrate.
         Essentially it wants the effstim in counts.
-        However, it also wants the pivot wavelength returned to it in
-        the same call."""
+
+        binned: if True, operations will be performed on (binwave,binflux);
+                otherwise on (wave,flux)
+
+        range=[low,high]: if range is not None, it is expected to be a
+            sequence with two floating-point elements specifying the low
+            and high wavelength range (specified in self.waveunits) over 
+            which the integration will be performed. 
+
+            This is an _inclusive_ range.
+
+            Disjoint or partially-overlapping ranges will raise an
+            exception.
+
+            If the specified range does not exactly match a value in the
+            waveset:
+               - if binned=True, the bin containing the range value will
+                 be used. (Recall values of binwave specify bin centers.)
+               - if binned=False, the wave and flux arrays will be
+                 interpolated to the specified values.
+        """
 
         myfluxunits = self.fluxunits.name
         self.convert('counts')
+        warn=False
         if binned:
-            ans = self.binflux.sum()
+            #No range specified - use full range
+            if range is None:
+                lx,ux=(None,None)
+            #Range is disjoint from binwave
+            elif (range[0]>self.binwave[-1] or
+                  range[1]<self.binwave[0]):
+                raise ValueError("%s is disjoint from obs.binwave %s"%(range,
+                                                                       [self.binwave[0],self.binwave[-1]]))
+            #Partial overlap                     
+            else:
+                
+                if range[0] < self._bin_edges[0]:
+                    warn=True
+                    lx=None
+                else:
+                    lx=N.searchsorted(self._bin_edges,range[0])-1
+                    
+                if range[1] > self._bin_edges[-1]:
+                    warn=True
+                    ux=None
+                else:
+                    ux=N.searchsorted(self._bin_edges,range[1])
+                
+
+            ans = self.binflux[lx:ux].sum()
+            if warn:
+                raise ValueError("%s does not fully overlap binwave range %s. Countrate in overlap area is %f"%(range,[self.binwave[0],self.binwave[-1]],ans))
+                                                                                                             
         else:
-            ans = self.flux.sum()
+            if range is None:
+                ans = self.flux.sum()
+            else:
+                raise NotImplementedError("Sorry, range+binned=False not yet implemented")
         self.convert(myfluxunits)
         return ans
 
