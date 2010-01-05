@@ -36,7 +36,8 @@ class RenormCase(testutil.FPTestCase):
     def testwarn(self):
         self.tra=dict(name=str(self.tst),
                       spwarn=str(self.tst.warnings))
-        self.failUnless(self.tst.warnings.get('PartialRenorm'),False)
+        self.failUnless('PartialRenorm' in self.tst.warnings,
+                        "Warnings: %s"%self.tst.warnings)
         
 class ParserRenormCase(testutil.FPTestCase):
     def setUp(self):
@@ -55,7 +56,7 @@ class ParserRenormCase(testutil.FPTestCase):
         self.sp=etc.parse_spec(self.syncmd)
         self.tra=dict(spwarn=str(self.sp.warnings),
                       name=str(self.sp))
-        self.failUnless(self.sp.warnings.get('PartialRenorm',False))
+        self.failIf('PartialRenorm' in self.sp.warnings)
         
 class ETCTestCase(testutil.FPTestCase):
 
