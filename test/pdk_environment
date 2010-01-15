@@ -1,3 +1,3 @@
 [default]
-PYSYN_CDBS=/grp/hst/cdbs/
+PYSYN_CDBS=$CDBS
 
