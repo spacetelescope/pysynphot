@@ -9,6 +9,23 @@ import catalog
 import os
 from obsbandpass import ObsBandpass
 
+# This file implements the pysynphot language parser.
+#
+# The language definition is in the docstring of class BaseParser,
+# function p_top.  The parser code in spark.py builds its internal
+# tables by reading the docstring, so you can't put anything else
+# (like documentation) there.
+#
+# l = scan('text') returns a list of tokens
+#
+# t = parse(l) converts the list of tokens into an Abstract Syntax Tree
+#
+# r = interpret(t) converts that abstract syntax tree into a (tree
+#     of?) pysynphot object, based on the conversion rules in class Interpreter
+#
+# In class Interpreter, the docstring of every function named with p_
+# is part of the instructions to the parser.
+
 syfunctions = [
     'spec',
     'unit',
@@ -22,6 +39,7 @@ syfunctions = [
     'ebmvx',
     'band'
     ]
+
 synforms = [
     'fnu',
     'flam',
@@ -35,6 +53,7 @@ synforms = [
     'jy',
     'mjy'
     ]
+
 syredlaws = [
     'gal1',
     'gal2',
@@ -43,6 +62,7 @@ syredlaws = [
     'lmc',
     'xgal'
     ]
+
 class Token:
     def __init__(self, type=None, attr=None):
         self.type = type
@@ -67,7 +87,7 @@ class AST:
         self._kids[low:high] = seq
     def __cmp__(self, o):
         return cmp(self.type, o)
-        
+
 class BaseScanner(GenericScanner):
     def __init__(self):
         GenericScanner.__init__(self)
@@ -193,7 +213,7 @@ class Interpreter(GenericASTMatcher):
             tree.svalue = "%s,%s"%(tree[0].svalue,tree[2].svalue)
         except AttributeError:
             pass #We only care about this for relatively simple constructs.
-        
+
     def p_functioncall(self, tree):
         # Where all the real interpreter action is
         # Note that things that should only be done at the top level
@@ -264,17 +284,18 @@ class Interpreter(GenericASTMatcher):
             elif fname == 'ebmvx':
                 # extinction
                 tree.value = reddening.Extinction(args[0],args[1])
-                                
+
             else:
                 tree.value = "would call %s with the following args: %s" % (fname, repr(args))
-            
-        
+
+
 # stuff not yet handled, namely, Filelist, should be handled in interp function        
 zzz =   '''
-          
+
             top ::= FILELIST
 
         '''
+
 def convertstr(value):
     # Any string appearing in numeric expressions must be
     # assumed to be a filename that should be read in as a table
@@ -316,17 +337,4 @@ def _handleThroughputFiles(name):
         return spectrum.TabularSourceSpectrum(_handleIRAFName(name))
     except NameError:
         return spectrum.TabularSourceSpectrum(_handleIRAFName(name))
-
-
-
-
-
-
-
-
-
-
-
-
-
 
