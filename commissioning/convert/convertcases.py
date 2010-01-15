@@ -36,7 +36,7 @@ import conv_base
     #Use with default=Comm
                 
     #Open the database
-    db = sqlite3.connect("/ssbwebv1/data1/pandokia/pdk/c3/db/pdk.db")
+    db = sqlite3.connect("/ssbwebv1/data1/pandokia/old/pdk/c3/db/pdk.db")
 
 
     #Open and initialize the output files

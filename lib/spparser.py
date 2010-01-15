@@ -121,7 +121,7 @@ class BaseParser(GenericASTBuilder):
             expr ::= term
             term ::= term * factor
             term ::= term / factor
-            term ::= LPAREN expr RPAREN
+            value ::= LPAREN expr RPAREN
             term ::= factor
             factor ::= unaryop value
             factor ::= value
@@ -179,8 +179,8 @@ class Interpreter(GenericASTMatcher):
     def p_term_div(self, tree):
         ''' V ::= term ( V / V )'''
         tree.value = convertstr(tree[0].value) / tree[2].value
-    def p_term_paren(self, tree):
-        ''' V ::= term ( LPAREN V RPAREN )'''
+    def p_value_paren(self, tree):
+        ''' V ::= value ( LPAREN V RPAREN )'''
         tree.value = convertstr(tree[1].value)
         tree.svalue = "(%s)"%str(tree[1].value)
     def p_arglist(self, tree):
