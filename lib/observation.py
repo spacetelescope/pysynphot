@@ -188,7 +188,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
                                                    binned=binned,
                                                    hkeys=hkeys)
             
-    def countrate(self,binned=True,range=None):
+    def countrate(self,binned=True,range=None,force=False):
         """This is the calculation performed when the ETC invokes countrate.
         Essentially it wants the effstim in counts.
 
@@ -203,7 +203,9 @@ class Observation(spectrum.CompositeSourceSpectrum):
             This is an _inclusive_ range.
 
             Disjoint or partially-overlapping ranges will raise an
-            exception.
+            exception by default. If force=True is set, then a partial
+            overlap will return the calculated value rather than raise
+            an exception.
 
             If the specified range does not exactly match a value in the
             waveset:
@@ -242,7 +244,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
                 
 
             ans = self.binflux[lx:ux].sum()
-            if warn:
+            if warn and not force:
                 raise ValueError("%s does not fully overlap binwave range %s. Countrate in overlap area is %f"%(range,[self.binwave[0],self.binwave[-1]],ans))
                                                                                                              
         else:
