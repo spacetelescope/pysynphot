@@ -64,4 +64,23 @@ class ObsModeBandpass(CompositeSpectralElement):
         thru=self.throughput
         if thru[0] != 0 or thru[-1] != 0:
             print "Warning: throughput for this obsmode is not bounded by zeros. Endpoints: thru[0]=%g, thru[-1]=%g"%(thru[0],thru[-1])
+
+    def thermback(self):
+        """Expose the thermal background calculation presently hidden
+        in the obsmode class.
+        Only bandpasses for which thermal information has been supplied in the graph
+        table supports this method; all others will raise a NotImplementedError.
+        """
+
+        #The obsmode.ThermalSpectrum method will raise an exception if there is
+        #no thermal information, and that will just propagate up.
+        sp=self.obsmode.ThermalSpectrum()
+
+        #Thermback is always provided in this non-standard set of units.
+        #This code was copied from etc.py.
+        ans = sp.integrate() * (self.obsmode.pixscale**2 *
+                                self.obsmode.area)
+        return ans
+
+        
         
