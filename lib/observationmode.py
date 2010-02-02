@@ -538,8 +538,13 @@ class _ThermalObservationMode(BaseObservationMode):
             thermtable = THERMTABLE
                         
             
-
+        #The constructor of the parent class defines the self.thcompnames
         BaseObservationMode.__init__(self, obsmode, method, graphtable)
+
+        #Check here to see if there are any.
+        if set(self.thcompnames) == set(['clear']):
+            raise NotImplementedError("No thermal support provided for %s"%obsmode)
+        
 
         ct = CompTable(comptable)
         self.ctname=comptable
