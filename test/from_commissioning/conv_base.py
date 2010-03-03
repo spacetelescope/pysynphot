@@ -14,9 +14,10 @@ from pysynphot.observationmode import ObservationMode
 DATADIR = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                        'data')
 
-
-#TODO: set a specified graph/comp/therm table set in a module setup
-                                       
+S.setref(comptable='$PYSYN_CDBS/mtab/tad1851am_tmc.fits',
+         thermtable='$PYSYN_CDBS/mtab/tae17277m_tmt.fits',
+         graphtable='$PYSYN_CDBS/mtab/t2605492m_tmg.fits')
+         
 class SpecCase(object):
     @classmethod
     def setUpClass(cls):
