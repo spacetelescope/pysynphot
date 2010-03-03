@@ -22,12 +22,27 @@ class SpecCase(object):
     def setUpClass(cls):
         """Always overridden by the child cases, but let's put some
         real values in here to test with"""
-        self.obsmode=None
-        self.spectrum=None
-        self.bp=None
-        self.sp=None
-        self.obs=None
-        self.setup2()
+        cls.obsmode=None
+        cls.spectrum=None
+        cls.bp=None
+        cls.sp=None
+        cls.obs=None
+        cls.fname=None #Pattern like "tname_%s.fits"
+        cls.setup2()
+
+    @classmethod
+    def tearDownClass(cls):
+        """Add names of failed items to the okfile"""
+        if cls.okset:
+            f=open(cls.tda['_okfile'],'w')
+            for item in cls.okset:
+                refname=os.path.join(HERE,
+                                     cls.fname%item.replace('.fits',
+                                                             '_ref.fits'))
+                tname=os.path.join(HERE,cls.fname%item)
+                f.write("%s %s\n"%(tname,refname))
+            f.close()
+
 
     @classmethod    
     def setup2(cls):
@@ -37,40 +52,52 @@ class SpecCase(object):
         cls.tda=dict(obsmode=cls.obsmode,
                       spectrum=cls.spectrum,
                       thresh=cls.thresh,
-                      sigthresh=cls.sigthresh)
+                      sigthresh=cls.sigthresh,
+                      _okfile=cls.fname.replace('_%s.fits','.okfile'))
         cls.tra=dict()
 
+        cls.okset=set() #Tracks okifying bookkeeping
 
         if cls.obsmode != "None":
+            kind = 'thru'
             cls.bp=S.ObsBandpass(cls.obsmode)
-            cls.bp.writefits(cls.fname%'thru', clobber=True,
+            cls.bp.writefits(cls.fname%kind, clobber=True,
                               trimzero=False)
-            cls.tra['thru']=cls.bp.name
+            cls.tra[kind]=cls.bp.name
+            cls.okset.add(kind)
         else:
             cls.bp = None
 
             
         if cls.spectrum != "None":
+            kind = 'spec'
         #All the data lives in a parallel directory, so go sit there
         #in case we need a file
             os.chdir(DATADIR)
             cls.sp=etc.parse_spec(cls.spectrum)
             os.chdir(HERE)
-            cls.sp.writefits(cls.fname%'spec', clobber=True,
+            cls.sp.writefits(cls.fname%kind, clobber=True,
                               trimzero=False)
-            cls.tra['sp']=cls.sp.name
+            cls.tra[kind]=cls.sp.name
+            cls.okset.add(kind)
         else:
             cls.sp = None
 
             
         if "None" not in (cls.obsmode, cls.spectrum):
-            cls.obs = S.Observation(cls.sp, cls.bp)
+            kind='obs'
+            try:
+                cls.obs = S.Observation(cls.sp, cls.bp)
+            except ValueError, e:
+                cls.obs = str(e)
+                return #then the obs tests should raise errors
             cls.obs.convert('counts')
             x = dict(PSCNTRAT = (cls.obs.countrate(),'countrate'),
                      PSEFFLAM = (cls.obs.efflam(),'efflam'))
-            cls.obs.writefits(cls.fname%'obs', hkeys=x, clobber=True,
+            cls.obs.writefits(cls.fname%kind, hkeys=x, clobber=True,
                                trimzero=False)
-            cls.tra['obs']=cls.obs.name
+            cls.tra[kind]=cls.obs.name
+            cls.okset.add(kind)
         else:
             cls.obs = None
 
@@ -139,7 +166,11 @@ class SpecCase(object):
         """Fail the test unless the expression is true."""
         if not expr: raise self.failureException, msg
 
-
+    def cleanup(self,item):
+        #Pop from oklist & clean up file
+        self.okset.remove(item)
+        os.unlink(self.fname%item)
+        
 #The actual tests start here.
 #In the parent case, we do spectrum-only tests.
 
@@ -147,18 +178,20 @@ class SpecCase(object):
         if self.sp:
             self.spref = S.FileSpectrum((self.fname%'spec').replace('.fits','_ref.fits'))
             self.arraytest(self.spref.flux, self.sp.flux)
-
+            self.cleanup('spec')
+            
 class CommCase(SpecCase):
     #In the default case, we also do throughput and observation tests
     def testthru(self):
             self.bpref = S.FileBandpass((self.fname%'thru').replace('.fits','_ref.fits'))
             self.arraytest(self.bpref.throughput, self.bp.throughput)
-
+            self.cleanup('thru')
 
     def testobs(self):
             self.obsref = S.FileSpectrum((self.fname%'obs').replace('.fits','_ref.fits'))
             self.arraytest(self.obsref.flux, self.obs.binflux)
-
+            self.cleanup('obs')
+            
     def testcntrate(self):
             self.obsref = S.FileSpectrum((self.fname%'obs').replace('.fits','_ref.fits'))
             self.tcompare(self.obsref.fheader['PSCNTRAT'],
@@ -177,6 +210,7 @@ class ThermCase(CommCase):
         #First call the parent
         super(CommCase,cls).setup2()
 
+        kind = 'therm'
         #Then do the thermal stuff
         cls.omode=ObservationMode(cls.obsmode)
         cls.thspec=cls.omode.ThermalSpectrum()
@@ -185,12 +219,14 @@ class ThermCase(CommCase):
         cls.thspec.convert('counts')
         cls.thermback=cls.thspec.integrate()*cls.omode.pixscale**2*cls.omode.area
         x = dict(PSTHMBCK = (cls.thermback,'thermback'))
-        cls.thspec.writefits(cls.fname%'therm', clobber=True,
+        cls.thspec.writefits(cls.fname%kind, clobber=True,
                               trimzero=False, hkeys=x)
+        cls.okset.add(kind)
         
     def testthspec(self):
         self.thref = S.FileSpectrum((self.fname%'therm').replace('.fits','_ref.fits'))
         self.arraytest(self.thref.flux, self.thspec.flux)
+        self.cleanup('therm')
                                     
 
     def testhermback(self):
