@@ -33,6 +33,7 @@ class SpecCase(object):
     @classmethod
     def tearDownClass(cls):
         """Add names of failed items to the okfile"""
+        
         if cls.okset:
             f=open(cls.tda['_okfile'],'w')
             for item in cls.okset:
@@ -89,6 +90,7 @@ class SpecCase(object):
             try:
                 cls.obs = S.Observation(cls.sp, cls.bp)
             except ValueError, e:
+                cls.tra['obs_error']=str(e)
                 cls.obs = str(e)
                 return #then the obs tests should raise errors
             cls.obs.convert('counts')
