@@ -36,6 +36,13 @@ class SpecCase(object):
         """Add names of failed items to the okfile"""
         
         if cls.okset:
+            #Try to remove the file. It's ok if this fails.
+            try:
+                os.unlink(cls.tda['_okfile'])
+            except (OSError, IOError):
+                pass
+
+            
             f=open(cls.tda['_okfile'],'w')
             for item in cls.okset:
                 refname=os.path.join(HERE,
