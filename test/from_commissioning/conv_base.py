@@ -39,7 +39,7 @@ class SpecCase(object):
             f=open(cls.tda['_okfile'],'w')
             for item in cls.okset:
                 refname=os.path.join(HERE,
-                                     cls.fname%item.replace('.fits',
+                                     (cls.fname%item).replace('.fits',
                                                              '_ref.fits'))
                 tname=os.path.join(HERE,cls.fname%item)
                 f.write("%s %s\n"%(tname,refname))
