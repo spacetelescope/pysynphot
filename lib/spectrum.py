@@ -457,7 +457,10 @@ class CompositeSourceSpectrum(SourceSpectrum):
         self.component2 = source2
         self.operation = operation
         self.name=str(self)
+        #Propagate warnings
         self.warnings={}
+        self.warnings.update(source1.warnings)
+        self.warnings.update(source2.warnings)
         # for now we keep these attributes here, in spite of the internal
         # units model. There is code that still breaks down if these attributes
         # are not here.
@@ -527,7 +530,6 @@ class TabularSourceSpectrum(SourceSpectrum):
             self.ToInternal()
             self.name=self.filename
             self.isAnalytic=False
-
         else:
             self._wavetable = None
             self._fluxtable = None
@@ -1402,6 +1404,8 @@ class CompositeSpectralElement(SpectralElement):
         self.throughputunits = None
         self.name="(%s * %s)"%(str(self.component1),str(self.component2))
         self.warnings={}
+        self.warnings.update(component1.warnings)
+        self.warnings.update(component2.warnings)
         
     def __call__(self, wavelength):
         '''This is where the throughput calculation is delegated.

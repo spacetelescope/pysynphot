@@ -44,6 +44,7 @@ def StdRenorm(spectrum, band, RNval, RNunitstring,force=False):
             pass
         elif stat == 'partial':
             if band.check_sig(spectrum):
+                spectrum.warnings['PartialRenorm']=True
                 print "Warning: Spectrum is not defined everywhere in renormalization bandpass. At least 99% of the band throughput has data, therefore proceeding anyway. Spectrum will be extrapolated at constant value."
             else:
                 raise(ValueError("Spectrum and renormalization band do not fully overlap. You may use force=True to force the renormalization to proceed."))
@@ -51,10 +52,10 @@ def StdRenorm(spectrum, band, RNval, RNunitstring,force=False):
             raise(ValueError('Spectrum and renormalization band are disjoint'))
 
                                                                      
-
     #Compute the flux of the spectrum through the bandpass and make sure
     #the result makes sense.
     sp = spectrum*band
+
     totalflux = sp.integrate()
     if totalflux <= 0.0:
         raise ValueError('Integrated flux is <= 0')
@@ -75,10 +76,11 @@ def StdRenorm(spectrum, band, RNval, RNunitstring,force=False):
         ratio=totalflux/up.integrate()
         dmag = RNval + 2.5*math.log10(ratio)
         newsp = spectrum.addmag(dmag)
-        return newsp
 
     #...or in linear flux units.
     else:
         const = RNval * (up.integrate()/totalflux)
         newsp = spectrum*const
-        return newsp
+
+    #Return the new spectrum
+    return newsp

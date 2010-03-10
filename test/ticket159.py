@@ -40,6 +40,7 @@ class RenormCase(testutil.FPTestCase):
                         "Warnings: %s"%self.tst.warnings)
         
 class ParserRenormCase(testutil.FPTestCase):
+    #The parser always uses force, so generates no warnings
     def setUp(self):
         tplace=os.path.dirname(__file__)
         self.spectrum="data/qso_template.fits"
@@ -90,6 +91,7 @@ class ETCTestCase(testutil.FPTestCase):
 
     def testwarn(self):
         obs=S.Observation(self.sp,self.bp,force='taper')
+        self.tra=dict(warnings=obs.warnings)
         self.assert_('PartialOverlap' in obs.warnings)
 
     def testcrwarn(self):
@@ -103,3 +105,15 @@ class ETCTestCase(testutil.FPTestCase):
         self.tra=dict(ans=ans, discrep=q)
         self.failIf(abs(q)>0.01)
 
+class TestComposite(testutil.FPTestCase):
+    def setUp(self):
+        self.sp=S.BlackBody(5500)
+        self.sp.warnings['FakeWarn'] = True
+        
+    def testmult(self):
+        sp2=self.sp*45
+        self.assert_('FakeWarn' in sp2.warnings)
+
+    def testsum(self):
+        sp2=self.sp + S.FlatSpectrum(1)
+        self.assert_('FakeWarn' in sp2.warnings)

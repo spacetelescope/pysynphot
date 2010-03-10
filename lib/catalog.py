@@ -65,7 +65,8 @@ class Icat(spectrum.TabularSourceSpectrum):
         self._fluxtable = sp(self._wavetable)
         self.waveunits = sp.waveunits
         self.fluxunits = sp.fluxunits
-
+        self.warnings = {}
+        
     def _getArgs(self, indices, filenames):
         results = []
         i = 0
