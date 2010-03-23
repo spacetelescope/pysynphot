@@ -1,24 +1,26 @@
 from __future__ import division
 from unittest import TestCase
+import os
+
 try:
-    from pysynphot.graphtab import GraphTab
+    from pysynphot.graphtab import GraphTable
 except ImportError:
     print "Warning, the tests won't run; GraphTabl not yet implemented"
 
-def maketmg(strdata,tmgname):
+def make_tmg(strdata,tmgname):
     """Helper function"""
     import pyfits
-    out=open('data.txt','w')
+    out=open(tmgname,'w')
     out.write(strdata)
     out.flush()
     out.close()
-    tbhdu=pyfits.tcreate('data.txt',cdfile='cdfile.txt',hfile='h1.txt')
-    tbhdu.writeto(tmgname, clobber=True)
+##     tbhdu=pyfits.tcreate('data.txt',cdfile='cdfile.txt',hfile='h1.txt')
+##     tbhdu.writeto(tmgname, clobber=True)
       
     
 class GraphCase(TestCase):
-    simple1="""
-acs 1 20 clear clear
+    #Drat, put compname first like in real table
+    old_simple1="""acs 1 20 clear clear
 cos 1 20 clear clear
 default 1 100 clear clear
 noota 20 30 clear clear
@@ -39,14 +41,35 @@ wfc1 10300 10310 acs_wfc_ebe_win12f clear
 default 10310 10320 acs_wfc_ccd1 clear
 mjd# 10310 10320 acs_wfc_ccd1_mjd clear
 """
+    simple1="""clear  acs  1  20  clear
+clear  cos  1  20  clear
+clear  default  1  100  clear
+clear  noota  20  30  clear
+hst_ota  default  20  30  clear
+hst_ota  ota  20  30  clear
+clear  acs  30  10000  clear
+clear  cos  30  11000  clear
+clear  sbc  10000  10199  clear
+clear  hrc  10000  10150  clear
+clear  wfc1  10000  10100  clear
+clear  default  10100  10101  clear
+acs_wfc_im123  default  10101  10130  clear
+acs_f606w  f606w  10130  10140  clear
+acs_f550m  f550m  10130  10140  clear
+acs_f555w  f555w  10130  10140  clear
+clear  default  10140  10300  clear
+acs_wfc_ebe_win12f  wfc1  10300  10310  clear
+acs_wfc_ccd1  default  10310  10320  clear
+acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
+
     def setUp(self):
         self.fname='/tmp/simple1.tmg'
-        make_tmg(simple1)
-        self.G=GraphTab(self.fname)
+        make_tmg(self.simple1, self.fname)
+        self.G=GraphTable(self.fname)
 
     def tearDown(self):
         os.unlink(self.fname)
-        os.unlink('data.txt')
+        #os.unlink('data.txt')
         
     def test1(self):
         self.instring='acs,wfc1,f555w'
@@ -55,7 +78,7 @@ mjd# 10310 10320 acs_wfc_ccd1_mjd clear
                   'acs_f555w',
                   'acs_wfc_ebe_win12f',
                   'acs_wfc_ccd1']
-        tst=self.G.traverse(self.instring)
+        tst, ignoretherm =self.G.traverse(self.instring)
         self.assertEqual(self.ref,tst)
 
     def testparam(self):
@@ -65,7 +88,7 @@ mjd# 10310 10320 acs_wfc_ccd1_mjd clear
                   'acs_f606w',
                   'acs_wfc_ebe_win12f',
                   'acs_wfc_ccd1_mjd']
-        tst=self.G.traverse(self.instring)
+        test, ignoretherm =self.G.traverse(self.instring)
         self.assertEqual(self.ref,test)
 
     def testnext(self):
@@ -75,21 +98,24 @@ mjd# 10310 10320 acs_wfc_ccd1_mjd clear
 
     def testunused(self):
         self.instring="cos,foo"
-        self.assertRaises(self.G.traverse,
-                          self.instring,
-                          ValueError)
+        self.assertRaises(ValueError,
+                          self.G.traverse,
+                          self.instring)
+
 
     def testincomplete(self):
         self.instring="acs"
-        self.assertRaises(self.G.traverse,
-                          self.instring,
-                          ValueError)
+        self.assertRaises(ValueError,
+                          self.G.traverse,
+                          self.instring)
+                          
 
     def testambiguous(self):
         self.instring="acs,wfc1,f550m,f555w"
-        self.assertRaises(self.G.traverse,
-                          self.instring,
-                          ValueError)
+        self.assertRaises(ValueError,
+                          self.G.traverse,
+                          self.instring)
+                          
 
     def testloopcheck(self):
         self.assert_(self.G._loopcheck())
@@ -153,7 +179,7 @@ class BadGraph(TestCase):
     badgraph="""something with loops and orphans and so on"""
     def setUp(self):
         self.fname='badgraph_tmg.fits'
-        self.G=GraphTab(self.fname)
+        self.G=GraphTable(self.fname)
 
 class MissingGraph(BadGraph):
     missinggraph="""something with some missing columns"""
@@ -161,6 +187,6 @@ class MissingGraph(BadGraph):
         self.fname='missinggraph_tmg.fits'
 
     def testconstructor(self):
-        self.assertRaises(GraphTab,
+        self.assertRaises(GraphTable,
                           self.fname,
                           ValueError) #or some other error?)
