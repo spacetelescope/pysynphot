@@ -44,12 +44,13 @@ class GraphNode(object):
 class GraphPath(object):
     """Simple class containing the result of a traversal of the GraphTable"""
 
-    def __init__(self, optical, thermal, params, tname):
+    def __init__(self, obsmode_string, optical, thermal, params, tname):
         """ optical: list of optical component names
             thermal: list of thermal component names
             params:  dictionary of {compname:parameterized value} for
                      any parameterized keywords used in the obsmode string
         """
+        self.obsmode = obsmode_string
         self.optical = optical
         self.thermal = thermal
         self.params  = params
@@ -67,15 +68,17 @@ class GraphTable(object):
         self.tab = defaultdict(GraphNode)
         self.tname = fname
         self.inittab()
-
+        self.all_nodes = set()
+        for node in self.tab:
+            self.all_nodes.add(node)
+            self.all_nodes.update(self.add_descendants(node))
         
     def inittab(self):
         #Both FITS files and text files are supported
         # In either case, process one row at a time
         if self.tname.endswith('.fits'):
             f = pyfits.open(self.tname)
-            d = f[1].data
-            for row in d:
+            for row in f[1].data:
                 if not row.field('compname').endswith('graph'):
                     #Make it a list because FITS_records don't fully
                     #implement all the usual sequence behaviors
@@ -126,6 +129,7 @@ class GraphTable(object):
         thm=[]
         used = set()
         paramcomp = dict()
+        nodelist = list()
         
         #Returns a list of keywords and a dict of paramkeys
         kws, paramdict = extract_keywords(icss)
@@ -158,6 +162,7 @@ class GraphTable(object):
 
             #Having picked out the matching node, also pick up
             #the optical & thermal components from it
+            nodelist.append(matchnode)
             nextnode, ocomp, tcomp  = matchnode
             if ocomp is not None:
                 opt.append(ocomp)
@@ -181,10 +186,37 @@ class GraphTable(object):
             raise ValueError("Unused keywords %s"%str([k for k in (kws-used)]))
 
         #The results are returned as a simple class
-        path = GraphPath(opt, thm, paramcomp, self.tname)
+        path = GraphPath(icss, opt, thm, paramcomp, self.tname)
         return path
 
+# Helper/validation methods, should be marked private
+    def add_descendants(self, node):
+        "auxiliary function: add all descendants of node to someset"
+        someset = set()
+        startnode = self.tab[node]
+        defout = startnode.default[0]
+        if defout is not None:
+            someset.add(defout)
+        for kwd, matchnode in startnode.named.items():
+            if matchnode[0] is not None:
+                someset.add(matchnode[0])
+            
+        return someset
 
+    def _loopcheck(self):
+        previously_seen = set()
+        currently_seen = set([1])
+        problemset = set()
+        while currently_seen:
+            node = currently_seen.pop()
+            if node in previously_seen:
+                problemset.add(node)
+            previously_seen.add(node)
+            currently_seen.update(self.add_descendants(node))
+
+        if problemset:
+            raise ValueError("Loop involving nodes: %s", problemset)
+        
 def extract_keywords(icss):
     """Helper function
        icss: input comma-separated string
