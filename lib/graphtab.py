@@ -1,3 +1,7 @@
+""" Graph table re-implementation
+  Data structure & traversal algorithm suggested by Alex Martelli,
+ http://stackoverflow.com/questions/844505/is-a-graph-library-eg-networkx-the-right-solution-for-my-python-problem
+"""
 from __future__ import division
 from collections import defaultdict
 import pyfits
@@ -36,6 +40,27 @@ class GraphNode(object):
 
     def get_named(self,kwd):
         return self.named[kwd]
+
+class GraphPath(object):
+    """Simple class containing the result of a traversal of the GraphTable"""
+
+    def __init__(self, optical, thermal, params, tname):
+        """ optical: list of optical component names
+            thermal: list of thermal component names
+            params:  dictionary of {compname:parameterized value} for
+                     any parameterized keywords used in the obsmode string
+        """
+        self.optical = optical
+        self.thermal = thermal
+        self.params  = params
+        self.gtable  = tname
+
+    def __repr__(self):
+        return str((self.optical, self.thermal, self.params, self.gtable))
+
+    def __len__(self):
+        return max(len(self.optical),
+                   len(self.thermal))
     
 class GraphTable(object):
     def __init__(self, fname):
@@ -49,7 +74,8 @@ class GraphTable(object):
         # In either case, process one row at a time
         if self.tname.endswith('.fits'):
             f = pyfits.open(self.tname)
-            for row in f[1].data:
+            d = f[1].data
+            for row in d:
                 if not row.field('compname').endswith('graph'):
                     #Make it a list because FITS_records don't fully
                     #implement all the usual sequence behaviors
@@ -99,7 +125,8 @@ class GraphTable(object):
         opt=[]
         thm=[]
         used = set()
-
+        paramcomp = dict()
+        
         #Returns a list of keywords and a dict of paramkeys
         kws, paramdict = extract_keywords(icss)
         if verbose:
@@ -121,7 +148,8 @@ class GraphTable(object):
                 #...and that we don't have ambiguity
                 if len(found) == 1:
                     used.update(found)
-                    matchnode = othernodes[found.pop()]
+                    matchkey = found.pop()
+                    matchnode = othernodes[matchkey]
                 else:
                     raise ValueError("Invalid obsmode: cannot use %s together"%found)
             else:
@@ -132,11 +160,15 @@ class GraphTable(object):
             #the optical & thermal components from it
             nextnode, ocomp, tcomp  = matchnode
             if ocomp is not None:
-                #Special handling of paramterization
-                
                 opt.append(ocomp)
             if tcomp is not None:
                 thm.append(tcomp)
+
+            #Special handling of paramterization
+            if matchkey in paramdict:
+                paramcomp[ocomp]=float(paramdict[matchkey])
+                paramcomp[tcomp]=float(paramdict[matchkey])
+
 
             if verbose: print matchnode
 
@@ -148,24 +180,57 @@ class GraphTable(object):
         if kws != used:
             raise ValueError("Unused keywords %s"%str([k for k in (kws-used)]))
 
-        #Return None for thermal if it's empty
-        if thm == []:
-            thm = None
+        #The results are returned as a simple class
+        path = GraphPath(opt, thm, paramcomp, self.tname)
+        return path
 
-        #The optical & thermal components are returned as a tuple
-        return opt, thm
 
 def extract_keywords(icss):
-    """icss: input comma-separated string
+    """Helper function
+       icss: input comma-separated string
+       returns a set of keywords, plus a dict of {parameterized_keyword:parameter_value}
     """
     # Force to lower case & split into keywords
     kws=set(icss.lower().split(','))
+
     #parameterized keywords require special handling
     paramdict={}
-    for k in kws:
-        if "#" in k:
-            key,val=k.split('#')
-            kws.remove(k)
-            kws.add(key+'#')
-            paramdict[key]=val
+    parlist = [k for k in kws if '#' in k]
+    for k in parlist:
+        key,val=k.split('#')
+        #Take the parameterized value off the keyword...
+        kws.remove(k)
+        kws.add(key+'#')
+        #...and save it in the dictionary
+        paramdict[key+'#']=val
     return kws, paramdict
+
+
+class CompTable(object):
+    """This class will cooperate with a GraphPath to produce a
+    realized list of files"""
+    
+    def __init__(self, fname):
+        self.tab = dict()
+        self.tname = fname
+        self.inittab()
+
+    def __getitem__(self, key):
+        return self.tab[key]
+    
+    def inittab(self):
+        #Support fits or text files
+        #Should the filenames be converted at this point, or later?
+        if self.tname.endswith('.fits'):
+            f = pyfits.open(self.tname)
+            for row in f[1].data:
+                self.tab[row.field('compname')] = row.field('filename')
+            f.close()
+        else:
+            #Only simple text file supported
+            f = open(self.tname)
+            for line in f:
+                compname, filename = line.split()
+                self.tab[compname] = filename
+            f.close()
+            

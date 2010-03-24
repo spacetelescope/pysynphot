@@ -78,8 +78,8 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
                   'acs_f555w',
                   'acs_wfc_ebe_win12f',
                   'acs_wfc_ccd1']
-        tst, ignoretherm =self.G.traverse(self.instring)
-        self.assertEqual(self.ref,tst)
+        path =self.G.traverse(self.instring)
+        self.assertEqual(self.ref, path.optical)
 
     def testparam(self):
         self.instring='acs,wfc1,f606w,mjd#70123'
@@ -88,8 +88,8 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
                   'acs_f606w',
                   'acs_wfc_ebe_win12f',
                   'acs_wfc_ccd1_mjd']
-        test, ignoretherm =self.G.traverse(self.instring)
-        self.assertEqual(self.ref,test)
+        path = self.G.traverse(self.instring)
+        self.assertEqual(self.ref, path.optical)
 
     def testnext(self):
         self.instring="acs"
@@ -152,25 +152,25 @@ class ThermalCase(GraphCase):
 
     def test_opt_therm(self):
         self.instring='nicmos,3,f222m'
-        #Is this the right UI? Or should traverse always return
-        #an (opt,thm) tuple?
-        opt=self.G.traverse(self.instring)
-        thm=self.G.traverse(self.instring,thermal=True)
+
+        path =self.G.traverse(self.instring)
+        #Or is this the right UI? 
+        #thm=self.G.traverse(self.instring,thermal=True)
         #The thermal path must be a superset of the optical path,
         #though it need not be a strict superset.
-        self.assert_(set(thm)>=set(opt))
+        self.assert_(set(path.thermal)>=set(path.optical))
 
     def test_therm(self):
         self.instring='nicmos,2,f187n'
         self.ref='tbd'
-        tst=self.G.traverse(self.instring,thermal=True)
-        self.assertEqual(self.ref,tst)
+        path = self.G.traverse(self.instring)
+        self.assertEqual(self.ref,path.thermal)
 
     def test_temp(self):
         #Do we really want to keep this interface?
         self.instring='nicmos,3,f222m,primary#320'
         self.ref='tbd'
-        tst=self.G.traverse(self.instring,thermal=True)
+        path =self.G.traverse(self.instring)
         #A better interface might be to specify temperature overrides
         #when calling the method
         #bp.thermback(primary=320)
@@ -187,6 +187,7 @@ class MissingGraph(BadGraph):
         self.fname='missinggraph_tmg.fits'
 
     def testconstructor(self):
-        self.assertRaises(GraphTable,
-                          self.fname,
-                          ValueError) #or some other error?)
+        self.assertRaises(ValueError,
+                          GraphTable,
+                          self.fname)
+                          
