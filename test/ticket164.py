@@ -2,12 +2,15 @@ import unittest
 import os
 import copy
 
+import numpy as N
+
 from pysynphot import observationmode, units
 from pysynphot.obsbandpass import ObsBandpass
 from pysynphot.locations import irafconvert
 
 #Code under test
 from pysynphot.observationmode import setref, showref, getref
+from pysynphot import units #uses area
 
 startup = getref()
 
@@ -97,6 +100,21 @@ class TestMulti(unittest.TestCase):
         self.assertEqual(startup, tst)
         
                                           
+class TestAreaChanges(unittest.TestCase):
+    def testchange(self):
+        ref=100
+        setref(area=ref)
+        tst=units.observationmode.HSTAREA
+        self.assertEqual(ref,tst)
 
+    def testcounts(self):
+        #Area is used to convert to counts.
+        #So, changing the area should change the resulting counts.
+        w=N.arange(1,10)
+        p=units.Photlam()
+        ref=p.ToCounts(w,w)
+        setref(area=10)
+        tst=p.ToCounts(w,w)
+        self.assert_(N.all(ref != tst))
     
     

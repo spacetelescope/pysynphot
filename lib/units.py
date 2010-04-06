@@ -11,7 +11,10 @@ import math
 import numpy as N
 import locations, spectrum #Circular import
 
-from observationmode import HSTAREA
+import observationmode #needed for HSTAREA
+#cannot just import the constant because it won't get updated
+#when the setref() function is used to change it.
+
         
 C = 2.99792458e18 # speed of light in Angstrom/sec
 H = 6.62620E-27   # Planck's constant
@@ -250,7 +253,7 @@ class Photlam(FluxUnits):
     
     def ToOBMag(self, wave, flux):
         dw = _getDeltaWave(wave)
-        arg = flux * dw * HSTAREA
+        arg = flux * dw * observationmode.HSTAREA
         return -1.085736 * N.log(arg)
 
     def ToVegaMag(self, wave, flux):
@@ -260,7 +263,7 @@ class Photlam(FluxUnits):
         return -2.5 * N.log10(normalized)
 
     def ToCounts(self, wave, flux):
-        return flux * _getDeltaWave(wave) * HSTAREA
+        return flux * _getDeltaWave(wave) * observationmode.HSTAREA
 
 
 #................................................................
@@ -470,7 +473,7 @@ class OBMag(LogFluxUnits):
     
     def ToPhotlam(self, wave, flux):
         dw = _getDeltaWave(wave)
-        return 10.0**(-0.4 * flux) / (dw * HSTAREA)
+        return 10.0**(-0.4 * flux) / (dw * observationmode.HSTAREA)
 
     def unitResponse(self,band):
         #sum = asumr(band,nwave)
@@ -499,7 +502,7 @@ class Counts(FluxUnits):
         self.isDensity = False
     
     def ToPhotlam(self, wave, flux):
-        return flux / (_getDeltaWave(wave) * HSTAREA)
+        return flux / (_getDeltaWave(wave) * observationmode.HSTAREA)
 
     
     def unitResponse(self,band):
