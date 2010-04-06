@@ -67,11 +67,19 @@ class GraphTable(object):
     def __init__(self, fname):
         self.tab = defaultdict(GraphNode)
         self.tname = fname
+        self.problemset=set()
         self.inittab()
+
+        if self.problemset:
+           print "warning, ambiguous nodes encountered"
+           print "(innode, kwd, (outnode, compname, thcompname)"
+           for k in self.problemset:
+               print k
+
         self.all_nodes = set()
         for node in self.tab:
             self.all_nodes.add(node)
-            self.all_nodes.update(self.add_descendants(node))
+            self.add_descendants(node, self.all_nodes)
         
     def inittab(self):
         #Both FITS files and text files are supported
@@ -121,7 +129,12 @@ class GraphTable(object):
         if kwd == 'default':
             self.tab[k].set_default(int(outnode),compname, thcomp)
         else:
-            self.tab[k].set_named(kwd,int(outnode),compname, thcomp)
+            try:
+                self.tab[k].set_named(kwd,int(outnode),compname, thcomp)
+            except IndexError:
+                old = self.tab[k].get_named(kwd)
+                plist = (k, kwd, old, (outnode, compname, thcomp))
+                self.problemset.add(plist)
 
 
     def traverse(self,icss,verbose=False):
@@ -190,9 +203,11 @@ class GraphTable(object):
         return path
 
 # Helper/validation methods, should be marked private
-    def add_descendants(self, node):
+    def add_descendants(self, node, someset=None):
         "auxiliary function: add all descendants of node to someset"
-        someset = set()
+        if someset is None:
+            someset = set()
+
         startnode = self.tab[node]
         defout = startnode.default[0]
         if defout is not None:
@@ -200,10 +215,14 @@ class GraphTable(object):
         for kwd, matchnode in startnode.named.items():
             if matchnode[0] is not None:
                 someset.add(matchnode[0])
-            
-        return someset
 
-    def _loopcheck(self):
+        if someset is None:
+            return someset
+
+    def validate(self):
+        """ Simulataneously checks for loops and unreachable nodes
+        """
+        msg = list()
         previously_seen = set()
         currently_seen = set([1])
         problemset = set()
@@ -212,15 +231,29 @@ class GraphTable(object):
             if node in previously_seen:
                 problemset.add(node)
             previously_seen.add(node)
-            currently_seen.update(self.add_descendants(node))
+            self.add_descendants(node, currently_seen)
 
+        unreachable = self.all_nodes - previously_seen
+        if unreachable:
+            msg.append("%d unreachable nodes: "%len(unreachable))
+            for node in unreachable:
+                msg.append(str(node))
+                
         if problemset:
-            raise ValueError("Loop involving nodes: %s", problemset)
+            msg.append("Loop involving %d nodes"%len(problemset))
+            for node in problemset:
+                msg.append(str(node))
+
+        if msg:
+            return msg
+        else:
+            return True
         
 def extract_keywords(icss):
     """Helper function
-       icss: input comma-separated string
-       returns a set of keywords, plus a dict of {parameterized_keyword:parameter_value}
+      icss: input comma-separated string
+       returns a set of keywords, plus a dict of {parameterized_keyword:
+       parameter_value}
     """
     # Force to lower case & split into keywords
     kws=set(icss.lower().split(','))

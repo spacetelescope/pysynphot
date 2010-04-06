@@ -118,8 +118,12 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
                           
 
     def testloopcheck(self):
-        self.assert_(self.G._loopcheck())
+        self.assert_(not self.G._loopcheck())
 
+    #I think this test is no longer necessary. The new
+    #structure is built of links and not dependent on order
+    #of traversal? But better test that that's true using
+    #a test file
     def testascending(self):
         self.assert_(self.G._ordercheck())
 
@@ -144,7 +148,7 @@ class ThermalCase(GraphCase):
     simpletherm="""something with thermal modes"""
 
     def setUp(self):
-        self.fname='simpletherm_tmg.fits'
+        self.fname='/tmp/t2605492m_tmg.fits' #simpletherm_tmg.fits'
         self.G=GraphTable(self.fname)
 
     def test_consistent(self):
