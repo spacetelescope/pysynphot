@@ -249,7 +249,7 @@ class Test821(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C821_%s.fits"
         cls.setup2()
 
@@ -257,7 +257,7 @@ class Test822(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C822_%s.fits"
         cls.setup2()
 
@@ -265,7 +265,7 @@ class Test823(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C823_%s.fits"
         cls.setup2()
 
@@ -273,7 +273,7 @@ class Test824(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/bpgs/bpgs_35.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/bpgs/bpgs_35.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C824_%s.fits"
         cls.setup2()
 
@@ -281,7 +281,7 @@ class Test825(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_121.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_121.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C825_%s.fits"
         cls.setup2()
 
@@ -289,7 +289,7 @@ class Test826(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_126.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_126.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C826_%s.fits"
         cls.setup2()
 
@@ -297,7 +297,7 @@ class Test827(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_127.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_127.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C827_%s.fits"
         cls.setup2()
 
@@ -305,7 +305,7 @@ class Test828(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_20.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_20.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C828_%s.fits"
         cls.setup2()
 
@@ -313,7 +313,7 @@ class Test829(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_63.fits),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_63.fits),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C829_%s.fits"
         cls.setup2()
 
@@ -569,7 +569,7 @@ class Test861(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),0.5),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),0.5),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C861_%s.fits"
         cls.setup2()
 
@@ -577,7 +577,7 @@ class Test862(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),1.0),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),1.0),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C862_%s.fits"
         cls.setup2()
 
@@ -585,7 +585,7 @@ class Test863(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),2.0),box(10000.0,1.0),1.00E-13,flam)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),2.0),box(10000.0,1.0),1.00E-13,flam)"
         cls.fname="C863_%s.fits"
         cls.setup2()
 
@@ -601,7 +601,7 @@ class Test865(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/1740346_nic_001.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/1740346_nic_001.fits)"
         cls.fname="C865_%s.fits"
         cls.setup2()
 
@@ -609,7 +609,7 @@ class Test866(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits)"
         cls.fname="C866_%s.fits"
         cls.setup2()
 
@@ -617,7 +617,7 @@ class Test867(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd153_mod_004.fits)"
         cls.fname="C867_%s.fits"
         cls.setup2()
 
@@ -625,7 +625,7 @@ class Test868(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f110w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd71_mod_005.fits)"
         cls.fname="C868_%s.fits"
         cls.setup2()
 
@@ -857,7 +857,7 @@ class Test897(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits)"
         cls.fname="C897_%s.fits"
         cls.setup2()
 
@@ -865,7 +865,7 @@ class Test898(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd153_mod_004.fits)"
         cls.fname="C898_%s.fits"
         cls.setup2()
 
@@ -873,7 +873,7 @@ class Test899(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,1,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd71_mod_005.fits)"
         cls.fname="C899_%s.fits"
         cls.setup2()
 
@@ -1033,7 +1033,7 @@ class Test919(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,2,f110w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits)"
         cls.fname="C919_%s.fits"
         cls.setup2()
 
@@ -1041,7 +1041,7 @@ class Test920(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,2,f110w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd153_mod_004.fits)"
         cls.fname="C920_%s.fits"
         cls.setup2()
 
@@ -1049,7 +1049,7 @@ class Test921(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,2,f110w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd71_mod_005.fits)"
         cls.fname="C921_%s.fits"
         cls.setup2()
 
@@ -1089,7 +1089,7 @@ class Test926(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,2,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits)"
         cls.fname="C926_%s.fits"
         cls.setup2()
 
@@ -1097,7 +1097,7 @@ class Test927(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,2,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd153_mod_004.fits)"
         cls.fname="C927_%s.fits"
         cls.setup2()
 
@@ -1105,7 +1105,7 @@ class Test928(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,2,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd71_mod_005.fits)"
         cls.fname="C928_%s.fits"
         cls.setup2()
 
@@ -1449,7 +1449,7 @@ class Test971(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(bessell,h),20,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(bessell,h),20,vegamag)"
         cls.fname="C971_%s.fits"
         cls.setup2()
 
@@ -1457,7 +1457,7 @@ class Test972(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),band(bessell,h),20,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),band(bessell,h),20,vegamag)"
         cls.fname="C972_%s.fits"
         cls.setup2()
 
@@ -1465,7 +1465,7 @@ class Test973(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,f110w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),band(bessell,h),20,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),band(bessell,h),20,vegamag)"
         cls.fname="C973_%s.fits"
         cls.setup2()
 
@@ -1649,7 +1649,7 @@ class Test996(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits)"
         cls.fname="C996_%s.fits"
         cls.setup2()
 
@@ -1657,7 +1657,7 @@ class Test997(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd153_mod_004.fits)"
         cls.fname="C997_%s.fits"
         cls.setup2()
 
@@ -1665,7 +1665,7 @@ class Test998(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,f160w"
-        cls.spectrum="spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits)"
+        cls.spectrum="spec($PYSYN_CDBS/calspec/gd71_mod_005.fits)"
         cls.fname="C998_%s.fits"
         cls.setup2()
 
@@ -1929,7 +1929,7 @@ class Test1031(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.554,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.554,vegamag)"
         cls.fname="C1031_%s.fits"
         cls.setup2()
 
@@ -1937,7 +1937,7 @@ class Test1032(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.658,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.658,vegamag)"
         cls.fname="C1032_%s.fits"
         cls.setup2()
 
@@ -1945,7 +1945,7 @@ class Test1033(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),15,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),15,vegamag)"
         cls.fname="C1033_%s.fits"
         cls.setup2()
 
@@ -1953,7 +1953,7 @@ class Test1034(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),20,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),20,vegamag)"
         cls.fname="C1034_%s.fits"
         cls.setup2()
 
@@ -1961,7 +1961,7 @@ class Test1035(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.047,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.047,vegamag)"
         cls.fname="C1035_%s.fits"
         cls.setup2()
 
@@ -1969,7 +1969,7 @@ class Test1036(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.185,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.185,vegamag)"
         cls.fname="C1036_%s.fits"
         cls.setup2()
 
@@ -1977,7 +1977,7 @@ class Test1037(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.735,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.735,vegamag)"
         cls.fname="C1037_%s.fits"
         cls.setup2()
 
@@ -1985,7 +1985,7 @@ class Test1038(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.742,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.742,vegamag)"
         cls.fname="C1038_%s.fits"
         cls.setup2()
 
@@ -1993,7 +1993,7 @@ class Test1039(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_38.fits),band(nicmos,2,f110w),13,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_38.fits),band(nicmos,2,f110w),13,vegamag)"
         cls.fname="C1039_%s.fits"
         cls.setup2()
 
@@ -2001,7 +2001,7 @@ class Test1040(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g096"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_9.fits),band(nicmos,2,f110w),13,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_9.fits),band(nicmos,2,f110w),13,vegamag)"
         cls.fname="C1040_%s.fits"
         cls.setup2()
 
@@ -2129,7 +2129,7 @@ class Test1056(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.554,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.554,vegamag)"
         cls.fname="C1056_%s.fits"
         cls.setup2()
 
@@ -2137,7 +2137,7 @@ class Test1057(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.658,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.658,vegamag)"
         cls.fname="C1057_%s.fits"
         cls.setup2()
 
@@ -2145,7 +2145,7 @@ class Test1058(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),15,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),15,vegamag)"
         cls.fname="C1058_%s.fits"
         cls.setup2()
 
@@ -2153,7 +2153,7 @@ class Test1059(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),20,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),20,vegamag)"
         cls.fname="C1059_%s.fits"
         cls.setup2()
 
@@ -2161,7 +2161,7 @@ class Test1060(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.047,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.047,vegamag)"
         cls.fname="C1060_%s.fits"
         cls.setup2()
 
@@ -2169,7 +2169,7 @@ class Test1061(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.185,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.185,vegamag)"
         cls.fname="C1061_%s.fits"
         cls.setup2()
 
@@ -2177,7 +2177,7 @@ class Test1062(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.735,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.735,vegamag)"
         cls.fname="C1062_%s.fits"
         cls.setup2()
 
@@ -2185,7 +2185,7 @@ class Test1063(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.742,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.742,vegamag)"
         cls.fname="C1063_%s.fits"
         cls.setup2()
 
@@ -2193,7 +2193,7 @@ class Test1064(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-05,jy)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-05,jy)"
         cls.fname="C1064_%s.fits"
         cls.setup2()
 
@@ -2201,7 +2201,7 @@ class Test1065(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-06,jy)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.00E-06,jy)"
         cls.fname="C1065_%s.fits"
         cls.setup2()
 
@@ -2209,7 +2209,7 @@ class Test1066(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-12,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-12,flam)"
         cls.fname="C1066_%s.fits"
         cls.setup2()
 
@@ -2217,7 +2217,7 @@ class Test1067(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g141"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-13,flam)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_23.fits)*ebmvx(1.0,gal1),box(10000.0,1.0),1.50E-13,flam)"
         cls.fname="C1067_%s.fits"
         cls.setup2()
 
@@ -2337,7 +2337,7 @@ class Test1082(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g206"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.554,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.554,vegamag)"
         cls.fname="C1082_%s.fits"
         cls.setup2()
 
@@ -2345,7 +2345,7 @@ class Test1083(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g206"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.658,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),12.658,vegamag)"
         cls.fname="C1083_%s.fits"
         cls.setup2()
 
@@ -2353,7 +2353,7 @@ class Test1084(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g206"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),15,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),15,vegamag)"
         cls.fname="C1084_%s.fits"
         cls.setup2()
 
@@ -2361,7 +2361,7 @@ class Test1085(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g206"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),20,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),band(nicmos,2,f110w),20,vegamag)"
         cls.fname="C1085_%s.fits"
         cls.setup2()
 
@@ -2369,7 +2369,7 @@ class Test1086(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g206"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.047,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.047,vegamag)"
         cls.fname="C1086_%s.fits"
         cls.setup2()
 
@@ -2377,7 +2377,7 @@ class Test1087(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g206"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.185,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),band(nicmos,2,f110w),14.185,vegamag)"
         cls.fname="C1087_%s.fits"
         cls.setup2()
 
@@ -2385,7 +2385,7 @@ class Test1088(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g206"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.735,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.735,vegamag)"
         cls.fname="C1088_%s.fits"
         cls.setup2()
 
@@ -2393,7 +2393,7 @@ class Test1089(conv_base.ThermCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="nicmos,3,g206"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.742,vegamag)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),band(nicmos,2,f110w),13.742,vegamag)"
         cls.fname="C1089_%s.fits"
         cls.setup2()
 

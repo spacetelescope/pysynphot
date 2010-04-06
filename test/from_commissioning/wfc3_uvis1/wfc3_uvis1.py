@@ -704,7 +704,7 @@ class Test1570(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/agk_81d266_stis_001.fits),0.05),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/agk_81d266_stis_001.fits),0.05),band(johnson,b),28.0,vegamag)"
         cls.fname="C1570_%s.fits"
         cls.setup2()
 
@@ -712,7 +712,7 @@ class Test1571(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/alpha_lyr_stis_003.fits),0.15),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/alpha_lyr_stis_003.fits),0.15),band(johnson,b),28.0,vegamag)"
         cls.fname="C1571_%s.fits"
         cls.setup2()
 
@@ -720,7 +720,7 @@ class Test1572(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/bd_28d4211_stis_001.fits),0.1),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/bd_28d4211_stis_001.fits),0.1),band(johnson,b),28.0,vegamag)"
         cls.fname="C1572_%s.fits"
         cls.setup2()
 
@@ -728,7 +728,7 @@ class Test1573(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/bd_75d325_stis_001.fits),0.15),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/bd_75d325_stis_001.fits),0.15),band(johnson,b),28.0,vegamag)"
         cls.fname="C1573_%s.fits"
         cls.setup2()
 
@@ -736,7 +736,7 @@ class Test1574(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/feige110_stis_001.fits),0.25),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/feige110_stis_001.fits),0.25),band(johnson,b),28.0,vegamag)"
         cls.fname="C1574_%s.fits"
         cls.setup2()
 
@@ -744,7 +744,7 @@ class Test1575(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/feige34_stis_001.fits),0.2),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/feige34_stis_001.fits),0.2),band(johnson,b),28.0,vegamag)"
         cls.fname="C1575_%s.fits"
         cls.setup2()
 
@@ -752,7 +752,7 @@ class Test1576(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),0.25),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),0.25),band(johnson,b),28.0,vegamag)"
         cls.fname="C1576_%s.fits"
         cls.setup2()
 
@@ -760,7 +760,7 @@ class Test1577(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/g93_48_004.fits),0.3),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/g93_48_004.fits),0.3),band(johnson,b),28.0,vegamag)"
         cls.fname="C1577_%s.fits"
         cls.setup2()
 
@@ -768,7 +768,7 @@ class Test1578(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd108_005.fits),0.1),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/gd108_005.fits),0.1),band(johnson,b),28.0,vegamag)"
         cls.fname="C1578_%s.fits"
         cls.setup2()
 
@@ -776,7 +776,7 @@ class Test1579(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),0.15),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),0.15),band(johnson,b),28.0,vegamag)"
         cls.fname="C1579_%s.fits"
         cls.setup2()
 
@@ -784,7 +784,7 @@ class Test1580(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd50_004.fits),0.3),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/gd50_004.fits),0.3),band(johnson,b),28.0,vegamag)"
         cls.fname="C1580_%s.fits"
         cls.setup2()
 
@@ -792,7 +792,7 @@ class Test1581(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),0.05),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),0.05),band(johnson,b),28.0,vegamag)"
         cls.fname="C1581_%s.fits"
         cls.setup2()
 
@@ -800,7 +800,7 @@ class Test1582(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/grw_70d5824_stis_001.fits),0.2),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/grw_70d5824_stis_001.fits),0.2),band(johnson,b),28.0,vegamag)"
         cls.fname="C1582_%s.fits"
         cls.setup2()
 
@@ -808,7 +808,7 @@ class Test1583(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/hz21_stis_001.fits),0.1),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/hz21_stis_001.fits),0.1),band(johnson,b),28.0,vegamag)"
         cls.fname="C1583_%s.fits"
         cls.setup2()
 
@@ -816,7 +816,7 @@ class Test1584(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/hz43_mod_004.fits),0.15),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/hz43_mod_004.fits),0.15),band(johnson,b),28.0,vegamag)"
         cls.fname="C1584_%s.fits"
         cls.setup2()
 
@@ -824,7 +824,7 @@ class Test1585(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/hz44_stis_001.fits),0.2),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/hz44_stis_001.fits),0.2),band(johnson,b),28.0,vegamag)"
         cls.fname="C1585_%s.fits"
         cls.setup2()
 
@@ -832,7 +832,7 @@ class Test1586(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/hz4_stis_001.fits),0.05),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/hz4_stis_001.fits),0.05),band(johnson,b),28.0,vegamag)"
         cls.fname="C1586_%s.fits"
         cls.setup2()
 
@@ -840,7 +840,7 @@ class Test1587(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/lb227_004.fits),0.25),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/lb227_004.fits),0.25),band(johnson,b),28.0,vegamag)"
         cls.fname="C1587_%s.fits"
         cls.setup2()
 
@@ -848,7 +848,7 @@ class Test1588(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/lds749b_mod_001.fits),0.3),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/lds749b_mod_001.fits),0.3),band(johnson,b),28.0,vegamag)"
         cls.fname="C1588_%s.fits"
         cls.setup2()
 
@@ -856,7 +856,7 @@ class Test1589(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/ngc7293_005.fits),0.05),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/ngc7293_005.fits),0.05),band(johnson,b),28.0,vegamag)"
         cls.fname="C1589_%s.fits"
         cls.setup2()
 
@@ -864,7 +864,7 @@ class Test1590(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f555w"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/sun_reference_stis_001.fits),0.1),band(johnson,b),28.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/sun_reference_stis_001.fits),0.1),band(johnson,b),28.0,vegamag)"
         cls.fname="C1590_%s.fits"
         cls.setup2()
 
@@ -1504,7 +1504,7 @@ class Test1670(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_1.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_1.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1670_%s.fits"
         cls.setup2()
 
@@ -1512,7 +1512,7 @@ class Test1671(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_1.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_1.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1671_%s.fits"
         cls.setup2()
 
@@ -1520,7 +1520,7 @@ class Test1672(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_10.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_10.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1672_%s.fits"
         cls.setup2()
 
@@ -1528,7 +1528,7 @@ class Test1673(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_10.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_10.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1673_%s.fits"
         cls.setup2()
 
@@ -1536,7 +1536,7 @@ class Test1674(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_10.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_10.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1674_%s.fits"
         cls.setup2()
 
@@ -1544,7 +1544,7 @@ class Test1675(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_100.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_100.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1675_%s.fits"
         cls.setup2()
 
@@ -1552,7 +1552,7 @@ class Test1676(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_100.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_100.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1676_%s.fits"
         cls.setup2()
 
@@ -1560,7 +1560,7 @@ class Test1677(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_100.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_100.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1677_%s.fits"
         cls.setup2()
 
@@ -1568,7 +1568,7 @@ class Test1678(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_100.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_100.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1678_%s.fits"
         cls.setup2()
 
@@ -1576,7 +1576,7 @@ class Test1679(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_11.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_11.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1679_%s.fits"
         cls.setup2()
 
@@ -1584,7 +1584,7 @@ class Test1680(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_11.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_11.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1680_%s.fits"
         cls.setup2()
 
@@ -1592,7 +1592,7 @@ class Test1681(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_114.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_114.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1681_%s.fits"
         cls.setup2()
 
@@ -1600,7 +1600,7 @@ class Test1682(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_117.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_117.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1682_%s.fits"
         cls.setup2()
 
@@ -1608,7 +1608,7 @@ class Test1683(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_118.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_118.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1683_%s.fits"
         cls.setup2()
 
@@ -1616,7 +1616,7 @@ class Test1684(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_12.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_12.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1684_%s.fits"
         cls.setup2()
 
@@ -1624,7 +1624,7 @@ class Test1685(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_12.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_12.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1685_%s.fits"
         cls.setup2()
 
@@ -1632,7 +1632,7 @@ class Test1686(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_13.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_13.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1686_%s.fits"
         cls.setup2()
 
@@ -1640,7 +1640,7 @@ class Test1687(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_14.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_14.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1687_%s.fits"
         cls.setup2()
 
@@ -1648,7 +1648,7 @@ class Test1688(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_14.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_14.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1688_%s.fits"
         cls.setup2()
 
@@ -1656,7 +1656,7 @@ class Test1689(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_15.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_15.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1689_%s.fits"
         cls.setup2()
 
@@ -1664,7 +1664,7 @@ class Test1690(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_16.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_16.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1690_%s.fits"
         cls.setup2()
 
@@ -1672,7 +1672,7 @@ class Test1691(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_16.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_16.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1691_%s.fits"
         cls.setup2()
 
@@ -1680,7 +1680,7 @@ class Test1692(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_17.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_17.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1692_%s.fits"
         cls.setup2()
 
@@ -1688,7 +1688,7 @@ class Test1693(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_17.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_17.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1693_%s.fits"
         cls.setup2()
 
@@ -1696,7 +1696,7 @@ class Test1694(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_18.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_18.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1694_%s.fits"
         cls.setup2()
 
@@ -1704,7 +1704,7 @@ class Test1695(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_18.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_18.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1695_%s.fits"
         cls.setup2()
 
@@ -1712,7 +1712,7 @@ class Test1696(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_19.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_19.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1696_%s.fits"
         cls.setup2()
 
@@ -1720,7 +1720,7 @@ class Test1697(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_19.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_19.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1697_%s.fits"
         cls.setup2()
 
@@ -1728,7 +1728,7 @@ class Test1698(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_2.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_2.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1698_%s.fits"
         cls.setup2()
 
@@ -1736,7 +1736,7 @@ class Test1699(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_2.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_2.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1699_%s.fits"
         cls.setup2()
 
@@ -1744,7 +1744,7 @@ class Test1700(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_20.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_20.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1700_%s.fits"
         cls.setup2()
 
@@ -1752,7 +1752,7 @@ class Test1701(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_20.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_20.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1701_%s.fits"
         cls.setup2()
 
@@ -1760,7 +1760,7 @@ class Test1702(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_22.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_22.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1702_%s.fits"
         cls.setup2()
 
@@ -1768,7 +1768,7 @@ class Test1703(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_23.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_23.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1703_%s.fits"
         cls.setup2()
 
@@ -1776,7 +1776,7 @@ class Test1704(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_24.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_24.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1704_%s.fits"
         cls.setup2()
 
@@ -1784,7 +1784,7 @@ class Test1705(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_25.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_25.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1705_%s.fits"
         cls.setup2()
 
@@ -1792,7 +1792,7 @@ class Test1706(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_26.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_26.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1706_%s.fits"
         cls.setup2()
 
@@ -1800,7 +1800,7 @@ class Test1707(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_27.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_27.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1707_%s.fits"
         cls.setup2()
 
@@ -1808,7 +1808,7 @@ class Test1708(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_29.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_29.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1708_%s.fits"
         cls.setup2()
 
@@ -1816,7 +1816,7 @@ class Test1709(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_3.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_3.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1709_%s.fits"
         cls.setup2()
 
@@ -1824,7 +1824,7 @@ class Test1710(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_31.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_31.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1710_%s.fits"
         cls.setup2()
 
@@ -1832,7 +1832,7 @@ class Test1711(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_33.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_33.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1711_%s.fits"
         cls.setup2()
 
@@ -1840,7 +1840,7 @@ class Test1712(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_34.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_34.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1712_%s.fits"
         cls.setup2()
 
@@ -1848,7 +1848,7 @@ class Test1713(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_36.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_36.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1713_%s.fits"
         cls.setup2()
 
@@ -1856,7 +1856,7 @@ class Test1714(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_37.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_37.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1714_%s.fits"
         cls.setup2()
 
@@ -1864,7 +1864,7 @@ class Test1715(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_38.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_38.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1715_%s.fits"
         cls.setup2()
 
@@ -1872,7 +1872,7 @@ class Test1716(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_4.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_4.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1716_%s.fits"
         cls.setup2()
 
@@ -1880,7 +1880,7 @@ class Test1717(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_40.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_40.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1717_%s.fits"
         cls.setup2()
 
@@ -1888,7 +1888,7 @@ class Test1718(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_5.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_5.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1718_%s.fits"
         cls.setup2()
 
@@ -1896,7 +1896,7 @@ class Test1719(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_5.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_5.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1719_%s.fits"
         cls.setup2()
 
@@ -1904,7 +1904,7 @@ class Test1720(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_50.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_50.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1720_%s.fits"
         cls.setup2()
 
@@ -1912,7 +1912,7 @@ class Test1721(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_51.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_51.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1721_%s.fits"
         cls.setup2()
 
@@ -1920,7 +1920,7 @@ class Test1722(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_52.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_52.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1722_%s.fits"
         cls.setup2()
 
@@ -1928,7 +1928,7 @@ class Test1723(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_53.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_53.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1723_%s.fits"
         cls.setup2()
 
@@ -1936,7 +1936,7 @@ class Test1724(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_54.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_54.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1724_%s.fits"
         cls.setup2()
 
@@ -1944,7 +1944,7 @@ class Test1725(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_55.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_55.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1725_%s.fits"
         cls.setup2()
 
@@ -1952,7 +1952,7 @@ class Test1726(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_56.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_56.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1726_%s.fits"
         cls.setup2()
 
@@ -1960,7 +1960,7 @@ class Test1727(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_6.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_6.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1727_%s.fits"
         cls.setup2()
 
@@ -1968,7 +1968,7 @@ class Test1728(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_60.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_60.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1728_%s.fits"
         cls.setup2()
 
@@ -1976,7 +1976,7 @@ class Test1729(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_63.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_63.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1729_%s.fits"
         cls.setup2()
 
@@ -1984,7 +1984,7 @@ class Test1730(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_63.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_63.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1730_%s.fits"
         cls.setup2()
 
@@ -1992,7 +1992,7 @@ class Test1731(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_65.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_65.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1731_%s.fits"
         cls.setup2()
 
@@ -2000,7 +2000,7 @@ class Test1732(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_65.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_65.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1732_%s.fits"
         cls.setup2()
 
@@ -2008,7 +2008,7 @@ class Test1733(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_65.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_65.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1733_%s.fits"
         cls.setup2()
 
@@ -2016,7 +2016,7 @@ class Test1734(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_67.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_67.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1734_%s.fits"
         cls.setup2()
 
@@ -2024,7 +2024,7 @@ class Test1735(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_67.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_67.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1735_%s.fits"
         cls.setup2()
 
@@ -2032,7 +2032,7 @@ class Test1736(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_69.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_69.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1736_%s.fits"
         cls.setup2()
 
@@ -2040,7 +2040,7 @@ class Test1737(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_76.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_76.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1737_%s.fits"
         cls.setup2()
 
@@ -2048,7 +2048,7 @@ class Test1738(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_87.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_87.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1738_%s.fits"
         cls.setup2()
 
@@ -2056,7 +2056,7 @@ class Test1739(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_9.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_9.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1739_%s.fits"
         cls.setup2()
 
@@ -2064,7 +2064,7 @@ class Test1740(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_93.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_93.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1740_%s.fits"
         cls.setup2()
 
@@ -2072,7 +2072,7 @@ class Test1741(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,f814w"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_95.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_95.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1741_%s.fits"
         cls.setup2()
 
@@ -2832,7 +2832,7 @@ class Test1836(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_1.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_1.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1836_%s.fits"
         cls.setup2()
 
@@ -2840,7 +2840,7 @@ class Test1837(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_1.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_1.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1837_%s.fits"
         cls.setup2()
 
@@ -2848,7 +2848,7 @@ class Test1838(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_10.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_10.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1838_%s.fits"
         cls.setup2()
 
@@ -2856,7 +2856,7 @@ class Test1839(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_11.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_11.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1839_%s.fits"
         cls.setup2()
 
@@ -2864,7 +2864,7 @@ class Test1840(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_12.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_12.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1840_%s.fits"
         cls.setup2()
 
@@ -2872,7 +2872,7 @@ class Test1841(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_14.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_14.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1841_%s.fits"
         cls.setup2()
 
@@ -2880,7 +2880,7 @@ class Test1842(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1842_%s.fits"
         cls.setup2()
 
@@ -2888,7 +2888,7 @@ class Test1843(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.16,smc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_2.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.16,smc)"
         cls.fname="C1843_%s.fits"
         cls.setup2()
 
@@ -2896,7 +2896,7 @@ class Test1844(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_3.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.2,lmc)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_3.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.2,lmc)"
         cls.fname="C1844_%s.fits"
         cls.setup2()
 
@@ -2904,7 +2904,7 @@ class Test1845(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_4.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.24,xgal)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_4.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.24,xgal)"
         cls.fname="C1845_%s.fits"
         cls.setup2()
 
@@ -2912,7 +2912,7 @@ class Test1846(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_5.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_5.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1846_%s.fits"
         cls.setup2()
 
@@ -2920,7 +2920,7 @@ class Test1847(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_5.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_5.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.08,gal1)"
         cls.fname="C1847_%s.fits"
         cls.setup2()
 
@@ -2928,7 +2928,7 @@ class Test1848(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_6.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.12,gal3)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_6.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.12,gal3)"
         cls.fname="C1848_%s.fits"
         cls.setup2()
 
@@ -2936,7 +2936,7 @@ class Test1849(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(spec(/grp/hst/cdbs//grid/pickles/dat_uvk/pickles_uk_9.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
+        cls.spectrum="rn(spec($PYSYN_CDBS/grid/pickles/dat_uvk/pickles_uk_9.fits),band(cousins,i),23.0,vegamag)*ebmvx(0.04,gal1)"
         cls.fname="C1849_%s.fits"
         cls.setup2()
 
@@ -2944,7 +2944,7 @@ class Test1850(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/g191b2b_mod_004.fits),0.05),band(johnson,b),23.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/g191b2b_mod_004.fits),0.05),band(johnson,b),23.0,vegamag)"
         cls.fname="C1850_%s.fits"
         cls.setup2()
 
@@ -2952,7 +2952,7 @@ class Test1851(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd153_mod_004.fits),0.1),band(johnson,b),23.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/gd153_mod_004.fits),0.1),band(johnson,b),23.0,vegamag)"
         cls.fname="C1851_%s.fits"
         cls.setup2()
 
@@ -2960,7 +2960,7 @@ class Test1852(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="wfc3,uvis1,g280"
-        cls.spectrum="rn(z(spec(/grp/hst/cdbs//calspec/gd71_mod_005.fits),0.15),band(johnson,b),23.0,vegamag)"
+        cls.spectrum="rn(z(spec($PYSYN_CDBS/calspec/gd71_mod_005.fits),0.15),band(johnson,b),23.0,vegamag)"
         cls.fname="C1852_%s.fits"
         cls.setup2()
 
