@@ -117,8 +117,10 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
                           self.instring)
                           
 
-    def testloopcheck(self):
-        self.assert_(not self.G._loopcheck())
+    #Included in validate: not separately available.
+    #it -could- be, but that would be very inefficient
+    #def testloopcheck(self):
+    #    self.assert_(not self.G._loopcheck())
 
     #I think this test is no longer necessary. The new
     #structure is built of links and not dependent on order
@@ -127,14 +129,17 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
     def testascending(self):
         self.assert_(self.G._ordercheck())
 
-    def testreachable(self):
-        self.assert_(self.G._orphancheck())
+    #also included in validate but not separately
+    #def testreachable(self):
+    #    self.assert_(self.G._orphancheck())
 
     def testvalidate(self):
         #Performs all the earlier checks
         self.assert_(self.G.validate())
 
     def testallmodes(self):
+        #Purpose: to generate all legal obsmodes.
+        # G.all_nodes is for something else
         self.ref=set(['cos',
                       'acs, hrc',
                       'acs, wfc1, f606w',
@@ -180,16 +185,44 @@ class ThermalCase(GraphCase):
         #bp.thermback(primary=320)
 
 class BadGraph(TestCase):
-    badgraph="""something with loops and orphans and so on"""
+    badgraph="""clear acs 1 20 clear
+clear acs 15 30 clear
+clear acs 20 30 clear
+clear cos 1 20 clear
+clear cos 20 30 clear
+clear cos 30 40 clear
+clear cos 40 20 clear
+"""
     def setUp(self):
-        self.fname='badgraph_tmg.fits'
-        self.G=GraphTable(self.fname)
+        self.fname='/tmp/badgraph_tmg.txt'
+        f=open(self.fname,'w')
+        f.write(self.badgraph)
+        f.close()
+        self.G=GraphTable(self.fname)        
 
-class MissingGraph(BadGraph):
-    missinggraph="""something with some missing columns"""
+    def testorphan(self):
+        msg = self.G.validate()
+        self.assert_('unreachable' in ''.join(msg))
+
+    def testloop(self):
+        msg = self.G.validate()
+        self.assert_('Loop' in ''.join(msg))
+
+class MissingGraph(TestCase):
+    #remove the last column of the simple graph case
+    missinggraph=GraphCase.simple1.replace('clear\n','\n')
     def setUp(self):
-        self.fname='missinggraph_tmg.fits'
+        self.fname='/tmp/missinggraph_tmg.txt'
+        f=open(self.fname,'w')
+        f.write(self.missinggraph)
+        f.close()
 
+    def tearDown(self):
+        try:
+            os.unlink(self.fname)
+        except Exception: #ok
+            pass
+        
     def testconstructor(self):
         self.assertRaises(ValueError,
                           GraphTable,

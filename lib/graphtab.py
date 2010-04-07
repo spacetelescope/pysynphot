@@ -203,12 +203,11 @@ class GraphTable(object):
         return path
 
 # Helper/validation methods, should be marked private
-    def add_descendants(self, node, someset=None):
+    def add_descendants(self, node, updateset=None):
         "auxiliary function: add all descendants of node to someset"
-        if someset is None:
-            someset = set()
-
+        someset = set()
         startnode = self.tab[node]
+        
         defout = startnode.default[0]
         if defout is not None:
             someset.add(defout)
@@ -216,7 +215,9 @@ class GraphTable(object):
             if matchnode[0] is not None:
                 someset.add(matchnode[0])
 
-        if someset is None:
+        if someset is not None:
+            updateset.update(someset)
+        else:
             return someset
 
     def validate(self):
@@ -230,8 +231,9 @@ class GraphTable(object):
             node = currently_seen.pop()
             if node in previously_seen:
                 problemset.add(node)
-            previously_seen.add(node)
-            self.add_descendants(node, currently_seen)
+            else:
+                previously_seen.add(node)
+                self.add_descendants(node, currently_seen)
 
         unreachable = self.all_nodes - previously_seen
         if unreachable:
