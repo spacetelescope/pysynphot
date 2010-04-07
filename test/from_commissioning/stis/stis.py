@@ -760,7 +760,7 @@ class Test1195(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g140l,fuvmama,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/g191b2b_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/g191b2b_mod_004.fits"
         cls.fname="C1195_%s.fits"
         cls.setup2()
 
@@ -768,7 +768,7 @@ class Test1196(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g140l,fuvmama,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd153_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd153_mod_004.fits"
         cls.fname="C1196_%s.fits"
         cls.setup2()
 
@@ -776,7 +776,7 @@ class Test1197(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g140l,fuvmama,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd71_mod_005.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd71_mod_005.fits"
         cls.fname="C1197_%s.fits"
         cls.setup2()
 
@@ -816,7 +816,7 @@ class Test1202(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g230l,nuvmama,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/g191b2b_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/g191b2b_mod_004.fits"
         cls.fname="C1202_%s.fits"
         cls.setup2()
 
@@ -824,7 +824,7 @@ class Test1203(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g230l,nuvmama,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd153_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd153_mod_004.fits"
         cls.fname="C1203_%s.fits"
         cls.setup2()
 
@@ -832,7 +832,7 @@ class Test1204(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g230l,nuvmama,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd71_mod_005.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd71_mod_005.fits"
         cls.fname="C1204_%s.fits"
         cls.setup2()
 
@@ -840,7 +840,7 @@ class Test1205(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g230lb,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/g191b2b_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/g191b2b_mod_004.fits"
         cls.fname="C1205_%s.fits"
         cls.setup2()
 
@@ -848,7 +848,7 @@ class Test1206(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g230lb,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd153_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd153_mod_004.fits"
         cls.fname="C1206_%s.fits"
         cls.setup2()
 
@@ -856,7 +856,7 @@ class Test1207(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g230lb,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd71_mod_005.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd71_mod_005.fits"
         cls.fname="C1207_%s.fits"
         cls.setup2()
 
@@ -864,7 +864,7 @@ class Test1208(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g430l,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/g191b2b_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/g191b2b_mod_004.fits"
         cls.fname="C1208_%s.fits"
         cls.setup2()
 
@@ -872,7 +872,7 @@ class Test1209(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g430l,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd153_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd153_mod_004.fits"
         cls.fname="C1209_%s.fits"
         cls.setup2()
 
@@ -880,7 +880,7 @@ class Test1210(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g430l,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd71_mod_005.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd71_mod_005.fits"
         cls.fname="C1210_%s.fits"
         cls.setup2()
 
@@ -888,7 +888,7 @@ class Test1211(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g750l,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/g191b2b_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/g191b2b_mod_004.fits"
         cls.fname="C1211_%s.fits"
         cls.setup2()
 
@@ -896,7 +896,7 @@ class Test1212(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g750l,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd153_mod_004.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd153_mod_004.fits"
         cls.fname="C1212_%s.fits"
         cls.setup2()
 
@@ -904,7 +904,7 @@ class Test1213(conv_base.CommCase):
     @classmethod
     def setUpClass(cls):
         cls.obsmode="stis,g750l,ccd,s52x2"
-        cls.spectrum="$PYSYN_CDBScalspec/gd71_mod_005.fits"
+        cls.spectrum="$PYSYN_CDBS/calspec/gd71_mod_005.fits"
         cls.fname="C1213_%s.fits"
         cls.setup2()
 
