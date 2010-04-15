@@ -1,14 +1,14 @@
 from __future__ import division
 from unittest import TestCase
 try:
-    from pysynphot.comptab import Comptab
+    from pysynphot.graphtab import CompTable 
 except ImportError:
     print "not implemented yet"
 
 class CompCase(TestCase):
     def setUp(self):
         self.fname='something'
-        self.C=Comptab(self.fname)
+        self.C=CompTable(self.fname)
 
     def test_nodups(self):
         #Test for duplicate filenames.
