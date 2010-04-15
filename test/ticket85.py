@@ -35,30 +35,11 @@ class EnforceWave(testutil.FPTestCase):
                       'valid':(self.valid,self.flux),
                       'desc':(self.descending,self.flux),
                       'mixed':(self.mixed,self.flux)}
-    def test(self):
-        self.args=self.argdict['valid']
+
+    def testdescending(self):
+        self.args=self.argdict['desc']
         sp=self.constructor(*self.args)
-        self.assertEqualNumpy(sp.wave,self.valid)
-
-        
-    def testzero(self):
-        self.args=self.argdict['zero']
-        self.assertRaises(ValueError,
-                          self.constructor,
-                          *self.args)
-
-    def testneg(self):
-        self.args=self.argdict['neg']
-        self.assertRaises(ValueError,
-                          self.constructor,
-                          *self.args)
-
-    def testmixed(self):
-        self.args=self.argdict['mixed']
-        self.assertRaises(ValueError,
-                          self.constructor,
-                          *self.args)
-
+        self.assertEqualNumpy(sp.wave,self.descending[::-1])
 
                     
 class EnforceWaveFile(EnforceWave):
