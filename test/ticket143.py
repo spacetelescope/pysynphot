@@ -35,43 +35,48 @@ class TestDefault(unittest.TestCase):
 ## >>> print obs.bandpass.obsmode.ctname
 ## /grp/hst/cdbs/mtab/t8h1822tm_tmc.fits
         
-        ref = 2.99447
+        ref = self.obs.binflux[self.obs.binwave == 5500.0]
         tst = self.obs.sample(self.refwave,
                               binned=True,
                               fluxunits='counts')
+
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tda['test']=tst
-        self.assert_(abs(self.tra['discrep']) <= self.tda['thresh'],
+        #Since we're getting the ref out of the same array, the
+        #numbers really should be exactly the same
+        self.assert_(abs(self.tra['discrep']) == 0,
                      'expected %f, got %f'%(ref,tst))
 
     def testp3(self):
         self.tda['wave']=5523.3
         #Important note: binwave contains bin _centers_.
-        ref=2.96376634
+        ref=self.obs.binflux[self.obs.binwave == 5523.0]
         
         tst = self.obs.sample(self.tda['wave'],binned=True,fluxunits='counts')
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tda['test']=tst
-        self.assert_(abs(self.tra['discrep']) <= self.tda['thresh'],
+        self.assert_(abs(self.tra['discrep']) == 0.0,
                      'expected %f, got %f'%(ref,tst))
 
     def testp8(self):
         self.tda['wave']=5523.8
         #Important note: binwave contains bin _centers_.
-        ref=2.96283698
+        ref=self.obs.binflux[self.obs.binwave == 5524.0]
         
         tst = self.obs.sample(self.tda['wave'],binned=True,fluxunits='counts')
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tda['test']=tst
-        self.assert_(abs(self.tra['discrep']) <= self.tda['thresh'],
+        self.assert_(abs(self.tra['discrep']) ==0.0,
                      'expected %f, got %f'%(ref,tst))
 
 class TestStisDef(unittest.TestCase):
     #Same tests for an actual disperser
     def setUp(self):
+        #Use a defined comptab here: we're examining native arrays
+        S.setref(comptable='$PYSYN_CDBS/mtab/u4c18498m_tmc.fits')
         self.sp=S.BlackBody(4400)
         self.bp=S.ObsBandpass('stis,fuvmama,g140m,c1470,s52x01')
         self.obs=S.Observation(self.sp,self.bp)
@@ -80,6 +85,7 @@ class TestStisDef(unittest.TestCase):
         self.tra=dict()
         self.tda['spectrum']=str(self.sp)
         self.tra['bandpass']=str(self.bp)
+        
 ## >>> bp=S.ObsBandpass('stis,fuvmama,g140m,c1470,s52x01')
 ## >>> sp=S.BlackBody(4400)
 ## >>> obs=S.Observation(sp,bp)
@@ -121,14 +127,21 @@ class TestStisDef(unittest.TestCase):
                      'expected %f, got %f'%(ref,tst))
 
     def testnativeref(self):
-        ref=self.obs.flux.item(N.where(self.obs.wave==self.refwave))
+
+        #Look up the reference in the correct units
+        self.obs.convert('counts')
+        ref=self.obs.flux[self.obs.wave==self.refwave]
+        self.obs.convert('photlam')
+        
         tst = self.obs.sample(self.refwave,
                               binned=False,
                               fluxunits='counts')
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tra['test']=tst
-        self.assert_(self.tra['discrep']<=self.tda['thresh'],
+        #This one may not be an exact match. Although refwave is
+        #an exact match in the lookup,
+        self.assert_(ref == tst,
                      'expected %f, got %f'%(ref,tst))
         
 ## >>> N.where(obs.wave == 1450)
@@ -144,7 +157,7 @@ class TestStisDef(unittest.TestCase):
 ## array([  2.06898932e-07,   1.93621958e-07,   1.62642353e-07,
 ##          1.18385774e-07])
 
-    def testp03(self):
+    def testnp03(self):
         self.refwave=1450.03
         ref=1.93621958e-07
         tst = self.obs.sample(self.refwave,
@@ -155,7 +168,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['test']=tst
         self.assert_(self.tra['discrep']<=self.tda['thresh'])
 
-    def testp1(self):
+    def testnp1(self):
         self.refwave=1450.1
         ref=1.62642353e-07
         tst = self.obs.sample(self.refwave,
@@ -166,7 +179,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['test']=tst
         self.assert_(self.tra['discrep']<=self.tda['thresh'])
 
-    def testp2(self):
+    def testnp2(self):
         self.refwave=1450.2
         ref= 1.18385774e-07
         tst = self.obs.sample(self.refwave,
@@ -177,7 +190,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['test']=tst
         self.assert_(self.tra['discrep']<=self.tda['thresh'])
 
-    def testlast(self):
+    def testnlast(self):
         self.refwave=self.obs.binwave[-1]
         ref = self.obs.binflux[-1]
         tst = self.obs.sample(self.refwave,
