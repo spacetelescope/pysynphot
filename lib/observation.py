@@ -362,11 +362,14 @@ class Observation(spectrum.CompositeSourceSpectrum):
                 raise NotImplementedError("Sorry, only scalar samples are supported at this time")
             else:
                 #Find the bin in which it belongs.
-                #The relationship here is that
-                #_bin_edges[i] corresponds to binwave[i+1]
+                #_bin_edge[i] is the low edge of the bin centered
+                #at binwave[i].
+
                 idx = N.where(swave >= self._bin_edges)[0]
+                #idx[-1] is the largest edge that is still smaller
+                #than swave
                 try:
-                    ans = self.binflux[idx[-1]+1]
+                    ans = self.binflux[idx[-1]]
                 except IndexError:
                     raise ValueError("Value out of range: wavelength %g not contained in range [%g, %g]"%(swave,self.binwave[0],self.binwave[-1]))
 
