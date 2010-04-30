@@ -177,7 +177,8 @@ def factory(redlaw, *args, **kwargs):
     return apply(reddeningClasses[string.lower(redlaw)], args, kwargs)
 
 class Extinction(spectrum.SpectralElement):
-    """extinction = Extinction(extinction in magnitudes, 'gal1|smc|lmc reddening laws)"""
+    """extinction = Extinction(extinction in magnitudes,
+    'gal1|smc|lmc reddening laws)"""
     def __init__(self, extval, redlaw):
         ''' Extinction mimics as a spectral element.
         '''
@@ -190,8 +191,3 @@ class Extinction(spectrum.SpectralElement):
         self.isAnalytic=False
         self.warnings={}
 
-    def options():
-        print "Supported reddening laws:"
-        for k in reddeningClasses.keys():
-            print "%s: %s"%(k,reddeningClasses[k].citation)
-    options=staticmethod(options)

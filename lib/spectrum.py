@@ -812,8 +812,12 @@ class AnalyticSpectrum(SourceSpectrum):
 
 
 class GaussianSource(AnalyticSpectrum):
-    """spec = GaussianSource(TotalFlux under Gaussian, central wavelength of
-    Gaussian, FWHM of Gaussian, waveunits, fluxunits)
+    """spec = GaussianSource(TotalFlux under Gaussian,
+                             central wavelength of Gaussian,
+                             FWHM of Gaussian,
+                             waveunits, fluxunits)
+
+                             
     """
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
                  fluxunits='flam'):
@@ -893,7 +897,12 @@ class FlatSpectrum(AnalyticSpectrum):
 
 
 class Powerlaw(AnalyticSpectrum):
-    """spec=PowerLaw(refwave, exponent, waveunits, fluxunits). As described in U{http://www.stsci.edu/resources/software_hardware/stsdas/synphot/SynphotManual.pdf}, table 3.5"""
+    """spec=PowerLaw(refwave, exponent, waveunits, fluxunits).
+
+    Power law spectrum of the form (lambda/refval)**exponent,
+    where refval is in Angstroms.
+    The spectrum is normalized to a flux of 1 in "fluxunits" at "refval".
+    """
     def __init__(self, refwave, index, waveunits='angstrom', fluxunits='photlam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.wavelength = None
@@ -921,7 +930,13 @@ class Powerlaw(AnalyticSpectrum):
 
 
 class BlackBody(AnalyticSpectrum):
-    """ spec = BlackBody(T in Kelvin)"""
+    """
+    spec = BlackBody(T in Kelvin)
+    
+    Blackbody spectrum with specified temperature, in Kelvin.
+    The flux of the spectrum is normalized to a star of solar radius
+    at a distance of 1 kpc.L
+    """
     def __init__(self, temperature):
         waveunits=units.Units('angstrom')
         fluxunits=units.Units('photlam')

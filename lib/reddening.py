@@ -45,7 +45,11 @@ class RedLaw(CustomRedLaw):
         f.close()
 
 def Extinction(extval,name=None):
-   """Factory function to return the right kind of reddening.
+   """
+   extinction = Extinction(extinction (E(B-V)) in magnitudes,
+                           'reddening law')
+                              
+   Factory function to return the right kind of reddening.
    If no name is provided, the average Milky Way extinction will
    be used. Extinction laws are defined in data files that must be
    installed with the CDBS files. Presently, the following extinction
