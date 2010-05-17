@@ -52,12 +52,12 @@ def calcphot(parlist):
     ostat=bp.check_overlap(sp)
     
     try:
-        obs=Observation(sp,bp,binned=True,force=odict[ostat])
+        obs=Observation(sp,bp,force=odict[ostat])
     except KeyError:
-        obs=Observation(sp,bp,bp.wave,binned=True,force=odict[ostat])
+        obs=Observation(sp,bp,bp.wave,force=odict[ostat])
 
     obs.convert('counts')
-    ans=obs.efflam()
+    ans=obs.efflam(binned=True)
 
     if ostat == 'full':
         return ans
