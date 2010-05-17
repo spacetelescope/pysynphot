@@ -40,7 +40,10 @@ def parse_spec(syncommand):
     return sp
 
 def calcphot(parlist):
-    """Calculate either effstim or efflam, depending on the input argument"""
+    """Calculate either effstim or efflam, depending on the input argument
+    ** MDDOFIED 17 May 2010 to explicitly state binned=False for
+    ease of JETC/pyetc comparison.
+    """
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['obsmode'])
@@ -49,9 +52,9 @@ def calcphot(parlist):
     ostat=bp.check_overlap(sp)
     
     try:
-        obs=Observation(sp,bp,force=odict[ostat])
+        obs=Observation(sp,bp,binned=True,force=odict[ostat])
     except KeyError:
-        obs=Observation(sp,bp,bp.wave,force=odict[ostat])
+        obs=Observation(sp,bp,bp.wave,binned=True,force=odict[ostat])
 
     obs.convert('counts')
     ans=obs.efflam()
@@ -72,7 +75,11 @@ def calcspec(parlist):
 
 def countrate(parlist):
     """Return the pivot wavelength and countrate of the spectrum as
-    observed through the obsmode, but based on the native waveset"""
+    observed through the obsmode, but based on the native waveset
+    ** MDDOFIED 17 May 2010 to explicitly state binned=False for
+    ease of JETC/pyetc comparison.
+    
+    """
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['instrument'])
@@ -87,8 +94,8 @@ def countrate(parlist):
         obs=Observation(sp,bp,bp.wave,force=odict[ostat])
 
     obs.convert('counts')
-    efflam=obs.efflam()
-    ans=obs.countrate(binned=False)
+    efflam=obs.efflam(binned=True)
+    ans=obs.countrate(binned=True)
 
     if ostat == 'full':
         return ans,efflam
@@ -98,7 +105,11 @@ def countrate(parlist):
 def specrate(parlist):
     """Return the countrate of the spectrum as observed through the
     obsmode, based on the binned wavelength set; and write the resulting
-    spectrum to a file, returning the filename."""
+    spectrum to a file, returning the filename.
+    ** MDDOFIED 17 May 2010 to explicitly state binned=False for
+    ease of JETC/pyetc comparison.
+
+    """
 
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
@@ -119,9 +130,9 @@ def specrate(parlist):
         d['output']=None
 
     if ostat == 'full':
-        return "%g;%s"%(obs.countrate(),d['output'])
+        return "%g;%s"%(obs.countrate(binned=True),d['output'])
     else:
-        return "%g;%s;%s"%(obs.countrate(),d['output'],owarn[ostat])
+        return "%g;%s;%s"%(obs.countrate(binned=True),d['output'],owarn[ostat])
     
 
 def thermback(parlist):
