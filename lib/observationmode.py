@@ -542,7 +542,7 @@ class _ThermalObservationMode(BaseObservationMode):
         BaseObservationMode.__init__(self, obsmode, method, graphtable)
 
         #Check here to see if there are any.
-        if set(self.thcompnames) == set(['clear']):
+        if set(self.thcompnames).issubset(set(['clear',''])):
             raise NotImplementedError("No thermal support provided for %s"%obsmode)
         
 
@@ -669,6 +669,7 @@ class _ThermalObservationMode(BaseObservationMode):
 
     def _mergeEmissivityWavesets(self):
         index = 1
+
         for component in self.components:
             emissivity = component.emissivity
             if emissivity == None:
