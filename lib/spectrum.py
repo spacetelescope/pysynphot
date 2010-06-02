@@ -1764,11 +1764,18 @@ class ThermalSpectralElement(TabularSpectralElement):
 
 class Box(SpectralElement):
     """bandpass = Box(central wavelength, width) - both in Angstroms"""
-    def __init__(self, center, width):
+    def __init__(self, center, width, waveunits=None):
         ''' Both center and width are assumed to be in Angstrom
             units, according to the synphot definition.
         '''
-        self.waveunits=units.Units('angstrom') #per docstring: for now
+
+        if waveunits is None:
+            self.waveunits=units.Units('angstrom') #per docstring: for now
+        else:
+            self.waveunits=units.Units(waveunits)
+            center = self.waveunits.Convert(center, 'angstrom')
+            width  = self.waveunits.Convert(width, 'angstrom')
+            
         lower = center - width / 2.0
         upper = center + width / 2.0
         step = 0.05                     # fixed step for now (in A)
