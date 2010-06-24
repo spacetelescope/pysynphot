@@ -205,14 +205,19 @@ class Photlam(FluxUnits):
                          'fnu': self.ToFnu,
                          'photlam': self.ToPhotlam,
                          'photnu': self.ToPhotnu,
-                         'jy':self.ToJy,
-                         'mjy':self.TomJy,
-                         'abmag':self.ToABMag,
-                         'stmag':self.ToSTMag,
-                         'obmag':self.ToOBMag,
-                         'vegamag':self.ToVegaMag,
-                         'counts':self.ToCounts,
-                         'counts':self.ToCounts}
+                         'jy': self.ToJy,
+                         'mjy': self.TomJy,
+                         'mujy': self.TomuJy,
+                         'microjy': self.TomuJy,
+                         'ujy': self.TomuJy,
+                         'njy': self.TonJy,
+                         'nanojy': self.TonJy,
+                         'abmag': self.ToABMag,
+                         'stmag': self.ToSTMag,
+                         'obmag': self.ToOBMag,
+                         'vegamag': self.ToVegaMag,
+                         'counts': self.ToCounts,
+                         'counts': self.ToCounts}
 
         self.nativewave = Angstrom
 
@@ -242,6 +247,12 @@ class Photlam(FluxUnits):
     
     def TomJy(self, wave, flux):
         return 1.0e+26 * H * flux * wave
+
+    def TomuJy(self, wave, flux):
+        return 1.0e+29 * H * flux * wave
+
+    def TonJy(self, wave, flux):
+        return 1.0e+32 * H * flux * wave
     
     def ToABMag(self, wave, flux):
         arg = H * flux * wave
@@ -425,6 +436,38 @@ class mJy(FluxUnits):
         modtot = total * (1.0e-26/H)
         return 1.0/modtot
 
+class muJy(FluxUnits):	# New
+    ''' mujy = 10^-29 erg cm^-2 s^-1 Hz^-1'''
+    def __init__(self):
+        FluxUnits.__init__(self)
+        self.name = 'mujy'
+        self.nativewave = Hz
+
+    def ToPhotlam(self, wave, flux):
+        return flux / wave * (1.0e-29 / H)
+   
+    def unitResponse(self,band):
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput/wave)
+        modtot = total * (1.0e-29/H)
+        return 1.0/modtot
+
+class nJy(FluxUnits):  # New
+    ''' njy = 10^-32 erg cm^-2 s^-1 Hz^-1'''
+    def __init__(self):
+        FluxUnits.__init__(self)
+        self.name = 'njy'
+        self.nativewave = Hz
+
+    def ToPhotlam(self, wave, flux):
+        return flux / wave * (1.0e-32 / H)
+   
+    def unitResponse(self,band):
+        wave=band.wave
+        total = band.trapezoidIntegration(wave,band.throughput/wave)
+        modtot = total * (1.0e-32/H)
+        return 1.0/modtot
+
 class ABMag(LogFluxUnits):
     def __init__(self):
         LogFluxUnits.__init__(self)
@@ -521,6 +564,11 @@ def factory(uname, *args, **kwargs):
                     'photnu'    : Photnu,
                     'jy'        : Jy,
                     'mjy'       : mJy,
+                    'mujy'      : muJy,
+                    'microjy'   : muJy,
+                    'ujy'       : muJy,
+                    'njy'       : nJy,
+                    'nanojy'    : nJy,
                     'abmag'     : ABMag,
                     'stmag'     : STMag,
                     'obmag'     : OBMag,
