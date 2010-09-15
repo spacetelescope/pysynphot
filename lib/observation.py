@@ -165,12 +165,12 @@ class Observation(spectrum.CompositeSourceSpectrum):
     binflux = property(_getBinfluxProp,doc='Flux on binned wavelength set property')
  
     #Disable methods that should not be supported by this class
-    def __mul__(self, other):
-        raise NotImplementedError('Observations cannot be multiplied')
-    def __rmul__(self, other):
-        raise NotImplementedError('Observations cannot be multiplied')
-    def __add__(self, other):
-        raise NotImplementedError('Observations cannot be added')
+#    def __mul__(self, other):
+#        raise NotImplementedError('Observations cannot be multiplied')
+#    def __rmul__(self, other):
+#        raise NotImplementedError('Observations cannot be multiplied')
+#    def __add__(self, other):
+#        raise NotImplementedError('Observations cannot be added')
     def __radd__(self, other):
         raise NotImplementedError('Observations cannot be added')
     def redshift(self,z):
