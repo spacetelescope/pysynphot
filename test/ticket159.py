@@ -57,7 +57,7 @@ class ParserRenormCase(testutil.FPTestCase):
         self.sp=etc.parse_spec(self.syncmd)
         self.tra=dict(spwarn=str(self.sp.warnings),
                       name=str(self.sp))
-        self.failIf('PartialRenorm' in self.sp.warnings)
+        self.failIf('PartialRenorm' not in self.sp.warnings)
         
 class ETCTestCase(testutil.FPTestCase):
 
