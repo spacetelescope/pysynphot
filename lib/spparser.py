@@ -265,7 +265,13 @@ class Interpreter(GenericASTMatcher):
                     sp = spectrum.TabularSourceSpectrum(name)
                 #Always force the renormalization to occur: prevent exceptions
                 #in case of partial overlap. Less robust but duplicates synphot.
-                tree.value = sp.renorm(args[2],args[3],args[1],force=True)
+
+                try:
+                    tree.value = sp.renorm(args[2],args[3],args[1])
+                except ValueError:
+                    tree.value = sp.renorm(args[2],args[3],args[1],force=True)
+                    tree.value.warnings['force_renorm'] = 'Warning: Renormalization of the spectrum, to the specified value, in the specified units, exceeds the limit of the specified passband.'
+
             elif fname == 'z':
                 # redshift
                 if args[0] != 'null': # the ETC generates junk sometimes....
