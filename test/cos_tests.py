@@ -25,4 +25,10 @@ class TestCosObsmodes(unittest.TestCase):
         self.obsmode='cos,fuv,g130m,c1096'
         self.tda['obsmode']=self.obsmode
         bp = S.ObsBandpass(self.obsmode)
+        obs = S.Observation(S.BlackBody(5500), bp)
+        
+    def test_c1280(self):
+        self.obsmode='cos,fuv,g140l,c1280'
+        self.tda['obsmode']=self.obsmode
+        bp = S.ObsBandpass(self.obsmode)
         obs = S.Observation(S.BlackBody(5500), bp)        
