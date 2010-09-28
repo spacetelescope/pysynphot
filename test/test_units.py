@@ -93,16 +93,16 @@ class TestmuJy(testutil.FPTestCase):
         self.ref_mujy=units.Units('photlam').ToJy(self.awave,self.flux)*(1.0e6)
 
     def teststr(self):
-    	# Verify that units entered are correct
+        # Verify that units entered are correct
         self.failUnless(str(self.x)=='mujy')
 
     def testunittophotlam(self):
-    	# Verify that the conversion from muJy to photlam is correct
+        # Verify that the conversion from muJy to photlam is correct
         test=self.x.ToPhotlam(self.awave,self.flux)
         self.assertApproxNumpy(self.ref_photlam,test)
         
     def testfromphotlam1(self):
-    	# Verify that the conversion from photlam to muJy is correct
+        # Verify that the conversion from photlam to muJy is correct
         photlam=units.Units('photlam')
         test=photlam.Convert(self.awave,self.flux,'mujy')
         print ' '
@@ -113,13 +113,13 @@ class TestmuJy(testutil.FPTestCase):
         self.assertApproxNumpy(test,self.ref_mujy)
 
     def testfromphotlam2(self):
-    	# Verify that the conversion from photlam to muJy is correct
+        # Verify that the conversion from photlam to muJy is correct
         photlam=units.Units('photlam')
         test=photlam.Convert(self.awave,self.flux,'microjy')
         self.assertApproxNumpy(test,self.ref_mujy)
 
     def testfromphotlam3(self):
-    	# Verify that the conversion from photlam to muJy is correct
+        # Verify that the conversion from photlam to muJy is correct
         photlam=units.Units('photlam')
         test=photlam.Convert(self.awave,self.flux,'ujy')
         self.assertApproxNumpy(test,self.ref_mujy)
@@ -150,22 +150,22 @@ class TestnJy(testutil.FPTestCase):
         self.ref_njy=units.Units('photlam').ToJy(self.awave,self.flux)*(1.0e9)
 
     def teststr(self):
-    	# Verify that units entered are correct
+        # Verify that units entered are correct
         self.failUnless(str(self.x)=='njy')
 
     def testunittophotlam(self):
-    	# Verify that the conversion from muJy to photlam is correct
+        # Verify that the conversion from muJy to photlam is correct
         test=self.x.ToPhotlam(self.awave,self.flux)
         self.assertApproxNumpy(self.ref_photlam,test)
         
     def testfromphotlam1(self):
-    	# Verify that the conversion from photlam to muJy is correct
+        # Verify that the conversion from photlam to muJy is correct
         photlam=units.Units('photlam')
         test=photlam.Convert(self.awave,self.flux,'njy')
         self.assertApproxNumpy(test,self.ref_njy)
 
     def testfromphotlam2(self):
-    	# Verify that the conversion from photlam to muJy is correct
+        # Verify that the conversion from photlam to muJy is correct
         photlam=units.Units('photlam')
         test=photlam.Convert(self.awave,self.flux,'nanojy')
         self.assertApproxNumpy(test,self.ref_njy)
