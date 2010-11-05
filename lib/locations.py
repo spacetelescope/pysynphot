@@ -35,7 +35,7 @@ CAT_TEMPLATE = os.path.join(rootdir,'grid','*','catalog.fits')
 KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
 
 #Vega
-VegaFile = os.path.join(specdir,'alpha_lyr_stis_003.fits')
+VegaFile = os.path.join(specdir,'alpha_lyr_stis_005.fits')
 
 #Reddening Laws
 extdir=os.path.join('grid','extinction')
