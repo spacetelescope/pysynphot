@@ -7,6 +7,10 @@ from pysynphot import ObsBandpass
 from pysynphot.observationmode import ObservationMode
 from pysynphot import observationmode as ommod #needed for tabcheck task
 import os, sys
+import warnings
+
+warnings.simplefilter('once',DeprecationWarning)
+warnings.warn("""The pysynphot.etc module is deprecated. Its parse_spec function has been moved to pysynphot.spparser and should be used from that module. All other pysynphot.etc functionality has been deprecated.""", DeprecationWarning)
 
 mypid=os.getpid()
 

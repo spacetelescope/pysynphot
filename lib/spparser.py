@@ -344,3 +344,8 @@ def _handleThroughputFiles(name):
     except NameError:
         return spectrum.TabularSourceSpectrum(_handleIRAFName(name))
 
+#Convenience function
+def parse_spec(syncommand):
+    """Parse the synphot-classic command and return the resulting spectrum"""
+    sp = interpret(parse(scan(syncommand)))
+    return sp
