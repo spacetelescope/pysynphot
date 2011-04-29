@@ -1,4 +1,6 @@
 from __future__ import division
+import exceptions #custom pysyn exceptions
+
 """
 Module: spectrum.py
 
@@ -142,7 +144,7 @@ class Integrator(object):
                         wlist.append(float(cols[0]))
                         flist.append(float(cols[1]))
                 except Exception, e:
-                    raise ValueError("Error reading %s: %s"%(filename,str(e)))
+                    raise exceptions.BadRow("Error reading %s: %s"%(filename,str(e)),rows=lcount)
 
         return wlist, flist
                 
@@ -151,7 +153,8 @@ class Integrator(object):
         #First check for invalid values
         wave=self._wavetable
         if N.any(wave <= 0):
-            raise ValueError('Zero wavelength occurs in wavelength array: invalid value')
+            wrong=N.where(wave <= 0)[0]
+            raise exceptions.ZeroWavelength('Negative or Zero wavelength occurs in wavelength array', rows=wrong)
 
         
         
@@ -162,12 +165,14 @@ class Integrator(object):
                 #monotonic descending is allowed
                 pass
             else:
-                raise ValueError('Wavelength array is not monotonic: invalid')
+                wrong = N.where(sorted != wave)[0]
+                raise exceptions.UnsortedWavelength('Wavelength array is not monotonic', rows=wrong)
 
         #Check for duplicate values
         dw=sorted[1:]-sorted[:-1]
         if N.any(dw==0):
-            raise ValueError("Wavelength array contains duplicate entries: invalid")
+            wrong=N.where(dw==0)[0]
+            raise exceptions.DuplicateWavelength("Wavelength array contains duplicate entries",rows=wrong)
         
     def validate_fluxtable(self):
         "Enforce non-negative fluxes"
