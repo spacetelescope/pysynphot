@@ -5,7 +5,7 @@ import testutil
 import pysynphot as S
 import pyfits
 import numpy as N
-from pysynphot import etc
+from pysynphot import etc, exceptions
 
 class Precision(testutil.FPTestCase):
     def setUp(self):
@@ -55,7 +55,7 @@ class Sorted(testutil.FPTestCase):
         self.failIf(num != 1, "%d occurrences found"%num)
 
     def testinputfix(self):
-        self.assertRaises(ValueError,
+        self.assertRaises(exceptions.DuplicateWavelength,
                           S.ArraySpectrum,
                           wave=N.array([1,2,3,4,4,5]),
                           flux=N.ones(6))
@@ -74,7 +74,7 @@ class SortedBP(Sorted):
         self.failIf(num != 1, "%d occurrences found"%num)
 
     def testinputfix(self):
-        self.assertRaises(ValueError,
+        self.assertRaises(exceptions.DuplicateWavelength,
                           S.ArrayBandpass,
                           wave=N.array([1,2,3,4,4,5]),
                           throughput=N.ones(6))

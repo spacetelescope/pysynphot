@@ -6,7 +6,7 @@ import numpy as N
 import pyfits
 import testutil 
 import pysynphot as S
-from pysynphot import units, locations
+from pysynphot import units, locations, exceptions
 
 class EnforceWave(testutil.FPTestCase):
     """Ticket #85: enforce monotonic ascending wavesets
@@ -43,19 +43,19 @@ class EnforceWave(testutil.FPTestCase):
         
     def testzero(self):
         self.args=self.argdict['zero']
-        self.assertRaises(ValueError,
+        self.assertRaises(exceptions.ZeroWavelength,
                           self.constructor,
                           *self.args)
 
     def testneg(self):
         self.args=self.argdict['neg']
-        self.assertRaises(ValueError,
+        self.assertRaises(exceptions.ZeroWavelength,
                           self.constructor,
                           *self.args)
 
     def testmixed(self):
         self.args=self.argdict['mixed']
-        self.assertRaises(ValueError,
+        self.assertRaises(exceptions.UnsortedWavelength,
                           self.constructor,
                           *self.args)
 

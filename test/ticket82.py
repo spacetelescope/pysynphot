@@ -1,6 +1,7 @@
 from __future__ import division
 """Tests varying legal cases for ASCII file spectrum data"""
 import pysynphot as S
+from pysynphot import exceptions
 import os, sys
 import testutil
 import numpy as N
@@ -114,7 +115,7 @@ class badline(testutil.FPTestCase):
         os.remove(self.fname)        
 
     def testerror(self):
-        self.assertRaises(ValueError,S.FileSpectrum,self.fname)
+        self.assertRaises(exceptions.BadRow,S.FileSpectrum,self.fname)
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:
