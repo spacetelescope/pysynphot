@@ -15,8 +15,15 @@ def testRenormSynPysyn():
     acs=S.ObsBandpass('acs,hrc,f555w')
     abox=S.Box(5500,1)
 
+    #Removing vegamag from this list because it introduces
+    # a data dependency. Pysynphot has upgraded the version of
+    # vega that it uses for vegamag conversions (11/5/2010, r1629)
+    # but synphot has not. This caused the emission line test
+    # to fail (since the numbers were so small anyway, the small
+    # difference exceeded the tolerance).
     uset=['photlam','flam','photnu','fnu','jy','mjy','counts',
-          'stmag','vegamag','abmag','obmag']
+          'stmag','abmag','obmag'] #, 'vegamag'
+    
 
     ucounts=['counts','obmag']
     
@@ -84,7 +91,7 @@ def testRenormSynPysyn():
                 idx=N.where(syn.flux != 0)
                 rat=(syn.flux[idx]/pysyn.flux[idx])
                 q=abs(1-rat[2:-2])
-                qtrunc=(10**4*q).astype(N.int)
+                qtrunc=(10**4*q).astype(N.int)                
                 assert N.alltrue(qtrunc<110),"Min/max ratio = %f,%f"%(q.min(),q.max())
                 #Clean up after yourself
                 try:
