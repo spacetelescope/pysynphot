@@ -180,7 +180,7 @@ class SpecCase(object):
     def failUnless(self, expr, msg=None):
         #Copied from unittest.TestCase
         """Fail the test unless the expression is true."""
-        if not expr: raise self.failureException, msg
+        if not expr: raise AssertionError(msg)
 
     def cleanup(self,item):
         #Pop from oklist & clean up file
