@@ -288,11 +288,14 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
     def test9(self):
         #Changed answer for r618 (no tapering): this obsmode doesn't
         #go all the way to zero with this comptab
+        #
+        # Changed answer for r1816: "stis,ccd" now has a wavecat file,
+        # which changes the integration range.
         spectrum = "spectrum= rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
         instrument = "instrument=stis,ccd"
         parameters = [spectrum, instrument]
         countrate = etc.countrate(parameters)
-        self.assertApproxFP(float(countrate[0]), 42195.1, accuracy=0.0025)
+        self.assertApproxFP(float(countrate[0]), 36313.7, accuracy=0.0025)
 
     def test10(self):
         spectrum = "spectrum=rn(unit(1,flam),band(johnson,v),15.0,vegamag)"
