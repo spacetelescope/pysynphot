@@ -5,7 +5,7 @@ import os
 try:
     from pysynphot.graphtab import GraphTable
 except ImportError:
-    print "Warning, the tests won't run; GraphTabl not yet implemented"
+    print "Warning, the tests won't run; GraphTable not yet implemented"
 
 def make_tmg(strdata,tmgname):
     """Helper function"""

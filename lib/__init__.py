@@ -129,7 +129,7 @@ flam
 
 from svn_version import __svn_version__, __full_svn_info__, setupdate
 
-__version__ = '0.8d'
+__version__ = '0.9a'
 __revstring__  = '$Rev$'
 
 #UI:
@@ -159,6 +159,8 @@ from spectrum import Vega
 import Cache
 #Permit resetting refdata
 from observationmode import setref, showref
+#
+import tables
 
 def _test():
     "Runs doctest on the examples in this file"

@@ -9,7 +9,7 @@ from observationmode import ObservationMode
 from spectrum import CompositeSpectralElement, TabularSpectralElement
 import wavetable
 
-def ObsBandpass(obstring, graphtable=None, comptable=None):
+def ObsBandpass(obstring, graphtable=None, comptable=None, component_dict={}):
     """ obsband = ObsBandpass(string specifying obsmode; for details
     see the Synphot Data User's Guide,
     U{http://www.stsci.edu/hst/HST_overview/documents/synphot/hst_synphotTOC.html}"""
@@ -17,7 +17,7 @@ def ObsBandpass(obstring, graphtable=None, comptable=None):
     ##Temporarily create an Obsmode to determine whether an
     ##ObsModeBandpass or a TabularSpectralElement will be returned.
     ob=ObservationMode(obstring,graphtable=graphtable,
-                       comptable=comptable)
+                       comptable=comptable,component_dict=component_dict)
     if len(ob) > 1:
         return ObsModeBandpass(ob)
     else:

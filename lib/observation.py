@@ -12,6 +12,11 @@ import units
 import numpy as N
 import math
 
+try:
+  import pysynphot_utils
+  utils_imported = True
+except ImportError:
+  utils_imported = False
 
 class Observation(spectrum.CompositeSourceSpectrum):
     """ obs = Observation(Spectrum object, Bandpass object,
@@ -32,7 +37,8 @@ class Observation(spectrum.CompositeSourceSpectrum):
         self.bandpass = band
         self.warnings={}
         self.validate_overlap(force)
-
+        self.binset = binset
+        
         keep=self.warnings
         spectrum.CompositeSourceSpectrum.__init__(self,
                                                   self.spectrum,
@@ -45,9 +51,11 @@ class Observation(spectrum.CompositeSourceSpectrum):
         #natural waveset of the spectrum with the natural waveset of the
         #bandpass. Because the Observation inherits from a
         #CompositeSourceSpectrum, this will be handled correctly.
+#        self._binwave = None
+        self._binflux = None
 
         self.initbinset(binset)
-        self.initbinflux()
+        #self.initbinflux()
 
         
     def validate_overlap(self,force):
@@ -96,7 +104,6 @@ class Observation(spectrum.CompositeSourceSpectrum):
         else:
             self.binwave=binset
 
-
     def initbinflux(self):
         """This routine performs the integration of the spectrum
         on the specified binned waveset. It uses the natural waveset
@@ -129,27 +136,33 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         # compute indices associated to each endpoint.
         indices = N.searchsorted(spwave, endpoints)
-        diff = indices[1:] - indices[:-1]
         self._indices = indices[:-1]
-        self._indices_last = self._indices + diff 
+        self._indices_last = indices[1:]
 
         # prepare integration variables.
         flux = self(spwave) 
         avflux = (flux[1:] + flux[:-1]) / 2.0
         self._deltaw = spwave[1:] - spwave[:-1]
-
         
         # sum over each bin.
-        #Note that, like all Python striding, the range over which
-        #we integrate is [first:last).
-        self._binflux = N.empty(shape=self.binwave.shape,dtype=N.float64)
-        self._intwave = N.empty(shape=self.binwave.shape,dtype=N.float64)
-        for i in range(len(self._indices)):
-            first = self._indices[i]
-            last = self._indices_last[i]
-            self._binflux[i]=(avflux[first:last]*self._deltaw[first:last]).sum()/self._deltaw[first:last].sum()
-            self._intwave[i]=self._deltaw[first:last].sum()
-
+        if utils_imported is True:
+            self._binflux, self._intwave = \
+              pysynphot_utils.calcbinflux(len(self.binwave),
+                                          self._indices,
+                                          self._indices_last,
+                                          avflux,
+                                          self._deltaw)
+        else:
+            #Note that, like all Python striding, the range over which
+            #we integrate is [first:last).
+            self._binflux = N.empty(shape=self.binwave.shape,dtype=N.float64)
+            self._intwave = N.empty(shape=self.binwave.shape,dtype=N.float64)
+            for i in range(len(self._indices)):
+                first = self._indices[i]
+                last = self._indices_last[i]
+                self._binflux[i]=(avflux[first:last]*self._deltaw[first:last]).sum()/self._deltaw[first:last].sum()
+                self._intwave[i]=self._deltaw[first:last].sum()
+        
         #Save the endpoints for future use
         self._bin_edges = endpoints
 
@@ -162,8 +175,14 @@ class Observation(spectrum.CompositeSourceSpectrum):
                                           self.fluxunits.name)
         return binflux
     
+    def _getBinwaveProp(self):
+        if self._binwave is None:
+            self.initbinset(self.binset)
+        return self._binwave
+    
     binflux = property(_getBinfluxProp,doc='Flux on binned wavelength set property')
- 
+#    binwave = property(_getBinwaveProp,doc='Waveset for binned flux')
+    
     #Disable methods that should not be supported by this class
     def __mul__(self, other):
         raise NotImplementedError('Observations cannot be multiplied')
@@ -214,6 +233,9 @@ class Observation(spectrum.CompositeSourceSpectrum):
                - if binned=False, the wave and flux arrays will be
                  interpolated to the specified values.
         """
+
+        if self._binflux is None:
+          self.initbinflux()
 
         myfluxunits = self.fluxunits.name
         self.convert('counts')
@@ -343,6 +365,9 @@ class Observation(spectrum.CompositeSourceSpectrum):
         performed, or on the native wave/flux, in which case interpolation
         is performed.
         """
+
+        if self._binflux is None:
+          self.initbinflux()
 
         if fluxunits != 'counts':
             raise NotImplementedError("Sorry, only counts are supported at this time")

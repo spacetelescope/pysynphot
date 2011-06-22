@@ -1,5 +1,5 @@
 from __future__ import division
-import exceptions #custom pysyn exceptions
+from pysynphot import exceptions #custom pysyn exceptions
 
 """
 Module: spectrum.py
@@ -78,7 +78,7 @@ def MergeWaveSets(waveset1, waveset2):
     elif waveset1 is None and Waveset2 is None:
         MergedWaveSet = None
     else:
-        MergedWaveSet = N.sort(N.union1d(waveset1, waveset2))
+        MergedWaveSet = N.union1d(waveset1, waveset2)
 
     return MergedWaveSet
 
@@ -181,8 +181,6 @@ class Integrator(object):
             idx=N.where(self._fluxtable < 0)
             self._fluxtable[idx]=0.0
             print "Warning, %d of %d bins contained negative fluxes; they have been set to zero."%(len(idx[0]),len(self._fluxtable))
-
-
 
                
 class SourceSpectrum(Integrator):
@@ -1029,6 +1027,29 @@ class SpectralElement(Integrator):
         else:
             return num/den
 
+    def pivot(self,binned=False):
+        """This is the calculation performed when the ETC invokes calcphot.
+        Does this need to be calculated on binned waveset, or may
+        it be calculated on native waveset?"""
+        if binned:
+            try:
+              wave = self.binwave
+            except AttributeError:
+              raise AttributeError('Class ' + str(type(self)) + ' does not support binning.')
+        else:
+            wave = self.wave
+
+        countmulwave = self(wave)*wave
+        countdivwave = self(wave)/wave
+
+        num = self.trapezoidIntegration(wave,countmulwave)
+        den = self.trapezoidIntegration(wave,countdivwave)
+
+        if num == 0.0 or den == 0.0:
+            return 0.0
+
+        return math.sqrt(num/den)
+
     def rmswidth(self, floor=0):
         """Defines the lambda sub rms from Koornneef et al 1987,
         p 836; should be definition of bandpar.bandw"""
@@ -1669,6 +1690,7 @@ class InterpolatedSpectralElement(SpectralElement):
         parameter (poorly named -- it is not always a wavelength) is used to
         interpolate between two columns in the file.
         '''
+        
         xre=re.search('\[(?P<col>.*?)\]',fileName)
         self.name = os.path.expandvars(fileName[0:(xre.start())])
         colSpec = xre.group('col')
@@ -1685,17 +1707,13 @@ class InterpolatedSpectralElement(SpectralElement):
         
 
         #Determine the columns that bracket the desired value
-        colNames = fs[1].data.names[2:]
-        colWaves = []
-        for columnName in colNames:
-            try:
-                colWaves.append(float(columnName.split('#')[1]))
-            except IndexError,e:
-                #make sure this is the case we know about
-                if columnName.lower().startswith('error'):
-                    pass
-                else:
-                    raise e
+        # grab all columns that have '#' in them
+        # then split off the numbers after the '#'
+        colNames = [n for n in fs[1].data.names if n.find('#') != -1]        
+        colWaves = [float(cn.split('#')[1]) for cn in colNames]
+        
+        if colNames == []:
+          raise StandardError('file {} contains no interpolated columns.'.format(fileName))
                 
         waves = MA.array(colWaves)
         greater = MA.masked_less(waves, wavelength)

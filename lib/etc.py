@@ -2,10 +2,10 @@ from __future__ import division
 """Module intended to replace the existing etc interface with the
 refactored user interface."""
 import spparser as P
-from pysynphot.observation import Observation
-from pysynphot import ObsBandpass
-from pysynphot.observationmode import ObservationMode
-from pysynphot import observationmode as ommod #needed for tabcheck task
+from observation import Observation
+from obsbandpass import ObsBandpass
+from observationmode import ObservationMode
+import observationmode as ommod #needed for tabcheck task
 import os, sys
 import warnings
 
