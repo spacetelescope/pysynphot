@@ -79,6 +79,20 @@ def MergeWaveSets(waveset1, waveset2):
         MergedWaveSet = None
     else:
         MergedWaveSet = N.union1d(waveset1, waveset2)
+        
+        # The merged wave sets may sometimes contain numbers which are nearly
+        # equal but differ at levels as small as 1e-14. Having values this
+        # close together can cause problems down the line so here we test whether
+        # any such small differences are present, with a small difference
+        # defined as less than 1e-10.
+        #
+        # If they are present we recompute the union of the two wavesets after
+        # rounding each one to 10 decimal places. The resulting wave set will
+        # have no values which differ by less than 1e-10.
+        delta = MergedWaveSet[1:] - MergedWaveSet[:-1]
+        
+        if not (delta > 1.e-10).all():
+          MergedWaveSet = N.union1d(waveset1.round(10), waveset2.round(10))        
 
     return MergedWaveSet
 
@@ -1713,7 +1727,7 @@ class InterpolatedSpectralElement(SpectralElement):
         colWaves = [float(cn.split('#')[1]) for cn in colNames]
         
         if colNames == []:
-          raise StandardError('file {} contains no interpolated columns.'.format(fileName))
+          raise StandardError('file %s contains no interpolated columns.' % (fileName,))
                 
         waves = MA.array(colWaves)
         greater = MA.masked_less(waves, wavelength)
