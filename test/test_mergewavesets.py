@@ -13,4 +13,4 @@ class TestMergeWaveSets(testutil.FPTestCase):
     
     delta = new_wave[1:] - new_wave[:-1]
     
-    self.assertTrue((new_wave > 1.e-10).all(),msg='Deltas > 1e-10, max delta = %f' % (delta.max(),))
+    self.assertTrue((new_wave > 1.e-10).all(),msg='Deltas < 1e-10, max delta = %f' % (delta.max(),))
