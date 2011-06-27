@@ -170,7 +170,10 @@ class Angstrom(WaveUnits):
         
 
     def ToAngstrom(self, wave):
-        return wave
+        if hasattr(wave,'copy'):
+          return wave.copy()      # to avoid writing over any internal wave objects
+        else:
+          return wave             # probably a scalar
     
     def ToNm(self, wave):
         return wave / 10.0
@@ -237,7 +240,10 @@ class Photlam(FluxUnits):
         return H * flux * wave
 
     def ToPhotlam(self, wave, flux):
-        return flux.copy() # No conversion, just copy the array.
+        if hasattr(flux,'copy'):
+          return flux.copy()  # No conversion, just copy the array.
+        else:
+          return flux         # probably a scalar
 
     def ToPhotnu(self, wave, flux):
         return flux * wave * wave / C

@@ -400,11 +400,15 @@ class SourceSpectrum(Integrator):
     def sample(self,wave):
         """Return a flux array, in self.fluxunits, on the provided
         wavetable"""
+        # convert input wavelengths to Angstroms
+        angwave = self.waveunits.ToAngstrom(wave)
+        
         #First use the __call__ to get it in photlam
-        flux=self(wave)
+        flux = self(angwave)
+        
         #Then convert to the desired units
-
-        ans=units.Photlam().Convert(wave,flux,self.fluxunits.name)
+        ans = units.Photlam().Convert(wave,flux,self.fluxunits.name)
+        
         return ans
     
     def convert(self, targetunits):
@@ -924,27 +928,36 @@ class Powerlaw(AnalyticSpectrum):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.wavelength = None
         self._input_units = self.fluxunits
-        self._refwave = refwave
+        
+        # .refwave has the user specified units, ._refwave is always Angstroms
+        self.refwave = refwave
+        self._refwave = self.waveunits.ToAngstrom(refwave)
+        
         self._index = index
-        self.name="Power law: refwave %g, index %g"%(self._refwave,self._index)
+        
+        self.name="Power law: refwave %g %s, index %g"%(self.refwave,self.waveunits,self._index)
         
     def __str__(self):
         return self.name
 
     def __call__(self, wavelength):
-        sp = TabularSourceSpectrum()
-        sp.waveunits = self.waveunits
-        sp.fluxunits = self._input_units
-        sp._wavetable = wavelength
-        sp._fluxtable = N.ones(sp._wavetable.shape, dtype=N.float64)
-
-        for i in range(len(sp._fluxtable)):
-            sp._fluxtable[i] = (sp._wavetable[i] / self._refwave) ** self._index
-
-        sp.ToInternal()
-
-        return sp(wavelength)
-
+        # input wavelength is assumed to be angstroms
+        # and either a scalar or a numpy array
+        return (wavelength / self._refwave) ** self._index
+        
+    def convert(self, targetunits):
+        '''Convert to other units. This method actually just changes the
+        wavelength and flux units objects, it does not recompute the
+        internally kept wave and flux data; these are kept always in internal
+        units. Method getArrays does the actual computation.
+        '''
+        nunits = units.Units(targetunits)
+        if nunits.isFlux:
+            self.fluxunits = nunits
+        else:
+            self.waveunits = nunits
+            self.refwave = units.Angstrom().Convert(self._refwave,self.waveunits.name)
+            self.name="Power law: refwave %g %s, index %g"%(self.refwave,self.waveunits,self._index)
 
 class BlackBody(AnalyticSpectrum):
     """
