@@ -12,7 +12,7 @@ def writedata(fh,start=0,end=4000):
     for k in range(start,end):
         fh.write("%f   %f\n"%(wave[k],flux[k]))
     return end-start
-                 
+
 def writeinline(fh):
     wave=N.arange(10000,14000,dtype=N.float64)
     flux=N.ones(wave.shape,dtype=N.float64)
@@ -34,17 +34,17 @@ class goodcase(testutil.FPTestCase):
         self.len=writedata(fh)
         fh.close()
         self.sp=S.FileSpectrum(self.fname)
-        
+
     def tearDown(self):
         os.remove(self.fname)
-        
+
     def testlength(self):
         self.assert_(self.len == len(self.sp.wave))
-        
+
     def testgarbage(self):
         idx=N.isfinite(self.sp.flux)
         self.assert_(N.all(idx))
-        
+
 
 class header1(goodcase):
     def setUp(self):
@@ -74,7 +74,7 @@ class endblank(goodcase):
             fh.write("\n")
         fh.close()
         self.sp=S.FileSpectrum(self.fname)
-        
+
 class midcomment(goodcase):
     def setUp(self):
         self.fname='midcomment.dat'
@@ -86,7 +86,7 @@ class midcomment(goodcase):
         fh.close()
         self.len=x1+x2
         self.sp=S.FileSpectrum(self.fname)
-        
+
 class inline(goodcase):
     def setUp(self):
         self.fname='inline.dat'
@@ -94,7 +94,7 @@ class inline(goodcase):
         self.len=writeinline(fh)
         fh.close()
         self.sp=S.FileSpectrum(self.fname)
-        
+
 class threecolumns(goodcase):
     def setUp(self):
         self.fname='3col.dat'
@@ -112,7 +112,7 @@ class badline(testutil.FPTestCase):
         fh.close()
 
     def tearDown(self):
-        os.remove(self.fname)        
+        os.remove(self.fname)
 
     def testerror(self):
         self.assertRaises(exceptions.BadRow,S.FileSpectrum,self.fname)

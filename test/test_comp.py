@@ -1,7 +1,7 @@
 from __future__ import division
 from unittest import TestCase
 try:
-    from pysynphot.graphtab import CompTable 
+    from pysynphot.graphtab import CompTable
 except ImportError:
     print "not implemented yet"
 
@@ -14,7 +14,7 @@ class CompCase(TestCase):
         #Test for duplicate filenames.
         #Duplicate compnames will be caught at construction
         self.assert_(self.C._dupcheck())
-        
+
     def testvalid(self):
         #C is dictionary-like
         self.assert_(self.C.validate())
@@ -28,4 +28,4 @@ class BadComp(TestCase):
                           self.fname,
                           KeyError)
 
-        
+/

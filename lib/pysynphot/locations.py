@@ -1,7 +1,7 @@
 from __future__ import division
 import os, warnings, glob, re
 
-   
+
 
 def _refTable(template):
     try:
@@ -11,21 +11,21 @@ def _refTable(template):
         warnings.warn("PYSYN_CDBS is undefined; cannot find %s file"%template,
                       UserWarning)
         return None
-    
+
     try:
         return names[-1]
     except IndexError:
         msg= "No files found for %s."%os.path.join(os.environ['PYSYN_CDBS'],
                                                    template)
         raise IOError(msg)
- 
+
 #Replace cdbs_roots lookup with an environment variable
 try:
     rootdir   = os.environ['PYSYN_CDBS']
 except KeyError:
     warnings.warn("PYSYN_CDBS is undefined; functionality will be SEVERELY crippled.",UserWarning)
     rootdir = ''
-    
+
 #Data directory is now installed locally
 specdir   = os.path.join(os.path.dirname(__file__),'data')+os.path.sep
 
@@ -54,7 +54,7 @@ for k in RedLaws:
         RedLaws[k]=_refTable(os.path.join(extdir,RedLaws[k]))
     except IOError,e:
         print 'Cannot open %s: %s'%(RedLaws[k],str(e))
-    
+
 #Define wavecat file explicitly
 wavecat = os.path.join(specdir,'wavecat.dat')
 
@@ -116,7 +116,7 @@ def irafconvert(iraffilename):
                   'mtab':os.path.join(rootdir,'mtab'),
                   'synphot': os.path.dirname(__file__)+os.path.sep}
 
-    
+
 
     #BUG: supports environment variables only as the leading element in the
     #     filename
@@ -140,4 +140,4 @@ def irafconvert(iraffilename):
         #If no $ sign found, just return the filename unchanged
         return iraffilename
 
-        
+

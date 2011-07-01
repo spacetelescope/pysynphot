@@ -44,8 +44,8 @@ RENORM = PI * RADIAN * RADIAN # Normalize to 1 solar radius @ 1 kpc
 #Single-precision epsilon value, taken from the synphot FAQ.
 #This is the minimum separation in wavelength value necessary for
 #synphot to read the entries as distinct single-precision numbers.
-syn_epsilon=0.00032 
-        
+syn_epsilon=0.00032
+
 def _computeDefaultWaveset():
     minwave = 500.
     maxwave = 26000.
@@ -60,7 +60,7 @@ def _computeDefaultWaveset():
         frac = float(i) / lenwave
         result[i] = 10 ** (w1 * (1.0 - frac) + w2 * frac)
 
-    return result        
+    return result
 
 # Default waveset is computed at load time, once and for all.
 # Note that this is not thread safe.
@@ -154,14 +154,14 @@ class Integrator(object):
             if ((len(cline) > 0) and (not cline.startswith('#'))):
                 try:
                     cols=cline.split()
-                    if len(cols) >= 2: 
+                    if len(cols) >= 2:
                         wlist.append(float(cols[0]))
                         flist.append(float(cols[1]))
                 except Exception, e:
                     raise exceptions.BadRow("Error reading %s: %s"%(filename,str(e)),rows=lcount)
 
         return wlist, flist
-                
+
     def validate_wavetable(self):
         "Enforce monotonic, ascending wavelengths with no zero values"
         #First check for invalid values
@@ -170,10 +170,10 @@ class Integrator(object):
             wrong=N.where(wave <= 0)[0]
             raise exceptions.ZeroWavelength('Negative or Zero wavelength occurs in wavelength array', rows=wrong)
 
-        
-        
+
+
         #Now check for monotonicity & enforce ascending
-        sorted=N.sort(wave)        
+        sorted=N.sort(wave)
         if not N.alltrue(sorted == wave):
             if N.alltrue(sorted[::-1] == wave):
                 #monotonic descending is allowed
@@ -187,7 +187,7 @@ class Integrator(object):
         if N.any(dw==0):
             wrong=N.where(dw==0)[0]
             raise exceptions.DuplicateWavelength("Wavelength array contains duplicate entries",rows=wrong)
-        
+
     def validate_fluxtable(self):
         "Enforce non-negative fluxes"
         if ((not self.fluxunits.isMag) #neg. magnitudes are legal
@@ -196,11 +196,11 @@ class Integrator(object):
             self._fluxtable[idx]=0.0
             print "Warning, %d of %d bins contained negative fluxes; they have been set to zero."%(len(idx[0]),len(self._fluxtable))
 
-               
+
 class SourceSpectrum(Integrator):
     '''Base class for the Source Spectrum object.
     '''
-    
+
     def __add__(self, other):
         '''Source Spectra can be added.  Delegate the work to the
         CompositeSourceSpectrum class.
@@ -215,7 +215,7 @@ class SourceSpectrum(Integrator):
         of adding."""
 
         return self.__add__(-1.0*other)
-    
+
     def __mul__(self, other):
         '''Source Spectra can be multiplied, by constants or by
         SpectralElement objects.
@@ -243,7 +243,7 @@ class SourceSpectrum(Integrator):
             return self*factor
         else:
             raise TypeError(".addmag() only takes a constant scalar argument")
-    
+
     def getArrays(self):
         '''Returns wavelength and flux arrays as a tuple, performing
            units conversion.
@@ -288,13 +288,13 @@ class SourceSpectrum(Integrator):
         hkeys:         Optional dictionary of {keyword:(value,comment)}
                    to be added to primary FITS header
         """
-        
+
         pcodes={'d':'D','s':'E'}
         if precision is None:
             precision=self.flux.dtype.char
         _precision=precision.lower()[0]
         pcodes={'d':'D','s':'E','f':'E'}
-            
+
         if clobber:
             try:
                 os.remove(filename)
@@ -307,7 +307,7 @@ class SourceSpectrum(Integrator):
         else:
             wave=self.wave
             flux=self.flux
-            
+
         #Add a check for single/double precision clash, so
         #that if written out in single precision, the wavelength table
         #will still be sorted with no duplicates
@@ -320,10 +320,10 @@ class SourceSpectrum(Integrator):
 
         wave=wave[idx]
         flux=flux[idx]
-        
+
         first,last=0,len(flux)
 
-        
+
         if trimzero:
             #Keep one zero at each end
             nz = flux.nonzero()[0]
@@ -393,9 +393,9 @@ class SourceSpectrum(Integrator):
         self.convert(fluxunits)
         wave,flux=self.getArrays()
         self.convert(u)
-        #then do the integration    
+        #then do the integration
         return self.trapezoidIntegration(wave,flux)
-    
+
 
     def sample(self,wave):
         """Return a flux array, in self.fluxunits, on the provided
@@ -411,7 +411,7 @@ class SourceSpectrum(Integrator):
         ans = units.Photlam().Convert(wave,flux,self.fluxunits.name)
         
         return ans
-    
+
     def convert(self, targetunits):
         '''Convert to other units. This method actually just changes the
         wavelength and flux units objects, it does not recompute the
@@ -441,7 +441,7 @@ class SourceSpectrum(Integrator):
 
         self.convert(waveunits)
         return copy
-        
+
     def setMagnitude(self, band, value):
         '''Makes the magnitude of the source in the band equal to value.
         band is a SpectralElement.
@@ -498,7 +498,7 @@ class CompositeSourceSpectrum(SourceSpectrum):
     def __str__(self):
         opdict = {'add':'+','multiply':'*'}
         return "%s %s %s"%(str(self.component1),opdict[self.operation],str(self.component2))
-    
+
     def __call__(self, wavelength):
         '''Add or multiply components, delegating the function calculation
         to the individual objects.
@@ -516,7 +516,7 @@ class CompositeSourceSpectrum(SourceSpectrum):
             except AttributeError:
                 ans.append(comp)
         return ans
-    
+
     def GetWaveSet(self):
         '''Obtain the wavelength set for the composite source by forming
         the union of wavelengths from each component.
@@ -545,7 +545,7 @@ class TabularSourceSpectrum(SourceSpectrum):
         if filename:
             self._readSpectrumFile(filename, fluxname)
             self.filename=filename
-            self.validate_units() 
+            self.validate_units()
             self.validate_wavetable()
             if not keepneg:
                 self.validate_fluxtable()
@@ -559,11 +559,11 @@ class TabularSourceSpectrum(SourceSpectrum):
             self.fluxunits = None
             self.filename = None
             self.name=self.filename
-        
+
     def _reverse_wave(self):
         self._wavetable = self._wavetable[::-1]
 
-        
+
     def __str__(self):
         return str(self.name)
 
@@ -596,7 +596,7 @@ class TabularSourceSpectrum(SourceSpectrum):
         wlist,flist = self._columnsFromASCII(filename)
         self._wavetable=N.array(wlist,dtype=N.float64)
         self._fluxtable=N.array(flist,dtype=N.float64)
-                
+
 
     def __call__(self, wavelengths):
         '''This is where the flux array is actually calculated given a
@@ -634,14 +634,14 @@ class TabularSourceSpectrum(SourceSpectrum):
         OutSpec.fluxunits = units.Units(str(self.fluxunits))
 
         return OutSpec
-        
+
     def resample(self, resampledWaveTab):
         '''Interpolate flux given a wavelength array that is monotonically
         increasing and the TabularSourceSpectrum object.
         @param resampledWaveTab: new wavelength table IN ANGSTROMS
         @type ressampledWaveTab: ndarray
         '''
-        
+
         ##Check whether the input wavetab is in descending order
         if resampledWaveTab[0]<resampledWaveTab[-1]:
             newwave=resampledWaveTab
@@ -661,7 +661,7 @@ class TabularSourceSpectrum(SourceSpectrum):
                            self._fluxtable[::-1])
             ans = rev[::-1]
 
- 
+
         ## If the new and old waveset don't have the same parity,
         ## the answer has to be flipped again
         if (newasc != oldasc):
@@ -670,7 +670,7 @@ class TabularSourceSpectrum(SourceSpectrum):
         ## Finally, make the new object
         # NB: these manipulations were done using the internal
         #tables in Angstrom and photlam, so those are the units
-        #that must be fed to the constructor. 
+        #that must be fed to the constructor.
         resampled=ArraySourceSpectrum(wave=resampledWaveTab.copy(),
                                       waveunits = 'angstroms',
                                       flux = ans.copy(),
@@ -730,7 +730,7 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
         """
         if len(wave)!=len(flux):
             raise ValueError("wave and flux arrays must be of equal length")
-        
+
         self._wavetable=wave
         self._fluxtable=flux
         self.waveunits=units.Units(waveunits)
@@ -738,15 +738,15 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
         self.name=name
         self.isAnalytic=False
         self.warnings={}
-        
+
         self.validate_units() #must do before validate_fluxtable because it tests against unit type
         self.validate_wavetable() #must do before ToInternal in case of descending
         if not keepneg:
             self.validate_fluxtable()
-            
+
         self.ToInternal()
 
-    
+
 class FileSourceSpectrum(TabularSourceSpectrum):
     """spec = FileSpectrum(filename (FITS or ASCII),
     fluxname=column name containing flux (for FITS tables only),
@@ -763,18 +763,18 @@ class FileSourceSpectrum(TabularSourceSpectrum):
 
         @param keepneg: If true, negative flux values will be retained; by default, they are forced to zero
         @type keepneg: bool
- 
+
         """
         self.name = locations.irafconvert(filename)
         self._readSpectrumFile(self.name, fluxname)
-        self.validate_units() 
+        self.validate_units()
         self.validate_wavetable()
         if not keepneg:
             self.validate_fluxtable()
         self.ToInternal()
         self.isAnalytic=False
         self.warnings={}
-        
+
     def _readSpectrumFile(self, filename, fluxname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
             self._readFITS(filename, fluxname)
@@ -783,7 +783,7 @@ class FileSourceSpectrum(TabularSourceSpectrum):
 
     def _readFITS(self, filename, fluxname):
         fs = pyfits.open(filename)
-        
+
         self._wavetable = fs[1].data.field('wavelength')
         if fluxname == None:
             fluxname = 'flux'
@@ -793,7 +793,7 @@ class FileSourceSpectrum(TabularSourceSpectrum):
 
         #Retain the header information as a convenience for the user.
         #If duplicate keywords exist, the value in the extension
-        #header will override that in the primary. 
+        #header will override that in the primary.
         self.fheader = dict(fs[0].header)
         self.fheader.update(dict(fs[1].header))
 
@@ -812,12 +812,12 @@ class FileSourceSpectrum(TabularSourceSpectrum):
 
         #We don't support headers from ascii files
         self.fheader = dict()
-                                
-                                                        
+
+
 class AnalyticSpectrum(SourceSpectrum):
     ''' Base class for analytic functions. These are spectral forms
     which are defined, by default, on top of the default synphot
-    waveset. 
+    waveset.
     '''
 
     def __init__(self,waveunits='angstrom',fluxunits='photlam'):
@@ -827,7 +827,7 @@ class AnalyticSpectrum(SourceSpectrum):
         self.validate_units()
         self.isAnalytic=True
         self.warnings={}
-        
+
     def GetWaveSet(self):
         global default_waveset
         return default_waveset.copy()
@@ -839,7 +839,7 @@ class GaussianSource(AnalyticSpectrum):
                              FWHM of Gaussian,
                              waveunits, fluxunits)
 
-                             
+
     """
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
                  fluxunits='photlam'):
@@ -942,7 +942,7 @@ class FlatSpectrum(AnalyticSpectrum):
                                             self._input_flux_units)
     def __str__(self):
         return self.name
-    
+
     def __call__(self, wavelength):
         if hasattr(wavelength,'shape'):
             return self._fluxdensity*N.ones(wavelength.shape,dtype=N.float64) 
@@ -954,7 +954,7 @@ class FlatSpectrum(AnalyticSpectrum):
         """Call the parent's method, which returns a TabularSourceSpectrum,
         then use its results to create a new FlatSpectrum with the correct
         value. """
-        
+
         tmp=SourceSpectrum.redshift(self,z)
         ans=FlatSpectrum(tmp.flux.max(),
                          fluxunits=tmp.fluxunits)
@@ -983,7 +983,7 @@ class Powerlaw(AnalyticSpectrum):
         self._refwave = self.waveunits.ToAngstrom(refwave)
         
         self._index = index
-        
+
         self.name="Power law: refwave %g %s, index %g"%(self.refwave,self.waveunits,self._index)
         
     def __str__(self):
@@ -1011,7 +1011,7 @@ class Powerlaw(AnalyticSpectrum):
 class BlackBody(AnalyticSpectrum):
     """
     spec = BlackBody(T in Kelvin)
-    
+
     Blackbody spectrum with specified temperature, in Kelvin.
     The flux of the spectrum is normalized to a star of solar radius
     at a distance of 1 kpc.L
@@ -1023,7 +1023,7 @@ class BlackBody(AnalyticSpectrum):
         self.wavelength = None
         self.temperature = temperature
         self.name='BB(T=%d)'%self.temperature
-        
+
     def __str__(self):
         return self.name
 
@@ -1071,7 +1071,7 @@ class SpectralElement(Integrator):
             wave=self.wave
         ans=self.trapezoidIntegration(wave,self(wave))
         return ans
-        
+
 #..................................................................
 # Methods to implement bandpar functionality go here
 #..................................................................
@@ -1079,14 +1079,14 @@ class SpectralElement(Integrator):
         """Implement the equation for lambda nought as defined
         in Koornneef et al 1987, p 836.
         Should be equivalent to bandpar.avglam = bandpar.avgwv"""
-        
+
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
-        
+
         wave=self.wave
         thru=self.throughput
         self.convert(mywaveunits)
-        
+
         num = self.trapezoidIntegration(wave, thru*wave)
         den = self.trapezoidIntegration(wave, thru)
 
@@ -1125,7 +1125,7 @@ class SpectralElement(Integrator):
 
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
-        
+
         wave=self.wave
         thru=self.throughput
         self.convert(mywaveunits)
@@ -1134,7 +1134,7 @@ class SpectralElement(Integrator):
             idx = N.where(thru >= floor)
             wave = wave[idx]
             thru = thru[idx]
-            
+
         integrand = (wave-self.avgwave())**2 * thru
         num = self.trapezoidIntegration(wave, integrand)
         den = self.trapezoidIntegration(wave, thru)
@@ -1145,11 +1145,11 @@ class SpectralElement(Integrator):
             ans = math.sqrt(num/den)
             return ans
 
-    def rectwidth(self):            
+    def rectwidth(self):
         """RECTW = INT(THRU) / MAX(THRU)"""
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
-        
+
         wave=self.wave
         thru=self.throughput
         self.convert(mywaveunits)
@@ -1173,14 +1173,14 @@ class SpectralElement(Integrator):
         """
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
-        
+
         wave=self.wave
         thru=self.throughput
         self.convert(mywaveunits)
 
         ans = self.trapezoidIntegration(wave, thru/wave)
         return ans
-        
+
 #..................................................................
     def check_sig(self, other):
         """Only call this if check_overlap returns 'partial'.
@@ -1189,7 +1189,7 @@ class SpectralElement(Integrator):
 
         swave=self.wave[N.where(self.throughput != 0)]
         s1,s2=swave.min(),swave.max()
-        
+
         owave=other.wave
         o1,o2=owave.min(),owave.max()
 
@@ -1198,7 +1198,7 @@ class SpectralElement(Integrator):
 
         #Get the full throughput
         total=self.integrate()
-        
+
         #Now get the other two pieces
         #We cannot yet do
         #low=self[slice(*lowrange)].integrate()
@@ -1217,7 +1217,7 @@ class SpectralElement(Integrator):
             return True
         else:
             return False
-        
+
     def check_overlap(self, other):
         """Check whether the wavelength range of other is defined everywhere
         that the wavelength range of self is defined.
@@ -1232,10 +1232,10 @@ class SpectralElement(Integrator):
         if other.isAnalytic:
             #then it's defined everywhere
             return 'full'
-        
+
         swave=self.wave[N.where(self.throughput != 0)]
         s1,s2=swave.min(),swave.max()
-        
+
         owave=other.wave
         o1,o2=owave.min(),owave.max()
 
@@ -1258,7 +1258,7 @@ class SpectralElement(Integrator):
         nunits = units.Units(targetunits)
         self.waveunits = nunits
 
-    
+
     def ToInternal(self):
         '''Convert wavelengths to the internal representation of angstroms..
         Note: This is not yet used, but should be for safety when creating
@@ -1291,7 +1291,7 @@ class SpectralElement(Integrator):
         """Provide a more normal user interface to the __call__"""
         return self.__call__(wavelengths)
 
-    
+
     def taper(self):
         '''Taper the spectrum by adding zeros to each end.
         '''
@@ -1315,7 +1315,7 @@ class SpectralElement(Integrator):
         OutElement._throughputtable = fcopy
 
         return OutElement
-    
+
     def writefits(self, filename, clobber=True, trimzero=True,
                   precision=None, hkeys=None):
         """Write the bandpass to a FITS file.
@@ -1339,7 +1339,7 @@ class SpectralElement(Integrator):
                 os.remove(filename)
             except OSError:
                 pass
-            
+
         wave=self.wave
         thru=self.throughput
 
@@ -1356,7 +1356,7 @@ class SpectralElement(Integrator):
         wave=wave[idx]
         thru=thru[idx]
 
-            
+
         first,last=0,len(thru)
         if trimzero:
             #Keep one zero at each end
@@ -1381,7 +1381,7 @@ class SpectralElement(Integrator):
         hdu = pyfits.PrimaryHDU()
         hdulist = pyfits.HDUList([hdu])
 
-            
+
         #User-provided keys are written to the primary header;
         #so are filename and origin
         bkeys = dict(filename=(os.path.basename(filename),'name of file'),
@@ -1424,7 +1424,7 @@ class SpectralElement(Integrator):
         hdulist.writeto(filename)
 
 
-                                                 
+
     def resample(self, resampledWaveTab):
         '''Interpolate throughput given a wavelength array that is
         monotonically increasing and the TabularSpectralElement object.'''
@@ -1456,7 +1456,7 @@ class SpectralElement(Integrator):
         # Finally, make the new object.
         # NB: these manipulations were done using the internal
         #tables in Angstrom, so those are the units
-        #that must be fed to the constructor. 
+        #that must be fed to the constructor.
         resampled=ArraySpectralElement(wave=resampledWaveTab.copy(),
                                        waveunits = 'angstroms',
                                        throughput = ans.copy())
@@ -1470,8 +1470,8 @@ class SpectralElement(Integrator):
         wave = self.GetWaveSet()
         thru = self(wave)
         return 1.0 / self.trapezoidIntegration(wave,thru)
-    
-        
+
+
 
     def GetWaveSet(self):
         "Return the waveset in the requested units."
@@ -1484,9 +1484,9 @@ class SpectralElement(Integrator):
         ## wavelength does. There is an implicit assumption here that
         ## the units of the input waveset to the __call__ are always
         ## Angstroms.
-        self.convert('angstroms') 
+        self.convert('angstroms')
         return self.__call__(self.wave)
-    
+
     wave = property(GetWaveSet, doc='Waveset for bandpass')
     throughput = property(GetThroughput, doc='Throughput for bandpass')
 
@@ -1516,7 +1516,7 @@ class CompositeSpectralElement(SpectralElement):
         self.warnings={}
         self.warnings.update(component1.warnings)
         self.warnings.update(component2.warnings)
-        
+
     def __call__(self, wavelength):
         '''This is where the throughput calculation is delegated.
         '''
@@ -1548,7 +1548,7 @@ class CompositeSpectralElement(SpectralElement):
 
 class UniformTransmission(SpectralElement):
     '''bandpass=UniformTransmission(dimensionless throughput)
-    
+
     @todo: Need to add a GetWaveSet method (or just return None).
     '''
     def __init__(self, value, waveunits='angstrom'):
@@ -1573,7 +1573,7 @@ class UniformTransmission(SpectralElement):
 ##         return N.array([default_waveset[0],default_waveset[-1]])
 ##
 ##     wave = property(GetWaveSet,doc="wave for UniformTransmission")
-    
+
     def __call__(self, wavelength):
         '''__call__ returns the constant value as an array, given a
         wavelength array as argument.
@@ -1607,10 +1607,10 @@ class TabularSpectralElement(SpectralElement):
 
     def _reverse_wave(self):
         self._wavetable = self._wavetable[::-1]
-        
+
     def __str__(self):
         return str(self.name)
-    
+
     def ToInternal(self):
         '''Convert wavelengths to the internal representation of angstroms..
         '''
@@ -1630,36 +1630,36 @@ class TabularSpectralElement(SpectralElement):
         wlist,tlist = self._columnsFromASCII(filename)
         self._wavetable=N.array(wlist,dtype=N.float64)
         self._throughputtable=N.array(tlist,dtype=N.float64)
-       
+
 
     def _readFITS(self,filename,thrucol='throughput'):
         fs = pyfits.open(filename)
-        
+
         self._wavetable = fs[1].data.field('wavelength')
         self._throughputtable = fs[1].data.field(thrucol)
-        
+
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.throughputunits = 'none'
-        
+
         self.getHeaderKeywords(fs[1].header)
-        
+
         fs.close()
 
-       
+
     def getHeaderKeywords(self, header):
         ''' This is a placeholder for subclasses to get header keywords without
-        having to reopen the file again. 
+        having to reopen the file again.
         '''
         pass
 
 
 class ArraySpectralElement(TabularSpectralElement):
     """ spec = ArraySpectrum(numpy array containing wavelength table,
-    numpy array containing throughput table, waveunits, 
+    numpy array containing throughput table, waveunits,
     name=human-readable nickname for bandpass.
     """
     def __init__(self, wave=None, throughput=None,
-                 waveunits='angstrom', 
+                 waveunits='angstrom',
                  name='UnnamedArrayBandpass'):
 
         """Create a spectrum from arrays.
@@ -1675,20 +1675,20 @@ class ArraySpectralElement(TabularSpectralElement):
         """
         if len(wave)!=len(throughput):
             raise ValueError("wave and throughput arrays must be of equal length")
-        
+
         self._wavetable=wave
         self._throughputtable=throughput
         self.waveunits=units.Units(waveunits)
         self.name=name
         self.isAnalytic=False
         self.warnings={}
-        
+
         self.validate_units() #must do before validate_fluxtable because it tests against unit type
         self.validate_wavetable() #must do before ToInternal in case of descending
-            
+
         self.ToInternal()
 
-    
+
 class FileSpectralElement(TabularSpectralElement):
     """spec = FileSpectrum(filename (FITS or ASCII),
     throughputname=column name containing throughput (for FITS tables only),
@@ -1707,12 +1707,12 @@ class FileSpectralElement(TabularSpectralElement):
         self.name = locations.irafconvert(filename)
         self._readThroughputFile(self.name, thrucol)
 
-        self.validate_units() 
+        self.validate_units()
         self.validate_wavetable()
         self.ToInternal()
         self.isAnalytic=False
         self.warnings={}
-        
+
     def _readThroughputFile(self, filename, throughputname):
         if filename.endswith('.fits') or filename.endswith('.fit'):
             self._readFITS(filename, throughputname)
@@ -1730,10 +1730,10 @@ class FileSpectralElement(TabularSpectralElement):
 
         #Retain the header information as a convenience for the user.
         #If duplicate keywords exist, the value in the extension
-        #header will override that in the primary. 
+        #header will override that in the primary.
         self.fheader = dict(fs[0].header)
         self.fheader.update(dict(fs[1].header))
-        
+
         fs.close()
 
     def _readASCII(self, filename):
@@ -1745,10 +1745,10 @@ class FileSpectralElement(TabularSpectralElement):
         wlist,flist = self._columnsFromASCII(filename)
         self._wavetable=N.array(wlist,dtype=N.float64)
         self._throughputtable=N.array(flist,dtype=N.float64)
-            
+
         #We don't support headers from asii files
         self.fheader = dict()
-        
+
 class InterpolatedSpectralElement(SpectralElement):
     '''The InterpolatedSpectralElement class handles spectral elements
     that are interpolated from columns stored in FITS tables
@@ -1766,14 +1766,14 @@ class InterpolatedSpectralElement(SpectralElement):
 
         self.analytic=False
         self.warnings={}
-        
+
         self.interpval = wavelength
 
         fs = pyfits.open(self.name)
 
         #The wavelength table will have to be adjusted before use
         wave0 = fs[1].data.field('wavelength')
-        
+
 
         #Determine the columns that bracket the desired value
         # grab all columns that have '#' in them
@@ -1783,7 +1783,7 @@ class InterpolatedSpectralElement(SpectralElement):
         
         if colNames == []:
           raise StandardError('file %s contains no interpolated columns.' % (fileName,))
-                
+
         waves = MA.array(colWaves)
         greater = MA.masked_less(waves, wavelength)
         less = MA.masked_greater(waves, wavelength)
@@ -1794,10 +1794,10 @@ class InterpolatedSpectralElement(SpectralElement):
             raise NotImplementedError("%g outside of range in %s; extrapolation not yet supported"%(wavelength,fileName))
 
 
-        #Construct the column names                              
+        #Construct the column names
         lcol = colNames[MA.argmax(less)]
         ucol = colNames[MA.argmin(greater)]
-        
+
 
         #Extract the data from those columns
         lthr = fs[1].data.field(lcol)
@@ -1820,7 +1820,7 @@ class InterpolatedSpectralElement(SpectralElement):
             uwave = wave0 + (upper-self.interpval)
             uthr = N.interp(uwave, wave0, fs[1].data.field(ucol))
             self._throughputtable = uthr
-            
+
         self._wavetable = wave0
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.throughputunits = 'none'
@@ -1867,7 +1867,7 @@ class Box(SpectralElement):
             self.waveunits=units.Units(waveunits)
             center = self.waveunits.Convert(center, 'angstrom')
             width  = self.waveunits.Convert(width, 'angstrom')
-            
+
         lower = center - width / 2.0
         upper = center + width / 2.0
         step = 0.05                     # fixed step for now (in A)
@@ -1880,7 +1880,7 @@ class Box(SpectralElement):
 
         self._wavetable[0]  = self._wavetable[1]  - step
         self._wavetable[-1] = self._wavetable[-2] + step
-        
+
         self._throughputtable = N.ones(shape=self._wavetable.shape, \
                                         dtype=N.float64)
         self._throughputtable[0]  = 0.0

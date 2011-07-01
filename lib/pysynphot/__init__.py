@@ -127,10 +127,20 @@ flam
 """
 
 
-from svn_version import __svn_version__, __full_svn_info__, setupdate
-
-__version__ = '0.9a'
-__revstring__  = '$Rev$'
+try:
+    import pkg_resources
+    import re
+    __version__ = pkg_resources.get_distribution('pysynphot').version
+    m = re.match(r'(?P<version>.*)-r(?P<rev>\d+)$', __version__)
+    if m:
+        __version__ = m.group('version')
+        __svn_version__ = m.group('rev')
+    else:
+        __svn_version__ = ''
+except:
+    raise
+    __version__ = ''
+    __svn_version__ = ''
 
 #UI:
 #AnalyticSpectra:

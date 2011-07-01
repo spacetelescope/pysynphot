@@ -1,5 +1,5 @@
 from __future__ import division
-## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+## Automatically adapted for numpy.numarray Mar 05, 2007 by
 
 import string
 import glob
@@ -53,12 +53,12 @@ def _set_default_refdata():
         print "         No thermal calculations can be performed."
 
     HSTAREA = 45238.93416  # cm^2
-    
+
 #Do this on import
 _set_default_refdata()
 
 
-def setref(graphtable=None, comptable=None, thermtable=None, 
+def setref(graphtable=None, comptable=None, thermtable=None,
            area=None):
     """provide user access to global reference data.
     Graph/comp/therm table names must be fully specified."""
@@ -75,7 +75,7 @@ def setref(graphtable=None, comptable=None, thermtable=None,
         #then we should reset everything.
         _set_default_refdata()
         return
-    
+
     #Otherwise, check them all separately
     if graphtable is not None:
         GRAPHTABLE = irafconvert(graphtable)
@@ -106,7 +106,7 @@ def showref():
     refdata = getref()
     for k, v in refdata.items():
         print "%10s: %s"%(k,v)
-        
+
 CLEAR = 'clear'
 
 class BaseObservationMode(object):
@@ -151,12 +151,12 @@ class BaseObservationMode(object):
             GRAPHDICT[graphtable] = gt
             
         self.gtname=graphtable
-        
+
         self.compnames,self.thcompnames = gt.GetComponentsFromGT(self.modes,1)
 
         self.components = None #Will be filled by subclasses
         self.pixscale = None
-        
+
         obm=self._obsmode.lower()
 
         try:
@@ -236,7 +236,7 @@ class BaseObservationMode(object):
             c3 = c2
         if len(coefficients) > 3:
             c3 = float(coefficients[3])
-            
+
         nwave = int(2.0 * (c1 - c0) / (c3 + c2)) + 1
 
         c = c0
@@ -280,7 +280,7 @@ class ObservationMode(BaseObservationMode):
             COMPDICT[comptable] = ct
             
         self.ctname = comptable
-        
+
         self._throughput_filenames = self._getFileNames(ct, self.compnames)
         
         self.components = self._getOpticalComponents(self._throughput_filenames,
@@ -351,7 +351,7 @@ class ObservationMode(BaseObservationMode):
                     product = product * component.throughput
         return product
 
-        
+
     def ThermalSpectrum(self):
         try:
             # delegate to subclass.
@@ -373,15 +373,14 @@ class _ThermalObservationMode(BaseObservationMode):
             comptable = COMPTABLE
         if thermtable is None:
             thermtable = THERMTABLE
-                        
-            
+
+
         #The constructor of the parent class defines the self.thcompnames
         BaseObservationMode.__init__(self, obsmode, method, graphtable)
 
         #Check here to see if there are any.
         if set(self.thcompnames).issubset(set(['clear',''])):
             raise NotImplementedError("No thermal support provided for %s"%obsmode)
-        
 
 #        ct = CompTable(comptable)
         if comptable in COMPDICT.keys():
@@ -391,7 +390,7 @@ class _ThermalObservationMode(BaseObservationMode):
             COMPDICT[comptable] = ct
             
         self.ctname=comptable
-        
+
         throughput_filenames = self._getFileNames(ct, self.compnames)
 
 #        thct = CompTable(thermtable)
@@ -402,7 +401,7 @@ class _ThermalObservationMode(BaseObservationMode):
             THERMDICT[thermtable] = thct
             
         self.thname = thermtable
-        
+
         thermal_filenames = self._getFileNames(thct, self.thcompnames)
 
         self.components = self._getThermalComponents(throughput_filenames, \
@@ -419,7 +418,7 @@ class _ThermalObservationMode(BaseObservationMode):
         fs = open(fname,mode='r')
         lines = fs.readlines()
         fs.close()
-        
+
         regx = re.compile(r'\S+', re.IGNORECASE)
         for line in lines:
             try:
@@ -482,7 +481,7 @@ class _ThermalObservationMode(BaseObservationMode):
             # thermal section
             if component.emissivity != None:
                 bb = self._bb(sp.GetWaveSet(), component.emissivity.temperature)
- 
+
                 sp_comp = component.emissivity.beamFillFactor * bb * \
                           component.emissivity
 
@@ -552,7 +551,7 @@ class _Component(object):
 
     def __str__(self):
         return str(self.throughput)
-    
+
     def _buildThroughput(self, name, interpval):
         if name != CLEAR:
             if interpval is None:
