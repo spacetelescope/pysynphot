@@ -945,9 +945,16 @@ class FlatSpectrum(AnalyticSpectrum):
 
     def __call__(self, wavelength):
         if hasattr(wavelength,'shape'):
-            return self._fluxdensity*N.ones(wavelength.shape,dtype=N.float64) 
+            flux = self._fluxdensity*N.ones(wavelength.shape,dtype=N.float64) 
         else:
-            return self._fluxdensity
+            flux = self._fluxdensity
+        
+        # __call__ is supposed to return photflam so we need to do the
+        # conversion here since it doesn't make sense to store the _fluxdensity
+        # attribute in photlam
+        wave = units.Angstrom().Convert(wavelength,self.waveunits.name)
+        
+        return self.fluxunits.ToPhotlam(wave,flux)
 
 
     def redshift(self, z):
