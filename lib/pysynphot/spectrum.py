@@ -917,7 +917,7 @@ class FlatSpectrum(AnalyticSpectrum):
         # attribute in photlam
         wave = units.Angstrom().Convert(wavelength,self.waveunits.name)
         
-        return self.fluxunits.ToPhotlam(wave,flux)
+        return self._input_flux_units.ToPhotlam(wave,flux)
 
 
     def redshift(self, z):

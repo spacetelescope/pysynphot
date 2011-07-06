@@ -479,7 +479,7 @@ class ParserTestCase(testutil.FPTestCase):
                         epsilon=0.0025,
                         tst=flux[5000])
         self.tda.update(S.observationmode.getref())
-        self.assertApproxFP(flux[5000], 1.53329E-7, accuracy=0.0025)
+        self.assertApproxFP(flux[4954], 1.53329E-7, accuracy=0.0025)
 
     def testuserdir2(self):
         expr = "spec(%s/test.dat)"%userdir
@@ -515,7 +515,7 @@ class ParserTestCase(testutil.FPTestCase):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertApproxFP(flux[7000], 1.38877E-6, accuracy=0.0265)
+        self.assertApproxFP(flux[6933], 1.38877E-6, accuracy=0.0265)
 
     def testnullz(self):
         expr = "rn(z(null,NaN),band(johnson,v),15.0,vegamag)"
@@ -543,7 +543,7 @@ class ParserTestCase(testutil.FPTestCase):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         flux = sp(wave)
-        self.assertApproxFP(flux[1000], 0.00110939, accuracy=0.0025)
+        self.assertApproxFP(flux[999], 0.00110939, accuracy=0.0025)
 
     def testcomp11(self):
         expr = "(spec(crcalspec$grw_70d5824_stis_001.fits))"
