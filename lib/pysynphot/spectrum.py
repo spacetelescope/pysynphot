@@ -408,7 +408,7 @@ class SourceSpectrum(Integrator):
         flux = self(angwave)
         
         #Then convert to the desired units
-        ans = units.Photlam().Convert(wave,flux,self.fluxunits.name)
+        ans = units.Photlam().Convert(angwave,flux,self.fluxunits.name)
         
         return ans
 
@@ -842,36 +842,43 @@ class GaussianSource(AnalyticSpectrum):
 
     """
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
-                 fluxunits='photlam'):
+                 fluxunits='flam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         
         self.center = center
-        self._center = self.waveunits.ToAngstrom(center)
         
         self.fwhm = fwhm
-        self._fwhm = self.waveunits.ToAngstrom(center + fwhm/2.) - \
-                      self.waveunits.ToAngstrom(center - fwhm/2.)
         
         self.total_flux = flux
-        self._input_units = self.fluxunits
+        
+        self._input_flux_units = self.fluxunits
+        self._input_wave_units = self.waveunits
         
         self.sigma = fwhm / math.sqrt(8.0 * math.log(2.0))
-        self._sigma = self._fwhm / math.sqrt(8.0 * math.log(2.0))
         
         self.factor = flux / (math.sqrt(2.0 * math.pi) * self.sigma)
-        self._factor = self.fluxunits.ToPhotlam(center,self.factor)
         
-        self.name ='Gaussian: mu=%g,fwhm=%g, total flux=%g %s' % (self.center,
+        self.name ='Gaussian: mu=%g %s,fwhm=%g %s, total flux=%g %s' % (self.center,
+                                                                  self._input_wave_units,
                                                                   self.fwhm,
+                                                                  self._input_wave_units,
                                                                   self.total_flux,
-                                                                  self.fluxunits)
+                                                                  self._input_flux_units)
 
     def __str__(self):
         return self.name
 
     def __call__(self, wavelength):
-        return self._factor * \
-                N.exp(-0.5 * ((wavelength - self._center) / self._sigma)**2)
+        # wavelength comes in as Angstom but Gaussian properties are stored
+        # in user defined units
+        wave = units.Angstrom().Convert(wavelength,self._input_wave_units.name)
+        
+        # calculate flux
+        flux = self.factor * \
+                N.exp(-0.5 * ((wave - self.center) / self.sigma)**2)
+                
+        # convert flux to photlam before returning
+        return self._input_flux_units.ToPhotlam(wave,flux)
 
     def GetWaveSet(self):
         '''Return a wavelength set that describes the Gaussian.
@@ -879,55 +886,11 @@ class GaussianSource(AnalyticSpectrum):
         center - 5*sigma to center + 5*sigma, in units of
         0.1*sigma
         '''
-        increment = 0.1*self._sigma
-        first = self._center - 50.0*increment
-        last = self._center + 50.0*increment
+        increment = 0.1*self.sigma
+        first = self.center - 50.0*increment
+        last = self.center + 50.0*increment
         
-        wav = N.arange(first, last, increment)
-        
-        return units.Angstrom().Convert(wav,self.waveunits.name)
-        
-    def convert(self, targetunits):
-        '''Convert to other units. This method actually just changes the
-        wavelength and flux units objects, it does not recompute the
-        internally kept wave and flux data; these are kept always in internal
-        units. Method getArrays does the actual computation.
-        
-        Note that this class is designed for wavelength space. It will return
-        correct flux when converted to a frequency unit but the self reported
-        fwhm, sigma, and scaling factor will be incorrect until converted back
-        into wavelength units. This is because a gaussian defined in wavelength
-        will be asymmetric when converted to frequency units.
-        '''
-        nunits = units.Units(targetunits)
-        if nunits.isFlux:
-            self.fluxunits = nunits
-            
-            self.factor = units.Photlam().Convert(self._center, self._factor, nunits.name)
-        
-            self.total_flux = self.factor*self.sigma*math.sqrt(2.0 * math.pi)
-            
-            self.name ='Gaussian: mu=%g,fwhm=%g, total flux=%g %s' % (self.center,
-                                                                      self.fwhm,
-                                                                      self.total_flux,
-                                                                      self.fluxunits)
-        else:
-            self.waveunits = nunits
-            
-            self.center = units.Angstrom().Convert(self._center,nunits.name)
-            
-            self.fwhm = units.Angstrom().Convert(self._center + self._fwhm/2.,nunits.name) - \
-                        units.Angstrom().Convert(self._center - self._fwhm/2.,nunits.name)
-            self.fwhm = N.abs(self.fwhm)
-            
-            self.sigma = self.fwhm / math.sqrt(8.0 * math.log(2.0))
-            
-            self.factor = self.total_flux / (math.sqrt(2.0 * math.pi) * self.sigma)
-            
-            self.name ='Gaussian: mu=%g,fwhm=%g, total flux=%g %s' % (self.center,
-                                                                      self.fwhm,
-                                                                      self.total_flux,
-                                                                      self.fluxunits)
+        return N.arange(first, last, increment)
 
 
 class FlatSpectrum(AnalyticSpectrum):
