@@ -55,6 +55,16 @@ class TestGaussian(testutil.FPTestCase):
     test = g.sample(self.wave[:10])
     
     self.assertApproxNumpy(test,ref)
+    
+  def test_symmetry1(self):
+    g = S.GaussianSource(1,4000,100,'angstrom','photlam')
+    
+    self.assertApproxFP(g.sample(3950),g.sample(4050))
+    
+  def test_symmetry2(self):
+    g = S.GaussianSource(1,400,100,'nm','flam')
+    
+    self.assertApproxFP(g.sample(395),g.sample(405))
   
   def test_conversion1(self):
     g = S.GaussianSource(1,4000,100,'angstrom','photlam')
