@@ -203,8 +203,8 @@ def ping(dummy):
 
 def version(dummy):
     """Return subversion version string"""
-    from pysynphot.svn_version import __svn_version__, setupdate
-    return __svn_version__+"; "+str(setupdate)
+    from pysynphot.svninfo import __svn_version__, __setup_datetime__
+    return __svn_version__+"; "+str(__setup_datetime__)
 
 #This defines the set of tasks available for the ETC server to perform.
 #Note that there are two distinct calls to calcphot that we might

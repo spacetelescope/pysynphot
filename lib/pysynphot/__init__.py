@@ -130,17 +130,19 @@ flam
 try:
     import pkg_resources
     import re
-    __version__ = pkg_resources.get_distribution('pysynphot').version
-    m = re.match(r'(?P<version>.*)-r(?P<rev>\d+)$', __version__)
-    if m:
-        __version__ = m.group('version')
-        __svn_version__ = m.group('rev')
-    else:
-        __svn_version__ = ''
-except:
-    raise
-    __version__ = ''
     __svn_version__ = ''
+    __full_svn_info__ = ''
+    __setup_datetime__ = ''
+
+    __version__ = pkg_resources.get_distribution('pysynphot').version
+
+    try:
+        from pysynphot.svninfo import (__svn_version__, __full_svn_info__,
+                                       __setup_datetime__)
+    except ImportError:
+        pass
+except:
+    pass
 
 #UI:
 #AnalyticSpectra:
