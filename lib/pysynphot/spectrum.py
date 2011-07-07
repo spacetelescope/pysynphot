@@ -41,6 +41,9 @@ PC = 3.085678E18              # Parsec
 RADIAN = RSUN / PC /1000.
 RENORM = PI * RADIAN * RADIAN # Normalize to 1 solar radius @ 1 kpc
 
+# MergeWaveSets "too close together" constant
+MERGETHRESH = 1.e-10
+
 #Single-precision epsilon value, taken from the synphot FAQ.
 #This is the minimum separation in wavelength value necessary for
 #synphot to read the entries as distinct single-precision numbers.
@@ -91,7 +94,7 @@ def MergeWaveSets(waveset1, waveset2):
         # have no values which differ by less than 1e-10.
         delta = MergedWaveSet[1:] - MergedWaveSet[:-1]
         
-        if not (delta > 1.e-10).all():
+        if not (delta > MERGETHRESH).all():
           MergedWaveSet = N.union1d(waveset1.round(10), waveset2.round(10))        
 
     return MergedWaveSet
@@ -1735,6 +1738,14 @@ class InterpolatedSpectralElement(SpectralElement):
         self.interpval = wavelength
 
         fs = pyfits.open(self.name)
+        
+        # if the file has the PARAMS header keyword and if it is set to
+        # WAVELENGTH then we want to perform a wavelength shift before
+        # interpolation, otherwise we don't want to shift.
+        if 'PARAMS' in fs[0].header and fs[0].header['PARAMS'].lower() == 'wavelength':
+          doshift = True
+        else:
+          doshift = False
 
         #The wavelength table will have to be adjusted before use
         wave0 = fs[1].data.field('wavelength')
@@ -1769,13 +1780,14 @@ class InterpolatedSpectralElement(SpectralElement):
         uthr = fs[1].data.field(ucol)
 
         if upper != lower:
-            #Adjust the wavelength table to bracket the range
-            lwave = wave0 + (lower-self.interpval)
-            uwave = wave0 + (upper-self.interpval)
+            if doshift:
+                #Adjust the wavelength table to bracket the range
+                lwave = wave0 + (lower-self.interpval)
+                uwave = wave0 + (upper-self.interpval)
 
-            #Interpolate the columns at those ranges
-            lthr = N.interp(lwave, wave0, fs[1].data.field(lcol))
-            uthr = N.interp(uwave, wave0, fs[1].data.field(ucol))
+                #Interpolate the columns at those ranges
+                lthr = N.interp(lwave, wave0, fs[1].data.field(lcol))
+                uthr = N.interp(uwave, wave0, fs[1].data.field(ucol))
 
             #Then interpolate between the two columns
             w = (wavelength - lower) / (upper - lower)
