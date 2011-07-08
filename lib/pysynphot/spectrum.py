@@ -42,7 +42,8 @@ RADIAN = RSUN / PC /1000.
 RENORM = PI * RADIAN * RADIAN # Normalize to 1 solar radius @ 1 kpc
 
 # MergeWaveSets "too close together" constant
-MERGETHRESH = 1.e-10
+MERGETHRESH = 1.e-12
+ROUNDTHRESH = 12
 
 #Single-precision epsilon value, taken from the synphot FAQ.
 #This is the minimum separation in wavelength value necessary for
@@ -95,7 +96,7 @@ def MergeWaveSets(waveset1, waveset2):
         delta = MergedWaveSet[1:] - MergedWaveSet[:-1]
         
         if not (delta > MERGETHRESH).all():
-          MergedWaveSet = N.union1d(waveset1.round(10), waveset2.round(10))        
+          MergedWaveSet = N.union1d(waveset1.round(ROUNDTHRESH), waveset2.round(ROUNDTHRESH))        
 
     return MergedWaveSet
 
