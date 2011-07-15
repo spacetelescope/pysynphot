@@ -24,6 +24,11 @@ class CompTable(object):
         Effect:  populates two data members: compnames and filenames
                  Both are 1-d chararrays'''
         
+        # None is common for various errors.
+        # the default value of None is not useful; pyfits.open(None) does not work.
+        if CFile is None :
+            raise TypeError('initializing CompTable with CFile=None; possible bad/missing CDBS')
+
         cp = pyfits.open(CFile)
         
         self.compnames = cp[1].data.field('compname')
@@ -51,6 +56,12 @@ class GraphTable(object):
                 outnodes: Int32 array of outnodes
                 compnames:CharArray of components names'''
         
+
+        # None is common for various errors.
+        # the default value of None is not useful; pyfits.open(None) does not work.
+        if GFile is None :
+            raise TypeError('initializing GraphTable with GFile=None; possible bad/missing CDBS')
+
         gp = pyfits.open(GFile)
         
         self.keywords = gp[1].data.field('keyword')
