@@ -95,7 +95,7 @@ def MergeWaveSets(waveset1, waveset2):
         
         if not (delta > MERGETHRESH).all():
             newlen = len(delta[delta > MERGETHRESH]) + 1
-            newmerged = N.empty(newlen,dtype=MergedWaveSet.dtype)
+            newmerged = N.zeros(newlen,dtype=MergedWaveSet.dtype)
             newmerged[:-1] = MergedWaveSet[delta > MERGETHRESH]
             newmerged[-1] = MergedWaveSet[-1]
 
