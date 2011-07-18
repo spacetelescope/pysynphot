@@ -43,7 +43,6 @@ RENORM = PI * RADIAN * RADIAN # Normalize to 1 solar radius @ 1 kpc
 
 # MergeWaveSets "too close together" constant
 MERGETHRESH = 1.e-12
-ROUNDTHRESH = 12
 
 #Single-precision epsilon value, taken from the synphot FAQ.
 #This is the minimum separation in wavelength value necessary for
@@ -88,15 +87,21 @@ def MergeWaveSets(waveset1, waveset2):
         # equal but differ at levels as small as 1e-14. Having values this
         # close together can cause problems down the line so here we test whether
         # any such small differences are present, with a small difference
-        # defined as less than 1e-10.
+        # defined as less than 1e-12.
         #
-        # If they are present we recompute the union of the two wavesets after
-        # rounding each one to 10 decimal places. The resulting wave set will
-        # have no values which differ by less than 1e-10.
+        # If small differences are present we make a copy of the union'ed array
+        # with the higher of the close together pairs removed (except for the
+        # last element. if it is part of a close pair the higher of the two
+        # will be kept.)
         delta = MergedWaveSet[1:] - MergedWaveSet[:-1]
         
         if not (delta > MERGETHRESH).all():
-          MergedWaveSet = N.union1d(waveset1.round(ROUNDTHRESH), waveset2.round(ROUNDTHRESH))        
+            newlen = len(delta[delta > MERGETHRESH]) + 1
+            newmerged = N.zeros(newlen,dtype=MergedWaveSet.dtype)
+            newmerged[:-1] = MergedWaveSet[delta > MERGETHRESH]
+            newmerged[-1] = MergedWaveSet[-1]
+
+            MergedWaveSet = newmerged
 
     return MergedWaveSet
 
