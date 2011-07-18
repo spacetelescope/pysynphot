@@ -90,14 +90,12 @@ def MergeWaveSets(waveset1, waveset2):
         # defined as less than 1e-12.
         #
         # If small differences are present we make a copy of the union'ed array
-        # with the higher of the close together pairs removed (except for the
-        # last element. if it is part of a close pair the higher of the two
-        # will be kept.)
+        # with the lower of the close together pairs removed.
         delta = MergedWaveSet[1:] - MergedWaveSet[:-1]
         
         if not (delta > MERGETHRESH).all():
             newlen = len(delta[delta > MERGETHRESH]) + 1
-            newmerged = N.zeros(newlen,dtype=MergedWaveSet.dtype)
+            newmerged = N.empty(newlen,dtype=MergedWaveSet.dtype)
             newmerged[:-1] = MergedWaveSet[delta > MERGETHRESH]
             newmerged[-1] = MergedWaveSet[-1]
 
