@@ -1,10 +1,13 @@
 from __future__ import division
 
+import os.path
+
 import numpy as np
 
 import testutil
 
 import pysynphot as S
+from pysynphot import observationmode
 
 # test whether the InterpolatedSpectralElement grabs the correct column
 # when the input value is a column (no interpolation required) and an "ERROR"
@@ -12,7 +15,8 @@ import pysynphot as S
 class InterpErrorColCase(testutil.FPTestCase):
   def setUp(self):
     interp_val = 51252.0
-    filename = '/grp/hst/cdbs/comp/stis/stis_nm16_mjd_010_syn.fits[MJD#]'
+    filename = os.path.join('comp','stis','stis_nm16_mjd_010_syn.fits')
+    filename = S.observationmode._refTable(filename) + '[MJD#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):
@@ -118,7 +122,8 @@ class InterpNoDefaultCase(testutil.FPTestCase):
 class InterpInterpolationRequiredCase(testutil.FPTestCase):
   def setUp(self):
     interp_val = 51000.0
-    filename = '/grp/hst/cdbs/comp/stis/stis_nm16_mjd_010_syn.fits[MJD#]'
+    filename = os.path.join('comp','stis','stis_nm16_mjd_010_syn.fits')
+    filename = S.observationmode._refTable(filename) + '[MJD#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):
@@ -207,7 +212,8 @@ class InterpInterpolationRequiredCase(testutil.FPTestCase):
 class RampFilterTest(testutil.FPTestCase):
   def setUp(self):
     interp_val = 6480.
-    filename = '/grp/hst/cdbs/comp/acs/acs_fr656n_005_syn.fits[fr656n#]'
+    filename = os.path.join('comp','acs','acs_fr656n_005_syn.fits')
+    filename = S.observationmode._refTable(filename) + '[fr656n#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):
