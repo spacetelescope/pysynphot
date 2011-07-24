@@ -5,6 +5,7 @@ class PysynphotError(Exception):
     """parent class"""
     pass
 
+# Exceptions to do with table access
 class TableFormatError(PysynphotError):
     def __init__(self, msg, rows=None):
         Exception.__init__(self, msg)
@@ -32,4 +33,28 @@ class UnsortedWavelength(TableFormatError):
     pass
 
 class BadRow(TableFormatError):
+    pass
+
+
+# Exceptions to do with overlap checking
+class OverlapError(PysynphotError):
+    pass
+
+class PartialOverlap(OverlapError):
+    pass
+
+class DisjointError(OverlapError):
+    pass
+
+# Exceptions to do with graph table traversal
+class GraphtabError(PysynphotError):
+    pass
+
+class UnusedKeyword(GraphtabError):
+    pass
+
+class IncompleteObsmode(GraphtabError):
+    pass
+
+class AmbiguousObsmode(GraphtabError):
     pass
