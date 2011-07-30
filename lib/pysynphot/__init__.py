@@ -130,9 +130,10 @@ flam
 try:
     import pkg_resources
     import re
-    __svn_version__ = ''
-    __full_svn_info__ = ''
-    __setup_datetime__ = ''
+    __version__ = 'unk'
+    __svn_version__ = 'unk'
+    __full_svn_info__ = 'unk'
+    __setup_datetime__ = 'unk'
 
     __version__ = pkg_resources.get_distribution('pysynphot').version
 
