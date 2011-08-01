@@ -30,7 +30,11 @@ import units
 import observationmode
 import locations
 import planck
-from pysynphot import __version__, __svn_version__
+from pysynphot import __version__
+try :
+    from pysynphot import __svn_version__
+except ImportError :
+    __svn_version__ = 'unk'
 
 
 
