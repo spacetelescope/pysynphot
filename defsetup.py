@@ -40,7 +40,7 @@ class build_ext(_build_ext):
         print '*************************\n'
 
 setupargs = {
-    'version'       :      	"0.9a",
+    'version'       :      	"0.9b",
     'description'   :       'Python Synthetic Photometry Utilities',
     'fullname'      :       'AstroLib Pysynphot',
     'license'       :       'BSD',

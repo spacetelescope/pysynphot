@@ -99,7 +99,8 @@ class InterpErrorColCase(testutil.FPTestCase):
 class InterpNoDefaultCase(testutil.FPTestCase):
   def setUp(self):
     interp_val = 0.0
-    filename = '/grp/hst/cdbs/comp/acs/acs_wfc_aper_002_syn.fits[aper#]'
+    filename = os.path.join('comp','acs','acs_wfc_aper_002_syn.fits')
+    filename = S.observationmode._refTable(filename) + '[aper#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):

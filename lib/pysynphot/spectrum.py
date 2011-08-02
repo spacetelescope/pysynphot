@@ -1,5 +1,4 @@
 from __future__ import division
-from pysynphot import exceptions #custom pysyn exceptions
 
 """
 Module: spectrum.py
@@ -30,13 +29,13 @@ import units
 import observationmode
 import locations
 import planck
+import pysynphot.exceptions as exceptions #custom pysyn exceptions
+
 from pysynphot import __version__
 try :
     from pysynphot import __svn_version__
 except ImportError :
     __svn_version__ = 'unk'
-
-
 
 # Renormalization constants from synphot:
 PI = 3.14159265               # Mysterious math constant
