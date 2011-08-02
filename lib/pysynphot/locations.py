@@ -116,7 +116,8 @@ def irafconvert(iraffilename):
                   'mtab':os.path.join(rootdir,'mtab'),
                   'synphot': os.path.dirname(__file__)+os.path.sep}
 
-
+    # remove duplicate separators and extraneous relative paths
+    iraffilename = os.path.normpath(iraffilename)
 
     #BUG: supports environment variables only as the leading element in the
     #     filename
