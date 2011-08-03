@@ -40,16 +40,16 @@ class build_ext(_build_ext):
         print '*************************\n'
 
 setupargs = {
-    'version'       :      	"0.9b",
+    'version'       :       "0.9.1dev",
     'description'   :       'Python Synthetic Photometry Utilities',
     'fullname'      :       'AstroLib Pysynphot',
     'license'       :       'BSD',
-    'author'        :     	"Robert Jedrzejewski, Ivo Busko, Vicki Laidler, Matt Davis",
-    'author_email'  :      	"help@stsci.edu",
-    'url'           :       "http://projects.scipy.org/astropy/astrolib",
-    'platforms'     :      	["Linux","Solaris","Mac OS X", "Win"],
+    'author'        :       "Vicki Laidler, Matt Davis, Robert Jedrzejewski, Ivo Busko",
+    'author_email'  :       "help@stsci.edu",
+    'url'           :       "http://trac6.assembla.com/astrolib",
+    'platforms'     :       ["Linux","Solaris","Mac OS X", "Win"],
     'requires'      :       ['pyfits','numpy'],
-    'data_files'    :     	[ ( pkg+'/data', [ 'data/generic/*', 'data/wavecat/*' ] ) ],
+    'data_files'    :       [ ( pkg+'/data', [ 'data/generic/*', 'data/wavecat/*' ] ) ],
     'ext_modules'   :       ext,
     'cmdclass'      :       {'build_ext':build_ext},
     'package_dir'   :       { 'pysynphot' : 'lib/pysynphot' },

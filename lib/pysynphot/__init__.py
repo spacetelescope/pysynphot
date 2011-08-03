@@ -13,9 +13,9 @@ interface for interactive use.
 
 Dependencies:
 =============
-- numpy 1.0 or greater
-- pyfits 1.1 or greater
-- spark (syntax parser) (included in package tho; really dependency?)
+- numpy 1.5.1 or greater
+- pyfits 2.4 or greater
+
 
 Environment:
 ============
@@ -28,14 +28,14 @@ In the examples below, items which may be installation- or platform-
 specific are commented out so as to be excluded from doctest. However
 users are still encouraged to try these examples.
 
-A tutorial containing further examples and other documentation can be found at
-U{http://incubator.stsci.edu/mediawiki/index.php/Telescopedia:pysynphot}.
+A quickstart tutorial containing further examples and other documentation
+can be found at U{http://stsdas.stsci.edu/pysynphot/
 
 
 >>> import pysynphot as S
 >>> import os
 >>> print S.__version__
-0.8d
+0.9.1dev
 >>> #Read a spectrum from a file
 >>> vega=S.FileSpectrum(S.locations.VegaFile)
 
@@ -65,7 +65,7 @@ BB(T=40000)
 
 >>> pl=S.PowerLaw(10000,-2)
 >>> print pl
-Power law: refwave 10000, index -2
+Power law: refwave 10000 angstrom, index -2
 
 ## >>> print pl.wave
 ## [   500.            500.19760122    500.39528054 ...,  25969.1985582
@@ -76,11 +76,11 @@ Power law: refwave 10000, index -2
 
 >>> g1=S.GaussianSource(18.3,18000,2000,fluxunits='abmag')
 >>> print g1
-Gaussian: mu=18000,fwhm=2000,flux=18.3 abmag
+Gaussian: mu=18000 angstrom,fwhm=2000 angstrom, total flux=18.3 abmag
 
 >>> unitflux=S.FlatSpectrum(18,fluxunits='abmag')
 >>> print unitflux
-Unit spectrum of 18 abmag
+Flat spectrum of 18 abmag
 
 >>> bp1=S.ObsBandpass('acs,hrc,f555w')
 >>> print bp1
@@ -140,7 +140,7 @@ if False :
     except:
         pass
 else :
-    __version__ = '0.9b'
+    __version__ = '0.9.1dev'
 
 
 if 0 :
