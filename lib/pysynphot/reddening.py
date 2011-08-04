@@ -44,23 +44,43 @@ class RedLaw(CustomRedLaw):
                               name=f[0].header['shortnm'])
         f.close()
 
+def print_red_laws():
+    """
+    Print information regarding the extinction laws currently available
+    on CDBS. The printed names may be used with the Extinction function
+    to retrieve available reddening laws.
+    
+    """
+    laws = {}
+    
+    # start by converting the Cache.RedLaws file names to RedLaw objects
+    # if they aren't already
+    for k in Cache.RedLaws:
+        if isinstance(Cache.RedLaws[k],str):
+            Cache.RedLaws[k] = RedLaw(Cache.RedLaws[k])
+            
+        laws[str(k)] = Cache.RedLaws[k].litref
+    
+    # get the length of the longest name and litref
+    maxname = max([len(name) for name in laws.keys()])
+    maxref = max([len(ref) for ref in laws.values()])
+    
+    s = '%-' + str(maxname) + 's   %-' + str(maxref) + 's'
+    
+    print(s % ('name','reference'))
+    print(s % ('-'*maxname,'-'*maxref))
+    
+    for k in sorted(laws.keys()):
+        print(s % (k, laws[k]))
+        
+
 def Extinction(extval,name=None):
    """
    extinction = Extinction(extinction (E(B-V)) in magnitudes,
                            'reddening law')
                               
-   Factory function to return the right kind of reddening.
    If no name is provided, the average Milky Way extinction will
-   be used. Extinction laws are defined in data files that must be
-   installed with the CDBS files. Presently, the following extinction
-   laws are supported:
-     gal3      Cardelli, Clayton, & Mathis (1989, ApJ, 345, 245) R_V = 3.10.
-     lmc30dor  Gordon et al. (2003, ApJ, 594, 279) R_V = 2.76.
-     lmcavg    Gordon et al. (2003, ApJ, 594, 279) R_V = 3.41.
-     mwavg     Cardelli, Clayton, & Mathis (1989, ApJ, 345, 245) R_V = 3.10.
-     mwdense   Cardelli, Clayton, & Mathis (1989, ApJ, 345, 245) R_V = 5.00.
-     smcbar    Gordon et al. (2003, ApJ, 594, 279) R_V=2.74.
-     xgalsb    Calzetti et al. (2000. ApJ, 533, 682)
+   be used. Run the print_red_laws function to see available names.
 
    """
    try:
@@ -78,7 +98,7 @@ def Extinction(extval,name=None):
        except IOError:
            #If not, see if it's an old extinction law
            try:
-               ext=extinction.Extinction(extval,name)
+               ext=extinction.DeprecatedExtinction(extval,name)
            except KeyError:
                raise ValueError('No extinction law has been defined for "%s", and no such file exists'%name)
    return ext

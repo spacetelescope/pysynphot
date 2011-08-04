@@ -1,6 +1,6 @@
 from __future__ import division
 import os, warnings, glob, re
-
+import pyfits
 
 
 def _refTable(template):
@@ -21,7 +21,7 @@ def _refTable(template):
 
 #Replace cdbs_roots lookup with an environment variable
 try:
-    rootdir   = os.environ['PYSYN_CDBS']
+    rootdir = os.environ['PYSYN_CDBS']
 except KeyError:
     warnings.warn("PYSYN_CDBS is undefined; functionality will be SEVERELY crippled.",UserWarning)
     rootdir = ''
@@ -36,24 +36,48 @@ KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
 
 #Vega
 VegaFile = os.path.join(specdir,'alpha_lyr_stis_005.fits')
+            
 
-#Reddening Laws
-extdir=os.path.join('grid','extinction')
+extdir = os.path.join('grid','extinction')
+RedLaws = {}
 
+def _get_RedLaws():
+    global RedLaws
+    
+    # get all the fits files in $PYSYN_CDBS/grid/extinction/
+    globstr = os.path.join(rootdir,extdir,'*.fits')
+    files = glob.glob(globstr)
+    
+    # replace ###.fits at the end of file names with *.fits
+    # and get a unique set
+    files = set([f[:-8] + '*.fits' for f in files])
+    
+    # use _refTable to get the most recent version of each extinction file
+    # and add that to the RedLaws dict
+    for f in files:
+        lawf = _refTable(f)
+        
+        key = pyfits.getval(lawf,'shortnm')
+        
+        RedLaws[key.lower()] = lawf
 
-RedLaws={'mwavg':   'milkyway_diffuse_*.fits',
-         'mwdense': 'milkyway_dense_*.fits',
-         'lmcavg':  'lmc_diffuse_*.fits',
-         'lmc30dor':'lmc_30dorshell_*.fits',
-         'smcbar':  'smc_bar_*.fits',
-         'xgalsb':  'xgal_starburst_*.fits'
-           }
+# load the extintion law file names
+_get_RedLaws()
 
-for k in RedLaws:
-    try:
-        RedLaws[k]=_refTable(os.path.join(extdir,RedLaws[k]))
-    except IOError,e:
-        print 'Cannot open %s: %s'%(RedLaws[k],str(e))
+#RedLaws={'mwavg':   'milkyway_diffuse_*.fits',
+#         'mwdense': 'milkyway_dense_*.fits',
+#         'lmcavg':  'lmc_diffuse_*.fits',
+#         'lmc30dor':'lmc_30dorshell_*.fits',
+#         'smcbar':  'smc_bar_*.fits',
+#         'xgalsb':  'xgal_starburst_*.fits'
+#           }
+#
+#for k in RedLaws:
+#    try:
+#        RedLaws[k]=_refTable(os.path.join(extdir,RedLaws[k]))
+#    except IOError,e:
+#        print 'Cannot open %s: %s'%(RedLaws[k],str(e))
+
 
 #Define wavecat file explicitly
 wavecat = os.path.join(specdir,'wavecat.dat')

@@ -176,7 +176,7 @@ reddeningClasses = {'gal1': Gal1,
 def factory(redlaw, *args, **kwargs):
     return apply(reddeningClasses[string.lower(redlaw)], args, kwargs)
 
-class Extinction(spectrum.SpectralElement):
+class DeprecatedExtinction(spectrum.SpectralElement):
     """extinction = Extinction(extinction in magnitudes,
     'gal1|smc|lmc reddening laws)"""
     def __init__(self, extval, redlaw):
