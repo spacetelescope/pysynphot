@@ -46,6 +46,8 @@ class ObsModeBandpass(CompositeSpectralElement):
 
         #Check for valid bounds
         self._checkbounds()
+        
+        self.binset = self.obsmode.bandWave()
 
     def __str__(self):
         """Defer to ObservationMode component """

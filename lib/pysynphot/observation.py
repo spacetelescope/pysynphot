@@ -94,12 +94,13 @@ class Observation(spectrum.CompositeSourceSpectrum):
             msg="(%s) does not have a defined binset in the wavecat table. The waveset of the spectrum will be used instead."%str(self.bandpass)
 
             try:
-                self.binwave = self.bandpass.obsmode.bandWave()
+                self.binwave = self.bandpass.binset
             except (KeyError, AttributeError), e:
-                self.binwave=self.spectrum.wave
+                self.binwave = self.spectrum.wave
                 print(msg)
+            
             if self.binwave is None:
-                self.binwave=self.spectrum.wave
+                self.binwave = self.spectrum.wave
                 print(msg)
         else:
             self.binwave=binset
@@ -129,7 +130,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
         #compute the first and last by making them symmetric
         endpoints[0]  = self.binwave[0]  - (bin_edges[0]   - self.binwave[0])
         endpoints[-1] = self.binwave[-1] + (self.binwave[-1] - bin_edges[-1])
-
+        
         # merge these endpoints in with the natural waveset 
         spwave = spectrum.MergeWaveSets(self.wave, endpoints)
         spwave = spectrum.MergeWaveSets(spwave,self.binwave)

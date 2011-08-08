@@ -90,7 +90,7 @@ def MergeWaveSets(waveset1, waveset2):
         # equal but differ at levels as small as 1e-14. Having values this
         # close together can cause problems down the line so here we test whether
         # any such small differences are present, with a small difference
-        # defined as less than 1e-12.
+        # defined as less than MERGETHRESH.
         #
         # If small differences are present we make a copy of the union'ed array
         # with the lower of the close together pairs removed.
@@ -1009,6 +1009,9 @@ class BlackBody(AnalyticSpectrum):
 class SpectralElement(Integrator):
     '''Base class for a Spectral Element (e.g. Filter, Detector...).
     '''
+    def __init__(self):
+        self.binset = None
+    
     def validate_units(self):
         "Ensure that waveunits are WaveUnits"
         if (not isinstance(self.waveunits,units.WaveUnits)):
@@ -1475,6 +1478,8 @@ class CompositeSpectralElement(SpectralElement):
     its components.
     '''
     def __init__(self, component1, component2):
+        SpectralElement.__init__(self)
+        
         if (not isinstance(component1, SpectralElement) or
             not isinstance(component2, SpectralElement)):
             raise TypeError("Arguments must be SpectralElements")
@@ -1527,6 +1532,8 @@ class UniformTransmission(SpectralElement):
     @todo: Need to add a GetWaveSet method (or just return None).
     '''
     def __init__(self, value, waveunits='angstrom'):
+        SpectralElement.__init__(self)
+        
         self.waveunits = units.Units(waveunits)
         self.value = value
         self.name=str(self)
@@ -1564,6 +1571,8 @@ class TabularSpectralElement(SpectralElement):
         '''__init__ takes a character string argument that contains the name
         of the file with the spectral element table.
         '''
+        SpectralElement.__init__(self)
+        
         self.isAnalytic=False
         self.warnings={}
         if fileName:
@@ -1734,6 +1743,7 @@ class InterpolatedSpectralElement(SpectralElement):
         parameter (poorly named -- it is not always a wavelength) is used to
         interpolate between two columns in the file.
         '''
+        SpectralElement.__init__(self)
         
         xre=re.search('\[(?P<col>.*?)\]',fileName)
         self.name = os.path.expandvars(fileName[0:(xre.start())])
@@ -1844,7 +1854,8 @@ class Box(SpectralElement):
         ''' Both center and width are assumed to be in Angstrom
             units, according to the synphot definition.
         '''
-
+        SpectralElement.__init__(self)
+        
         if waveunits is None:
             self.waveunits=units.Units('angstrom') #per docstring: for now
         else:
