@@ -4,8 +4,10 @@
 # the user asks for the stpytools version
 
 import os
-import stsci.tools.stsci_distutils_hack as H
-
+try:
+    import stsci.tools.stsci_distutils_hack as H
+except ImportError, e:
+    import stsci_distutils_hack as H
 H.run()
 
 
