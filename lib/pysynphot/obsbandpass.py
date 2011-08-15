@@ -246,17 +246,21 @@ class ObsModeBandpass(CompositeSpectralElement):
             
         if frac_ind2 > self.binset.shape[0] - 0.5:
             raise ValueError("Upper wavelength range is above allowed binset.")
-            
+        
         # translate ends to wavelength
         if round == 'round':
             # calculate lower end of wavelength range
             f, i = np.modf(frac_ind1)
             i = int(i)
             
-            if f >= 0:
+            if f > 0:
                 # end is somewhere greater than binset[0] so we can just
-                # interpolate between two neighboring values
+                # interpolate between two neighboring values going with upper edge
                 wave1 = self.binset[i:i+2].mean()
+            elif f == 0 and i > 0:
+                # end is somewhere greater than binset[0] so we can just
+                # interpolate between two neighboring values going with lower edge
+                wave1 = self.binset[i-1:i+1].mean()
             else:
                 # end is below the lowest binset value, but not by enough to
                 # trigger an exception
@@ -266,14 +270,15 @@ class ObsModeBandpass(CompositeSpectralElement):
             f, i = np.modf(frac_ind2)
             i = int(i)
             
-            if i <= self.binset.shape[0] - 1:
+            if i < self.binset.shape[0] - 2:
                 # end is somewhere below binset[-1] so we can just interpolate
-                # between two neighboring values
-                wave2 = self.binset[i-1:i+1].mean()
+                # between two neighboring values, going with the upper edge.
+                wave2 = self.binset[i:i+2].mean()
             else:
                 # end is above highest binset value but not by enough to
                 # trigger an exception
                 wave2 = self.binset[-1] + (self.binset[-1] - self.binset[-2:].mean())
+        
         else:
             raise NotImplementedError("Support for round=%s is not yet available." % repr(round))
         
