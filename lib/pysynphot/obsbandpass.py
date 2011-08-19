@@ -11,6 +11,7 @@ from observationmode import ObservationMode
 from spectrum import CompositeSpectralElement, TabularSpectralElement
 import wavetable
 import units
+import pysynphot.exceptions as exceptions
 
 def ObsBandpass(obstring, graphtable=None, comptable=None, component_dict={}):
     """ obsband = ObsBandpass(string specifying obsmode; for details
@@ -50,7 +51,13 @@ class ObsModeBandpass(CompositeSpectralElement):
         #Check for valid bounds
         self._checkbounds()
         
-        self.binset = self.obsmode.bandWave()
+        try:
+            self.binset = self.obsmode.bandWave()
+        except AttributeError:
+            # this is to catch an error raised when the self.obsmode object does not
+            # have a binset attribute because of some problem with the obsmode
+            # used to instatiate it.
+            pass
 
     def __str__(self):
         """Defer to ObservationMode component """
@@ -102,32 +109,39 @@ class ObsModeBandpass(CompositeSpectralElement):
             If None, the wavelengths are assumed to be in the units of the
             `waveunits` attribute.
             
-        round : {'round','ciel','floor'}, optional
-            How to deal with pixels at the edges of the wavelength range.
+        round : {'round','min','max',None}, optional
+            How to deal with pixels at the edges of the wavelength range. All
+            of the options, except None, will return an integer number of pixels.
             Defaults to 'round'.
             
             When set to 'round' end pixels are included in the count if
             the wavelength range includes at least half of the end pixel.
             
-            When set to 'ciel'...
+            When set to 'min' only pixels wholly within `waverange` are counted.
             
-            When set to 'floor'...
+            When set to 'max' end pixels that are within `waverange` by any
+            margin are counted.
+            
+            When set to None the exact number of encompassed pixels, including
+            fractional pixels, is returned
             
         Returns
         -------
-        num : int
-            Number of wavelength bins within `waverange`.
+        num : int or float
+            Number of wavelength bins within `waverange`. 
             
         Raises
         ------
         ValueError
-            If `round` is not an allowed value or `waverange` exceeds the bounds
-            of the `binset` attribute.
+            If `round` is not an allowed value.
+            
+        pysynphot.exceptions.OverlapError
+            If `waverange` exceeds the bounds of the `binset` attribute.
         
         """
         # make sure that the round keyword is valid
-        if round not in ('round','ciel','floor'):
-            raise ValueError("round keyword must be one of ('round','ciel','floor')")
+        if round not in ('round','min','max',None):
+            raise ValueError("round keyword must be one of ('round','ciel','floor',None)")
         
         # start by converting waverange to self.waveunits, if necessary
         if waveunits is not None:
@@ -146,11 +160,11 @@ class ObsModeBandpass(CompositeSpectralElement):
         # make sure the specified waverange is within our .binset
         minwave = self.binset[0] - (self.binset[0:2].mean() - self.binset[0])
         if wave1 < minwave:
-            raise ValueError("Lower bound of waverange is outside of binset. Min = %f" % minwave)
+            raise exceptions.OverlapError("Lower bound of waverange is outside of binset. Min = %f" % minwave)
          
         maxwave = self.binset[-1] + (self.binset[-1] - self.binset[-2:].mean())
         if wave2 > maxwave:
-            raise ValueError("Upper bound of waverange is outside of binset. Max = %f" % maxwave)
+            raise exceptions.OverlapError("Upper bound of waverange is outside of binset. Max = %f" % maxwave)
         
         # if the wavelength ends are the same return 0
         if wave1 == wave2:
@@ -160,18 +174,17 @@ class ObsModeBandpass(CompositeSpectralElement):
         if round == 'round':
             ind1 = self.binset.searchsorted(wave1, side='left')
             ind2 = self.binset.searchsorted(wave2, side='right')
-            
+        
             num = ind2 - ind1
         else:
             raise NotImplementedError("Support for round=%s is not yet available." % repr(round))
         
         return num
         
-    def wave_range(self, cenwave, npix, waveunits=None, round='round'):
+    def wave_range(self, cenwave, npix, waveunits=None, round=None):
         """
         Get the wavelength range covered by a number of pixels, `npix`, centered
-        on wavelength `cenwave`. The returned wavelength ends will correspond
-        to pixel edges.
+        on wavelength `cenwave`.
         
         Parameters
         ----------
@@ -186,12 +199,24 @@ class ObsModeBandpass(CompositeSpectralElement):
             Defaults to None. If None, the wavelengths are assumed to be in 
             the units of the `waveunits` attribute.
             
-        round : {'round','ciel','floor'}, optional
-            How to deal with pixels at the edges of the wavelength range.
-            Defaults to 'round'.
+        round : {None,'round','min','max'}, optional
+            How to deal with pixels at the edges of the wavelength range. All
+            of the options, except None, will return a wavelength range that
+            encompasses an integer number of pixels, and that number may not
+            be equal to `npix`.
+            Defaults to None.
             
-            When set to 'round' the end pixels are included if at least half
-            of the pixel is encompassed.
+            When set to None an exact wavelength range is returned. The returned
+            range may not correspond to to an integer number of pixels.
+            
+            When set to 'round' the returned wavelength range encompasses
+            an end pixel if at least half of the pixel is included.
+            
+            When set to 'min' the returned wavelength range is shrunk so that
+            it includes an integer number of pixels.
+            
+            When set to 'max' the returned wavelength range is expanded so that
+            it includes an integer number of pixels.
             
         Returns
         -------
@@ -201,14 +226,16 @@ class ObsModeBandpass(CompositeSpectralElement):
         Raises
         ------
         ValueError
-            If `round` is not an allowed value, `cenwave` is not within the
-            `binset` attribute, or the returned `waverange` would
+            If `round` is not an allowed value.
+        
+        pysynphot.exceptions.OverlapError
+            If `cenwave` is not within the `binset` attribute, or the returned `waverange` would
             exceed the limits of the `binset` attribute.
         
         """
         # make sure that the round keyword is valid
-        if round not in ('round','ciel','floor'):
-            raise ValueError("round keyword must be one of ('round','ciel','floor')")
+        if round not in (None,'round','min','max'):
+            raise ValueError("round keyword must be one of (None,'round','min','max')")
         
         # convert cenwave from waveunits to self.waveunits, if necessary
         if waveunits is not None:
@@ -220,9 +247,9 @@ class ObsModeBandpass(CompositeSpectralElement):
         
         # make sure cenwave is within binset
         if cenwave < self.binset[0]:
-            raise ValueError("cenwave is not within binset. Min = %f" % self.binset[0])
+            raise exceptions.OverlapError("cenwave is not within binset. Min = %f" % self.binset[0])
         elif cenwave > self.binset[-1]:
-            raise ValueError("cenwave is not within binset. Max = %f" % self.binset[-1])
+            raise exceptions.OverlapError("cenwave is not within binset. Max = %f" % self.binset[-1])
                 
         # first figure out what index the central wavelength falls at
         diff = self.binset - cenwave
@@ -242,10 +269,10 @@ class ObsModeBandpass(CompositeSpectralElement):
         
         # check ends
         if frac_ind1 < -0.5:
-            raise ValueError("Lower wavelength range is below allowed binset.")
+            raise exceptions.OverlapError("Lower wavelength range is below allowed binset.")
             
         if frac_ind2 > self.binset.shape[0] - 0.5:
-            raise ValueError("Upper wavelength range is above allowed binset.")
+            raise exceptions.OverlapError("Upper wavelength range is above allowed binset.")
         
         # translate ends to wavelength
         if round == 'round':
