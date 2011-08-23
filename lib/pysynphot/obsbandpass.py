@@ -114,8 +114,10 @@ class ObsModeBandpass(CompositeSpectralElement):
             of the options, except None, will return an integer number of pixels.
             Defaults to 'round'.
             
-            When set to 'round' end pixels are included in the count if
-            the wavelength range includes at least half of the end pixel.
+            When set to 'round' wavelength ends that fall in the middle of a
+            pixel are counted if more than half of the pixel is within `waverange`.
+            Ends that fall in the center of a pixel are rounded up to the
+            nearest pixel edge.
             
             When set to 'min' only pixels wholly within `waverange` are counted.
             
@@ -123,12 +125,12 @@ class ObsModeBandpass(CompositeSpectralElement):
             margin are counted.
             
             When set to None the exact number of encompassed pixels, including
-            fractional pixels, is returned
+            fractional pixels, is returned.
             
         Returns
         -------
         num : int or float
-            Number of wavelength bins within `waverange`. 
+            Number of wavelength bins within `waverange`.
             
         Raises
         ------
@@ -157,12 +159,15 @@ class ObsModeBandpass(CompositeSpectralElement):
             wave1 = waverange[0]
             wave2 = waverange[-1]
             
+        # give self.binset a shorter name
+        bins = self.binset
+            
         # make sure the specified waverange is within our .binset
-        minwave = self.binset[0] - (self.binset[0:2].mean() - self.binset[0])
+        minwave = bins[0] - (bins[0:2].mean() - bins[0])
         if wave1 < minwave:
             raise exceptions.OverlapError("Lower bound of waverange is outside of binset. Min = %f" % minwave)
          
-        maxwave = self.binset[-1] + (self.binset[-1] - self.binset[-2:].mean())
+        maxwave = bins[-1] + (bins[-1] - bins[-2:].mean())
         if wave2 > maxwave:
             raise exceptions.OverlapError("Upper bound of waverange is outside of binset. Max = %f" % maxwave)
         
@@ -172,16 +177,67 @@ class ObsModeBandpass(CompositeSpectralElement):
         
         # find where the wavelength endpoints fall.
         if round == 'round':
-            ind1 = self.binset.searchsorted(wave1, side='left')
-            ind2 = self.binset.searchsorted(wave2, side='right')
+            ind1 = bins.searchsorted(wave1, side='right')
+            ind2 = bins.searchsorted(wave2, side='right')
         
             num = ind2 - ind1
-        else:
-            raise NotImplementedError("Support for round=%s is not yet available." % repr(round))
-        
+            
+        elif round == 'min':
+            ind1 = bins.searchsorted(wave1, side='left')
+            ind2 = bins.searchsorted(wave2, side='left')
+            
+            # for ind1, figure out if pixel ind1 is wholly included or not.
+            # do this by figuring out where wave1 is between ind1 and ind1-1.
+            frac = (bins[ind1] - wave1) / (bins[ind1] - bins[ind1-1])
+            
+            if frac < 0.5:
+                # ind1 is only partially included
+                ind1 += 1
+                
+            # similar but reversed procedure for ind2
+            frac = (wave2 - bins[ind2-1]) / (bins[ind2] - bins[ind2-1])
+            
+            if frac < 0.5:
+                # ind2 is only partially included
+                ind2 -= 1
+                
+            num = ind2 - ind1
+            
+        elif round == 'max':
+            ind1 = bins.searchsorted(wave1, side='left')
+            ind2 = bins.searchsorted(wave2, side='left')
+            
+            # for ind1, figure out if pixel ind1-1 is partially included or not.
+            # do this by figuring out where wave1 is between ind1 and ind1-1.
+            frac = (wave1 - bins[ind1-1]) / (bins[ind1] - bins[ind1-1])
+            
+            if frac < 0.5:
+                # ind1 is partially included
+                ind1 -= 1
+                
+            # similar but reversed procedure for ind2
+            frac = (bins[ind2] - wave2) / (bins[ind2] - bins[ind2-1])
+            
+            if frac < 0.5:
+                # ind2 is partially included
+                ind2 += 1
+                
+            num = ind2 - ind1
+            
+        elif round is None:
+            ind1 = bins.searchsorted(wave1, side='left')
+            ind2 = bins.searchsorted(wave2, side='left')
+            
+            # calculate fractional indices
+            frac1 = ind1 - (bins[ind1] - wave1) / (bins[ind1] - bins[ind1-1])
+            
+            frac2 = ind2 - (bins[ind2] - wave2) / (bins[ind2] - bins[ind2-1])
+            
+            num = frac2 - frac1
+               
         return num
         
-    def wave_range(self, cenwave, npix, waveunits=None, round=None):
+    def wave_range(self, cenwave, npix, waveunits=None, round='round'):
         """
         Get the wavelength range covered by a number of pixels, `npix`, centered
         on wavelength `cenwave`.
@@ -199,24 +255,28 @@ class ObsModeBandpass(CompositeSpectralElement):
             Defaults to None. If None, the wavelengths are assumed to be in 
             the units of the `waveunits` attribute.
             
-        round : {None,'round','min','max'}, optional
+        round : {'round','min','max',None}, optional
             How to deal with pixels at the edges of the wavelength range. All
-            of the options, except None, will return a wavelength range that
-            encompasses an integer number of pixels, and that number may not
-            be equal to `npix`.
-            Defaults to None.
+            of the options, except None, will return wavelength ends that
+            correpsonds to pixel edges. 
+            Defaults to 'round'.
             
-            When set to None an exact wavelength range is returned. The returned
-            range may not correspond to to an integer number of pixels.
+            When set to None an exact wavelength range is returned. The
+            wavelength ends returned may not correspond to pixel edges, but
+            will cover exactly `npix` pixels.
             
-            When set to 'round' the returned wavelength range encompasses
-            an end pixel if at least half of the pixel is included.
+            When set to 'round' a wavelength range is returned such that the
+            ends are pixel edges and the range spans exactly `npix` pixels.
+            Ends that fall in the center of bins are rounded up to the nearest
+            pixel edge.
             
             When set to 'min' the returned wavelength range is shrunk so that
-            it includes an integer number of pixels.
+            it includes an integer number of pixels and the ends fall on pixel
+            edges. May not span exactly `npix` pixels.
             
             When set to 'max' the returned wavelength range is expanded so that
-            it includes an integer number of pixels.
+            it includes an integer number of pixels and the ends fall on pixel
+            edges. May not span exactly `npix` pixels.
             
         Returns
         -------
@@ -250,16 +310,19 @@ class ObsModeBandpass(CompositeSpectralElement):
             raise exceptions.OverlapError("cenwave is not within binset. Min = %f" % self.binset[0])
         elif cenwave > self.binset[-1]:
             raise exceptions.OverlapError("cenwave is not within binset. Max = %f" % self.binset[-1])
-                
+        
+        # give self.binset a shorter name
+        bins = self.binset
+        
         # first figure out what index the central wavelength falls at
-        diff = self.binset - cenwave
+        diff = cenwave - bins
         ind = np.where(np.abs(diff) == np.abs(diff).min())[0][0]
         
         # now figure out the fractional index
         if diff[ind] < 0:
-            frac_ind = float(ind) + diff[ind] / (diff[ind] - diff[ind-1])
+            frac_ind = float(ind) + diff[ind] / (bins[ind] - bins[ind-1])
         elif diff[ind] > 0:
-            frac_ind = float(ind) + diff[ind] / (diff[ind+1] - diff[ind])
+            frac_ind = float(ind) + diff[ind] / (bins[ind+1] - bins[ind])
         else:
             frac_ind = float(ind)
         
@@ -274,40 +337,98 @@ class ObsModeBandpass(CompositeSpectralElement):
         if frac_ind2 > self.binset.shape[0] - 0.5:
             raise exceptions.OverlapError("Upper wavelength range is above allowed binset.")
         
+        frac1, int1 = np.modf(frac_ind1)
+        frac2, int2 = np.modf(frac_ind2)
+        
         # translate ends to wavelength
-        if round == 'round':
-            # calculate lower end of wavelength range
-            f, i = np.modf(frac_ind1)
-            i = int(i)
+        if round is None:
+            # translate ends directly to wavelength without regard to bin edges
+            f, i = frac1, int1
             
-            if f > 0:
+            wave1 = bins[i] + frac1 * (bins[i+1] - bins[i])
+            
+            f, i = frac2, int2
+            
+            wave2 = bins[i] + frac2 * (bins[i+1] - bins[i])
+        
+        elif round == 'round':
+            # calculate lower end of wavelength range
+            f, i = frac1, int(int1)
+            
+            if f >= 0:
                 # end is somewhere greater than binset[0] so we can just
                 # interpolate between two neighboring values going with upper edge
-                wave1 = self.binset[i:i+2].mean()
-            elif f == 0 and i > 0:
-                # end is somewhere greater than binset[0] so we can just
-                # interpolate between two neighboring values going with lower edge
-                wave1 = self.binset[i-1:i+1].mean()
+                wave1 = bins[i:i+2].mean()
             else:
                 # end is below the lowest binset value, but not by enough to
                 # trigger an exception
-                wave1 = self.binset[0] - (self.binset[0:2].mean() - self.binset[0])
+                wave1 = bins[0] - (bins[0:2].mean() - bins[0])
                 
             # calculate upper end of wavelength range
-            f, i = np.modf(frac_ind2)
-            i = int(i)
+            f, i = frac2, int(int2)
             
-            if i < self.binset.shape[0] - 2:
+            if i < bins.shape[0] - 1:
                 # end is somewhere below binset[-1] so we can just interpolate
                 # between two neighboring values, going with the upper edge.
-                wave2 = self.binset[i:i+2].mean()
+                wave2 = bins[i:i+2].mean()
             else:
                 # end is above highest binset value but not by enough to
                 # trigger an exception
-                wave2 = self.binset[-1] + (self.binset[-1] - self.binset[-2:].mean())
+                wave2 = bins[-1] + (bins[-1] - bins[-2:].mean())
+                
+        elif round == 'min':
+            # calculate lower end of wavelength range
+            f, i = frac1, int(int1)
+            
+            if f <= 0.5 and i < bins.shape[0] - 1:
+                # not at the lowest possible edge and pixel i included
+                wave1 = bins[i:i+2].mean()
+            elif f > 0.5 and i < bins.shape[0] - 2:
+                # not at the lowest possible edge and pixel i not included
+                wave1 = bins[i+1:i+3].mean()
+            elif f == -0.5:
+                # at the lowest possible edge
+                wave1 = bins[0] - (bins[0:2].mean() - bins[0])
+                
+            # calculate upper end of wavelength range
+            f, i = frac2, int(int2)
+            
+            if f >= 0.5 and i < bins.shape[0] - 1:
+                # not out at the end and pixel i included
+                wave2 = bins[i:i+2].mean()
+            elif f < 0.5 and i < bins.shape[0]:
+                # not out at end and pixel i not included
+                wave2 = bins[i-1:i+1].mean()
+            elif f == 0.5 and i == bins.shape[0] - 1:
+                # at the very end
+                wave2 = bins[-1] + (bins[-1] - bins[-2:].mean())
         
-        else:
-            raise NotImplementedError("Support for round=%s is not yet available." % repr(round))
+        elif round == 'max':
+            # calculate lower end of wavelength range
+            f, i = frac1, int(int1)
+            
+            if f < 0.5 and i < bins.shape[0]:
+                # not at the lowest possible edge and pixel i included
+                wave1 = bins[i-1:i+1].mean()
+            elif f >= 0.5 and i < bins.shape[0] - 1:
+                # not at the lowest possible edge and pixel i not included
+                wave1 = bins[i:i+2].mean()
+            elif f == -0.5:
+                # at the lowest possible edge
+                wave1 = bins[0] - (bins[0:2].mean() - bins[0])
+                
+            # calculate upper end of wavelength range
+            f, i = frac2, int(int2)
+            
+            if f > 0.5 and i < bins.shape[0] - 2:
+                # not out at the end and pixel i included
+                wave2 = bins[i+1:i+3].mean()
+            elif f <= 0.5 and i < bins.shape[0] - 1:
+                # not out at end and pixel i not included
+                wave2 = bins[i:i+2].mean()
+            elif f == 0.5 and i == bins.shape[0] - 1:
+                # at the very end
+                wave2 = bins[-1] + (bins[-1] - bins[-2:].mean())
         
         # translate ends to waveunits, if necessary
         if waveunits is not None:
