@@ -413,3 +413,34 @@ class Observation(spectrum.CompositeSourceSpectrum):
         if saveunits is not None:
             self.convert(saveunits)
         return ans
+        
+    def pixel_range(self, waverange, waveunits=None, round='round'):
+        """
+        Returns the number of wavelength bins within `waverange`.
+        
+        .. note:: This calls `self.bandpass.pixel_range`. Refer to
+           `ObsModeBandpass.pixel_range` for full documentation.
+           
+        See Also
+        --------
+        `ObsModeBandpass.pixel_range`
+        
+        """
+        return self.bandpass.pixel_range(waverange, waveunits, round)
+        
+        
+    def wave_range(self, cenwave, npix, waveunits=None, round='round'):
+        """
+        Get the wavelength range covered by a number of pixels, `npix`, centered
+        on wavelength `cenwave`.
+        
+        .. note:: This calls `self.bandpass.wave_range`. Refer to
+           `ObsModeBandpass.wave_range` for full documentation.
+           
+        See Also
+        --------
+        `ObsModeBandpass.wave_range`
+        
+        """
+        return self.bandpass.wave_range(cenwave, npix, waveunits, round)
+        
