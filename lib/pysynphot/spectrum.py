@@ -518,6 +518,12 @@ class CompositeSourceSpectrum(SourceSpectrum):
         if self.operation == 'multiply':
             return self.component1(wavelength) * self.component2(wavelength)
 
+    def __iter__(self):
+        """ Allow iteration over each component. """
+
+        complist = self.complist()
+        return complist.__iter__()
+    
     def complist(self):
         ans=[]
         for comp in (self.component1, self.component2):
