@@ -11,7 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-from stsci_sphinxext.conf import *
+from stsci.sphinxext.conf import *
 
 import sys, os
 
