@@ -1449,12 +1449,20 @@ class SpectralElement(Integrator):
 
         return resampled
 
-    def unitResponse(self):
-        """Is this correct if waveunits != Angstrom?"""
+    def unit_response(self):
+        """
+        Returns flux, in flam, of a star that produces a response of
+        one photon per second in this passband.
+        
+        Only correct if waveunits are Angstrom.
+        
+        """
+        hc = units.HC
+        area = observationmode.HSTAREA
+        
         wave = self.GetWaveSet()
         thru = self(wave)
-        return 1.0 / self.trapezoidIntegration(wave,thru)
-
+        return hc / (area * self.trapezoidIntegration(wave,thru*wave))
 
 
     def GetWaveSet(self):

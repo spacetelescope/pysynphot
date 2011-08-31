@@ -305,6 +305,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
         finally:
             self.convert(oldunits)
             del x
+            
         return ans
 
     def _fluxcheck(self,totalflux):

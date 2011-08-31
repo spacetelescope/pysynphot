@@ -17,7 +17,7 @@ import observationmode #needed for HSTAREA
 
         
 C = 2.99792458e18 # speed of light in Angstrom/sec
-H = 6.62620E-27   # Planck's constant
+H = 6.62620E-27   # Planck's constant in ergs * sec
 HC = H * C
 ABZERO = -48.60   # magnitude zero points
 STZERO = -21.10
