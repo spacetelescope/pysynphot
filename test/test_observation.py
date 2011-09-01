@@ -1,13 +1,19 @@
 from __future__ import division
 
-import testutil
+# tests for the observation.Observation class
+
 import os.path
+import unittest
 
 import numpy as np
 
+import pysynphot as S
 from pysynphot import Observation, ObsBandpass, FlatSpectrum
 from pysynphot import locations
 
+import testutil
+
+# test the Observaion.initbinflux method
 class BinFluxCase(testutil.FPTestCase):
   def setUp(self):
     tmg = locations._refTable(os.path.join('mtab','u921351jm_tmg.fits'))
@@ -44,4 +50,37 @@ class BinFluxCase(testutil.FPTestCase):
     self.assertEqualNumpy(front10,bin_edges[:10])
     self.assertEqualNumpy(back10,bin_edges[-10:])
     self.assertEqualNumpy(mid10,bin_edges[5000:5010])
+
+
+# test for changes in ticket #198
+# test the the bandpass .binset is the same as the Observation .binwave.
+# should be since one comes from the other. also verifies that the bandpass
+# has the .binset attribute, which is new in the fix to ticket 198.
+def test_observation_binset():
+  bp = S.ObsBandpass('acs,hrc,f555w')
+  
+  spec = S.FlatSpectrum(1)
+  
+  obs = S.Observation(spec,bp)
+  
+  assert (bp.binset == obs.binwave).all()
+  
+  
+# test the Observation.pixel_range() and .wave_range() methods
+class TestPixelWaveRangeMethods(unittest.TestCase):
+  def setUp(self):
+    bp = S.ObsBandpass('acs,hrc,f555w')
+    spec = S.FlatSpectrum(1)
+    
+    self.obs = S.Observation(spec,bp)
+    
+  def test_pixel_range_waveunits(self):
+    num = self.obs.pixel_range((499.95,500.05),waveunits='nm',round='round')
+    self.assertEqual(num,1)
+    
+  def test_wave_range_waveunits(self):
+    w1, w2 = self.obs.wave_range(500,2,waveunits='nm',round=None)
+    self.assertEqual(w1,499.9)
+    self.assertEqual(w2,500.1)
+  
     

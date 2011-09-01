@@ -58,3 +58,8 @@ class IncompleteObsmode(GraphtabError):
 
 class AmbiguousObsmode(GraphtabError):
     pass
+
+
+# Exceptions for undefined optional values
+class UndefinedBinset(PysynphotError):
+    pass

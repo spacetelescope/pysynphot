@@ -7,10 +7,15 @@ certain other methods."""
 import os
 import types
 
-import spectrum
-import units
 import numpy as N
 import math
+
+import spectrum
+import units
+
+from obsbandpass import pixel_range, wave_range
+
+import pysynphot.exceptions as exceptions
 
 try:
   import pysynphot_utils
@@ -419,15 +424,44 @@ class Observation(spectrum.CompositeSourceSpectrum):
         """
         Returns the number of wavelength bins within `waverange`.
         
-        .. note:: This calls `self.bandpass.pixel_range`. Refer to
-           `ObsModeBandpass.pixel_range` for full documentation.
+        .. note:: This calls the `obsbandpass.pixel_range` function with
+           `self.binwave` as the first argument. See
+           `obsbandpass.pixel_range` for full documentation.
+           
+        Parameters
+        ----------
+        waveunits : str, optional
+            The units of the wavelengths given in `waverange`. Defaults to None.
+            If None, the wavelengths are assumed to be in the units of the
+            `waveunits` attribute.
+            
+        Raises
+        ------
+        pysynphot.exceptions.UndefinedBinset
+            If the `binwave` attribute is None.
            
         See Also
         --------
-        `ObsModeBandpass.pixel_range`
+        `obsbandpass.pixel_range`
         
         """
-        return self.bandpass.pixel_range(waverange, waveunits, round)
+        # make sure we have a binset to work with
+        if self.binwave is None:
+            raise exceptions.UndefinedBinset('No binset specified for this bandpass.')
+        
+        # start by converting waverange to self.waveunits, if necessary
+        if waveunits is not None:
+            waveunits = units.Units(waveunits)
+            
+            if not isinstance(waverange,N.ndarray):
+                waverange = N.array(waverange)
+            
+            # convert to angstroms and then whatever self.waveunits is
+            waverange = waveunits.ToAngstrom(waverange)
+            
+            waverange = units.Angstrom().Convert(waverange, self.waveunits.name)
+        
+        return pixel_range(self.binwave, waverange, round=round)
         
         
     def wave_range(self, cenwave, npix, waveunits=None, round='round'):
@@ -435,13 +469,50 @@ class Observation(spectrum.CompositeSourceSpectrum):
         Get the wavelength range covered by a number of pixels, `npix`, centered
         on wavelength `cenwave`.
         
-        .. note:: This calls `self.bandpass.wave_range`. Refer to
-           `ObsModeBandpass.wave_range` for full documentation.
+        .. note:: This calls the `obsbandpass.wave_range` function with
+           `self.binwave` as the first argument. See
+           `obsbandpass.wave_range` for full documentation.
            
+        Parameters
+        ----------
+        waveunits : str, optional
+            Wavelength units of `cenwave` and the returned wavelength range.
+            Defaults to None. If None, the wavelengths are assumed to be in 
+            the units of the `waveunits` attribute.
+        
+        Raises
+        ------
+        pysynphot.exceptions.UndefinedBinset
+            If the `binwave` attribute is None.
+        
         See Also
         --------
-        `ObsModeBandpass.wave_range`
+        `obsbandpass.wave_range`
         
         """
-        return self.bandpass.wave_range(cenwave, npix, waveunits, round)
+        # make sure we have a binset to work with
+        if self.binwave is None:
+            raise exceptions.UndefinedBinset('No binset specified for this bandpass.')
+        
+        # convert cenwave from waveunits to self.waveunits, if necessary
+        if waveunits is not None:
+            waveunits = units.Units(waveunits)
+            
+            # convert to angstroms and then whatever self.waveunits is
+            cenwave = waveunits.ToAngstrom(cenwave)
+            cenwave = units.Angstrom().Convert(cenwave, self.waveunits.name)
+            
+        wave1, wave2 = wave_range(self.binwave, cenwave, npix, round=round)    
+            
+        # translate ends to waveunits, if necessary
+        if waveunits is not None:
+            # convert to angstroms
+            wave1 = self.waveunits.ToAngstrom(wave1)
+            wave2 = self.waveunits.ToAngstrom(wave2)
+            
+            # then to waveunits
+            wave1 = units.Angstrom().Convert(wave1, waveunits.name)
+            wave2 = units.Angstrom().Convert(wave2, waveunits.name)
+            
+        return wave1, wave2
         
