@@ -20,10 +20,10 @@ import string
 import re
 import os
 import math
+import warnings
 
 import pyfits
 import numpy as N
-from numpy import ma as MA
 
 import units
 import observationmode
@@ -1774,9 +1774,17 @@ class InterpolatedSpectralElement(SpectralElement):
         # WAVELENGTH then we want to perform a wavelength shift before
         # interpolation, otherwise we don't want to shift.
         if 'PARAMS' in fs[0].header and fs[0].header['PARAMS'].lower() == 'wavelength':
-          doshift = True
+            doshift = True
         else:
-          doshift = False
+            doshift = False
+            
+        # check whether we are supposed to extrapolate when we're given an
+        # interpolation value beyond the columns of the table.
+        # extrapolation is assumed to false if the EXTRAP keyword is missing.
+        if 'EXTRAP' in fs[0].header and fs[0].header['EXTRAP'] is True:
+            extrapolate = True
+        else:
+            extrapolate = False
 
         #The wavelength table will have to be adjusted before use
         wave0 = fs[1].data.field('wavelength')
@@ -1789,47 +1797,46 @@ class InterpolatedSpectralElement(SpectralElement):
         colWaves = [float(cn.split('#')[1]) for cn in colNames]
         
         if colNames == []:
-          raise StandardError('file %s contains no interpolated columns.' % (fileName,))
-
-        waves = MA.array(colWaves)
-        greater = MA.masked_less(waves, wavelength)
-        less = MA.masked_greater(waves, wavelength)
-        upper = MA.minimum(greater)
-        lower = MA.maximum(less)
-
-        if '--' in (str(upper),str(lower)):
-            raise NotImplementedError("%g outside of range in %s; extrapolation not yet supported"%(wavelength,fileName))
-
-
-        #Construct the column names
-        lcol = colNames[MA.argmax(less)]
-        ucol = colNames[MA.argmin(greater)]
-
-
-        #Extract the data from those columns
-        lthr = fs[1].data.field(lcol)
-        uthr = fs[1].data.field(ucol)
-
-        if upper != lower:
-            if doshift:
-                #Adjust the wavelength table to bracket the range
-                lwave = wave0 + (lower-self.interpval)
-                uwave = wave0 + (upper-self.interpval)
-
-                #Interpolate the columns at those ranges
-                lthr = N.interp(lwave, wave0, fs[1].data.field(lcol))
-                uthr = N.interp(uwave, wave0, fs[1].data.field(ucol))
-
-            #Then interpolate between the two columns
-            w = (wavelength - lower) / (upper - lower)
-            self._throughputtable = uthr * w + lthr * (1.0 - w)
-        else:
-            #Interpolate the matching column to the correct wave range
-            uwave = wave0 + (upper-self.interpval)
-            uthr = N.interp(uwave, wave0, fs[1].data.field(ucol))
-            self._throughputtable = uthr
-
-        self._wavetable = wave0
+            raise StandardError('File %s contains no interpolated columns.' % (fileName,))
+        
+        # easy case: wavelength matches a column
+        if self.interpval in colWaves:
+            self._no_interp_init(wave0, fs[1].data[colNames[colWaves.index(wavelength)]])
+            
+        # need interpolation
+        elif self.interpval > colWaves[0] and self.interpval < colWaves[-1]:
+            upper_ind = N.searchsorted(colWaves,self.interpval)
+            lower_ind = upper_ind - 1
+            
+            self._interp_init(wave0,colWaves[lower_ind],colWaves[upper_ind],
+                              fs[1].data[colNames[lower_ind]],
+                              fs[1].data[colNames[upper_ind]],doshift)
+                              
+        # extrapolate below lowest columns
+        elif extrapolate and self.interpval < colWaves[0]:
+            self._extrap_init(wave0,colWaves[0],colWaves[1],
+                              fs[1].data[colNames[0]],
+                              fs[1].data[colNames[1]])
+                                  
+        # extrapolate above highest columns
+        elif extrapolate and self.interpval > colWaves[-1]:
+            self._extrap_init(wave0,colWaves[-2],colWaves[-1],
+                              fs[1].data[colNames[-2]],
+                              fs[1].data[colNames[-1]])
+                              
+        # can't extrapolate, use default
+        elif not extrapolate and 'THROUGHPUT' in fs[1].data.names:
+            s = 'Extrapolation not allowed, using default throughput for %s' % (fileName,)
+            warnings.warn(s,UserWarning)
+            self.warnings['DefaultThroughput'] = True
+            self._no_interp_init(wave0,fs[1].data['THROUGHPUT'])
+                              
+        # can't extrapolate and no default
+        elif not extrapolate and 'THROUGHPUT' not in fs[1].data.names:
+            s = 'Cannot extrapolate and no default throughput for %s' % (fileName,)
+            raise exceptions.ExtrapolationNotAllowed(s)
+        
+        # assign units
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.throughputunits = 'none'
 
@@ -1837,6 +1844,39 @@ class InterpolatedSpectralElement(SpectralElement):
 
     def __str__(self):
         return "%s#%g"%(self.name,self.interpval)
+        
+    def _no_interp_init(self,waves,throughput):
+        self._wavetable = waves
+        self._throughputtable = throughput
+        
+    def _interp_init(self,waves,lower_val,upper_val,lower_thru,upper_thru,doshift):
+        self._wavetable = waves
+        
+        if doshift:
+            #Adjust the wavelength table to bracket the range
+            lwave = waves + (lower_val - self.interpval)
+            uwave = waves + (upper_val - self.interpval)
+
+            #Interpolate the columns at those ranges
+            lower_thru = N.interp(lwave, waves, lower_thru)
+            upper_thru = N.interp(uwave, waves, upper_thru)
+            
+        #Then interpolate between the two columns
+        w = (self.interpval - lower_val) / (upper_val - lower_val)
+        self._throughputtable = (upper_thru * w) + lower_thru * (1.0 - w)
+        
+    def _extrap_init(self,waves,lower_val,upper_val,lower_thru,upper_thru):
+        self._wavetable = waves
+        
+        throughput = []
+        
+        for y1,y2 in zip(lower_thru,upper_thru):
+            m = (y2 - y1) / (upper_val - lower_val)
+            b = y1 - m * lower_val
+            
+            throughput.append(m*self.interpval + b)
+            
+        self._throughputtable = N.array(throughput)
 
 
 class ThermalSpectralElement(TabularSpectralElement):

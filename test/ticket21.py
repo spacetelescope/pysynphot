@@ -15,19 +15,6 @@ cmptb_name = os.path.join('mtab','rcb1833hm_tmc.fits')
 observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
 print "%s:"%os.path.basename(__file__)
 print "   Tests are being run with %s"%observationmode.COMPTABLE
-
-class Extraphi(testutil.FPTestCase):
-    def setUp(self):
-        self.omstring='acs,hrc,f555w,mjd#5400000'
-        
-    def testraise(self):
-        self.assertRaises(NotImplementedError,observationmode.ObservationMode,
-                          self.omstring)
-        
-class Extraplo(Extraphi):
-    def setUp(self):
-        self.omstring='acs,hrc,f555w,mjd#2'
-
         
                                             
 class ParmCase(testutil.FPTestCase):

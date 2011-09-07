@@ -4,10 +4,13 @@ import os.path
 
 import numpy as np
 
+import nose.tools
+
 import testutil
 
 import pysynphot as S
 from pysynphot import observationmode
+import pysynphot.exceptions as exceptions
 
 # test whether the InterpolatedSpectralElement grabs the correct column
 # when the input value is a column (no interpolation required) and an "ERROR"
@@ -210,6 +213,18 @@ class InterpInterpolationRequiredCase(testutil.FPTestCase):
     self.assertEqualNumpy(self.spec._wavetable,wavetable)
 
 
+# test that an exception is raised when we can't extrapolate
+# and there's no default
+def aper_no_extrap_test():
+  interp_val = -5.
+  filename = os.path.join('comp','acs','acs_wfc_aper_002_syn.fits')
+  filename = S.observationmode._refTable(filename) + '[aper#]'
+  
+  nose.tools.assert_raises(exceptions.ExtrapolationNotAllowed,
+                            S.spectrum.InterpolatedSpectralElement,
+                            filename,interp_val)
+
+
 class RampFilterTest(testutil.FPTestCase):
   def setUp(self):
     interp_val = 6480.
@@ -285,3 +300,17 @@ class RampFilterTest(testutil.FPTestCase):
         6116.        ,  6121.        ,  6126.        ,  6131.        ])
         
     self.assertApproxNumpy(self.spec._wavetable[:100],wavetable)
+
+
+class RampFilterExtrapTest(RampFilterTest):
+  def setUp(self):
+    interp_val = -5.
+    filename = os.path.join('comp','acs','acs_fr656n_005_syn.fits')
+    filename = S.observationmode._refTable(filename) + '[fr656n#]'
+    self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
+    
+  def test_throughput(self):
+    self.assertTrue((self.spec._throughputtable == 0).all())
+    
+  def test_warnings(self):
+    nose.tools.assert_is(self.spec.warnings['DefaultThroughput'],True)

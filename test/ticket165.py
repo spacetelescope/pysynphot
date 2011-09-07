@@ -14,12 +14,3 @@ def test_aper():
             except KeyError,e:
                 raise AssertionError(e.message)
         yield makebp,mode
-        
-        
-def test_extrap():
-    #Make sure we didn't break the extrapolation exception
-    try:
-        bp=S.ObsBandpass('wfc3,uvis1,f218w,aper#5')
-        raise AssertionError('Extrapolation not caught')
-    except NotImplementedError:
-        pass

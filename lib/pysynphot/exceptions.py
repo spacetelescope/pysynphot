@@ -63,3 +63,8 @@ class AmbiguousObsmode(GraphtabError):
 # Exceptions for undefined optional values
 class UndefinedBinset(PysynphotError):
     pass
+    
+    
+# Exceptions for interpolation/extrapolation
+class ExtrapolationNotAllowed(PysynphotError):
+    pass
