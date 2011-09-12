@@ -1762,7 +1762,7 @@ class InterpolatedSpectralElement(SpectralElement):
         xre=re.search('\[(?P<col>.*?)\]',fileName)
         self.name = os.path.expandvars(fileName[0:(xre.start())])
         colSpec = xre.group('col')
-
+        
         self.analytic=False
         self.warnings={}
 
@@ -1791,9 +1791,9 @@ class InterpolatedSpectralElement(SpectralElement):
 
 
         #Determine the columns that bracket the desired value
-        # grab all columns that have '#' in them
-        # then split off the numbers after the '#'
-        colNames = [n for n in fs[1].data.names if n.find('#') != -1]        
+        # grab all columns that beging with the parameter name (e.g. 'MJD#')
+        # then split off the numbers after the '#'   
+        colNames = [n for n in fs[1].data.names if n.startswith(colSpec.upper())]
         colWaves = [float(cn.split('#')[1]) for cn in colNames]
         
         if colNames == []:

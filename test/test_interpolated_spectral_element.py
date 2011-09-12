@@ -313,4 +313,15 @@ class RampFilterExtrapTest(RampFilterTest):
     self.assertTrue((self.spec._throughputtable == 0).all())
     
   def test_warnings(self):
-    nose.tools.assert_is(self.spec.warnings['DefaultThroughput'],True)
+    assert self.spec.warnings['DefaultThroughput'] is True
+    
+
+# this is here because WFPC2 CONT# tables have both CONT# and ERR# columns
+# and both were being grabbed and used by InterpolatedSpectralElement.
+# This tests my fix.
+class TestWFPC2Cont(testutil.FPTestCase):
+  def test_wfpc2_cont(self):
+    bp = S.ObsBandpass('wfpc2,1,a2d7,f300w,cont#49892.0')
+    ur = bp.unit_response()
+    
+    self.assertApproxFP(ur,6.3011E-17,accuracy=1.e-4)
