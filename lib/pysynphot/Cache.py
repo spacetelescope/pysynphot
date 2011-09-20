@@ -13,4 +13,12 @@ if 'mwavg' in RedLaws:
     RedLaws[None]=RedLaws['mwavg'] #Establishes default
     RedLaws['gal3']=RedLaws['mwavg'] #Temporary: for syn_pysyn testing
 
-Catalogs={}
+CATALOG_CACHE = {}
+
+def reset_catalog_cache():
+    """
+    Empty the CATALOG_CACHE global variable.
+    """
+    global CATALOG_CACHE
+    
+    CATALOG_CACHE.clear()

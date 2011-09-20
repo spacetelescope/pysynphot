@@ -3,12 +3,13 @@
 
 class PysynphotError(Exception):
     """parent class"""
-    pass
+    def __init__(self,msg):
+        Exception.__init__(self,msg)
 
 # Exceptions to do with table access
 class TableFormatError(PysynphotError):
     def __init__(self, msg, rows=None):
-        Exception.__init__(self, msg)
+        PysynphotError.__init__(self, msg)
 
         # Save rows with wrong values as an attribute so calling code
         # can access it directly
@@ -67,4 +68,9 @@ class UndefinedBinset(PysynphotError):
     
 # Exceptions for interpolation/extrapolation
 class ExtrapolationNotAllowed(PysynphotError):
+    pass
+    
+    
+# Exceptions for catalog problems
+class ParameterOutOfBounds(PysynphotError):
     pass

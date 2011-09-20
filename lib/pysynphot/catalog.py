@@ -1,34 +1,67 @@
 from __future__ import division
-## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+"""
+This module is useful for working with catalog spectra such as Castelli & Kurucz.
+
+Spectra are constructed from basis spectra which are indexed for various
+combinations of effective temperature (Teff), metallicity, 
+and log gravity (log G). The user may specify any combination of Teff,
+metallicity, and log G so long as each parameter is within the range
+for that parameter defined by the catalog.
+
+For example, the Castelli & Kurucz 2004 catalog contains spectra for effective
+temperatures between 3500 - 50000 K. In this case no spectrum can be
+constructed for Teff=50001 K or Teff=3499 K. The range of parameters available
+may vary from catalog to catalog.
+
+More information on catalogs can be found at
+http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs.html#57
+
+"""
+
 import os
 import numpy as N
-from numpy import ma as MA
 import pyfits
 
 import spectrum
 import locations
 
+from Cache import CATALOG_CACHE
+
+import pysynphot.exceptions as exceptions
 
 class Icat(spectrum.TabularSourceSpectrum):
-    """spec = Icat(CDBS directory name,Teff,metallicity,logG).
+    """
     This class constructs a model from the grid available in catalogs such
     as the Castelli & Kurucz. See the Synphot User's Data Manual, Appendix A,
     for more information
     U{http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs4.html#48115}
+    
+    spec = Icat(CDBS directory name,Teff,metallicity,logG).
+    
     """
     def __init__(self,catdir,Teff,metallicity,log_g):
-
         self.isAnalytic=False
+        
+        # this is useful for reporting in exceptions which parameter is
+        # causing the problems.
+        self.parameter_names = ['Teff','metallicity','log G']
         
         filename = locations.CAT_TEMPLATE.replace('*',catdir)
         self.name="%s(Teff=%g,z=%g,logG=%g)"%(catdir,Teff,metallicity,log_g)
 
-        table = pyfits.open(filename)
+        if filename in CATALOG_CACHE:
+            indices = CATALOG_CACHE[filename]
+        else:
+            table = pyfits.open(filename)
 
-        indexList = table[1].data.field('INDEX')
-        filenameList = table[1].data.field('FILENAME')
+            indexList = table[1].data.field('INDEX')
+            filenameList = table[1].data.field('FILENAME')
+            
+            table.close()
 
-        indices = self._getArgs(indexList, filenameList)
+            indices = self._getArgs(indexList, filenameList)
+            
+            CATALOG_CACHE[filename] = indices
 
         list0,list1 = self._breakList(indices, 0, Teff)
 
@@ -39,7 +72,7 @@ class Icat(spectrum.TabularSourceSpectrum):
         list8,list9   = self._breakList(list3, 2, log_g)
         list10,list11 = self._breakList(list4, 2, log_g)
         list12,list13 = self._breakList(list5, 2, log_g)
-
+        
         sp1 = self._getSpectrum(list6[0],  catdir)
         sp2 = self._getSpectrum(list7[0],  catdir)
         sp3 = self._getSpectrum(list8[0],  catdir)
@@ -48,7 +81,7 @@ class Icat(spectrum.TabularSourceSpectrum):
         sp6 = self._getSpectrum(list11[0], catdir)
         sp7 = self._getSpectrum(list12[0], catdir)
         sp8 = self._getSpectrum(list13[0], catdir)
-
+        
         spa1 = self._interpolateSpectrum(sp1, sp2, log_g)
         spa2 = self._interpolateSpectrum(sp3, sp4, log_g)
         spa3 = self._interpolateSpectrum(sp5, sp6, log_g)
@@ -69,11 +102,10 @@ class Icat(spectrum.TabularSourceSpectrum):
         
     def _getArgs(self, indices, filenames):
         results = []
-        i = 0
-        for index in indices:
-            list1 = map(lambda x: float(x),index.split(','))
+        
+        for i,index in enumerate(indices):
+            list1 = [float(x) for x in index.split(',')]
             list1.append(filenames[i])
-            i = i + 1
             results.append(list1)
 
         return results
@@ -81,30 +113,35 @@ class Icat(spectrum.TabularSourceSpectrum):
     def _breakList(self, inList, index, parameter):
         par = float(parameter)
 
-        array = N.empty(shape=[len(inList),],dtype=N.float64)
-        i = 0
-        for parameters in inList:
-            array[i] = parameters[index]
-            i = i + 1 
+        array = [parameters[index] for parameters in inList]
+        array = N.array(array, dtype=N.float64)
 
-        greater = MA.masked_less(array, par)
-        less = MA.masked_greater(array, par)
-
-        upper = MA.minimum(greater)
-        lower = MA.maximum(less)
-
-        upperArray = MA.masked_inside(array, par, upper)
-        lowerArray = MA.masked_inside(array, lower, par)
-
+        upperArray = array[array >= par]
+        lowerArray = array[array <= par]
+        
+        if upperArray.size == 0:
+            maxAllowed = array.max()
+            s = "Parameter '%s' exceeds data. Max allowed=%f, entered=%f."
+            s = s % (self.parameter_names[index], maxAllowed, parameter)
+            raise exceptions.ParameterOutOfBounds(s)
+            
+        elif lowerArray.size == 0:
+            minAllowed = array.min()
+            s = "Parameter '%s' exceeds data. Min allowed=%f, entered=%f."
+            s = s % (self.parameter_names[index], minAllowed, parameter)
+            raise exceptions.ParameterOutOfBounds(s)
+            
+        upper = upperArray.min()
+        lower = lowerArray.max()
+        
         upperList = []
         lowerList = []
-        i = 0
-        for parameters in inList:
-            if upperArray.mask[i]:
+        
+        for i,parameters in enumerate(inList):
+            if array[i] >= par and array[i] <= upper:
                 upperList.append(parameters)
-            if lowerArray.mask[i]:
+            if array[i] >= lower and array[i] <= par:
                 lowerList.append(parameters)
-            i = i + 1
 
         return upperList, lowerList
 
