@@ -251,6 +251,7 @@ wfc3,g102               (7000,13000,25,25)
 wfc3,g141               (9000,18000,47,47)
 cos,fuv,g130m,c1055     (899.0,1196.01,0.0099)
 cos,fuv,g130m,c1096	(939.0,1237.01,0.0099)
+cos,fuv,g130m,c1222     (1067.0,1363.01,0.0099)
 cos,fuv,g130m,c1291    synphot$data/cos_fuv_g130m_1291.txt
 cos,fuv,g130m,c1300    synphot$data/cos_fuv_g130m_1300.txt
 cos,fuv,g130m,c1309    synphot$data/cos_fuv_g130m_1309.txt
