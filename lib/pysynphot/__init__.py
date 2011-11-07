@@ -35,7 +35,7 @@ can be found at U{http://stsdas.stsci.edu/pysynphot/
 >>> import pysynphot as S
 >>> import os
 >>> print S.__version__
-0.9.1dev
+0.9.2dev
 >>> #Read a spectrum from a file
 >>> vega=S.FileSpectrum(S.locations.VegaFile)
 
@@ -140,7 +140,7 @@ if False :
     except:
         pass
 else :
-    __version__ = '0.9.1dev'
+    __version__ = '0.9.2dev'
 
 
 if 0 :
