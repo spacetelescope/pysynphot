@@ -155,19 +155,55 @@ Contents:
 \begin{abstract}
 
 Pysynphot attempts to replicate much of the functionality of the Synphot
-\code{bandpar} utility but sometimes uses different formulae and algorithms.
-This TSR collects the calculations used in Pysynphot, Synphot, and the
-formula described in the \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual} on page 42.
+\href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{bandpar}
+utility but sometimes uses different formulae and algorithms.
+This TSR collects the calculations used in Pysynphot, Synphot, the
+formulae described in the \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual} in Section 5.1 on page 42,
+and the formulae in the Synphot help files.
 
 \end{abstract}
 
 
-\chapter{PHOTBW - BANDW - RMS Width}
-\label{main:synphot-manual}\label{main:photbw-bandw-rms-width}
+\chapter{RMS Width - BANDW - PHOTBW}
+\label{main:synphot-manual}\label{main:rms-width-bandw-photbw}
 
-\section{Synphot}
-\label{main:synphot}
-The \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual} gives the equation for RMS bandwidth as
+\section{Summary}
+\label{main:summary}
+This value is added to image headers in the PHOTBW keyword.
+
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1106}{SpectralElement.rmswidth}
+
+\item {} 
+\emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref3]{\emph{3 page 836}}}
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{BANDW}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x}{rmslam} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by {\color{red}\bfseries{}{}`bandpar{}`\_}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x}{rmslam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1 sections 5.1,7.1}}}, {\hyperref[references:ref2]{\emph{2}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:synphot-equations}\label{main:id1}
+The \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual} section 5.1 gives the equation for RMS bandwidth as
 \begin{gather}
 \begin{split}\lambda_{rms}^2 = \bar{\lambda}^2 \frac{\int P_{\lambda} \ln(\lambda/\bar{\lambda})^2
 \,d\lambda/\lambda}{\int P_{\lambda} \,d\lambda/\lambda}\end{split}\notag
@@ -187,13 +223,17 @@ A copy of the WF/PC-1 Instrument Handbook could not be found so it has not been
 verified that the Synphot code faithfully reproduces whatever may be documented
 there.
 
+The
+\href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{bandpar help file}
+gives the same equations as above for the RMS width but the \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual}
+in section 7.1 gives different equations when describing bandpar. The equations
+in section 7.1 are the same as used by Pysynphot, shown below.
 
-\section{Pysynphot}
-\label{main:pysynphot}\label{main:rmslam}
-The Pysynphot
-\href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{source code}
-references Koornneef et al 1987, page 836 as the
-source for its RMS width calculation, which appears to be
+
+\section{Pysynphot Equations}
+\label{main:pysynphot-equations}\label{main:rmslam}
+The Pysynphot \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1106}{rmswidth} source code references Koornneef et al 1987, page 836
+as the source for its RMS width calculation, which is
 \begin{gather}
 \begin{split}\lambda_{rms}^2 = \frac{\int P_{\lambda} (\lambda - \bar{\lambda})^2 \,d\lambda}
 {\int P_{\lambda} \,d\lambda}\end{split}\notag
@@ -203,6 +243,26 @@ where
 \begin{split}\bar{\lambda} = \frac{\int \lambda P_{\lambda} \,d\lambda}
 {\int P_{\lambda} \,d\lambda}.\end{split}\notag
 \end{gather}
+
+\chapter{References}
+\label{references:references}\label{references::doc}\label{references:rmswidth}\phantomsection\label{references:ref1}\begin{enumerate}
+\item {} 
+Synphot Manual: \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}
+
+\end{enumerate}
+\phantomsection\label{references:ref2}\begin{enumerate}
+\setcounter{enumi}{1}
+\item {} 
+Schneider, Gunn and Hoessel (1983 ApJ 264,337)
+
+\end{enumerate}
+\phantomsection\label{references:ref3}\begin{enumerate}
+\setcounter{enumi}{2}
+\item {} 
+Koornneef et al., 1987
+
+\end{enumerate}
+
 
 
 \renewcommand{\indexname}{Index}

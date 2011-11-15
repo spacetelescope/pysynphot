@@ -1,5 +1,7 @@
 \select@language {english}
 \contentsline {chapter}{\numberline {1}Comparison of Synphot and Pysynphot Bandpar Functionality}{3}{chapter.1}
-\contentsline {chapter}{\numberline {2}PHOTBW - BANDW - RMS Width}{2}{chapter.2}
-\contentsline {section}{\numberline {2.1}Synphot}{2}{section.2.1}
-\contentsline {section}{\numberline {2.2}Pysynphot}{2}{section.2.2}
+\contentsline {chapter}{\numberline {2}RMS Width - BANDW - PHOTBW}{2}{chapter.2}
+\contentsline {section}{\numberline {2.1}Summary}{2}{section.2.1}
+\contentsline {section}{\numberline {2.2}Synphot Equations}{2}{section.2.2}
+\contentsline {section}{\numberline {2.3}Pysynphot Equations}{3}{section.2.3}
+\contentsline {chapter}{\numberline {3}References}{4}{chapter.3}

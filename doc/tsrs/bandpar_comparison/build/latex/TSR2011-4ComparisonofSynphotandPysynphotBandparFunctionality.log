@@ -1,4 +1,4 @@
-This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2010.7.31)  15 NOV 2011 14:29
+This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdflatex 2010.7.31)  15 NOV 2011 17:17
 entering extended mode
  %&-line parsing enabled.
 **TSR2011-4ComparisonofSynphotandPysynphotBandparFunctionality.tex
@@ -840,7 +840,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 146--146
 
  []
 
-<stsci_logo.pdf, id=23, 237.88875pt x 133.49875pt>
+<stsci_logo.pdf, id=31, 237.88875pt x 133.49875pt>
 File: stsci_logo.pdf Graphic file (type pdf)
  <use stsci_logo.pdf>
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <24.88> not available
@@ -864,47 +864,55 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 153.
 [3
 
-]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 158.
- (/sw/share/texmf-dist/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
+]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.162 \end{abstract}
+l.164 \end{abstract}
                      [1]
 Chapter 2.
-(./TSR2011-4ComparisonofSynphotandPysynphotBandparFunctionality.ind)pdfTeX warn
-ing (ext4): destination with the same identifier (name{page.2}) has been alread
-y used, duplicate ignored
+LaTeX Font Info:    Try loading font information for TS1+ptm on input line 176.
+
+(/sw/share/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
+ been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.210 \end{document}
-                     [2
+l.240 \end{gather}
+                   [2
+
+]pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.247 \chapter
+              {References} [3]
+Chapter 3.
+(./TSR2011-4ComparisonofSynphotandPysynphotBandparFunctionality.ind) [4
 
 ]
 (./TSR2011-4ComparisonofSynphotandPysynphotBandparFunctionality.aux) ) 
 Here is how much of TeX's memory you used:
- 7691 strings out of 493886
- 103909 string characters out of 1155898
- 181894 words of memory out of 3000000
- 10784 multiletter control sequences out of 10000+50000
- 23697 words of font info for 32 fonts, out of 3000000 for 5000
+ 7705 strings out of 493886
+ 104100 string characters out of 1155898
+ 183211 words of memory out of 3000000
+ 10788 multiletter control sequences out of 10000+50000
+ 26238 words of font info for 33 fonts, out of 3000000 for 5000
  715 hyphenation exceptions out of 8191
- 43i,16n,45p,331b,319s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 43i,16n,45p,410b,319s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/sw/shar
 e/texmf-dist/fonts/enc/dvips/base/8r.enc}</sw/share/texmf-dist/fonts/type1/blue
 sky/cm/cmex10.pfb></sw/share/texmf-dist/fonts/type1/bluesky/cm/cmmi10.pfb></sw/
 share/texmf-dist/fonts/type1/bluesky/cm/cmmi7.pfb></sw/share/texmf-dist/fonts/t
 ype1/bluesky/cm/cmr10.pfb></sw/share/texmf-dist/fonts/type1/bluesky/cm/cmr7.pfb
 ></sw/share/texmf-dist/fonts/type1/bluesky/cm/cmsy10.pfb></sw/share/texmf-dist/
-fonts/type1/urw/courier/ucrr8a.pfb></sw/share/texmf-dist/fonts/type1/urw/times/
-utmb8a.pfb></sw/share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+fonts/type1/urw/times/utmb8a.pfb></sw/share/texmf-dist/fonts/type1/urw/times/ut
+mr8a.pfb></sw/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
 Output written on TSR2011-4ComparisonofSynphotandPysynphotBandparFunctionality.
-pdf (5 pages, 81118 bytes).
+pdf (7 pages, 93995 bytes).
 PDF statistics:
- 98 PDF objects out of 1000 (max. 8388607)
- 10 named destinations out of 1000 (max. 131072)
- 54 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 138 PDF objects out of 1000 (max. 8388607)
+ 19 named destinations out of 1000 (max. 131072)
+ 70 words of extra memory for PDF output out of 10000 (max. 10000000)
 

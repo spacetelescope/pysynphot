@@ -6,7 +6,8 @@ Comparison of Synphot and Pysynphot Bandpar Functionality
    :date: 15 November 2011
    
    Pysynphot attempts to replicate much of the functionality of the Synphot
-   `bandpar`_ utility but sometimes uses different formulae and algorithms.
+   `bandpar <https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/pkg/hst_calib/synphot/doc/bandpar.hlp>`_ 
+   utility but sometimes uses different formulae and algorithms.
    This TSR collects the calculations used in Pysynphot, Synphot, the
    formulae described in the `Synphot Manual`_ in Section 5.1 on page 42,
    and the formulae in the Synphot help files.
