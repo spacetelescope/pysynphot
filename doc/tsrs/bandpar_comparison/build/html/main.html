@@ -23,6 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality v2011-4  documentation" href="index.html" />
+    <link rel="next" title="References" href="references.html" />
     <link rel="prev" title="TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality" href="index.html" /> 
   </head>
   <body>
@@ -32,6 +33,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="references.html" title="References"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality"
              accesskey="P">previous</a> |</li>
@@ -46,9 +50,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Comparison of Synphot and Pysynphot Bandpar Functionality</a></li>
-<li><a class="reference internal" href="#photbw-bandw-rms-width">PHOTBW - BANDW - RMS Width</a><ul>
-<li><a class="reference internal" href="#synphot">Synphot</a></li>
-<li><a class="reference internal" href="#pysynphot">Pysynphot</a></li>
+<li><a class="reference internal" href="#rms-width-bandw-photbw">RMS Width - BANDW - PHOTBW</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#synphot-equations">Synphot Equations</a></li>
+<li><a class="reference internal" href="#pysynphot-equations">Pysynphot Equations</a></li>
 </ul>
 </li>
 </ul>
@@ -56,6 +61,9 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
                         title="previous chapter">TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="references.html"
+                        title="next chapter">References</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/main.txt"
@@ -87,16 +95,34 @@
 <p><b>Author:</b> Matt Davis (SSB)</p><p><b>Date:</b> 15 November 2011</p><div class="admonition abstract">
 <p class="first admonition-title">Abstract</p>
 <p class="last">Pysynphot attempts to replicate much of the functionality of the Synphot
-<tt class="docutils literal"><span class="pre">bandpar</span></tt> utility but sometimes uses different formulae and algorithms.
-This TSR collects the calculations used in Pysynphot, Synphot, and the
-formula described in the <a class="reference external" href="http://stsdas.stsci.edu/stsci_python_epydoc/SynphotManual.pdf">Synphot Manual</a> on page 42.</p>
+<a class="reference external" href="https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/pkg/hst_calib/synphot/bandpar/bandpar.x">bandpar</a> utility but sometimes uses different formulae and algorithms.
+This TSR collects the calculations used in Pysynphot, Synphot, the
+formulae described in the <a class="reference external" href="http://stsdas.stsci.edu/stsci_python_epydoc/SynphotManual.pdf">Synphot Manual</a> in Section 5.1 on page 42,
+and the formulae in the Synphot help files.</p>
 </div>
 </div>
-<div class="section" id="photbw-bandw-rms-width">
-<h1>PHOTBW - BANDW - RMS Width<a class="headerlink" href="#photbw-bandw-rms-width" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="synphot">
-<h2>Synphot<a class="headerlink" href="#synphot" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference external" href="http://stsdas.stsci.edu/stsci_python_epydoc/SynphotManual.pdf">Synphot Manual</a> gives the equation for RMS bandwidth as</p>
+<div class="section" id="rms-width-bandw-photbw">
+<h1>RMS Width - BANDW - PHOTBW<a class="headerlink" href="#rms-width-bandw-photbw" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>This value is added to image headers in the PHOTBW keyword.</p>
+<p><strong>Pysynphot</strong></p>
+<ul class="simple">
+<li><em>Function name</em>: <a class="reference external" href="https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py#L1106">SpectralElement.rmswidth</a></li>
+<li><em>Source code</em>: <a class="reference external" href="https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py">spectrum.py</a></li>
+<li><em>References</em>: <a class="reference internal" href="references.html#ref3"><em>3 page 836</em></a></li>
+</ul>
+<p><strong>Synphot</strong></p>
+<ul class="simple">
+<li><em>Bandpar name</em>: <a class="reference external" href="https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/pkg/hst_calib/synphot/doc/bandpar.hlp">BANDW</a></li>
+<li><em>Function name</em>: <a class="reference external" href="https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x">rmslam</a> called by <a class="reference external" href="https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/pkg/hst_calib/synphot/bandpar/comppar.x">comppar</a> called by <a class="reference external" href="https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/pkg/hst_calib/synphot/bandpar/bandpar.x">bandpar</a>.</li>
+<li><em>Source code</em>: <a class="reference external" href="https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x">rmslam.x</a></li>
+<li><em>References</em>: <a class="reference internal" href="references.html#ref1"><em>1 sections 5.1,7.1</em></a>, <a class="reference internal" href="references.html#ref2"><em>2</em></a></li>
+</ul>
+</div>
+<div class="section" id="synphot-equations">
+<h2>Synphot Equations<a class="headerlink" href="#synphot-equations" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://stsdas.stsci.edu/stsci_python_epydoc/SynphotManual.pdf">Synphot Manual</a> section 5.1 gives the equation for RMS bandwidth as</p>
 <div class="math">
 <p><img src="_images/math/0687e5998fcf534c8c62e629837e4e1681ad2724.png" alt="\lambda_{rms}^2 = \bar{\lambda}^2 \frac{\int P_{\lambda} \ln(\lambda/\bar{\lambda})^2
 \,d\lambda/\lambda}{\int P_{\lambda} \,d\lambda/\lambda}" /></p>
@@ -112,13 +138,16 @@ for mean wavelength.</p>
 <p>A copy of the WF/PC-1 Instrument Handbook could not be found so it has not been
 verified that the Synphot code faithfully reproduces whatever may be documented
 there.</p>
+<p>The
+<a class="reference external" href="https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/pkg/hst_calib/synphot/doc/bandpar.hlp">bandpar help file</a>
+gives the same equations as above for the RMS width but the <a class="reference external" href="http://stsdas.stsci.edu/stsci_python_epydoc/SynphotManual.pdf">Synphot Manual</a>
+in section 7.1 gives different equations when describing bandpar. The equations
+in section 7.1 are the same as used by Pysynphot, shown below.</p>
 </div>
-<div class="section" id="pysynphot">
-<h2>Pysynphot<a class="headerlink" href="#pysynphot" title="Permalink to this headline">¶</a></h2>
-<p>The Pysynphot
-<a class="reference external" href="https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py">source code</a>
-references Koornneef et al 1987, page 836 as the
-source for its RMS width calculation, which appears to be</p>
+<div class="section" id="pysynphot-equations">
+<h2>Pysynphot Equations<a class="headerlink" href="#pysynphot-equations" title="Permalink to this headline">¶</a></h2>
+<p>The Pysynphot <a class="reference external" href="https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py#L1106">rmswidth</a> source code references Koornneef et al 1987, page 836
+as the source for its RMS width calculation, which is</p>
 <div class="math">
 <p><img src="_images/math/2cbe54ce45da33af9bb33eded1e93b2706f2e11d.png" alt="\lambda_{rms}^2 = \frac{\int P_{\lambda} (\lambda - \bar{\lambda})^2 \,d\lambda}
 {\int P_{\lambda} \,d\lambda}" /></p>
@@ -141,6 +170,9 @@ source for its RMS width calculation, which appears to be</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="references.html" title="References"
+             >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality"
              >previous</a> |</li>
