@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Comparison of Synphot and Pysynphot Bandpar Functionality &mdash; TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality v2011-4  documentation</title>
+    <link rel="stylesheet" href="_static/stsci_sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '2011-4 ',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality v2011-4  documentation" href="index.html" />
+    <link rel="prev" title="TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="index.html" title="TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality v2011-4  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/stsci_logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Comparison of Synphot and Pysynphot Bandpar Functionality</a></li>
+<li><a class="reference internal" href="#photbw-bandw-rms-width">PHOTBW - BANDW - RMS Width</a><ul>
+<li><a class="reference internal" href="#synphot">Synphot</a></li>
+<li><a class="reference internal" href="#pysynphot">Pysynphot</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/main.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="comparison-of-synphot-and-pysynphot-bandpar-functionality">
+<h1>Comparison of Synphot and Pysynphot Bandpar Functionality<a class="headerlink" href="#comparison-of-synphot-and-pysynphot-bandpar-functionality" title="Permalink to this headline">¶</a></h1>
+<p><b>Author:</b> Matt Davis (SSB)</p><p><b>Date:</b> 15 November 2011</p><div class="admonition abstract">
+<p class="first admonition-title">Abstract</p>
+<p class="last">Pysynphot attempts to replicate much of the functionality of the Synphot
+<tt class="docutils literal"><span class="pre">bandpar</span></tt> utility but sometimes uses different formulae and algorithms.
+This TSR collects the calculations used in Pysynphot, Synphot, and the
+formula described in the <a class="reference external" href="http://stsdas.stsci.edu/stsci_python_epydoc/SynphotManual.pdf">Synphot Manual</a> on page 42.</p>
+</div>
+</div>
+<div class="section" id="photbw-bandw-rms-width">
+<h1>PHOTBW - BANDW - RMS Width<a class="headerlink" href="#photbw-bandw-rms-width" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="synphot">
+<h2>Synphot<a class="headerlink" href="#synphot" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://stsdas.stsci.edu/stsci_python_epydoc/SynphotManual.pdf">Synphot Manual</a> gives the equation for RMS bandwidth as</p>
+<div class="math">
+<p><img src="_images/math/0687e5998fcf534c8c62e629837e4e1681ad2724.png" alt="\lambda_{rms}^2 = \bar{\lambda}^2 \frac{\int P_{\lambda} \ln(\lambda/\bar{\lambda})^2
+\,d\lambda/\lambda}{\int P_{\lambda} \,d\lambda/\lambda}" /></p>
+</div><p>where</p>
+<div class="math">
+<p><img src="_images/math/49e4babc76c9d4adc60f8ac02f88a0217dedc01c.png" alt="\bar{\lambda} = \exp \left[ \frac{\int P_{\lambda} \ln(\lambda) \,d\lambda/\lambda}
+{\int P_{\lambda} \,d\lambda/\lambda} \right]." /></p>
+</div><p>The Synphot function <a class="reference external" href="https://svn.stsci.edu/trac/ssb/stsci_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x">rmslam</a> does appear to implement this procedure for
+calculating the RMS width of the bandpass. The source code references the WF/PC-1
+Instrument Handbook as the source of the equation for RMS width and references
+Schneider, Gunn and Hoessel (1983 ApJ 264,337) as the source for the equation
+for mean wavelength.</p>
+<p>A copy of the WF/PC-1 Instrument Handbook could not be found so it has not been
+verified that the Synphot code faithfully reproduces whatever may be documented
+there.</p>
+</div>
+<div class="section" id="pysynphot">
+<h2>Pysynphot<a class="headerlink" href="#pysynphot" title="Permalink to this headline">¶</a></h2>
+<p>The Pysynphot
+<a class="reference external" href="https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py">source code</a>
+references Koornneef et al 1987, page 836 as the
+source for its RMS width calculation, which appears to be</p>
+<div class="math">
+<p><img src="_images/math/2cbe54ce45da33af9bb33eded1e93b2706f2e11d.png" alt="\lambda_{rms}^2 = \frac{\int P_{\lambda} (\lambda - \bar{\lambda})^2 \,d\lambda}
+{\int P_{\lambda} \,d\lambda}" /></p>
+</div><p>where</p>
+<div class="math">
+<p><img src="_images/math/ae493033bbd9a964514cd524041d23e083223f59.png" alt="\bar{\lambda} = \frac{\int \lambda P_{\lambda} \,d\lambda}
+{\int P_{\lambda} \,d\lambda}." /></p>
+</div></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="index.html" title="TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality"
+             >previous</a> |</li>
+        <li><a href="index.html">TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality v2011-4  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Matt Davis.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
+    </div>
+  </body>
+</html>
