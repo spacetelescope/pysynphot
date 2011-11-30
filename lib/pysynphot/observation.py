@@ -14,6 +14,7 @@ import spectrum
 import units
 
 from obsbandpass import pixel_range, wave_range
+from spectrum import ArraySourceSpectrum
 
 import pysynphot.exceptions as exceptions
 
@@ -515,4 +516,36 @@ class Observation(spectrum.CompositeSourceSpectrum):
             wave2 = units.Angstrom().Convert(wave2, waveunits.name)
             
         return wave1, wave2
-        
+
+    def as_spectrum(self, binned=True):
+        """ Reduce the Observation to a TabularSourceSpectrum.
+
+        An Observation is a complex object with some restrictions on its
+        capabilities. At times it would be useful to work with the
+        simulated Observation as a simpler object that is easier to
+        manipulate and takes up less memory. This method returns a
+        TabularSourceSpectrum made from either the (wave, flux) or
+        the (binwave, binflux) properties of the Observation.
+
+        Parameters
+        ----------
+        binned: bool
+          If True, use (binwave, binflux); otherwise use (wave, flux).
+
+        Returns
+        -------
+        result: TabularSourceSpectrum
+
+        """
+        if binned:
+            wave, flux = self.binwave, self.binflux
+        else:
+            wave, flux = self.wave, self.flux
+
+        result = ArraySourceSpectrum(wave, flux,
+                                     self.waveunits,
+                                     self.fluxunits,
+                                     name = self.name,
+                                     keepneg = True)
+
+        return result
