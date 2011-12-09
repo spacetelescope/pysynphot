@@ -191,14 +191,14 @@ class Observation(spectrum.CompositeSourceSpectrum):
 #    binwave = property(_getBinwaveProp,doc='Waveset for binned flux')
     
 
-    # Multiplication and addition are handled by performing them on
+    # Multiplication is handled by performing the operation on
     # the spectral component of the Observation, and then creating a
     # new Observation as the result.
     #
     # This is because Observation is a subclass of CompositeSourceSpectrum
     # but with *a lot* of extra functionality involved in handling the
     # binned wave and flux arrays. Simply inheriting the parent class's
-    # methods for multiplication and addition does not return an Observation.
+    # methods for multiplication does not return an Observation.
     #
     # Note that the order of operations actually implemented therefore varies
     # from what is expected, which naively would be
@@ -214,15 +214,15 @@ class Observation(spectrum.CompositeSourceSpectrum):
     def __rmul__(self, other):
         return __mul__(self, other)
 
+    #Disable methods that should not be supported by this class
     def __add__(self, other):
-        result = Observation(self.spectrum + other,
-                             self.bandpass,
-                             binset = self.binset)
+        raise NotImplementedError('Observations cannot be added')
+
         return result
     def __radd__(self, other):
-        return __add__(self, other)
+        raise NotImplementedError('Observations cannot be added')
       
-    #Disable methods that should not be supported by this class
+
     def redshift(self,z):
         raise NotImplementedError('Observations cannot be redshifted')
 

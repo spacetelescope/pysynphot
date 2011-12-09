@@ -83,7 +83,7 @@ class TestPixelWaveRangeMethods(unittest.TestCase):
     self.assertEqual(w1,499.9)
     self.assertEqual(w2,500.1)
   
-# test the multiplication and addition
+# test the multiplication (supported) and addition (disabled)
 
 class TestArithmetic(unittest.TestCase):
   def setUp(self):
@@ -101,26 +101,29 @@ class TestArithmetic(unittest.TestCase):
     self.assertAlmostEqual(tst.sample(5000), 3*self.obs.sample(5000))
     self.assertEqual(tst.sample(1000), 0)
 
-  def test_add_scalar(self):
 
-    # is not allowed
-    self.assertRaises(TypeError,
-                      self.obs.__add__,
-                      self.obs,
-                      3)
-
-  def test_add_spectrum(self):
-    wv=S.Waveset(1000,10000,1)
-    other = S.ArraySpectrum(wave=wv,
-                            flux=np.zeros(wv.shape)+10,
-                            waveunits='angstroms',
-                            fluxunits='counts')
-    tst = self.obs + other
-    self.assertAlmostEqual(tst.sample(5000), self.obs.sample(5000)+10)
-    self.assertEqual(tst.sample(2000), 10)
 
   def test_mult_band(self):
     tst = self.obs * (S.Box(5000,1000)* 5)
     self.assertAlmostEqual(tst.sample(5000), 5*self.obs.sample(5000))
     self.assertEqual(tst.sample(1000), 0)
+
+
+  def test_add_scalar(self):
+
+    # is not allowed
+    self.assertRaises(NotImplementedError,
+                      self.obs.__add__,
+                      3)
+
+  def test_add_spectrum(self):
+    # is not allowed
+    wv=S.Waveset(1000,10000,1)
+    other = S.ArraySpectrum(wave=wv,
+                            flux=np.zeros(wv.shape)+10,
+                            waveunits='angstroms',
+                            fluxunits='counts')
+    self.assertRaises(NotImplementedError,
+                      self.obs.__add__,
+                      other)
 
