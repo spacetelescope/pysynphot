@@ -1563,6 +1563,19 @@ class UniformTransmission(SpectralElement):
     def GetWaveSet(self):
         return None
 
+    def check_overlap(self, spectrum):
+        """ Apply special overlap logic for UniformTransmission.
+
+        By definition, a UniformTransmission is defined everywhere.
+        Therefore, this is a special case for which the overlap check
+        should be ignored (because the alternative is that it will
+        always fail and always require users to override it, so it
+        becomes meaningless).
+
+        """
+        pass
+        
+
 ## This produced 15 test failures in cos_etc_test.
 ##     def GetWaveSet(self):
 ##         global default_waveset
