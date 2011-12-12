@@ -44,7 +44,8 @@ setupargs = {
     'description'   :       'Python Synthetic Photometry Utilities',
     'fullname'      :       'AstroLib Pysynphot',
     'license'       :       'BSD',
-    'author'        :       "Vicki Laidler, Matt Davis, Robert Jedrzejewski, Ivo Busko",
+    'author'        :       "Vicki Laidler, Matt Davis, Robert Jedrzejewski, "
+                            "Ivo Busko",
     'author_email'  :       "help@stsci.edu",
     'url'           :       "http://trac6.assembla.com/astrolib",
     'platforms'     :       ["Linux","Solaris","Mac OS X", "Win"],
