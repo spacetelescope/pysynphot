@@ -25,7 +25,7 @@ if not os.path.isdir(specdir):
     specdir = os.path.join(pardir, 'data')
     setup_py = os.path.join(pardir, 'setup.py')
     # Ensure that we're actually in the source tree
-    if not os.path.exists(specdir) or not os.path.exists('setup.py'):
+    if not os.path.exists(specdir) or not os.path.exists(setup_py):
         raise RuntimeError('pysynphot data directory missing!')
     del pardir
     del setup_py
