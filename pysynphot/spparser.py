@@ -71,7 +71,7 @@ class Token:
         return cmp(self.type, o)
     def __repr__(self):
         if self.attr is not None:
-            return str(self.attr) 
+            return str(self.attr)
         else:
             return self.type
 
@@ -295,7 +295,7 @@ class Interpreter(GenericASTMatcher):
                 tree.value = "would call %s with the following args: %s" % (fname, repr(args))
 
 
-# stuff not yet handled, namely, Filelist, should be handled in interp function        
+# stuff not yet handled, namely, Filelist, should be handled in interp function
 zzz =   '''
 
             top ::= FILELIST
