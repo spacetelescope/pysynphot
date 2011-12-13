@@ -79,6 +79,7 @@ def _refTable(template):
                                                    template)
         raise IOError(msg)
 
+
 def _get_RedLaws():
     global RedLaws
 

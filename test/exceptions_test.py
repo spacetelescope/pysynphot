@@ -7,12 +7,17 @@ import pysynphot as S
 
 class TMCmismatch(unittest.TestCase):
     """Can arise with mismatched graph & component tables"""
+
     def setUp(self):
         tmcname = os.path.join('mtab','r1j2146sm_tmc.fits')
+        self.old_comptable = observationmode.COMPTABLE
         observationmode.COMPTABLE = observationmode._refTable(tmcname)
         tmgname = os.path.join('mtab','rbg2236im_tmg.fits')
         observationmode.GRAPHTABLE = observationmode._refTable(tmgname)
         self.omstring='acs,hrc,f555w,mjd#54000'
+
+    def tearDown(self):
+        observationmode.COMPTABLE = self.old_comptable
 
     def test1(self):
         "compname not found in tmc"
@@ -32,8 +37,8 @@ class RenormNonsense(unittest.TestCase):
                           15, 'vegamag', self.bp)
 
 
-        
-        
+
+
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)

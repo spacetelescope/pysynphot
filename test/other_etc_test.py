@@ -27,19 +27,34 @@ testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
 testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
 
 
-#Freeze the version of the comptable so tests are not susceptible to
-# updates to CDBS
-cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "%s:"%os.path.basename(__file__)
-print "  Tests are being run with %s"%observationmode.COMPTABLE
-print "  Synphot comparison results were computed with r1j2146sm_tmc.fits"
-#Synphot comparison results are identified with the varname synphot_ref.
+old_comptable = None
+old_vegafile = None
 
-#Also set the version of Vega for similar reasons
-locations.VegaFile=os.path.join(testdir,
-                                'alpha_lyr_stis_002.fits')
-print "Using Vega spectrum: %s"%locations.VegaFile
+
+def setUpModule():
+    global old_comptable
+    global old_vegafile
+
+    #Freeze the version of the comptable so tests are not susceptible to
+    # updates to CDBS
+    old_comptable = observationmode.COMPTABLE
+    cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
+    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    print "%s:" % os.path.basename(__file__)
+    print "  Tests are being run with %s" % observationmode.COMPTABLE
+    print "  Synphot comparison results were computed with r1j2146sm_tmc.fits"
+    #Synphot comparison results are identified with the varname synphot_ref.
+
+    #Also set the version of Vega for similar reasons
+    old_vegafile = locations.VegaFile
+    locations.VegaFile = os.path.join(testdir, 'alpha_lyr_stis_002.fits')
+    print "Using Vega spectrum: %s" % locations.VegaFile
+
+
+def tearDownModule():
+    observationmode.COMPTABLE = old_comptable
+    locations.VegaFile = old_vegafile
+
 
 accuracy = 1.0e-5    # default floating point comparison accuracy
 etc.debug = 0        # supress messages from ETC-support tasks
