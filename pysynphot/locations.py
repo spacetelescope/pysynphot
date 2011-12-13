@@ -55,7 +55,7 @@ KUR_TEMPLATE = os.path.join(rootdir, 'grid', '*')
 VegaFile = get_data_filename('alpha_lyr_stis_005.fits')
 
 
-extdir = os.path.join('grid','extinction')
+extdir = os.path.join('grid', 'extinction')
 
 #Define wavecat file explicitly
 wavecat = get_data_filename('wavecat.dat')

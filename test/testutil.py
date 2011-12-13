@@ -67,6 +67,20 @@ except ImportError:
     def nottest(func):
         return func
 
+def skip(func):
+    """A decorator to indicate to nose that a test should be skipped."""
+
+    try:
+        from nose.plugins.skip import SkipTest
+        import functools
+
+        @functools.wraps(func)
+        def test_skipped(*args, **kwargs):
+            raise SkipTest('Test %s is marked as skipped' % func.__name__)
+        return test_skipped
+    except ImportError:
+        return func
+
 
 class FPTestCase(unittest.TestCase):
     ''' Base class to hold some functionality related to floating-point
