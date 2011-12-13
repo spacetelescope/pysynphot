@@ -1,11 +1,13 @@
 from __future__ import division
 from unittest import TestCase
+from testutil import skip
 try:
     from pysynphot.graphtab import CompTable
 except ImportError:
     print "not implemented yet"
 
 class CompCase(TestCase):
+    @skip
     def setUp(self):
         self.fname='something'
         self.C=CompTable(self.fname)
@@ -20,6 +22,7 @@ class CompCase(TestCase):
         self.assert_(self.C.validate())
 
 class BadComp(TestCase):
+    @skip
     def setUp(self):
         self.fname='somethingelse'
 
@@ -28,4 +31,3 @@ class BadComp(TestCase):
                           self.fname,
                           KeyError)
 
-/
