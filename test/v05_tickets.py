@@ -7,12 +7,13 @@ import numpy as N
 from pysynphot.units import Units
 from pysynphot import extinction, spectrum, units, etc, reddening
 
+
 class aticket123(testutil.FPTestCase):
     #Some of the tests below will fail if this is not the FIRST
     #set of tests to be run;they probe side effects on the Cache.
     def setUp(self):
         self.xt=None
-        
+
     def test1(self):
         self.xt=S.Extinction(0.3,'mwdense')
         self.assert_(isinstance(self.xt,spectrum.SpectralElement))
@@ -40,7 +41,7 @@ class aticket123(testutil.FPTestCase):
         self.xt=S.Extinction(0.3)
         self.assert_(isinstance(self.xt,spectrum.SpectralElement))
         self.assert_('mwavg' in self.xt.name.lower())
-                     
+
 
 class multi(testutil.FPTestCase):
     #Holds cases that exercise a number of subsystems
@@ -58,12 +59,13 @@ class multi(testutil.FPTestCase):
     def testproperty(self):
         self.assertEqualNumpy(self.newsmc.throughput,
                               self.newsmc._throughputtable)
-        
+
+
 class ticket121(testutil.FPTestCase):
     def setUp(self):
         self.sp=S.BlackBody(30000)
         self.bp = S.ObsBandpass('johnson,v')
-        
+
     def testintegral(self):
         self.sp.convert('flam')
         self.sp.convert('Angstrom')
@@ -75,6 +77,7 @@ class ticket121(testutil.FPTestCase):
         self.hz=self.sp.trapezoidIntegration(wave,flux)
         self.failUnlessAlmostEqual(self.ang/self.hz,1)
 
+
 class ticket135_desc(testutil.FPTestCase):
     def setUp(self):
         self.ascending=N.arange(10000,10100,10)
@@ -82,7 +85,7 @@ class ticket135_desc(testutil.FPTestCase):
         self.bp=S.ArrayBandpass(wave=self.descending,
                                 throughput=N.arange(10)+5)
         self.T=self.bp(self.ascending)
-        
+
     def test1(self):
         self.assert_(N.alltrue(self.bp.throughput == self.bp._throughputtable))
 
@@ -93,6 +96,7 @@ class ticket135_desc(testutil.FPTestCase):
     def test3(self):
          self.assert_(N.alltrue(self.bp.throughput == self.bp(self.bp.wave)))
 
+
 class ticket135_asc(ticket135_desc):
      def setUp(self):
         self.ascending=N.arange(10000,10100,10)
@@ -100,14 +104,12 @@ class ticket135_asc(ticket135_desc):
         self.bp=S.ArrayBandpass(wave=self.ascending,
                                 throughput=N.arange(10)+5)
         self.T=self.bp(self.descending)
-    
-                     
+
+
 class ticket135(testutil.FPTestCase):
      def setUp(self):
         self.sp=S.BlackBody(30000)
         self.bp = S.ObsBandpass('johnson,v')
-
-
 
      def testflip_sp(self):
         #create a spectrum with wavelength in descending order
@@ -119,9 +121,8 @@ class ticket135(testutil.FPTestCase):
         #.flux calls __call__ calls resample
         ref=self.sp.flux[::-1]
         tst=self.sp2.flux
-        
-        self.assertApproxNumpy(ref,tst)
 
+        self.assertApproxNumpy(ref,tst)
 
      def testflip_bp(self):
         #create a bandpass with wavelength in descending order
@@ -129,8 +130,8 @@ class ticket135(testutil.FPTestCase):
         self.bp2=S.ArrayBandpass(wave=self.bp.wave[::-1],
                                  throughput=T[::-1],
                                  waveunits=self.sp.waveunits)
-                                
-        
+
+
         #.throughput calls __call__ calls resample
         ref=self.bp.throughput[::-1]
         tst=self.bp2.throughput
@@ -138,32 +139,42 @@ class ticket135(testutil.FPTestCase):
         idxt=N.where(tst != 0)[0]
         self.assertEqualNumpy(idxr,idxt)
         self.assertApproxNumpy(ref[idxr],tst[idxr])
-    
+
+
 class ticket125(testutil.FPTestCase):
     def setUp(self):
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(nicmos,2,f222m),18,vegamag)"
     def testparse(self):
         self.spstring=etc.parse_spec(self.spstring)
 
+
 class ticket125_a(ticket125):
     def setUp(self):
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(v),18,vegamag)"
+
 
 class ticket125_b(ticket125):
     def setUp(self):
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
 
+
 class ticket125_c(ticket125):
     def setUp(self):
+        self.oldcwd = os.getcwd()
+        os.chdir(os.path.dirname(__file__))
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(johnson,v),18,vegamag)"
         self.spstring="rn(data/bd_75d325_stis_001.fits,band(u),9.5,vegamag)*band(fos,blue,4.3,g160l)"
-        
+
+    def tearDown(self):
+        os.chdir(self.oldcwd)
+
+
 class AddInverseMicron(testutil.FPTestCase):
     def setUp(self):
         self.x=Units('1/um')
         self.mwave=extinction._buildDefaultWaveset()[0:10]
         self.awave=(spectrum.default_waveset.copy()[::10])[0:10]
-        
+
     def teststr(self):
         self.failUnless(str(self.x)=='1/um')
 
@@ -185,10 +196,8 @@ class AddInverseMicron(testutil.FPTestCase):
         ang=Units('angstrom')
         test=ang.Convert(self.awave,'inversemicrons')
         self.assertApproxNumpy(test,self.mwave)
-        
-        
-    def testfromang(self):
 
+    def testfromang(self):
         test=S.ArraySpectrum(wave=self.awave,
                              flux=N.ones(self.awave.shape),
                              waveunits='angstrom',
@@ -204,19 +213,21 @@ class AddInverseMicron(testutil.FPTestCase):
                              fluxunits='flam')
         self.failUnless(isinstance(test.waveunits,units.InverseMicron))
         self.assertEqualNumpy(test.wave,self.mwave)
-                        
+
     def testtoang(self):
         test=S.ArraySpectrum(wave=self.mwave,
                             flux=N.ones(self.mwave.shape),
                             waveunits='1/um',
                             fluxunits='flam')
-        
+
         test.convert('angstrom')
         self.failUnless(isinstance(test.waveunits,units.Angstrom))
         self.assertApproxNumpy(test.wave,self.awave)
-                                                
+
+
 class AddMag(testutil.FPTestCase):
     "Ticket #122"
+
     def setUp(self):
         self.bright=S.FlatSpectrum(18.0,fluxunits='abmag')
         self.faint=S.FlatSpectrum(21.0,fluxunits='abmag')
@@ -235,6 +246,7 @@ class AddMag(testutil.FPTestCase):
                           self.faint.addmag,
                           self.bright)
 
+
 class Sample(testutil.FPTestCase):
     "Ticket #99"
 
@@ -249,6 +261,7 @@ class Sample(testutil.FPTestCase):
         test=self.sp.sample(self.wave)
         self.assertEqualNumpy(test,self.ref.flux)
 
+
 class Ticket104(testutil.FPTestCase):
     """Use the extinction laws to test & make sure the conversion to
     SpectralElements works ok"""
@@ -259,7 +272,7 @@ class Ticket104(testutil.FPTestCase):
         refwave = extinction._buildDefaultWaveset()
         testwave = self.sp.wave
         self.assertApproxNumpy(testwave,refwave)
-        
+
 #--------------------------------------------------------------------
 ## I removed the spectrum.photonrate() method, but this test identified
 ## a problem with the GaussianSource when defined in frequency-based

@@ -10,7 +10,8 @@ from pysynphot.locations import irafconvert
 
 #Code under test
 from pysynphot.observationmode import setref, showref, getref
-from pysynphot import units #uses area
+from pysynphot import units  # uses area
+
 
 startup = getref()
 
@@ -22,26 +23,30 @@ class TestSet(unittest.TestCase):
         self.ref='mtab$foobar.fits'
         self.ttype='graphtable'
         setref(graphtable=self.ref)
-        
+
+    def tearDown(self):
+        setref(**startup)
+
     def testset(self):
         tst=getref()[self.ttype]
         self.assertEquals(irafconvert(self.ref),
                           irafconvert(tst),
                           "(ref,tst)=(%s,%s)"%(self.ref,tst)
                           )
-        
+
     def testget(self):
         tst = getref()
         ref = copy.deepcopy(startup)
         ref[self.ttype]=irafconvert(self.ref)
         self.assertEqual(ref,tst,"(ref,test):\n (%s\n%s)"%(ref,tst))
-        
+
     def testreset(self):
         setref()
         tst=getref()
         self.assertEqual(startup,tst,
-                         "(ref,tst)=(%s,%s)"%(startup,tst)
+                         "(ref,tst)=(%s,%s)" % (startup, tst)
                          )
+
 
 class TestComp(TestSet):
     def setUp(self):
@@ -50,38 +55,41 @@ class TestComp(TestSet):
         self.ttype='comptable'
         setref(comptable=self.ref)
 
+
 class TestArea(TestSet):
     def setUp(self):
         setref()
-        self.ttype='area'
-        self.ref=12345.6
+        self.ttype = 'area'
+        self.ref = 12345.6
         setref(area=self.ref)
 
     def testset(self):
         tst=getref()['area']
         self.assertEquals(self.ref, tst,
-                          "(ref,tst)=(%s,%s)"%(self.ref,tst)
+                          "(ref,tst)=(%s,%s)" % (self.ref,tst)
                           )
+
     def testget(self):
         tst = getref()
         ref = dict()
         ref.update(startup)
-        ref[self.ttype]=self.ref
-        self.assertEqual(ref,tst,"(ref,test):\n (%s\n%s)"%(ref,tst))
-
+        ref[self.ttype] = self.ref
+        self.assertEqual(ref, tst, "(ref,test):\n (%s\n%s)" % (ref, tst))
 
 
 class TestMulti(unittest.TestCase):
     def setUp(self):
         setref()
-        self.gref=irafconvert('mtab$t2605492m_tmg.fits')
-        self.cref=irafconvert('mtab$t260548pm_tmc.fits')
+        self.gref = irafconvert('mtab$t2605492m_tmg.fits')
+        self.cref = irafconvert('mtab$t260548pm_tmc.fits')
         setref(graphtable=self.gref,
-               comptable =self.cref)
-        self.pick=getref()
-        
-    def testgraph(self):
+               comptable=self.cref)
+        self.pick = getref()
 
+    def tearDown(self):
+        setref(**startup)
+
+    def testgraph(self):
         self.assertEqual(self.pick['graphtable'],
                          self.gref)
 
@@ -98,8 +106,8 @@ class TestMulti(unittest.TestCase):
         setref()
         tst=getref()
         self.assertEqual(startup, tst)
-        
-                                          
+
+
 class TestAreaChanges(unittest.TestCase):
     def testchange(self):
         ref=100
@@ -116,5 +124,5 @@ class TestAreaChanges(unittest.TestCase):
         setref(area=10)
         tst=p.ToCounts(w,w)
         self.assert_(N.all(ref != tst))
-    
-    
+
+

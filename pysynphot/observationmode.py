@@ -61,16 +61,19 @@ _set_default_refdata()
 def setref(graphtable=None, comptable=None, thermtable=None,
            area=None):
     """provide user access to global reference data.
-    Graph/comp/therm table names must be fully specified."""
 
-    global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA, GRAPHDICT, COMPDICT, THERMDICT
+    Graph/comp/therm table names must be fully specified.
+    """
+
+    global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA, GRAPHDICT, COMPDICT
+    global THERMDICT
 
     GRAPHDICT = {}
     COMPDICT = {}
     THERMDICT = {}
 
     #Check for all None, which means reset
-    kwds=set([graphtable,comptable,thermtable,area])
+    kwds = set([graphtable, comptable, thermtable, area])
     if kwds == set([None]):
         #then we should reset everything.
         _set_default_refdata()
@@ -93,21 +96,26 @@ def setref(graphtable=None, comptable=None, thermtable=None,
     #That's it.
     return
 
+
 def getref():
     """Collects & returns the current refdata as a dictionary"""
-    ans=dict(graphtable=GRAPHTABLE,
-             comptable=COMPTABLE,
-             thermtable=THERMTABLE,
-             area=HSTAREA)
-    return ans
+
+    return dict(graphtable=GRAPHTABLE,
+                comptable=COMPTABLE,
+                thermtable=THERMTABLE,
+                area=HSTAREA)
+
 
 def showref():
     """Prints the values settable by setref"""
+
     refdata = getref()
     for k, v in refdata.items():
-        print "%10s: %s"%(k,v)
+        print "%10s: %s" % (k, v)
+
 
 CLEAR = 'clear'
+
 
 class BaseObservationMode(object):
     ''' Class that handles the graph table, common to both optical and

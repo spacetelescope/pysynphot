@@ -9,27 +9,43 @@ import numpy as N
 from pysynphot import locations, observationmode
 
 
-#Freeze the version of the comptable so tests are not susceptible to
-# updates to CDBS
-cmptb_name = os.path.join('mtab','t260548pm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "%s:"%os.path.basename(__file__)
-print "  Tests are being run with %s"%observationmode.COMPTABLE
+old_comptable = None
+old_vegafile = None
 
-#Also set the version of Vega for similar reasons
-locations.VegaFile=os.path.join('crcalspec',
-                                'alpha_lyr_stis_003.fits')
-print "Using Vega spectrum: %s"%locations.VegaFile
+
+def setUpModule():
+    # Freeze the version of the comptable so tests are not susceptible to
+    # updates to CDBS
+    global old_comptable
+    global old_vegafile
+
+    cmptb_name = os.path.join('mtab', 't260548pm_tmc.fits')
+    old_comptable = observationmode.COMPTABLE
+    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    print "%s:" % os.path.basename(__file__)
+    print "  Tests are being run with %s" % observationmode.COMPTABLE
+
+    # Also set the version of Vega for similar reasons
+    old_vegafile = locations.VegaFile
+    locations.VegaFile = os.path.join('crcalspec', 'alpha_lyr_stis_003.fits')
+    print "Using Vega spectrum: %s" % locations.VegaFile
+
+
+def tearDownModule():
+    observationmode.COMPTABLE = old_comptable
+    locations.VegaFile = old_vegafile
+
 
 class RenormOverlap(testutil.FPTestCase):
     """Tests for strict rejection."""
+
     def setUp(self):
-        #(re)discovery case: stis_rn_cases/stisC94
-        self.sp=S.FileSpectrum('$PYSYN_CDBS/grid/kc96/starb2_template.fits')
-        self.bp=S.ObsBandpass('cos,fuv,g130m,c1300')
-        self.cmd='rn(crgridkc96$starb2_template.fits,band(cos,fuv,g130m,c1300),16.0,stmag)'
-        self.ref=0.00718543 #expected renorm factor
-        
+        # (re)discovery case: stis_rn_cases/stisC94
+        self.sp = S.FileSpectrum('$PYSYN_CDBS/grid/kc96/starb2_template.fits')
+        self.bp = S.ObsBandpass('cos,fuv,g130m,c1300')
+        self.cmd = 'rn(crgridkc96$starb2_template.fits,band(cos,fuv,g130m,c1300),16.0,stmag)'
+        self.ref = 0.00718543  # expected renorm factor
+
     def testraise(self):
         self.assertRaises(ValueError,
                           self.sp.renorm,
@@ -51,9 +67,9 @@ class RenormOverlap(testutil.FPTestCase):
             sp2=self.sp.renorm(17.0,'abmag',jv)
         except ValueError,e:
             self.fail(e.message)
-      
 
-                       
+
+
 class SmarterOverlap(RenormOverlap):
     #If 99% of throughput on spectrum, go ahead but print warning
     def testsmart(self):
@@ -63,6 +79,7 @@ class SmarterOverlap(RenormOverlap):
             sp2=self.sp.renorm(17.0,'abmag',acs)
         except ValueError,e:
             self.fail(e.message)
+
 
 class CornerCase(testutil.FPTestCase):
     def setUp(self):
@@ -74,7 +91,7 @@ class CornerCase(testutil.FPTestCase):
         f=N.zeros(w.shape)
         f[4000:4010]=1.0
         self.sp=S.ArraySpectrum(wave=w,flux=f,fluxunits='flam')
-                                
+
     def testpartial(self):
         self.assert_('partial',
                      self.bp.check_overlap(self.sp))
@@ -84,13 +101,14 @@ class CornerCase(testutil.FPTestCase):
             sp2=self.sp.renorm(17.0,'abmag',self.bp)
         except ValueError,e:
             self.fail(e.message)
-        
+
+
 class BPIntegrate(testutil.FPTestCase):
     def setUp(self):
         #Box 100 A wide, centered at 1000
         self.bp=S.Box(1000,100)
         self.ref=100.0
-        
+
     def testintegrate(self):
         tst=self.bp.integrate()
         self.assertEqual(self.ref,tst)
@@ -126,7 +144,8 @@ class OVBase(object):
             self.assertEqual(self.sref,ans)
         else:
             pass
-        
+
+
 class SpBp(OVBase,testutil.FPTestCase):
     #SPdef fully encloses BPdef: "full" overlap. Pass.
     def setUp(self):
@@ -137,7 +156,8 @@ class SpBp(OVBase,testutil.FPTestCase):
         OVBase.defarrays(self)
         self.cref='full'
         self.sref=True
-        
+
+
 class BpSp(OVBase,testutil.FPTestCase):
     #BPdef fully encloses SPdef: Insufficient overlap. Fail.
     def setUp(self):
@@ -148,7 +168,8 @@ class BpSp(OVBase,testutil.FPTestCase):
         OVBase.defarrays(self)
         self.cref='partial'
         self.sref=False
-        
+
+
 class SpPartial(OVBase,testutil.FPTestCase):
     #Partial overlap: return partial, require further processing
     def setUp(self):
@@ -159,10 +180,10 @@ class SpPartial(OVBase,testutil.FPTestCase):
         OVBase.defarrays(self)
         self.cref='partial'
         self.sref=False #assuming they're all ones
-        
+
 #Now do variants where nonzero is different from range
 
-class SpBpNz(OVBase,testutil.FPTestCase):
+class SpBpNz(OVBase, testutil.FPTestCase):
     #BP defined zero some places: still acceptable
     def setUp(self):
         self.sprange=(1000,10000)
@@ -172,7 +193,8 @@ class SpBpNz(OVBase,testutil.FPTestCase):
         OVBase.defarrays(self)
         self.cref='full'
         self.sref=True
-        
+
+
 class BpSpNz(OVBase,testutil.FPTestCase):
     #Passes per current defn that looks at bp.nonzero, sp.def
     def setUp(self):
@@ -183,7 +205,8 @@ class BpSpNz(OVBase,testutil.FPTestCase):
         OVBase.defarrays(self)
         self.cref='full'
         self.sref=True
-        
+
+
 class SpPartialNz1(OVBase,testutil.FPTestCase):
     #Passes per current defn that looks at bp.nonzero, sp.def
     def setUp(self):
@@ -194,7 +217,8 @@ class SpPartialNz1(OVBase,testutil.FPTestCase):
         OVBase.defarrays(self)
         self.cref='full'
         self.sref=True
-        
+
+
 class SpPartialNz2(OVBase,testutil.FPTestCase):
     #This is still not acceptable:
     #the bandpass is nonzero in places where the spectrum is undefined.

@@ -8,6 +8,9 @@ __pycache__
 # Other generated files
 pysynphot/version.py
 
+# Test files
+test/from_commissioning/*/*.fits
+
 # Sphinx
 _build
 

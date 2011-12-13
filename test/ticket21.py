@@ -8,15 +8,24 @@ from pysynphot import spectrum,observationmode
 from pysynphot import locations
 
 
+old_comptable = None
 
-#Freeze the version of the comptable so tests are not susceptible to
-# updates to CDBS
-cmptb_name = os.path.join('mtab','rcb1833hm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "%s:"%os.path.basename(__file__)
-print "   Tests are being run with %s"%observationmode.COMPTABLE
-        
-                                            
+
+def setUpModule():
+    #Freeze the version of the comptable so tests are not susceptible to
+    # updates to CDBS
+    global old_comptable
+    cmptb_name = os.path.join('mtab','rcb1833hm_tmc.fits')
+    old_comptable = observationmode.COMPTABLE
+    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    print "%s:" % os.path.basename(__file__)
+    print "   Tests are being run with %s" % observationmode.COMPTABLE
+
+
+def tearDownModule():
+    observationmode.COMPTABLE = old_comptable
+
+
 class ParmCase(testutil.FPTestCase):
     def setUp(self):
         self.omstring='acs,hrc,f555w,mjd#54000'
@@ -25,7 +34,7 @@ class ParmCase(testutil.FPTestCase):
         self.reffile=os.path.join(os.environ['PYSYN_CDBS'],'comp','acs',
                                   'acs_hrc_ccd_mjd_013_syn.fits[mjd#]')
         self.construct()
-        
+
 
     def construct(self):
         self.om=observationmode.ObservationMode(self.omstring)
@@ -36,7 +45,7 @@ class ParmCase(testutil.FPTestCase):
             print "looking for ",self.reffile
             for fname in self.rnames:
                 print fname
-                
+
     def test1(self):
         "parm# in modes"
         self.assert_(self.parkey+'#' in self.om.modes)
@@ -59,29 +68,30 @@ class ParmCase(testutil.FPTestCase):
             print len(self.om.components)
             print self.idx
 
+
 class TwoParms(testutil.FPTestCase):
     def setUp(self):
-        self.omstring='acs,hrc,fr459m#4610,aper#0.3'
-        self.pardict={'fr459m':4610,'aper':0.3}
-        self.om=observationmode.ObservationMode(self.omstring)
+        self.omstring = 'acs,hrc,fr459m#4610,aper#0.3'
+        self.pardict = {'fr459m': 4610,'aper': 0.3}
+        self.om = observationmode.ObservationMode(self.omstring)
 
     def test1(self):
         "parm# in modes"
         for k in self.pardict:
-            self.assert_(k+'#' in self.om.modes)
+            self.assert_(k + '#' in self.om.modes)
 
-            
+
 
     def test3(self):
         "dict vals"
         for k in self.pardict:
             self.assert_(self.om.pardict[k] == self.pardict[k])
 
-            
+
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
     else:
         testutil.testall(__name__,2)
 
-                            
+

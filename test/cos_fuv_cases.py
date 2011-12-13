@@ -1,21 +1,36 @@
 from __future__ import division
-import etctest_base_class
+
+import os
+import sys
+
 from pysynphot.etc import parse_spec
 from pysynphot import ObsBandpass, locations
-from pysynphot import observationmode #to check on comptable
+from pysynphot import observationmode  # to check on comptable
+
 import testutil
-import sys, os
+import etctest_base_class
 
 
-print "%s:"%os.path.basename(__file__)
-print "   Tests are being run with %s"%observationmode.COMPTABLE
-print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
+testdir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data')
+old_vegafile = None
 
-testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
-#Also set the version of Vega for similar reasons
-locations.VegaFile=os.path.join(testdir,
-                                'alpha_lyr_stis_002.fits')
-print "Using Vega spectrum: %s"%locations.VegaFile
+
+def setUpModule():
+    global old_vegafile
+
+    print "%s:" % os.path.basename(__file__)
+    print "   Tests are being run with %s" % observationmode.COMPTABLE
+    print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
+
+    # Also set the version of Vega for similar reasons
+    old_vegafile = locations.VegaFile
+    locations.VegaFile = os.path.join(testdir, 'alpha_lyr_stis_002.fits')
+    print "Using Vega spectrum: %s" % locations.VegaFile
+
+
+def tearDownModule():
+    locations.VegaFile = old_vegafile
+
 
 class C1(etctest_base_class.ETCTestCase):
     def setparms(self):
@@ -24,7 +39,6 @@ class C1(etctest_base_class.ETCTestCase):
         self.ref_rate=28.9958
         self.cmd='SpecSourcerateSpec'
         self.fname='specAV1.fits'
-
 
 
 class C2(etctest_base_class.ETCTestCase):
@@ -672,7 +686,7 @@ if __name__ == '__main__':
             testutil.testall(__name__,2)
         else:
             testutil.testall(__name__)
-            
 
 
-                            
+
+

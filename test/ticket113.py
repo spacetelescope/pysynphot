@@ -1,7 +1,6 @@
 from __future__ import division
 import sys
 import os
-import tempfile
 import math
 import numpy as N
 import pysynphot as S

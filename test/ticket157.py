@@ -9,23 +9,37 @@ import numpy as N
 from pysynphot import locations, observationmode
 
 #Places used by test code
-userdir   = os.path.join(os.path.dirname(__file__),'data')
-testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
-testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
+userdir   = os.path.join(os.path.dirname(__file__), 'data')
+testdata  = os.path.join(locations.rootdir, 'calspec', 'feige66_002.fits')
+testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data')
 
-#Freeze the version of the comptable so tests are not susceptible to
-# updates to CDBS
-cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "%s:"%os.path.basename(__file__)
-print "  Tests are being run with %s"%observationmode.COMPTABLE
-print "  Synphot comparison results were computed with r1j2146sm_tmc.fits"
-#Synphot comparison results are identified with the varname synphot_ref.
+old_comptable = None
+old_vegafile = None
 
-#Also set the version of Vega for similar reasons
-locations.VegaFile=os.path.join(testdir,
-                                'alpha_lyr_stis_002.fits')
-print "Using Vega spectrum: %s"%locations.VegaFile
+def setUpModule():
+    #Freeze the version of the comptable so tests are not susceptible to
+    # updates to CDBS
+    global old_comptable
+    global old_vegafile
+
+    old_comptable = observationmode.COMPTABLE
+    cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
+    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    print "%s:" % os.path.basename(__file__)
+    print "   Tests are being run with %s" % observationmode.COMPTABLE
+    print "   Synphot comparison results were computed with r1j2146sm_tmc.fits"
+    #Synphot comparison results are identified with the varname synphot_ref.
+
+    #Also set the version of Vega for similar reasons
+    old_vegafile = locations.VegaFile
+    locations.VegaFile = os.path.join(testdir, 'alpha_lyr_stis_002.fits')
+    print "Using Vega spectrum: %s" % locations.VegaFile
+
+
+def tearDownModule():
+    observationmode.COMPTABLE = old_comptable
+    locations.VegaFile = old_vegafile
+
 
 class OverlapBug(testutil.FPTestCase):
     def setUp(self):
@@ -39,7 +53,7 @@ class OverlapBug(testutil.FPTestCase):
     def testoverlap(self):
         ans=self.bp.check_overlap(self.sp)
         self.failUnless(ans=='partial')
-        
+
     def testtaper(self):
         self.obs=S.Observation(self.sp,self.bp,force='taper')
         idx=N.where(self.obs.wave==self.refwave)
@@ -51,7 +65,7 @@ class OverlapBug(testutil.FPTestCase):
         idx=N.where(self.obs.wave==self.refwave)
         test=self.obs.flux.item(idx[0])
         self.assertAlmostEqual(test,self.refval,msg='Expected %f, got %f'%(self.refval,test))
-        
+
 ##     def testrange(self):
 ##         self.wt=N.array([3090, 3095, 4000,4005, 4010])
 ##         ans=self.sp(self.wt)
@@ -66,7 +80,9 @@ class OverlapBug(testutil.FPTestCase):
 
 class DiscoveryCase(OverlapBug):
     def setUp(self):
-        fname=os.path.join(testdir,'qso_template.fits')
+        fname = os.path.join('data', 'qso_template.fits')
+        self.old_cwd = os.getcwd()
+        os.chdir(os.path.dirname(__file__))
         self.spstring='rn(z(spec(%s),0.03),band(johnson,v),18,vegamag)' %fname
         self.sp=etc.parse_spec(self.spstring)
         self.sp.convert('photlam')
@@ -74,24 +90,27 @@ class DiscoveryCase(OverlapBug):
         self.refwave=6200
         self.refval=2.97759742e-06
 
+    def tearDown(self):
+        os.chdir(self.old_cwd)
+
 ##     def testorig(self):
 ##         #This test fails unless the Observation has the "expected"
 ##         #behavior. Pre-fix, it will fail because that's the bug.
 ##         #Post-fix, it will have an error and end with an exception.
 ##           #It can be uncommented as a sanity check, but will never pass.
-##           
+##
 ##         self.obs=S.Observation(self.sp,self.bp)
 ##         idx=N.where(self.obs.wave==self.refwave)
 ##         testval=self.obs.flux[idx[0]]
 ##         self.failUnless(testval == 0,'obs[%d]==%g'%(self.refwave,testval))
-        
+
 class BPOverlap(testutil.FPTestCase):
     def setUp(self):
         self.a=S.Box(4000,50)
         self.disjoint=S.Box(6000,100)
         self.full=S.Box(4000,100)
         self.partial=S.Box(4050,50)
-        
+
     def testdisjoint(self):
         stat=self.a.check_overlap(self.disjoint)
         self.failUnless(stat == 'none')
@@ -158,13 +177,13 @@ class AnalyticCase(testutil.FPTestCase):
 class CalcphotTestCase(testutil.FPTestCase):
     #Loosened accuracy for r618 (no taper)
     def setUp(self):
-        testdata  = os.path.join(locations.rootdir,'calspec',
+        testdata  = os.path.join(locations.rootdir, 'calspec',
                                  'feige66_002.fits')
         self.sp = S.FileSpectrum(testdata)
         self.bandpass = S.ObsBandpass('acs,hrc,f555w')
         self.refrate = 8.30680E+05
         self.reflam = 5304.462
-        
+
     def testraises(self):
         self.assertRaises(ValueError,
                           S.Observation,
@@ -180,29 +199,30 @@ class CalcphotTestCase(testutil.FPTestCase):
         obs=S.Observation(self.sp, self.bandpass, force='taper')
         tst=obs.countrate()
         self.assertApproxFP(tst, self.refrate, 1e-4)
-        
+
 
 class ETCTestCase_Imag2(testutil.FPTestCase):
-    
+
     def setUp(self):
-        self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
         self.spectrum = "((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         self.obsmode = "acs,sbc,F140LP"
-        self.refrate=0.0877036
+        self.refrate = 0.0877036
         self.setup2()
 
     def setup2(self):
        try:
-            self.oldpath=os.path.abspath(os.curdir)
-            os.chdir(locations.specdir)
-            self.sp=etc.parse_spec(self.spectrum)
-            self.bp=S.ObsBandpass(self.obsmode)
-            self.parameters=["spectrum=%s"%self.spectrum,
-                             "instrument=%s"%self.obsmode]
+            self.oldpath = os.path.abspath(os.curdir)
+            if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+                os.chdir(os.path.join(locations.specdir, 'generic'))
+            else:
+                os.chdir(locations.specdir)
+            self.sp = etc.parse_spec(self.spectrum)
+            self.bp = S.ObsBandpass(self.obsmode)
+            self.parameters = ["spectrum=%s" % self.spectrum,
+                               "instrument=%s" % self.obsmode]
        except AttributeError:
            pass
-       
+
     def tearDown(self):
         os.chdir(self.oldpath)
 
@@ -219,7 +239,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         q=(float(tstrate[0])-self.refrate)/self.refrate
         self.failIf(abs(q)>0.01)
 
-        
+
     def tearDown(self):
         os.chdir(self.oldpath)
 
@@ -232,7 +252,7 @@ class ETCTestCase_Spec2a(ETCTestCase_Imag2):
         self.syn_pysyn_id = 'stis_etc_cases:SpecSourcerateSpecCase2'
         self.refrate = 28935.7
         self.setup2()
-        
+
 
 
     def testflux(self):
@@ -243,11 +263,11 @@ class ETCTestCase_Spec2a(ETCTestCase_Imag2):
 
 ## class ETC01(OverlapBug):
 
-                                     
+
 ##         self.spectrum = "em(4300.0,1.0,9.999999960041972E-13,flam)"
 ##         self.obsmode = "stis,ccd,g430l"
 
- 
+
 ##         self.spectrum = "em(4000.0,10.0,1.0000000168623835E-16,flam)"
 ##         self.obsmode = "acs,hrc,PR200L"
 

@@ -6,9 +6,10 @@ import testutil
 import pysynphot as S
 import numpy as N
 
-        
+
 
 class AnalyticSP(testutil.FPTestCase):
+    @testutil.skip
     def setUp(self):
         self.sp=S.FlatSpectrum(10)
 
