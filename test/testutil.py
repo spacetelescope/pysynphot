@@ -1,8 +1,3 @@
-from __future__ import division
-
-import math
-import unittest
-import numpy as N
 """
 Copied from stsci_python.pytools so that pysynphot can be tested without
 an extra dependency.
@@ -58,6 +53,13 @@ explicitly. The modules you are testing must be visible in your sys.path.
 >>> U.testall('ui_test')
 
 """
+
+from __future__ import division
+
+import math
+import unittest
+import numpy as N
+
 
 class FPTestCase(unittest.TestCase):
     ''' Base class to hold some functionality related to floating-point
