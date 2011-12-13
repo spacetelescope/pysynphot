@@ -60,6 +60,13 @@ import math
 import unittest
 import numpy as N
 
+try:
+    from nose.tools import nottest
+except ImportError:
+    # A noop placeholder
+    def nottest(func):
+        return func
+
 
 class FPTestCase(unittest.TestCase):
     ''' Base class to hold some functionality related to floating-point
@@ -90,6 +97,7 @@ def debug(module):
     """ Build the test suite, then run in debug mode, which allows for postmortems"""
     buildsuite(module).debug()
 
+@nottest
 def testall(module,verb=0):
     """ Build and run the suite through the testrunner. Verbosity level
     defaults to quiet but can be set to 2 to produce a line as it runs
