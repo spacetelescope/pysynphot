@@ -64,11 +64,11 @@ def setref(graphtable=None, comptable=None, thermtable=None,
     Graph/comp/therm table names must be fully specified."""
 
     global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA, GRAPHDICT, COMPDICT, THERMDICT
-    
+
     GRAPHDICT = {}
     COMPDICT = {}
     THERMDICT = {}
-    
+
     #Check for all None, which means reset
     kwds=set([graphtable,comptable,thermtable,area])
     if kwds == set([None]):
@@ -149,7 +149,7 @@ class BaseObservationMode(object):
         else:
             gt = GraphTable(graphtable)
             GRAPHDICT[graphtable] = gt
-            
+
         self.gtname=graphtable
 
         self.compnames,self.thcompnames = gt.GetComponentsFromGT(self.modes,1)
@@ -251,12 +251,12 @@ class BaseObservationMode(object):
         fs = open(name, mode='r')
         lines = fs.readlines()
         fs.close()
-        
+
         tokens = []
         for line in lines:
             if not line.startswith('#'):
                 tokens.append(line)
-        
+
         return N.float_(tokens)
 
 
@@ -278,11 +278,11 @@ class ObservationMode(BaseObservationMode):
         else:
             ct = CompTable(comptable)
             COMPDICT[comptable] = ct
-            
+
         self.ctname = comptable
 
         self._throughput_filenames = self._getFileNames(ct, self.compnames)
-        
+
         self.components = self._getOpticalComponents(self._throughput_filenames,
                                                       component_dict)
 
@@ -294,7 +294,7 @@ class ObservationMode(BaseObservationMode):
                 parkey=parkey[:-2]
             else:
                 parkey=None
-            
+
             if (throughput_name, self.pardict.get(parkey)) in component_dict.keys():
               component = component_dict[(throughput_name, self.pardict.get(parkey))]
             else:
@@ -388,7 +388,7 @@ class _ThermalObservationMode(BaseObservationMode):
         else:
             ct = CompTable(comptable)
             COMPDICT[comptable] = ct
-            
+
         self.ctname=comptable
 
         throughput_filenames = self._getFileNames(ct, self.compnames)
@@ -399,7 +399,7 @@ class _ThermalObservationMode(BaseObservationMode):
         else:
             thct = CompTable(thermtable)
             THERMDICT[thermtable] = thct
-            
+
         self.thname = thermtable
 
         thermal_filenames = self._getFileNames(thct, self.thcompnames)
@@ -414,7 +414,7 @@ class _ThermalObservationMode(BaseObservationMode):
         obsmode = self._obsmode.split(',')
         obsmode = str(obsmode[0]) + ',' + str(obsmode[1])
 
-        fname=os.path.join(locations.specdir,'detectors.dat')
+        fname= locations.get_data_filename('detectors.dat')
         fs = open(fname,mode='r')
         lines = fs.readlines()
         fs.close()

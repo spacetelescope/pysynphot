@@ -1,6 +1,66 @@
 from __future__ import division
-import os, warnings, glob, re
+
+import glob
+import os
+import re
+import warnings
+
 import pyfits
+
+
+# Replace cdbs_roots lookup with an environment variable
+try:
+    rootdir = os.environ['PYSYN_CDBS']
+except KeyError:
+    warnings.warn("PYSYN_CDBS is undefined; functionality will be SEVERELY "
+                  "crippled.")
+    rootdir = ''
+
+
+# Data directory is now installed locally
+specdir = os.path.join(os.path.dirname(__file__), 'data')
+if not os.path.isdir(specdir):
+    # We might be running out of the source; try looking up a level
+    pardir = os.path.join(os.path.dirname(__file__), os.pardir)
+    specdir = os.path.join(pardir, 'data')
+    setup_py = os.path.join(pardir, 'setup.py')
+    # Ensure that we're actually in the source tree
+    if not os.path.exists(specdir) or not os.path.exists('setup.py'):
+        raise RuntimeError('pysynphot data directory missing!')
+    del pardir
+    del setup_py
+
+specdir = os.path.abspath(specdir) + os.sep
+
+
+# Map of filenames to their actual path
+_data_map = None
+def get_data_filename(filename):
+    global _data_map
+
+    if _data_map is None:
+        _data_map = {}
+        for root, dirs, files in os.walk(specdir):
+            for fname in files:
+                _data_map[fname] = os.path.join(root, fname)
+
+    return _data_map[filename]
+
+
+#Eliminate use of temporary directory; use python tmpfile utilities instead
+CAT_TEMPLATE = os.path.join(rootdir, 'grid', '*', 'catalog.fits')
+KUR_TEMPLATE = os.path.join(rootdir, 'grid', '*')
+
+#Vega
+VegaFile = get_data_filename('alpha_lyr_stis_005.fits')
+
+
+extdir = os.path.join('grid','extinction')
+
+#Define wavecat file explicitly
+wavecat = get_data_filename('wavecat.dat')
+
+RedLaws = {}
 
 
 def _refTable(template):
@@ -19,46 +79,24 @@ def _refTable(template):
                                                    template)
         raise IOError(msg)
 
-#Replace cdbs_roots lookup with an environment variable
-try:
-    rootdir = os.environ['PYSYN_CDBS']
-except KeyError:
-    warnings.warn("PYSYN_CDBS is undefined; functionality will be SEVERELY crippled.",UserWarning)
-    rootdir = ''
-
-#Data directory is now installed locally
-specdir   = os.path.join(os.path.dirname(__file__),'data')+os.path.sep
-
-#Eliminate use of temporary directory; use python tmpfile utilities instead
-
-CAT_TEMPLATE = os.path.join(rootdir,'grid','*','catalog.fits')
-KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
-
-#Vega
-VegaFile = os.path.join(specdir,'alpha_lyr_stis_005.fits')
-            
-
-extdir = os.path.join('grid','extinction')
-RedLaws = {}
-
 def _get_RedLaws():
     global RedLaws
-    
+
     # get all the fits files in $PYSYN_CDBS/grid/extinction/
     globstr = os.path.join(rootdir,extdir,'*.fits')
     files = glob.glob(globstr)
-    
+
     # replace ###.fits at the end of file names with *.fits
     # and get a unique set
     files = set([f[:-8] + '*.fits' for f in files])
-    
+
     # use _refTable to get the most recent version of each extinction file
     # and add that to the RedLaws dict
     for f in files:
         lawf = _refTable(f)
-        
+
         key = pyfits.getval(lawf,'shortnm')
-        
+
         RedLaws[key.lower()] = lawf
 
 # load the extintion law file names
@@ -77,10 +115,6 @@ _get_RedLaws()
 #        RedLaws[k]=_refTable(os.path.join(extdir,RedLaws[k]))
 #    except IOError,e:
 #        print 'Cannot open %s: %s'%(RedLaws[k],str(e))
-
-
-#Define wavecat file explicitly
-wavecat = os.path.join(specdir,'wavecat.dat')
 
 
 def irafconvert(iraffilename):
