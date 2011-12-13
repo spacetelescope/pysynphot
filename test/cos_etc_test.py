@@ -1,5 +1,6 @@
 import sys
 import os
+import shutil
 import tempfile
 import math
 import numpy as N
@@ -19,9 +20,8 @@ import testutil
 
 
 #Places used by test code
-userdir   = os.path.join(os.path.dirname(__file__),'data')
-testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
-testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
+testdata  = os.path.join(locations.rootdir, 'calspec', 'feige66_002.fits')
+testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data')
 
 #Freeze the version of the comptable so tests are not susceptible to
 # updates to CDBS
@@ -466,11 +466,16 @@ class ParserTestCase(testutil.FPTestCase):
         self.assertApproxFP(flux[50], 0.000220323, accuracy=0.0025)
 
     def testuserdir1(self):
-        expr = "spec(%s)"%os.path.join(userdir,'vb8.inr.2a')
-        sp = P.interpret(P.parse(P.scan(expr)))
-        wave = sp.GetWaveSet()
-        flux = sp(wave)
-        self.assertApproxFP(flux[5000], 8.15545E-3, accuracy=0.0025)
+        userdir = tempfile.mkdtemp(suffix='pysynphot')
+        shutil.copy(os.path.join(testdir, 'vb8.inr.2a'), userdir)
+        try:
+            expr = "spec(%s)" % os.path.join(userdir, 'vb8.inr.2a')
+            sp = P.interpret(P.parse(P.scan(expr)))
+            wave = sp.GetWaveSet()
+            flux = sp(wave)
+            self.assertApproxFP(flux[5000], 8.15545E-3, accuracy=0.0025)
+        finally:
+            shutil.rmtree(userdir)
 
     def testebmvx(self):
         expr = "rn(unit(1,flam)*ebmvx(0.1,gal1),box(5500.0,1),1.0E-18,flam)"
@@ -485,12 +490,16 @@ class ParserTestCase(testutil.FPTestCase):
         self.assertApproxFP(flux[4954], 1.53329E-7, accuracy=0.0025)
 
     def testuserdir2(self):
-        expr = "spec(%s/test.dat)"%userdir
-        sp = P.interpret(P.parse(P.scan(expr)))
-        wave = sp.GetWaveSet()
-        flux = sp(wave)
-        self.assertApproxFP(flux[5000], 6.08108E+10, accuracy=0.0025)
-
+        userdir = tempfile.mkdtemp(suffix='pysynphot')
+        shutil.copy(os.path.join(testdir, 'test.dat'), userdir)
+        try:
+            expr = "spec(%s/test.dat)" % userdir
+            sp = P.interpret(P.parse(P.scan(expr)))
+            wave = sp.GetWaveSet()
+            flux = sp(wave)
+            self.assertApproxFP(flux[5000], 6.08108E+10, accuracy=0.0025)
+        finally:
+            shutil.rmtree(userdir)
 
     def testk93(self):
         expr = "rn(icat(k93models,5770,0.0,4.5),band(johnson,v),20.0,vegamag)"
