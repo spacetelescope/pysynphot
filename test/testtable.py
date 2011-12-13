@@ -5,6 +5,7 @@ as well & can be tested that way.
 
 from pysynphot import exceptions, spectrum
 
+import os
 import unittest
 import random
 import numpy as np
@@ -49,7 +50,7 @@ class TestFile(unittest.TestCase):
         self.wv=np.array([10, 20, 'grackle', 30, 50, 100])
         self.fx=self.wv
 
-        self.fname='grackle.dat'
+        self.fname = os.path.abspath('grackle.dat')
         out=open(self.fname,'w')
         for w,f in zip(self.wv, self.fx):
             out.write("%s  %s\n"%(w,f))
