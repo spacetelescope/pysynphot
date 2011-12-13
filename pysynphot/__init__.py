@@ -163,6 +163,7 @@ import Cache
 #Permit resetting refdata
 from observationmode import setref, showref
 #
+from locations import get_data_filename
 import tables
 
 def _test():

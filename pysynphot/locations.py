@@ -171,8 +171,7 @@ def irafconvert(iraffilename):
                   'crgridagn':os.path.join(rootdir,'grid','agn'),
                   'crgridgalactic':os.path.join(rootdir,'grid','galactic'),
                   'crgridkc96':os.path.join(rootdir,'grid','kc96'),
-                  'mtab':os.path.join(rootdir,'mtab'),
-                  'synphot': os.path.dirname(__file__)+os.path.sep}
+                  'mtab':os.path.join(rootdir,'mtab')}
 
     # remove duplicate separators and extraneous relative paths
     iraffilename = os.path.normpath(iraffilename)
@@ -192,6 +191,8 @@ def irafconvert(iraffilename):
     elif '$' in iraffilename:
         #Then it's an iraf-style variable
         irafdir,basename=iraffilename.split('$')
+        if irafdir == 'synphot':
+            return get_data_filename(os.path.basename(basename))
         unixdir=convertdic[irafdir]
         unixfilename=os.path.join(unixdir,basename)
         return unixfilename
