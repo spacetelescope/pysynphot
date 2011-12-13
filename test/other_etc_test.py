@@ -12,7 +12,7 @@ from pysynphot import units, planck
 from pysynphot import etc
 import pysynphot as S
 
-import testutil 
+import testutil
 
 
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
@@ -85,7 +85,7 @@ format_spec = '%.5E'    # floating point precision in assert
 format_offset = {'win32':1,'sunos5':0,'linux2':0}
 
 def format(value):
-    ''' Formats scientific notation according to platform.    
+    ''' Formats scientific notation according to platform.
     '''
     str = format_spec%(value)
 
@@ -188,8 +188,11 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
         self.expr = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
-        os.chdir(locations.specdir)
-       
+        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+            os.chdir(os.path.join(locations.specdir, 'generic'))
+        else:
+            os.chdir(locations.specdir)
+
     def tearDown(self):
         os.chdir(self.oldpath)
 
@@ -233,11 +236,14 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
 
 
 class ETCTestCase_Imag2(testutil.FPTestCase):
-    
+
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
-       
+        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+            os.chdir(os.path.join(locations.specdir, 'generic'))
+        else:
+            os.chdir(locations.specdir)
+
     def tearDown(self):
         os.chdir(self.oldpath)
 
@@ -279,11 +285,11 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
 
     #Moved thermtest5 to other_etc_ticket_cases
     #Tests run, but fail comparison.
-    
+
     #Moved test6 to ticket157.
 
     #Moved test7 to other_etc_ticket_case: answers disagree
-    #Deleted test8: it's an obsolete case.   
+    #Deleted test8: it's an obsolete case.
 
     def test9(self):
         #Changed answer for r618 (no tapering): this obsmode doesn't
@@ -323,14 +329,17 @@ class ETCTestCase(testutil.FPTestCase):
 
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
+        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+            os.chdir(os.path.join(locations.specdir, 'generic'))
+        else:
+            os.chdir(locations.specdir)
         self.sp=etc.parse_spec(self.spectrum)
         self.bp=ObsBandpass(self.obsmode)
         self.obs=observation.Observation(self.sp,self.bp)
         self.parameters=["spectrum=%s"%self.spectrum,
                          "instrument=%s"%self.obsmode]
         self.obs.convert('counts')
-       
+
     def tearDown(self):
         os.chdir(self.oldpath)
 
@@ -341,7 +350,7 @@ class ETCTestCase_Spec1a(ETCTestCase):
         self.obsmode = "acs,hrc,PR200L"
         ETCTestCase.setUp(self)
         self.accuracy=0.0025
-        
+
     def testrate(self):
         countrate = etc.specrate(self.parameters)
         self.assertApproxFP(float(countrate.split(';')[0]), 13.7853,
@@ -356,7 +365,7 @@ class ETCTestCase_Spec1b(ETCTestCase):
         self.obsmode = "acs,wfc1,G800L"
         ETCTestCase.setUp(self)
         self.accuracy=0.0025
-        
+
     def testrate(self):
         countrate = etc.specrate(self.parameters)
         self.assertApproxFP(float(countrate.split(';')[0]), 73770.3,
@@ -382,7 +391,7 @@ class ETCTestCase_Spec1d(ETCTestCase):
         self.obsmode="acs,hrc,PR200L"
         ETCTestCase.setUp(self)
         self.accuracy=0.0025
-        
+
     def testrate(self):
         countrate = etc.specrate(self.parameters)
         self.assertApproxFP(float(countrate.split(';')[0]),15658.6,
@@ -412,7 +421,7 @@ class ETCTestCase_Spec2b(ETCTestCase):
         self.obsmode = "stis,nuvmama,e230h,c2263,s02x02"
         ETCTestCase.setUp(self)
         self.accuracy=0.0025
-        
+
     def testrate(self):
         countrate = etc.specrate(self.parameters)
         self.assertApproxFP(float(countrate.split(';')[0]), 35412,
@@ -466,7 +475,7 @@ class ETCTestCase_Spec3b:
         self.obsmode = "acs,hrc,PR200L"
         ETCTestCase.setUp(self)
 
-    def testrate(self): 
+    def testrate(self):
         countrate = etc.specrate(self.parameters)
         self.assertApproxFP(float(countrate.split(';')[0]), 119.709)
 
@@ -490,7 +499,7 @@ class ETCTestCase_Spec3d:
         countrate = etc.specrate(parameters)
         self.assertApproxFP(float(countrate.split(';')[0]), 26.5409)
 
-        
+
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:

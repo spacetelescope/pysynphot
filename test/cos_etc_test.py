@@ -14,7 +14,7 @@ from pysynphot.observation import Observation
 from pysynphot import renorm
 import pysynphot as S
 
-import testutil 
+import testutil
 
 
 
@@ -82,7 +82,7 @@ format_spec = '%.5E'    # floating point precision in assert
 format_offset = {'win32':1,'sunos5':0,'linux2':0}
 
 def format(value):
-    ''' Formats scientific notation according to platform.    
+    ''' Formats scientific notation according to platform.
     '''
     str = format_spec%(value)
 
@@ -125,7 +125,7 @@ class SpectrumReadTestCase(testutil.FPTestCase):
 class UnitsTestCase(testutil.FPTestCase):
     def setUp(self):
         self.sp = spectrum.TabularSourceSpectrum(testdata)
-        
+
 
     def testang(self):
         self._testWave(self.sp,'angstrom')
@@ -304,11 +304,14 @@ class FunctionTestCase(testutil.FPTestCase):
 class ParserTestCase(testutil.FPTestCase):
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
-        
+        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+            os.chdir(os.path.join(locations.specdir, 'generic'))
+        else:
+            os.chdir(locations.specdir)
+
     def tearDown(self):
         os.chdir(self.oldpath)
-       
+
     def testunit1(self):
         expr = "unit(1,photlam)"
         sp = P.interpret(P.parse(P.scan(expr)))
@@ -360,7 +363,7 @@ class ParserTestCase(testutil.FPTestCase):
         self.assertRaises(exceptions.ZeroWavelength,
                           etc.parse_spec,
                           'spec(zeroang.dat)')
-        
+
 
 
     #Add some cos test modes
@@ -393,7 +396,7 @@ class ParserTestCase(testutil.FPTestCase):
         wave = sp.GetWaveSet()
         flux = sp(wave)
         self.assertApproxFP(flux[100], 3.3173e-16, accuracy=0.0025)
-        
+
     def testcomp2(self):
         expr = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
         sp = P.interpret(P.parse(P.scan(expr)))
@@ -488,7 +491,7 @@ class ParserTestCase(testutil.FPTestCase):
         flux = sp(wave)
         self.assertApproxFP(flux[5000], 6.08108E+10, accuracy=0.0025)
 
- 
+
     def testk93(self):
         expr = "rn(icat(k93models,5770,0.0,4.5),band(johnson,v),20.0,vegamag)"
         sp = P.interpret(P.parse(P.scan(expr)))
@@ -613,16 +616,22 @@ class ETCTestCase_Imag1(testutil.FPTestCase):
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
         self.expr = "(earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5)"
-        os.chdir(locations.specdir)
-       
+        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+            os.chdir(os.path.join(locations.specdir, 'generic'))
+        else:
+            os.chdir(locations.specdir)
+
     def tearDown(self):
         os.chdir(self.oldpath)
 class ETCTestCase_Imag2(testutil.FPTestCase):
-    
+
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
-       
+        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+            os.chdir(os.path.join(locations.specdir, 'generic'))
+        else:
+            os.chdir(locations.specdir)
+
     def tearDown(self):
         os.chdir(self.oldpath)
 
@@ -631,16 +640,22 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
 
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
-       
+        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+            os.chdir(os.path.join(locations.specdir, 'generic'))
+        else:
+            os.chdir(locations.specdir)
+
     def tearDown(self):
         os.chdir(self.oldpath)
 
 class ETCTestCase_Spec3(testutil.FPTestCase):
     def setUp(self):
         self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
-        
+        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
+            os.chdir(os.path.join(locations.specdir, 'generic'))
+        else:
+            os.chdir(locations.specdir)
+
     def tearDown(self):
         os.chdir(self.oldpath)
     def test4(self):
@@ -703,7 +718,7 @@ class WritefitsTestCase(testutil.FPTestCase):
     def test1(self):
         sp = P.interpret(P.parse(P.scan("icat(k93models,5750,0.0,4.5)")))
         sp.writefits(self.filename)
-        
+
         sp = spectrum.TabularSourceSpectrum(testdata)
 
         (wave, flux) = sp.getArrays()
@@ -747,7 +762,7 @@ class EnforceWave(testutil.FPTestCase):
         sp=self.constructor(*self.args)
         self.assertEqualNumpy(sp.wave,self.valid)
 
-        
+
     def testzero(self):
         self.args=self.argdict['zero']
         self.assertRaises(exceptions.ZeroWavelength,
@@ -765,7 +780,7 @@ class EnforceWave(testutil.FPTestCase):
         self.assertRaises(exceptions.UnsortedWavelength,
                           self.constructor,
                           *self.args)
-        
+
 ##................................................................
 ## Commenting out this test: descending "wavelengths" need to be
 ## legal after all -- frequency units legitimately descend.
@@ -775,7 +790,7 @@ class EnforceWave(testutil.FPTestCase):
 ##         sp=self.constructor(*self.args)
 ##         self.assertEqualNumpy(sp.wave,self.descending[::-1])
 
-                    
+
 class EnforceWaveFile(EnforceWave):
     """Ticket *85: enforce monotonic ascending wavesets
         for FileSourceSpectrum objects"""
@@ -829,7 +844,7 @@ class SrvParserTestCase(testutil.FPTestCase):
         self.tokens=self.cgistring.split('&')
         d=etc.getparms(self.tokens[1:])
 
-    
+
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
