@@ -127,27 +127,13 @@ flam
 """
 
 
-if False :
-    try:
-        import pkg_resources
-        import re
-        __version__ = 'unk'
-        __svn_version__ = 'unk'
-        __full_svn_info__ = 'unk'
-        __setup_datetime__ = 'unk'
+from pysynphot.version import (__version__, __svn_revision__,
+                               __svn_full_info__, __setup_datetime__)
 
-        __version__ = pkg_resources.get_distribution('pysynphot').version
-    except:
-        pass
-else :
-    __version__ = '0.9.2dev'
+# For backwards compatibility
+__svn_version__ = __svn_revision__
+__full_svn_info__ = __svn_full_info__
 
-
-if 0 :
-    try:
-        from pysynphot.svninfo import (__svn_version__, __full_svn_info__, __setup_datetime__)
-    except ImportError:
-        pass
 
 #UI:
 #AnalyticSpectra:
@@ -172,7 +158,7 @@ from observationmode import ObservationMode as Obsmode
 from numpy import arange as Waveset
 #Get Vega
 from spectrum import Vega
-#Get cache 
+#Get cache
 import Cache
 #Permit resetting refdata
 from observationmode import setref, showref

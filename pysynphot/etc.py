@@ -26,7 +26,7 @@ def getparms(parlist):
     from the few elements it actually uses. """
     d={}
     keylist=['spectrum','output','obsmode','instrument','func','etcid']
-             
+
     for pair in parlist:
         try:
             name,value=pair.split('=')
@@ -52,9 +52,9 @@ def calcphot(parlist):
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['obsmode'])
     # obs=bp.observe(sp)
-    
+
     ostat=bp.check_overlap(sp)
-    
+
     try:
         obs=Observation(sp,bp,force=odict[ostat])
     except KeyError:
@@ -82,7 +82,7 @@ def countrate(parlist):
     observed through the obsmode, but based on the native waveset
     ** MDDOFIED 17 May 2010 to explicitly state binned=False for
     ease of JETC/pyetc comparison.
-    
+
     """
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
@@ -91,7 +91,7 @@ def countrate(parlist):
 
     #Check overlap status & proceed accordingly
     ostat=bp.check_overlap(sp)
-    
+
     try:
         obs=Observation(sp,bp,force=odict[ostat])
     except KeyError:
@@ -118,7 +118,7 @@ def specrate(parlist):
     d=getparms(parlist)
     sp=parse_spec(d['spectrum'])
     bp=ObsBandpass(d['instrument'])
-    
+
     #Check overlap status & proceed accordingly
     ostat=bp.check_overlap(sp)
 
@@ -137,7 +137,7 @@ def specrate(parlist):
         return "%g;%s"%(obs.countrate(binned=True),d['output'])
     else:
         return "%g;%s;%s"%(obs.countrate(binned=True),d['output'],owarn[ostat])
-    
+
 
 def thermback(parlist):
     """Return the thermal background rate for the obsmode"""
@@ -169,12 +169,12 @@ def showfiles(parlist):
     For nonserver use:
     foo='showfiles&obsmode="acs,hrc,f555w"&output="testme2.txt"'
     etc.showfiles(foo.split('&')[1:])
-    
+
     """
     d=getparms(parlist)
     obsmode=d['obsmode']
     outname=d['output']
-    
+
     ob=ommod.ObservationMode(obsmode)
     flist=[x for x in ob._throughput_filenames if x != 'clear']
     out=open(outname,'w')
@@ -186,7 +186,7 @@ def showfiles(parlist):
         out.write("%s\n"%fname)
     out.close()
     return(outname)
-    
+
 def Suicide(dummy):
     """Kill this process"""
 
@@ -203,8 +203,8 @@ def ping(dummy):
 
 def version(dummy):
     """Return subversion version string"""
-    from pysynphot.svninfo import __svn_version__, __setup_datetime__
-    return __svn_version__+"; "+str(__setup_datetime__)
+    from pysynphot.svninfo import __svn_revision__, __setup_datetime__
+    return __svn_revision__+"; "+str(__setup_datetime__)
 
 #This defines the set of tasks available for the ETC server to perform.
 #Note that there are two distinct calls to calcphot that we might
