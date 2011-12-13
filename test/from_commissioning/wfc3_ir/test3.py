@@ -1,8 +1,15 @@
 import os
 import sys
-sys.path.append('..')
-import conv_base
-conv_base.HERE = os.path.abspath(os.path.dirname(__file__))
+
+try:
+    # TODO: If we made the tests dir a package this could be avoided by using
+    # package-relative imports
+    import conv_base
+except ImportError:
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                    os.pardir)))
+    import conv_base
+
 
 class Test1361(conv_base.ThermCase):
     @classmethod
