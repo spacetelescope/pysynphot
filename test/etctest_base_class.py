@@ -3,12 +3,12 @@ import os
 import testutil
 from pysynphot import locations
 from pysynphot.observation import Observation 
-from pysynphot import observationmode #to freeze comptable
+from pysynphot import refs #to freeze comptable
 
 #Freeze the version of the comptable so tests are not susceptible to
 # updates to CDBS
 cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+refs.COMPTABLE = locations._refTable(cmptb_name)
 
 class ETCTestCase(testutil.FPTestCase):
     """Base class for cases generated from the ETC test listings"""

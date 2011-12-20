@@ -4,12 +4,12 @@ import copy
 
 import numpy as N
 
-from pysynphot import observationmode, units
+from pysynphot import observationmode, units, refs
 from pysynphot.obsbandpass import ObsBandpass
 from pysynphot.locations import irafconvert
 
 #Code under test
-from pysynphot.observationmode import setref, showref, getref
+from pysynphot.refs import setref, showref, getref
 from pysynphot import units #uses area
 
 startup = getref()
@@ -104,7 +104,7 @@ class TestAreaChanges(unittest.TestCase):
     def testchange(self):
         ref=100
         setref(area=ref)
-        tst=units.observationmode.HSTAREA
+        tst=refs.HSTAREA
         self.assertEqual(ref,tst)
 
     def testcounts(self):

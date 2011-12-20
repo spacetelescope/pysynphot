@@ -6,7 +6,7 @@ import numpy as N
 
 import etctest_base_class
 from pysynphot import spectrum, observationmode, exceptions
-from pysynphot import locations
+from pysynphot import locations, refs
 from pysynphot import spparser as P
 from pysynphot import units, planck
 from pysynphot import etc
@@ -17,7 +17,6 @@ import pysynphot as S
 import testutil 
 
 
-
 #Places used by test code
 userdir   = os.path.join(os.path.dirname(__file__),'data')
 testdata  = os.path.join(locations.rootdir,'calspec','feige66_002.fits')
@@ -26,9 +25,9 @@ testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
 #Freeze the version of the comptable so tests are not susceptible to
 # updates to CDBS
 cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "%s:"%os.path.basename(__file__)
-print "   Tests are being run with %s"%observationmode.COMPTABLE
+refs.COMPTABLE = locations._refTable(cmptb_name)
+print "%s:" % os.path.basename(__file__)
+print "   Tests are being run with %s" % refs.COMPTABLE
 print "   Synphot comparison results were computed with r1j2146sm_tmc.fits"
 #Synphot comparison results are identified with the varname synphot_ref.
 
@@ -36,7 +35,7 @@ print "   Synphot comparison results were computed with r1j2146sm_tmc.fits"
 #Also set the version of Vega for similar reasons
 locations.VegaFile=os.path.join(testdir,
                                 'alpha_lyr_stis_002.fits')
-print "Using Vega spectrum: %s"%locations.VegaFile
+print "Using Vega spectrum: %s" % locations.VegaFile
 
 accuracy = 1.0e-5    # default floating point comparison accuracy
 etc.debug = 0        # suppress messages from ETC-support tasks
@@ -84,7 +83,7 @@ format_offset = {'win32':1,'sunos5':0,'linux2':0}
 def format(value):
     ''' Formats scientific notation according to platform.    
     '''
-    str = format_spec%(value)
+    str = format_spec % (value)
 
     index1 = str.index('E') + 2
     index2 = index1 + format_offset[sys.platform]
@@ -242,8 +241,8 @@ class SpectrumTestCase(testutil.FPTestCase):
 
 class PlanckTestCase(testutil.FPTestCase):
     def testbb(self):
-        flux = planck.bb_photlam_arcsec(spectrum.default_waveset, 1000.)
-        self.assertApproxFP(flux[5000], 3.8914E-8, accuracy=0.0025)
+        flux = planck.bb_photlam_arcsec(refs._default_waveset, 1000.)
+        self.assertApproxFP(flux[5000], 3.91911e-08, accuracy=0.0025)
 
 
 class ObsmodeTestCase(testutil.FPTestCase):
@@ -291,7 +290,7 @@ class FunctionTestCase(testutil.FPTestCase):
         sp = sp * box
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertApproxFP(fluxes.sum(), 20., accuracy=0.0025)
+        self.assertApproxFP(fluxes.sum(), 21., accuracy=0.0025)
 
     def testmult2(self):
         sp = spectrum.FlatSpectrum(1.0,fluxunits='flam')
@@ -299,7 +298,7 @@ class FunctionTestCase(testutil.FPTestCase):
         sp = sp * box
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertApproxFP(fluxes.sum(), 5.53744E+12, accuracy=0.0025)
+        self.assertApproxFP(fluxes.sum(), 5.8143e+12, accuracy=0.0025)
 
 class ParserTestCase(testutil.FPTestCase):
     def setUp(self):
@@ -334,7 +333,7 @@ class ParserTestCase(testutil.FPTestCase):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertApproxFP(fluxes.sum(), 5.53744E+12, accuracy=0.0025)
+        self.assertApproxFP(fluxes.sum(), 5.8143e+12, accuracy=0.0025)
 
     def testmult2(self):
         expr = "(unit(1,flam) * box(5500.0,20.0))"
@@ -478,7 +477,7 @@ class ParserTestCase(testutil.FPTestCase):
                         ref=1.53329E-7,
                         epsilon=0.0025,
                         tst=flux[5000])
-        self.tda.update(S.observationmode.getref())
+        self.tda.update(refs.getref())
         self.assertApproxFP(flux[4954], 1.53329E-7, accuracy=0.0025)
 
     def testuserdir2(self):

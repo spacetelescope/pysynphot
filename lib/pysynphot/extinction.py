@@ -3,6 +3,7 @@ import string
 import numpy as N
 import spectrum
 import units
+import refs
 
 _seatonx = N.array([0.,  1.0, 1.1, 1.2, 1.3, 1.4, 1.5, \
                                 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, \
@@ -34,12 +35,12 @@ _smce = N.array([-3.10, -2.94, -2.72, -2.23, -1.60, -0.78,  0.00,  \
 
 
 def _buildDefaultWaveset():
-    wave = spectrum.default_waveset.copy()[::10]
+    wave = refs._default_waveset.copy()[::10]
 
     result = N.empty(shape=[wave.shape[0]+1,],dtype=N.float64)
 
     result[0:-1] = wave
-    result[-1] = spectrum.default_waveset[-1]
+    result[-1] = refs._default_waveset[-1]
 
     return 10000.0 / result     # convert to 1/micron
 

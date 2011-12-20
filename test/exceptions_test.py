@@ -2,16 +2,16 @@ from __future__ import division
 """Test that exceptions really are raised when they should be."""
 import unittest,sys,os
 import testutil
-from pysynphot import observationmode
+from pysynphot import observationmode, locations, refs
 import pysynphot as S
 
 class TMCmismatch(unittest.TestCase):
     """Can arise with mismatched graph & component tables"""
     def setUp(self):
         tmcname = os.path.join('mtab','r1j2146sm_tmc.fits')
-        observationmode.COMPTABLE = observationmode._refTable(tmcname)
+        refs.COMPTABLE = locations._refTable(tmcname)
         tmgname = os.path.join('mtab','rbg2236im_tmg.fits')
-        observationmode.GRAPHTABLE = observationmode._refTable(tmgname)
+        refs.GRAPHTABLE = locations._refTable(tmgname)
         self.omstring='acs,hrc,f555w,mjd#54000'
 
     def test1(self):

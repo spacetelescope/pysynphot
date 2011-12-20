@@ -3,7 +3,7 @@ import os
 import testutil
 import pysynphot as S
 from pysynphot import etc
-from pysynphot import locations
+from pysynphot import locations, refs
 
 class SuccessCase(testutil.FPTestCase):
     def setUp(self):
@@ -13,7 +13,7 @@ class SuccessCase(testutil.FPTestCase):
         self.tda=dict(spectrum=str(self.sp),
                       bp=str(self.bp)
                       )
-        self.tda.update(S.observationmode.getref())
+        self.tda.update(refs.getref())
                      
 
     def testok(self):
@@ -71,7 +71,7 @@ class ETCTestCase(testutil.FPTestCase):
         self.tda=dict(spectrum=str(self.spectrum),
                       bp=str(self.obsmode)
                       )
-        self.tda.update(S.observationmode.getref())
+        self.tda.update(refs.getref())
         self.setup2()
         
     def setup2(self):

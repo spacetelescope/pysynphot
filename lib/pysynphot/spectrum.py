@@ -25,8 +25,8 @@ import warnings
 import pyfits
 import numpy as N
 
+import refs
 import units
-import observationmode
 import locations
 import planck
 import pysynphot.exceptions as exceptions #custom pysyn exceptions
@@ -51,27 +51,6 @@ MERGETHRESH = 1.e-12
 #This is the minimum separation in wavelength value necessary for
 #synphot to read the entries as distinct single-precision numbers.
 syn_epsilon=0.00032
-
-def _computeDefaultWaveset():
-    minwave = 500.
-    maxwave = 26000.
-    lenwave = 10000
-
-    w1 = math.log10(minwave)
-    w2 = math.log10(maxwave)
-
-    result = N.zeros(shape=[lenwave,],dtype=N.float64)
-
-    for i in range(lenwave):
-        frac = float(i) / lenwave
-        result[i] = 10 ** (w1 * (1.0 - frac) + w2 * frac)
-
-    return result
-
-# Default waveset is computed at load time, once and for all.
-# Note that this is not thread safe.
-global default_waveset
-default_waveset = _computeDefaultWaveset()
 
 
 def MergeWaveSets(waveset1, waveset2):
@@ -845,8 +824,7 @@ class AnalyticSpectrum(SourceSpectrum):
         self.warnings={}
 
     def GetWaveSet(self):
-        global default_waveset
-        return default_waveset.copy()
+        return refs._default_waveset.copy()
 
 
 class GaussianSource(AnalyticSpectrum):
@@ -948,8 +926,7 @@ class FlatSpectrum(AnalyticSpectrum):
 
 ##This change produces 5 errors and 17 failures in cos_etc_test.py
 ##     def GetWaveSet(self):
-##         global default_waveset
-##         return N.array([default_waveset[0],default_waveset[-1]])
+##         return N.array([_default_waveset[0],_default_waveset[-1]])
 
 
 class Powerlaw(AnalyticSpectrum):
@@ -1458,7 +1435,7 @@ class SpectralElement(Integrator):
         
         """
         hc = units.HC
-        area = observationmode.HSTAREA
+        area = refs.HSTAREA
         
         wave = self.GetWaveSet()
         thru = self(wave)
@@ -1555,7 +1532,7 @@ class UniformTransmission(SpectralElement):
         self.warnings={}
         #The ._wavetable is used only by the .writefits() method at this time
         #It is not for general use.
-        self._wavetable = N.array([default_waveset[0],default_waveset[-1]])
+        self._wavetable = N.array([refs._default_waveset[0],refs._default_waveset[-1]])
 
     def __str__(self):
         return "%g"%self.value
@@ -1578,8 +1555,7 @@ class UniformTransmission(SpectralElement):
 
 ## This produced 15 test failures in cos_etc_test.
 ##     def GetWaveSet(self):
-##         global default_waveset
-##         return N.array([default_waveset[0],default_waveset[-1]])
+##         return N.array([_default_waveset[0],_default_waveset[-1]])
 ##
 ##     wave = property(GetWaveSet,doc="wave for UniformTransmission")
 
@@ -1934,9 +1910,10 @@ class Box(SpectralElement):
         upper = center + width / 2.0
         step = 0.05                     # fixed step for now (in A)
 
-        self.name='Box at %g (%g wide)'%(center,width)
+        self.name='Box at %g (%g wide)' % (center,width)
         nwaves = int(((upper - lower) / step)) + 2
         self._wavetable = N.zeros(shape=[nwaves,], dtype=N.float64)
+        
         for i in range(nwaves):
             self._wavetable[i] = lower + step * i
 

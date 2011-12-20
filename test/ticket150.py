@@ -6,15 +6,15 @@ import os, sys
 import testutil
 import numpy as N
 
-from pysynphot import locations, observationmode
+from pysynphot import locations, refs
 
 
 #Freeze the version of the comptable so tests are not susceptible to
 # updates to CDBS
 cmptb_name = os.path.join('mtab','t260548pm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "%s:"%os.path.basename(__file__)
-print "  Tests are being run with %s"%observationmode.COMPTABLE
+refs.COMPTABLE = locations._refTable(cmptb_name)
+print "%s:" % os.path.basename(__file__)
+print "  Tests are being run with %s" % refs.COMPTABLE
 
 #Also set the version of Vega for similar reasons
 locations.VegaFile=os.path.join('crcalspec',

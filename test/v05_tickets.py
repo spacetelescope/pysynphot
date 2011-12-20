@@ -5,7 +5,7 @@ import testutil
 import pysynphot as S
 import numpy as N
 from pysynphot.units import Units
-from pysynphot import extinction, spectrum, units, etc, reddening
+from pysynphot import extinction, spectrum, units, etc, reddening, refs
 
 class aticket123(testutil.FPTestCase):
     #Some of the tests below will fail if this is not the FIRST
@@ -162,7 +162,7 @@ class AddInverseMicron(testutil.FPTestCase):
     def setUp(self):
         self.x=Units('1/um')
         self.mwave=extinction._buildDefaultWaveset()[0:10]
-        self.awave=(spectrum.default_waveset.copy()[::10])[0:10]
+        self.awave=(refs._default_waveset.copy()[::10])[0:10]
         
     def teststr(self):
         self.failUnless(str(self.x)=='1/um')

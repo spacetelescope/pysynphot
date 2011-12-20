@@ -5,16 +5,16 @@ import os
 import testutil
 
 from pysynphot import spectrum,observationmode
-from pysynphot import locations
+from pysynphot import locations, refs
 
 
 
 #Freeze the version of the comptable so tests are not susceptible to
 # updates to CDBS
 cmptb_name = os.path.join('mtab','rcb1833hm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "%s:"%os.path.basename(__file__)
-print "   Tests are being run with %s"%observationmode.COMPTABLE
+refs.COMPTABLE = locations._refTable(cmptb_name)
+print "%s:" % os.path.basename(__file__)
+print "   Tests are being run with %s" % refs.COMPTABLE
         
                                             
 class ParmCase(testutil.FPTestCase):

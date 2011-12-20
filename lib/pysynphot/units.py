@@ -11,7 +11,7 @@ import math
 import numpy as N
 import locations, spectrum #Circular import
 
-import observationmode #needed for HSTAREA
+import refs #needed for HSTAREA
 #cannot just import the constant because it won't get updated
 #when the setref() function is used to change it.
 
@@ -94,8 +94,8 @@ class BaseUnit(object):
         try:
             return self.Dispatch[target_units.lower()](wave,flux)
         except KeyError:
-            raise TypeError("%s cannot be converted to %s"%(self.name,
-                                                            target_units))
+            raise TypeError("%s cannot be converted to %s" % (self.name,
+                                                              target_units))
 
 class WaveUnits(BaseUnit):
     """All WaveUnits know how to convert themselves to Angstroms"""
@@ -109,8 +109,8 @@ class WaveUnits(BaseUnit):
         try:
             return self.Dispatch[target_units.lower()](wave)
         except KeyError:
-            raise TypeError("%s cannot be converted to %s"%(self.name,
-                                                            target_units))
+            raise TypeError("%s cannot be converted to %s" % (self.name,
+                                                              target_units))
 
     def ToAngstrom(self,wave):
         raise NotImplementedError("Required method ToAngstrom not yet implemented")
@@ -135,7 +135,7 @@ class FluxUnits(BaseUnit):
         try:
             return self.Dispatch[target_units](wave,flux)
         except KeyError:
-            raise TypeError("%s is not a valid flux unit"%(target_units))
+            raise TypeError("%s is not a valid flux unit" % (target_units))
 
     def ToPhotlam(self,wave,flux):
         raise NotImplementedError("Required method ToPhotlam not yet implemented")
@@ -270,7 +270,7 @@ class Photlam(FluxUnits):
     
     def ToOBMag(self, wave, flux):
         dw = _getDeltaWave(wave)
-        arg = flux * dw * observationmode.HSTAREA
+        arg = flux * dw * refs.HSTAREA
         return -1.085736 * N.log(arg)
 
     def ToVegaMag(self, wave, flux):
@@ -280,7 +280,7 @@ class Photlam(FluxUnits):
         return -2.5 * N.log10(normalized)
 
     def ToCounts(self, wave, flux):
-        return flux * _getDeltaWave(wave) * observationmode.HSTAREA
+        return flux * _getDeltaWave(wave) * refs.HSTAREA
 
 
 #................................................................
@@ -522,7 +522,7 @@ class OBMag(LogFluxUnits):
     
     def ToPhotlam(self, wave, flux):
         dw = _getDeltaWave(wave)
-        return 10.0**(-0.4 * flux) / (dw * observationmode.HSTAREA)
+        return 10.0**(-0.4 * flux) / (dw * refs.HSTAREA)
 
     def unitResponse(self,band):
         #sum = asumr(band,nwave)
@@ -551,7 +551,7 @@ class Counts(FluxUnits):
         self.isDensity = False
     
     def ToPhotlam(self, wave, flux):
-        return flux / (_getDeltaWave(wave) * observationmode.HSTAREA)
+        return flux / (_getDeltaWave(wave) * refs.HSTAREA)
 
     
     def unitResponse(self,band):

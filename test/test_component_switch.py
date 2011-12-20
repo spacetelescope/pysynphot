@@ -10,7 +10,7 @@ from __future__ import division
 import os
 from unittest import TestCase
 
-from pysynphot import observationmode
+from pysynphot import observationmode, locations, refs
 
 class TestCompSwitch(TestCase):
   def setUp(self):
@@ -28,7 +28,7 @@ class TestCompSwitch(TestCase):
       throughput_list[i] = os.path.join(self.cdbs,f)
     
     cmptb_name = os.path.join('mtab','ub31649mm_tmc.fits')
-    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    refs.COMPTABLE = locations._refTable(cmptb_name)
     
     obs = observationmode.ObservationMode('acs,hrc,f435w')
     
@@ -47,7 +47,7 @@ class TestCompSwitch(TestCase):
       throughput_list[i] = os.path.join(self.cdbs,f)
     
     cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
-    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    refs.COMPTABLE = locations._refTable(cmptb_name)
     
     obs = observationmode.ObservationMode('acs,hrc,f435w')
     

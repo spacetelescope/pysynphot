@@ -3,7 +3,8 @@ from __future__ import division
 one that works, turn it into a method on the spectrum class."""
 import math
 import numpy as N
-from spectrum import FlatSpectrum, Vega, default_waveset
+from spectrum import FlatSpectrum, Vega
+from refs import _default_waveset
 import units
 
 
@@ -20,7 +21,7 @@ def DefineStdSpectraForUnits():
     units.mJy.StdSpectrum = FlatSpectrum(1,fluxunits='mjy')
 
     #Non-density units
-    scale = 1.0/default_waveset.size
+    scale = 1.0/_default_waveset.size
     units.Counts.StdSpectrum = FlatSpectrum(1,fluxunits='counts')*scale
     units.OBMag.StdSpectrum = FlatSpectrum(1,fluxunits='counts')*scale
 

@@ -34,6 +34,3 @@ class Client(threading.Thread):
         print "%s Client sent: %s \n Client received: %s"%(hr,self._line,
                                                            self._response)
         sock.close()
-
-
-

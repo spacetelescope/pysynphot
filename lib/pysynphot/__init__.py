@@ -175,7 +175,7 @@ from spectrum import Vega
 #Get cache 
 import Cache
 #Permit resetting refdata
-from observationmode import setref, showref
+from refs import setref, showref
 #
 import tables
 

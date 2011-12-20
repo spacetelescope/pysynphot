@@ -6,7 +6,7 @@ import tempfile
 from pysynphot import spectrum,observationmode
 from pysynphot import observation
 from pysynphot import ObsBandpass
-from pysynphot import locations
+from pysynphot import locations, refs
 from pysynphot import spparser as P
 from pysynphot import units, planck
 from pysynphot import etc
@@ -30,16 +30,16 @@ testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)),'data')
 #Freeze the version of the comptable so tests are not susceptible to
 # updates to CDBS
 cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
-observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
-print "%s:"%os.path.basename(__file__)
-print "  Tests are being run with %s"%observationmode.COMPTABLE
+refs.COMPTABLE = locations._refTable(cmptb_name)
+print "%s:" % os.path.basename(__file__)
+print "  Tests are being run with %s" % refs.COMPTABLE
 print "  Synphot comparison results were computed with r1j2146sm_tmc.fits"
 #Synphot comparison results are identified with the varname synphot_ref.
 
 #Also set the version of Vega for similar reasons
 locations.VegaFile=os.path.join(testdir,
                                 'alpha_lyr_stis_002.fits')
-print "Using Vega spectrum: %s"%locations.VegaFile
+print "Using Vega spectrum: %s" % locations.VegaFile
 
 accuracy = 1.0e-5    # default floating point comparison accuracy
 etc.debug = 0        # supress messages from ETC-support tasks

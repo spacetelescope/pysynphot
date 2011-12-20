@@ -6,7 +6,7 @@ import math
 import numpy as N
 import pyfits
 import testutil 
-from pysynphot import units, locations, spectrum, observationmode
+from pysynphot import units, locations, spectrum, refs
 from pysynphot.obsbandpass import ObsBandpass
 import pysynphot as S
 
@@ -157,9 +157,9 @@ class FSSTestCase(testutil.FPTestCase):
 class BandTestCase(testutil.FPTestCase):
     def setUp(self):
         cmptb_name=os.path.join('mtab','r1j2146sm_tmc.fits')
-        observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+        refs.COMPTABLE = locations._refTable(cmptb_name)
         print "ui_Test.BandTests:"
-        print "  Tests are being run with comptable",observationmode.COMPTABLE
+        print "  Tests are being run with comptable",refs.COMPTABLE
         print "  Comparison results were computed with r1j2146sm_tmc.fits"
         
     def testomfail(self):

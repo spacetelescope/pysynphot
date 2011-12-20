@@ -3,7 +3,7 @@ import os
 import testutil
 import pysynphot as S
 from pysynphot import etc
-from pysynphot import locations
+from pysynphot import locations, refs
 
         
 class ETCTestCase(testutil.FPTestCase):
@@ -18,7 +18,7 @@ class ETCTestCase(testutil.FPTestCase):
         self.setup2()
         self.tda=dict(obsmode=self.obsmode,
                       spectrum=self.spectrum)
-        self.tda.update(S.observationmode.getref())
+        self.tda.update(refs.getref())
 
     def setup2(self):
         try:

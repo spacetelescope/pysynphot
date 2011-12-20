@@ -1,13 +1,12 @@
 from __future__ import division
 import etctest_base_class 
-from pysynphot.etc import parse_spec
-from pysynphot import ObsBandpass
-from pysynphot import observationmode #to check on comptable
+from pysynphot.spparser import parse_spec
+from pysynphot import ObsBandpass, refs
 import testutil
 import sys,os
 
-print "%s:"%os.path.basename(__file__)
-print "   Tests are being run with %s"%observationmode.COMPTABLE
+print "%s:" % os.path.basename(__file__)
+print "   Tests are being run with %s" % refs.COMPTABLE
 print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
 
 
