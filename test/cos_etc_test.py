@@ -242,7 +242,7 @@ class SpectrumTestCase(testutil.FPTestCase):
 class PlanckTestCase(testutil.FPTestCase):
     def testbb(self):
         flux = planck.bb_photlam_arcsec(refs._default_waveset, 1000.)
-        self.assertApproxFP(flux[5000], 3.91911e-08, accuracy=0.0025)
+        self.assertApproxFP(flux[5000], 3.89141e-08, accuracy=0.0025)
 
 
 class ObsmodeTestCase(testutil.FPTestCase):
@@ -290,7 +290,7 @@ class FunctionTestCase(testutil.FPTestCase):
         sp = sp * box
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertApproxFP(fluxes.sum(), 21., accuracy=0.0025)
+        self.assertApproxFP(fluxes.sum(), 20., accuracy=0.0025)
 
     def testmult2(self):
         sp = spectrum.FlatSpectrum(1.0,fluxunits='flam')
@@ -298,7 +298,7 @@ class FunctionTestCase(testutil.FPTestCase):
         sp = sp * box
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertApproxFP(fluxes.sum(), 5.8143e+12, accuracy=0.0025)
+        self.assertApproxFP(fluxes.sum(), 5.53744e+12, accuracy=0.0025)
 
 class ParserTestCase(testutil.FPTestCase):
     def setUp(self):
@@ -333,7 +333,7 @@ class ParserTestCase(testutil.FPTestCase):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertApproxFP(fluxes.sum(), 5.8143e+12, accuracy=0.0025)
+        self.assertApproxFP(fluxes.sum(), 5.53744e+12, accuracy=0.0025)
 
     def testmult2(self):
         expr = "(unit(1,flam) * box(5500.0,20.0))"

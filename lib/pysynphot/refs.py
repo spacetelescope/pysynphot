@@ -21,11 +21,7 @@ def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
                         delta=None, log=True):
     """
     Set the default waveset for pysynphot spectral types. Calculated wavesets
-    are inclusive of `minwave` and `maxwave`.
-    
-    When a waveset is specified using the `delta` parameter the waveset is
-    calculated such that the ends are exactly `minwave` and `maxwave` and
-    points are evenly distributed with spacing as close to `delta` as possible.
+    are inclusive of `minwave` and exclusive of `maxwave`.
     
     Parameters
     ----------
@@ -43,11 +39,6 @@ def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
         Delta between values in the waveset. If not None, this overrides
         the `num` parameter. If `log` is True then `delta` is assumed to be
         the spacing in log space.
-        
-        The waveset may not have a spacing of exactly `delta`. Rather,
-        the waveset is calculated such that the value separation is as close to
-        `delta` as possible while being evenly spaced and including the
-        end points.
         
     log : bool, optional
         Sets whether the waveset is evenly spaced in log or linear space. If
@@ -67,7 +58,7 @@ def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
         logmin = np.log10(minwave)
         logmax = np.log10(maxwave)
         
-        _default_waveset = np.logspace(logmin,logmax,num)
+        _default_waveset = np.logspace(logmin, logmax, num, endpoint=False)
         
     elif log and delta:
         s = s % tuple([str(x) for x in (minwave, maxwave, None, delta, log)])
@@ -75,21 +66,17 @@ def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
         logmin = np.log10(minwave)
         logmax = np.log10(maxwave)
         
-        num = np.round((logmax - logmin) / delta) + 1
-        
-        _default_waveset = np.logspace(logmin,logmax,num)
+        _default_waveset = 10 ** np.arange(logmin, logmax, delta)
         
     elif not log and not delta:
         s = s % tuple([str(x) for x in (minwave, maxwave, num, None, log)])
     
-        _default_waveset = np.linspace(minwave,maxwave,num)
+        _default_waveset = np.linspace(minwave, maxwave, num, endpoint=False)
         
     elif not log and delta:
         s = s % tuple([str(x) for x in (minwave, maxwave, None, delta, log)])
     
-        num = np.round((maxwave - minwave) / delta) + 1
-        
-        _default_waveset = np.linspace(minwave,maxwave,num)
+        _default_waveset = np.arange(minwave, maxwave, delta)
         
     _default_waveset_str = s
 
