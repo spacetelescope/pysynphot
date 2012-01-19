@@ -386,19 +386,33 @@ class SourceSpectrum(Integrator):
         return self.trapezoidIntegration(wave,flux)
 
 
-    def sample(self,wave):
+    def sample(self,wave, interp=True):
         """Return a flux array, in self.fluxunits, on the provided
         wavetable"""
-        # convert input wavelengths to Angstroms since the __call__ method
-        # will be expecting that
-        angwave = self.waveunits.ToAngstrom(wave)
-        
-        #First use the __call__ to get it in photlam
-        flux = self(angwave)
-        
-        #Then convert to the desired units
-        ans = units.Photlam().Convert(angwave,flux,self.fluxunits.name)
-        
+        if interp:
+            # convert input wavelengths to Angstroms since the __call__ method
+            # will be expecting that
+            angwave = self.waveunits.ToAngstrom(wave)
+
+            #First use the __call__ to get it in photlam
+            flux = self(angwave)
+
+            #Then convert to the desired units
+            ans = units.Photlam().Convert(angwave,flux,self.fluxunits.name)
+
+        else:
+            # Get the arrays in the proper units
+            wave_array, flux_array = self.getArrays()
+            if N.isscalar(wave):
+                # Find the correct index
+                diff = abs(wave-wave_array)
+                idx = diff.argmin()
+
+                ans = flux_array[idx]
+
+            else:
+                raise NotImplementedError("Interp=False not yet supported for non-scalars")
+
         return ans
 
     def convert(self, targetunits):
@@ -605,6 +619,9 @@ class TabularSourceSpectrum(SourceSpectrum):
             return tmp._fluxtable[1]
         else:
             return self.resample(wavelengths)._fluxtable
+
+
+    
 
 
     def taper(self):
