@@ -1,1 +1,0 @@
-Finished out the rest of the bandpar things and added a reference for the wfpc2 instrument handbook.
