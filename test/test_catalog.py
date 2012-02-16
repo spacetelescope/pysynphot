@@ -12,7 +12,7 @@ import pysynphot.exceptions as exceptions
 class ICatK93Test(testutil.FPTestCase):
   def setUp(self):
     self.sp = S.Icat('k93models', 6440, 0, 4.3)
-    
+
   def test_wave(self):
     ref_wave1 = \
         np.array([  90.90000153,   93.50000763,   96.09999847,   97.70000458,
@@ -28,9 +28,9 @@ class ICatK93Test(testutil.FPTestCase):
         216.20001221,  219.80000305,  223.        ,  226.80000305,
         230.        ,  234.        ,  240.        ,  246.5       ,
         252.3999939 ,  256.80001831], dtype=np.float32)
-        
+
     self.assertApproxNumpy(self.sp.wave[:50], ref_wave1)
-    
+
     ref_wave2 = \
         np.array([   83800.,    84200.,    84600.,    85000.,    85400.,    85800.,
           86200.,    86600.,    87000.,    87400.,    87800.,    88200.,
@@ -41,18 +41,18 @@ class ICatK93Test(testutil.FPTestCase):
           98200.,    98600.,    99000.,    99400.,    99800.,   100200.,
          200000.,   400000.,   600000.,   800000.,  1000000.,  1200000.,
         1400000.,  1600000.], dtype=np.float32)
-        
+
     self.assertApproxNumpy(self.sp.wave[-50:], ref_wave2)
-    
+
   def test_flux(self):
     ref_flux1 = \
         np.array([ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
         0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
         0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,
         0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.])
-        
+
     self.assertEqualNumpy(self.sp.flux[:50], ref_flux1)
-    
+
     ref_flux2 = \
         np.array([  2.52510792e+03,   2.47883842e+03,   2.43311637e+03,
          2.38843415e+03,   2.34455095e+03,   2.30190141e+03,
@@ -71,7 +71,7 @@ class ICatK93Test(testutil.FPTestCase):
          8.04744247e+01,   5.03657385e+00,   9.88851448e-01,
          3.10885179e-01,   1.26599425e-01,   6.07383728e-02,
          3.26344365e-02,   1.90505413e-02])
-         
+
     self.assertApproxNumpy(self.sp.flux[-50:], ref_flux2)
 
 
@@ -80,45 +80,68 @@ class ICatK93Test(testutil.FPTestCase):
 class TestIcatExceptions(testutil.FPTestCase):
   def test_logG_out_high(self):
     self.assertRaises(exceptions.ParameterOutOfBounds,S.Icat,'k93models', 6440, 0, 10)
-    
+
   def test_logG_out_low(self):
     self.assertRaises(exceptions.ParameterOutOfBounds,S.Icat,'k93models', 6440, 0, -1)
-    
+
   def test_Teff_out_high(self):
     self.assertRaises(exceptions.ParameterOutOfBounds,S.Icat,'k93models', 1.e6, 0, 4.3)
-    
+
   def test_Teff_out_low(self):
     self.assertRaises(exceptions.ParameterOutOfBounds,S.Icat,'k93models', 100, 0, 4.3)
-    
+
   def test_metallicity_out_high(self):
     self.assertRaises(exceptions.ParameterOutOfBounds,S.Icat,'k93models', 6440, 2, 4.3)
-    
+
   def test_metallicity_out_low(self):
     self.assertRaises(exceptions.ParameterOutOfBounds,S.Icat,'k93models', 6440, -6, 4.3)
-    
+
 
 # test changes for ticket #131
 # test that the Cache.CATALOG_CACHE variable works as intended.
 class TestCatalogCache(testutil.FPTestCase):
   def test_things_in_cache(self):
+
+    fail = False
+    self.tra = { }
+
     Cache.reset_catalog_cache()
-    
+
     sp = S.Icat('k93models', 6440, 0, 4.3)
-    
+
     self.assertTrue(len(Cache.CATALOG_CACHE) == 1)
-    
+
     k = Cache.CATALOG_CACHE.keys()[0]
-    
-    self.assertTrue(k.endswith('/grid/k93models/catalog.fits'))
-    
-    self.assertTrue(isinstance(Cache.CATALOG_CACHE[k],list))
-    
+
+    from pysynphot.locations import irafconvert
+    import os.path
+    f = irafconvert("$PYSYN_CDBS/grid/k93models/catalog.fits")
+    f = os.path.normpath(f)
+    f = os.path.normcase(f)
+
+    fixed_k = os.path.normpath(k)
+    fixed_k = os.path.normcase(fixed_k)
+
+    if fixed_k != f :
+        self.tra['cache_found'] = k
+        self.tra['cache_found_fixed'] = fixed_k
+        self.tra['cache_expect'] = f
+        fail = True
+
+    if not isinstance(Cache.CATALOG_CACHE[k],list) :
+        self.tra['cache_type_mismatch'] = str(type(Cache.CATALOG_CACHE[k]))
+        fail = True
+
+    if fail :
+        raise AssertionError()
+
   def test_reset_catalog_cache(self):
     sp = S.Icat('k93models', 6440, 0, 4.3)
-    
+
     self.assertTrue(len(Cache.CATALOG_CACHE) != 0)
-    
+
     Cache.reset_catalog_cache()
-    
+
     self.assertTrue(len(Cache.CATALOG_CACHE) == 0)
-    
+
+
