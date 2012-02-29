@@ -129,14 +129,14 @@ class Gal2(_ExtinctionLaw):
     citation = 'Savage & Mathis 1979 (ARA&A 17:73)'
     name = 'gal2'
     def __init__(self, extval):
-        raise NotImplementedError("Sorry, %s is not yet implemented"%self.name)
+        raise NotImplementedError("Sorry, %s is not yet implemented" % self.name)
     
 class Gal3(_ExtinctionLaw):
     citation='Cardelli, Clayton & Mathis 1989 (ApJ 345:245)'
     name='gal3'
 
     def __init__(self, extval):
-        raise NotImplementedError("Sorry, %s is not yet implemented"%self.name)
+        raise NotImplementedError("Sorry, %s is not yet implemented" % self.name)
 
 
 class Smc(_ExtinctionLaw):

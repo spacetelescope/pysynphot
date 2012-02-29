@@ -237,13 +237,19 @@ class SourceSpectrum(Integrator):
         '''Returns wavelength and flux arrays as a tuple, performing
            units conversion.
         '''
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+        
         wave = self.GetWaveSet();
         flux = self(wave)
 
-        flux = units.Photlam().Convert(wave, flux, self.fluxunits.name)
+        flux = units.Photlam().Convert(wave, flux,
+                                        self.fluxunits.name, area=area)
         wave = units.Angstrom().Convert(wave, self.waveunits.name)
 
-        return (wave, flux)
+        return wave, flux
 
     #Define properties for consistent UI
     def _getWaveProp(self):
@@ -254,8 +260,8 @@ class SourceSpectrum(Integrator):
         wave,flux=self.getArrays()
         return flux
 
-    wave=property(_getWaveProp,doc="Wavelength property")
-    flux=property(_getFluxProp,doc="Flux property")
+    wave=property(_getWaveProp, doc="Wavelength property")
+    flux=property(_getFluxProp, doc="Flux property")
 
     def validate_units(self):
         "Ensure that waveunits are WaveUnits and fluxunits are FluxUnits"
@@ -389,16 +395,23 @@ class SourceSpectrum(Integrator):
     def sample(self,wave, interp=True):
         """Return a flux array, in self.fluxunits, on the provided
         wavetable"""
+        
         if interp:
             # convert input wavelengths to Angstroms since the __call__ method
             # will be expecting that
             angwave = self.waveunits.ToAngstrom(wave)
-
+            
             #First use the __call__ to get it in photlam
             flux = self(angwave)
-
+            
+            if hasattr(self, 'primary_area'):
+                area = self.primary_area
+            else:
+                area = None
+            
             #Then convert to the desired units
-            ans = units.Photlam().Convert(angwave,flux,self.fluxunits.name)
+            ans = units.Photlam().Convert(angwave, flux,
+                                          self.fluxunits.name, area=area)
 
         else:
             # Get the arrays in the proper units
@@ -422,6 +435,7 @@ class SourceSpectrum(Integrator):
         units. Method getArrays does the actual computation.
         '''
         nunits = units.Units(targetunits)
+        
         if nunits.isFlux:
             self.fluxunits = nunits
         else:
@@ -481,11 +495,14 @@ class CompositeSourceSpectrum(SourceSpectrum):
         self.component1 = source1
         self.component2 = source2
         self.operation = operation
-        self.name=str(self)
+        
+        self.name = str(self)
+        
         #Propagate warnings
         self.warnings={}
         self.warnings.update(source1.warnings)
         self.warnings.update(source2.warnings)
+        
         # for now we keep these attributes here, in spite of the internal
         # units model. There is code that still breaks down if these attributes
         # are not here.
@@ -497,10 +514,40 @@ class CompositeSourceSpectrum(SourceSpectrum):
             self.fluxunits = source2.fluxunits
 
         self.isAnalytic = source1.isAnalytic and source2.isAnalytic
+        
+        # check areas
+        if hasattr(source1, 'primary_area'):
+            source1_area = source1.primary_area
+        else:
+            source1_area = None
+        
+        if hasattr(source2, 'primary_area'):
+            source2_area = source2.primary_area
+        else:
+            source2_area = None
+        
+        if not source1_area and not source2_area:
+            self.primary_area = None
+        
+        elif source1_area and not source2_area:
+            self.primary_area = source1_area
+        
+        elif not source1_area and source2_area:
+            self.primary_area = source2_area
+        
+        else:
+            if source1_area == source2_area:
+                self.primary_area = source1_area
+            
+            else:
+                err = 'Components have different area attributes: %s: %f, %s: %f'
+                err = err % (str(source1), source1_area,
+                             str(source2), source2_area)
+                raise exceptions.IncompatibleSources(err)
 
     def __str__(self):
         opdict = {'add':'+','multiply':'*'}
-        return "%s %s %s"%(str(self.component1),opdict[self.operation],str(self.component2))
+        return "%s %s %s" % (str(self.component1),opdict[self.operation],str(self.component2))
 
     def __call__(self, wavelength):
         '''Add or multiply components, delegating the function calculation
@@ -508,6 +555,7 @@ class CompositeSourceSpectrum(SourceSpectrum):
         '''
         if self.operation == 'add':
             return self.component1(wavelength) + self.component2(wavelength)
+        
         if self.operation == 'multiply':
             return self.component1(wavelength) * self.component2(wavelength)
 
@@ -706,12 +754,22 @@ class TabularSourceSpectrum(SourceSpectrum):
         '''Convert to the internal representation of (angstroms, photlam).
         '''
         self.validate_units()
+        
         savewunits = self.waveunits
         savefunits = self.fluxunits
+        
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+        
         angwave = self.waveunits.Convert(self.GetWaveSet(), 'angstrom')
-        phoflux = self.fluxunits.Convert(angwave, self._fluxtable, 'photlam')
+        phoflux = self.fluxunits.Convert(angwave, self._fluxtable, 'photlam',
+                                          area=area)
+        
         self._wavetable = angwave.copy()
         self._fluxtable = phoflux.copy()
+        
         self.waveunits = savewunits
         self.fluxunits = savefunits
 
@@ -887,9 +945,14 @@ class GaussianSource(AnalyticSpectrum):
         # calculate flux
         flux = self.factor * \
                 N.exp(-0.5 * ((wave - self.center) / self.sigma)**2)
+        
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
                 
         # convert flux to photlam before returning
-        return self._input_flux_units.ToPhotlam(wave,flux)
+        return self._input_flux_units.ToPhotlam(wave, flux, area=area)
 
     def GetWaveSet(self):
         '''Return a wavelength set that describes the Gaussian.
@@ -928,7 +991,12 @@ class FlatSpectrum(AnalyticSpectrum):
         # attribute in photlam
         wave = units.Angstrom().Convert(wavelength,self.waveunits.name)
         
-        return self._input_flux_units.ToPhotlam(wave,flux)
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+        
+        return self._input_flux_units.ToPhotlam(wave, flux, area=area)
 
 
     def redshift(self, z):
@@ -979,8 +1047,13 @@ class Powerlaw(AnalyticSpectrum):
         
         flux = (wave / self._refwave) ** self._index
         
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+        
         # convert flux to photlam before returning
-        return self._input_flux_units.ToPhotlam(wave,flux)
+        return self._input_flux_units.ToPhotlam(wave, flux, area=area)
         
 
 class BlackBody(AnalyticSpectrum):
@@ -1265,9 +1338,11 @@ class SpectralElement(Integrator):
         else:
             return self.resample(wavelengths)._throughputtable
 
-    def sample(self, wavelengths):
+    def sample(self, wave):
         """Provide a more normal user interface to the __call__"""
-        return self.__call__(wavelengths)
+        angwave = self.waveunits.ToAngstrom(wave)
+        
+        return self.__call__(angwave)
 
 
     def taper(self):
@@ -1452,11 +1527,16 @@ class SpectralElement(Integrator):
         
         """
         hc = units.HC
-        area = refs.HSTAREA
+        
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = refs.PRIMARY_AREA
         
         wave = self.GetWaveSet()
         thru = self(wave)
-        return hc / (area * self.trapezoidIntegration(wave,thru*wave))
+        
+        return hc / (area * self.trapezoidIntegration(wave, thru*wave))
 
 
     def GetWaveSet(self):
@@ -1491,19 +1571,55 @@ class CompositeSpectralElement(SpectralElement):
         if (not isinstance(component1, SpectralElement) or
             not isinstance(component2, SpectralElement)):
             raise TypeError("Arguments must be SpectralElements")
+        
         self.component1 = component1
         self.component2 = component2
+        
         self.isAnalytic = component1.isAnalytic and component2.isAnalytic
+        
         if component1.waveunits.name == component2.waveunits.name:
             self.waveunits = component1.waveunits
         else:
             msg="Components have different waveunits (%s and %s)"%(component1.waveunits,component2.waveunits)
             raise NotImplementedError(msg)
+        
         self.throughputunits = None
+        
         self.name="(%s * %s)"%(str(self.component1),str(self.component2))
+        
         self.warnings={}
         self.warnings.update(component1.warnings)
         self.warnings.update(component2.warnings)
+        
+         # check areas
+        if hasattr(component1, 'primary_area'):
+            comp1_area = component1.primary_area
+        else:
+            comp1_area = None
+        
+        if hasattr(component2, 'primary_area'):
+            comp2_area = component2.primary_area
+        else:
+            comp2_area = None
+        
+        if not comp1_area and not comp2_area:
+            self.primary_area = None
+        
+        elif comp1_area and not comp2_area:
+            self.primary_area = comp1_area
+        
+        elif not comp1_area and comp2_area:
+            self.primary_area = comp2_area
+        
+        else:
+            if comp1_area == comp2_area:
+                self.primary_area = comp1_area
+            
+            else:
+                err = 'Components have different area attributes: %s: %f, %s: %f'
+                err = err % (str(component1), comp1_area,
+                             str(component2), comp2_area)
+                raise exceptions.IncompatibleSources(err)
 
     def __call__(self, wavelength):
         '''This is where the throughput calculation is delegated.
@@ -1677,7 +1793,7 @@ class ArraySpectralElement(TabularSpectralElement):
         @param name: Description of this spectral element
         @type name: string
         """
-        if len(wave)!=len(throughput):
+        if len(wave) != len(throughput):
             raise ValueError("wave and throughput arrays must be of equal length")
 
         self._wavetable=wave

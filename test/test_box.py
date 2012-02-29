@@ -36,7 +36,7 @@ class Ticket114(unittest.TestCase):
 
     def testinside(self):
         ref = 1.0
-        tst = self.bp.sample(5000)
+        tst = self.bp.sample(500)
         self.assertEquals(ref,tst)
         
 

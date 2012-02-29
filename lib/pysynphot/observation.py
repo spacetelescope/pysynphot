@@ -176,10 +176,16 @@ class Observation(spectrum.CompositeSourceSpectrum):
     def _getBinfluxProp(self):
         if self._binflux is None:
             self.initbinflux()
+        
+        if hasattr(self.bandpass, 'primary_area'):
+            area = self.bandpass.primary_area
+        else:
+            area = None
             
         binflux = units.Photlam().Convert(self.binwave,
                                           self._binflux,
-                                          self.fluxunits.name)
+                                          self.fluxunits.name,
+                                          area=area)
         return binflux
     
     def _getBinwaveProp(self):

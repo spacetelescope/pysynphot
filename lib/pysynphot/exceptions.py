@@ -74,3 +74,8 @@ class ExtrapolationNotAllowed(PysynphotError):
 # Exceptions for catalog problems
 class ParameterOutOfBounds(PysynphotError):
     pass
+
+
+# if two sources in Composite* spectrum shouldn't go together
+class IncompatibleSources(PysynphotError):
+    pass

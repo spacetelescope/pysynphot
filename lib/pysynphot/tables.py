@@ -64,6 +64,9 @@ class GraphTable(object):
 
         gp = pyfits.open(GFile)
         
+        if 'PRIMAREA' in gp[0].header:
+            self.primary_area = gp[0].header['PRIMAREA']
+        
         self.keywords = gp[1].data.field('keyword')
         self.innodes = gp[1].data.field('innode')
         self.outnodes = gp[1].data.field('outnode')

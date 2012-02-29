@@ -32,7 +32,7 @@ class BaseObservationMode(object):
     ''' Class that handles the graph table, common to both optical and
     thermal obsmodes.
     '''
-    def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
+    def __init__(self, obsmode, method='HSTGraphTable', graphtable=None):
         #Strip "band()" syntax if present
         tmatch=re.search(r'band\((.*?)\)',obsmode,re.IGNORECASE)
         if tmatch:
@@ -42,11 +42,6 @@ class BaseObservationMode(object):
         if graphtable is None:
             graphtable = refs.GRAPHTABLE
 
-        self.area = refs.HSTAREA
-
-        # For sensitivity calculations: 5.03411762e7 is hc in
-        # the appropriate units
-        self._constant = 5.03411762e7 * self.area
         self.pardict={}
 
         modes = obsmode.lower().split(',')
@@ -71,7 +66,16 @@ class BaseObservationMode(object):
             
         self.gtname = graphtable
 
-        self.compnames,self.thcompnames = gt.GetComponentsFromGT(self.modes,1)
+        self.compnames, self.thcompnames = gt.GetComponentsFromGT(self.modes,1)
+        
+        if hasattr(gt, 'primary_area'):
+            self.primary_area = gt.primary_area
+        else:
+            self.primary_area = refs.PRIMARY_AREA
+        
+        # For sensitivity calculations: 5.03411762e7 is hc in
+        # the appropriate units
+        self._constant = 5.03411762e7 * self.primary_area
 
         self.components = None #Will be filled by subclasses
         self.pixscale = None

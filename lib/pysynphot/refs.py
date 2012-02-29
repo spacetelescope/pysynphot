@@ -15,7 +15,8 @@ COMPTABLE = ''
 COMPDICT = {}
 THERMTABLE = ''
 THERMDICT = {}
-HSTAREA = 45238.93416  # cm^2
+
+PRIMARY_AREA = 45238.93416  # cm^2 - default to HST mirror
 
 def set_default_waveset(minwave=500, maxwave=26000, num=10000., 
                         delta=None, log=True):
@@ -82,7 +83,7 @@ def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
 
 
 def _set_default_refdata():
-    global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA
+    global GRAPHTABLE, COMPTABLE, THERMTABLE, PRIMARY_AREA
     # Component tables are defined here.
 
     try:
@@ -100,7 +101,7 @@ def _set_default_refdata():
         print "Warning: %s" % str(e)
         print "         No thermal calculations can be performed."
 
-    HSTAREA = 45238.93416  # cm^2
+    PRIMARY_AREA = 45238.93416  # cm^2 - default to HST mirror
     
     set_default_waveset()
 
@@ -113,7 +114,7 @@ def setref(graphtable=None, comptable=None, thermtable=None,
     """provide user access to global reference data.
     Graph/comp/therm table names must be fully specified."""
 
-    global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA, GRAPHDICT, COMPDICT, THERMDICT
+    global GRAPHTABLE, COMPTABLE, THERMTABLE, PRIMARY_AREA, GRAPHDICT, COMPDICT, THERMDICT
     
     GRAPHDICT = {}
     COMPDICT = {}
@@ -138,7 +139,7 @@ def setref(graphtable=None, comptable=None, thermtable=None,
 
     #Area is a bit different:
     if area is not None:
-        HSTAREA = area
+        PRIMARY_AREA = area
     
     if waveset is not None:
         if len(waveset) not in (3,4):
@@ -169,7 +170,7 @@ def getref():
     ans=dict(graphtable=GRAPHTABLE,
              comptable=COMPTABLE,
              thermtable=THERMTABLE,
-             area=HSTAREA,
+             area=PRIMARY_AREA,
              waveset=_default_waveset_str)
     return ans
 

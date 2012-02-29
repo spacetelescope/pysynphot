@@ -45,8 +45,9 @@ class ObsModeBandpass(CompositeSpectralElement):
                                           ob.components[-1].throughput)
         
             
-        self.obsmode=ob
-        self.name=self.obsmode._obsmode #str(self.obsmode)
+        self.obsmode = ob
+        self.name = self.obsmode._obsmode #str(self.obsmode)
+        self.primary_area = ob.primary_area
 
         #Check for valid bounds
         self._checkbounds()
@@ -91,7 +92,7 @@ class ObsModeBandpass(CompositeSpectralElement):
         #Thermback is always provided in this non-standard set of units.
         #This code was copied from etc.py.
         ans = sp.integrate() * (self.obsmode.pixscale**2 *
-                                self.obsmode.area)
+                                self.obsmode.primary_area)
         return ans
         
     def pixel_range(self, waverange, waveunits=None, round='round'):

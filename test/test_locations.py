@@ -19,3 +19,16 @@ def test_get_RedLaws():
               
   for name in shouldbe:
     assert shouldbe[name] == os.path.basename(locations.RedLaws[name])
+
+# test that we can add a new conversion to the CONVERTDICT and 
+# irafconvert will find and use it.
+def test_CONVERTDICT():
+  import pysynphot.locations as locations
+  
+  locations.CONVERTDICT['testjref'] = './data/cdbs/jref/'
+  
+  refpath = './data/cdbs/jref/empty_test_file.txt'
+  
+  filename = locations.irafconvert('testjref$empty_test_file.txt')
+  
+  assert refpath == filename

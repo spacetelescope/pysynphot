@@ -145,7 +145,7 @@ def thermback(parlist):
     omode=ObservationMode(d['obsmode'])
     sp=omode.ThermalSpectrum()
     #Possibly bundle this so we can just do omode.thermback()
-    ans = sp.integrate() * omode.pixscale**2 * omode.area
+    ans = sp.integrate() * omode.pixscale**2 * omode.primary_area
     return ans
 
 def updatetabs(dummy):

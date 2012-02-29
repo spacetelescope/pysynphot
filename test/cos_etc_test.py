@@ -249,7 +249,7 @@ class ObsmodeTestCase(testutil.FPTestCase):
 
     def test1(self):
         obsmode = observationmode.ObservationMode(values['obsmode'])
-        self.assertApproxFP(obsmode.area, values['hstarea'], accuracy=0.0025)
+        self.assertApproxFP(obsmode.primary_area, values['hstarea'], accuracy=0.0025)
         throughput = obsmode.Throughput()._throughputtable
         self.assertEqual(len(throughput), 11003)
         self.assertApproxFP(throughput[5000], 0.12232652011958853, accuracy=0.0025)

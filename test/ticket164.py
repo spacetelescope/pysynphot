@@ -104,7 +104,7 @@ class TestAreaChanges(unittest.TestCase):
     def testchange(self):
         ref=100
         setref(area=ref)
-        tst=refs.HSTAREA
+        tst=refs.PRIMARY_AREA
         self.assertEqual(ref,tst)
 
     def testcounts(self):
