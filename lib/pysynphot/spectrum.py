@@ -1171,8 +1171,22 @@ class SpectralElement(Integrator):
         return math.sqrt(num/den)
 
     def rmswidth(self, floor=0):
-        """Defines the lambda sub rms from Koornneef et al 1987,
-        p 836; should be definition of bandpar.bandw"""
+        """
+        Calculate the RMS width as in Koornneef et al 1987, p 836.
+        
+        Parameters
+        ----------
+        floor : float, optional
+            Points with throughputs below this threshold are not
+            included in the calculation. By default all points
+            are included.
+        
+        Returns
+        -------
+        rmswidth : float
+            RMS width of the bandpass.
+        
+        """
 
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
@@ -1195,6 +1209,61 @@ class SpectralElement(Integrator):
         else:
             ans = math.sqrt(num/den)
             return ans
+    
+    def photbw(self, floor=0):
+        """
+        This is a compatibility function allowing pysynphot to calculate
+        the bandpass RMS width in the same way as Synphot (documented
+        in the Synphot Manual section 5.1). This is the value returned
+        in the BANDW keyword by Synphot's bandpar function.
+        
+        This function is designed only for use to get the same results
+        as Synphot. To calculate the bandpass RMS width use the
+        `rmswidth` method.
+        
+        Parameters
+        ----------
+        floor : float, optional
+            Points with throughputs below this threshold are not
+            included in the calculation. By default all points
+            are included.
+        
+        Returns
+        -------
+        photbw : float
+            RMS width of the bandpass.
+        
+        """
+        mywaveunits = self.waveunits.name
+        self.convert('angstroms')
+
+        wave=self.wave
+        thru=self.throughput
+        self.convert(mywaveunits)
+        
+        # calculate the average wavelength
+        num = self.trapezoidIntegration(wave, thru * N.log(wave) / wave)
+        den = self.trapezoidIntegration(wave, thru / wave)
+        
+        if num == 0 or den == 0:
+            error_str = 'Could not calculate average wavelength of bandpass.'
+            raise exceptions.PysnphotErorr(error_str)
+        
+        avg_wave = N.exp(num/den)
+        
+        if floor != 0:
+            idx = N.where(thru >= floor)
+            wave = wave[idx]
+            thru = thru[idx]
+        
+        # calcualte the rms width
+        integrand = thru * N.log(wave / avg_wave)**2 / wave
+        num = self.trapezoidIntegration(wave, integrand)
+       
+        if num == 0 or den == 0:
+            return 0.0
+       
+        return avg_wave * N.sqrt(num/den)
 
     def rectwidth(self):
         """RECTW = INT(THRU) / MAX(THRU)"""
