@@ -84,13 +84,13 @@ class Observation(spectrum.CompositeSourceSpectrum):
                 self.spectrum=self.spectrum.taper()
             except AttributeError:
                 self.spectrum=self.spectrum.tabulate().taper()
-                self.warnings['PartialOverlap']=True
+                self.warnings['PartialOverlap']=force
                 
         elif force.lower().startswith('extrap'):
             #default behavior works, but check the overlap so we can set the warning
             stat=self.bandpass.check_overlap(self.spectrum)
             if stat == 'partial':
-                self.warnings['PartialOverlap']=True
+                self.warnings['PartialOverlap']=force
 
         else:
             raise(KeyError("Illegal value force=%s; legal values=('taper','extrap')"%force))
@@ -211,9 +211,15 @@ class Observation(spectrum.CompositeSourceSpectrum):
     #    (self.spectrum*self.bandpass) * other
     #
     def __mul__(self, other):
+        # If the original object has partial overlap warnings, then
+        # the forcing behavior also needs to be propagated.
+
+        force = self.warnings.get('PartialOverlap', None)
+      
         result = Observation(self.spectrum,
-                                 self.bandpass * other,
-                                 binset=self.binset
+                             self.bandpass * other,
+                             binset=self.binset
+                             force=force
                                  )
         return result
       
