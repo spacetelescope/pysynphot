@@ -218,7 +218,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
       
         result = Observation(self.spectrum,
                              self.bandpass * other,
-                             binset=self.binset
+                             binset=self.binset,
                              force=force
                                  )
         return result
