@@ -72,5 +72,5 @@ else :
     # to create it again when we install.  The old library will create it
     # again in the wrong place, but we don't care.
     import stsci.tools.stsci_distutils_hack
-    stsci.tools.stsci_distutils_hack.__set_svn_version__( fname="pysynphot/svn_version.py" )
+    stsci.tools.stsci_distutils_hack.__set_svn_version__( fname="svn_version.py" )
 
