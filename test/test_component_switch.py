@@ -16,13 +16,19 @@ class TestCompSwitch(TestCase):
     def setUp(self):
         self.cdbs = os.environ['PYSYN_CDBS']
 
+        graphtab = os.path.join('mtab','u921351jm_tmg.fits')
+        refs.GRAPHTABLE = locations._refTable(graphtab)
+
+    def tearDown(self):
+        refs.setref()
+
     def test_one(self):
         throughput_list = ['comp/ota/hst_ota_007_syn.fits',
-                       'comp/acs/acs_hrc_m12_005_syn.fits',
-                       'comp/acs/acs_hrc_m3_005_syn.fits',
-                       'comp/acs/acs_f435w_005_syn.fits',
-                       'comp/acs/acs_hrc_win_005_syn.fits',
-                       'comp/acs/acs_hrc_ccd_013_syn.fits']
+                           'comp/acs/acs_hrc_m12_005_syn.fits',
+                           'comp/acs/acs_hrc_m3_005_syn.fits',
+                           'comp/acs/acs_f435w_005_syn.fits',
+                           'comp/acs/acs_hrc_win_005_syn.fits',
+                           'comp/acs/acs_hrc_ccd_013_syn.fits']
 
         for i,f in enumerate(throughput_list):
             throughput_list[i] = os.path.join(self.cdbs,f)
@@ -32,21 +38,19 @@ class TestCompSwitch(TestCase):
 
         obs = observationmode.ObservationMode('acs,hrc,f435w')
 
-        n = self.check_list( 
-            [ c.throughput_name for c in obs.components ],
-            throughput_list 
-            )
+        n = self.check_list(throughput_list,
+                            [c.throughput_name for c in obs.components])
 
-        if n :
+        if n:
             raise AssertionError(n)
 
     def test_two(self):
         throughput_list = ['comp/ota/hst_ota_007_syn.fits',
-                       'comp/acs/acs_hrc_m12_005_syn.fits',
-                       'comp/acs/acs_hrc_m3_005_syn.fits',
-                       'comp/acs/acs_f435w_004_syn.fits',
-                       'comp/acs/acs_hrc_win_005_syn.fits',
-                       'comp/acs/acs_hrc_ccd_011_syn.fits']
+                           'comp/acs/acs_hrc_m12_005_syn.fits',
+                           'comp/acs/acs_hrc_m3_005_syn.fits',
+                           'comp/acs/acs_f435w_004_syn.fits',
+                           'comp/acs/acs_hrc_win_005_syn.fits',
+                           'comp/acs/acs_hrc_ccd_011_syn.fits']
 
         for i,f in enumerate(throughput_list):
             throughput_list[i] = os.path.join(self.cdbs,f)
@@ -56,12 +60,10 @@ class TestCompSwitch(TestCase):
 
         obs = observationmode.ObservationMode('acs,hrc,f435w')
 
-        n = self.check_list( 
-            [ c.throughput_name for c in obs.components ],
-            throughput_list 
-            )
+        n = self.check_list(throughput_list,
+                            [c.throughput_name for c in obs.components])
 
-        if n :
+        if n:
             raise AssertionError(n)
 
     def check_list( self, expect_list, in_list ) :
