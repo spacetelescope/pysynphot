@@ -8,22 +8,22 @@ def _refTable(template):
         names = glob.glob(os.path.join(os.environ['PYSYN_CDBS'], template))
         names.sort()
     except KeyError:
-        warnings.warn("PYSYN_CDBS is undefined; cannot find %s file"%template,
-                      UserWarning)
+        warnings.warn("PYSYN_CDBS is undefined; cannot find %s file" % template)
         return None
 
     try:
         return names[-1]
     except IndexError:
-        msg= "No files found for %s."%os.path.join(os.environ['PYSYN_CDBS'],
-                                                   template)
+        msg= "No files found for %s." % os.path.join(os.environ['PYSYN_CDBS'],
+                                                     template)
         raise IOError(msg)
 
 #Replace cdbs_roots lookup with an environment variable
 try:
     rootdir = os.environ['PYSYN_CDBS']
 except KeyError:
-    warnings.warn("PYSYN_CDBS is undefined; functionality will be SEVERELY crippled.",UserWarning)
+    warnings.warn('PYSYN_CDBS is undefined; '
+                  'functionality will be SEVERELY crippled.')
     rootdir = ''
 
 #Data directory is now installed locally
@@ -37,20 +37,39 @@ KUR_TEMPLATE = os.path.join(rootdir,'grid','*')
 #Vega
 VegaFile = os.path.join(specdir,'alpha_lyr_stis_005.fits')
 
+# CDBS is moving extinction files to $PYSYN_CDBS/extinction so here we
+# test whether that location exists and use it if it does.
+# If it doesn't exist we use the old location $PYSYN_CDBS/grid/extinction
+# and print a warning.
+if os.path.exists(os.path.join(rootdir, 'extinction')) and \
+   os.path.isdir(os.path.join(rootdir, 'extinction')):
+    EXTDIR = 'extinction'
 
-extdir = os.path.join('grid','extinction')
+else:
+    EXTDIR = os.path.join('grid','extinction')
+
+    warnings.warn('Extinction files should be moved to '
+                  '$PYSYN_CDBS/extinction for compatibility with '
+                  'future versions of pysynphot.')
+
 RedLaws = {}
 
 def _get_RedLaws():
     global RedLaws
 
-    # get all the fits files in $PYSYN_CDBS/grid/extinction/
-    globstr = os.path.join(rootdir,extdir,'*.fits')
+    extdir = os.path.join(rootdir, EXTDIR)
+
+    # get all the fits files in EXTDIR
+    globstr = os.path.join(extdir, '*.fits')
     files = glob.glob(globstr)
+
+    if not files:
+        warnings.warn('Extinction files not found in %s' % (extdir,))
+        return
 
     # replace ###.fits at the end of file names with *.fits
     # and get a unique set
-    files = set([f[:-8] + '*.fits' for f in files])
+    files = set(f[:-8] + '*.fits' for f in files)
 
     # use _refTable to get the most recent version of each extinction file
     # and add that to the RedLaws dict
@@ -63,20 +82,6 @@ def _get_RedLaws():
 
 # load the extintion law file names
 _get_RedLaws()
-
-#RedLaws={'mwavg':   'milkyway_diffuse_*.fits',
-#         'mwdense': 'milkyway_dense_*.fits',
-#         'lmcavg':  'lmc_diffuse_*.fits',
-#         'lmc30dor':'lmc_30dorshell_*.fits',
-#         'smcbar':  'smc_bar_*.fits',
-#         'xgalsb':  'xgal_starburst_*.fits'
-#           }
-#
-#for k in RedLaws:
-#    try:
-#        RedLaws[k]=_refTable(os.path.join(extdir,RedLaws[k]))
-#    except IOError,e:
-#        print 'Cannot open %s: %s'%(RedLaws[k],str(e))
 
 
 #Define wavecat file explicitly
