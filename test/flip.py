@@ -5,7 +5,7 @@ import testutil
 import pysynphot as S
 import numpy as N
 from pysynphot.units import Units
-from pysynphot import extinction, spectrum, units, etc, reddening
+from pysynphot import extinction, spectrum, units, spparser, reddening
 
 class FlipTest(testutil.FPTestCase):
     def setUp(self):

@@ -1,7 +1,7 @@
 import unittest
 import os
 from pysynphot.locations import irafconvert
-from pysynphot.etc import parse_spec
+from pysynphot.spparser import parse_spec
 
 class Ticket52(unittest.TestCase):
 

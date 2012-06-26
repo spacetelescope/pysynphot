@@ -9,7 +9,7 @@ from pysynphot import spectrum, observationmode, exceptions
 from pysynphot import locations, refs
 from pysynphot import spparser as P
 from pysynphot import units, planck
-from pysynphot import etc
+from pysynphot import spparser
 from pysynphot.observation import Observation
 from pysynphot import renorm
 import pysynphot as S
@@ -38,7 +38,7 @@ locations.VegaFile=os.path.join(testdir,
 print "Using Vega spectrum: %s" % locations.VegaFile
 
 accuracy = 1.0e-5    # default floating point comparison accuracy
-etc.debug = 0        # suppress messages from ETC-support tasks
+
 
 testindex = 0
 # spectrum values @ testindex
@@ -357,7 +357,7 @@ class ParserTestCase(testutil.FPTestCase):
 
     def testzeroang(self):
         self.assertRaises(exceptions.ZeroWavelength,
-                          etc.parse_spec,
+                          spparser.parse_spec,
                           'spec(zeroang.dat)')
         
 
@@ -635,19 +635,6 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
     def tearDown(self):
         os.chdir(self.oldpath)
 
-class ETCTestCase_Spec3(testutil.FPTestCase):
-    def setUp(self):
-        self.oldpath=os.path.abspath(os.curdir)
-        os.chdir(locations.specdir)
-        
-    def tearDown(self):
-        os.chdir(self.oldpath)
-    def test4(self):
-        spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
-        instrument = "instrument=cos,fuv,g130m,c1309"
-        parameters = [spectrum, instrument]
-        countrate = etc.specrate(parameters)
-        self.assertApproxFP(float(countrate.split(';')[0]), 26.5409, accuracy=0.0025)
 
 
 class IcatTestCase(testutil.FPTestCase):
@@ -821,12 +808,6 @@ class Ticket87(testutil.FPTestCase):
         self.assert_(self.sp.wave.min() == tst.wave.min(),"wave.min=%f"%tst.wave.min())
 
 
-
-class SrvParserTestCase(testutil.FPTestCase):
-    def testtermamp(self):
-        self.cgistring='SpecSourcerateSpec&spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"&instrument="cos,fuv,g130m,c1309"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV5.fits&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"&'
-        self.tokens=self.cgistring.split('&')
-        d=etc.getparms(self.tokens[1:])
 
     
 if __name__ == '__main__':

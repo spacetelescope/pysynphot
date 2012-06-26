@@ -6,7 +6,7 @@ import os
 
 import numpy as N
 import pysynphot as S
-from pysynphot import etc
+from pysynphot import spparser
 #For thermal classes only
 from pysynphot.observationmode import ObservationMode
 
@@ -83,7 +83,7 @@ class SpecCase(object):
         #All the data lives in a parallel directory, so go sit there
         #in case we need a file
             os.chdir(DATADIR)
-            cls.sp=etc.parse_spec(cls.spectrum)
+            cls.sp=spparser.parse_spec(cls.spectrum)
             os.chdir(HERE)
             cls.sp.writefits(cls.fname%kind, clobber=True,
                               trimzero=False)

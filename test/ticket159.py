@@ -2,7 +2,7 @@ from __future__ import division
 import os
 import testutil
 import pysynphot as S
-from pysynphot import etc
+from pysynphot import spparser
 from pysynphot import locations, refs
 
 class SuccessCase(testutil.FPTestCase):
@@ -54,7 +54,7 @@ class ParserRenormCase(testutil.FPTestCase):
                       file=S.__file__)
 
     def testwarn(self):
-        self.sp=etc.parse_spec(self.syncmd)
+        self.sp=spparser.parse_spec(self.syncmd)
         self.tra=dict(spwarn=str(self.sp.warnings),
                       name=str(self.sp))
         self.failIf('PartialRenorm' not in self.sp.warnings)
@@ -78,7 +78,7 @@ class ETCTestCase(testutil.FPTestCase):
         try:
             self.oldpath=os.path.abspath(os.curdir)
             os.chdir(locations.specdir)
-            self.sp=etc.parse_spec(self.spectrum)
+            self.sp=spparser.parse_spec(self.spectrum)
             self.bp=S.ObsBandpass(self.obsmode)
             self.parameters=["spectrum=%s"%self.spectrum,
                              "instrument=%s"%self.obsmode]
@@ -94,16 +94,6 @@ class ETCTestCase(testutil.FPTestCase):
         self.tra=dict(warnings=obs.warnings)
         self.assert_('PartialOverlap' in obs.warnings)
 
-    def testcrwarn(self):
-        ans=etc.countrate(self.parameters)
-        self.tra=dict(ans=ans)
-        self.assert_('partial' in ans[-1])
-
-    def testcountrate(self):
-        ans=etc.countrate(self.parameters)
-        q=(float(ans[0])-self.refrate)/self.refrate
-        self.tra=dict(ans=ans, discrep=q)
-        self.failIf(abs(q)>0.01)
 
 class TestComposite(testutil.FPTestCase):
     def setUp(self):

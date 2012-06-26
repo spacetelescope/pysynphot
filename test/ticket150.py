@@ -1,7 +1,7 @@
 from __future__ import division
 import pysynphot as S
 from pysynphot.observation import Observation
-from pysynphot import etc
+from pysynphot import spparser
 import os, sys
 import testutil
 import numpy as N
@@ -41,7 +41,7 @@ class RenormOverlap(testutil.FPTestCase):
         self.failUnless(N.all(1-abs(ratio/self.ref)<0.0001))
 
     def testparse(self):
-        sp2=S.etc.parse_spec(self.cmd)
+        sp2=S.spparser.parse_spec(self.cmd)
         ratio=sp2.flux/self.sp.flux
         self.failUnless(N.all(1-abs(ratio/self.ref)<0.0001))
 

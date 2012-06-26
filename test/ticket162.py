@@ -2,7 +2,7 @@ from __future__ import division
 import os
 import testutil
 import pysynphot as S
-from pysynphot import etc
+from pysynphot import spparser
 from pysynphot import locations, refs
 
         
@@ -24,7 +24,7 @@ class ETCTestCase(testutil.FPTestCase):
         try:
             self.oldpath=os.path.abspath(os.curdir)
             os.chdir(locations.specdir)
-            self.sp=etc.parse_spec(self.spectrum)
+            self.sp=spparser.parse_spec(self.spectrum)
             self.bp=S.ObsBandpass(self.obsmode)
             self.parameters=["spectrum=%s"%self.spectrum,
                              "instrument=%s"%self.obsmode,
@@ -39,16 +39,3 @@ class ETCTestCase(testutil.FPTestCase):
         obs=S.Observation(self.sp,self.bp,force='taper')
         self.assert_('PartialOverlap' in obs.warnings)
 
-    def testspecrate(self):
-        result=etc.specrate(self.parameters)
-        #ans structure is different
-        ans=result.split(';')
-        self.failUnless('partial' in ans[-1], 'error message: %s'%ans[-1])
-
-    def testcalcphot(self):
-        ans=etc.calcphot(self.parameters)
-        try:
-            self.failUnless('partial' in ans[-1])
-        except IndexError, e:
-            #Then we didn't get an error message: fail
-            self.fail('No error message generated')

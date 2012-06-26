@@ -1,7 +1,7 @@
 from __future__ import division
 import pysynphot as S
 from pysynphot.observation import Observation
-from pysynphot import etc
+from pysynphot import spparser
 import os, sys
 import testutil
 import numpy as N
@@ -68,7 +68,7 @@ class DiscoveryCase(OverlapBug):
     def setUp(self):
         fname=os.path.join(testdir,'qso_template.fits')
         self.spstring='rn(z(spec(%s),0.03),band(johnson,v),18,vegamag)' %fname
-        self.sp=etc.parse_spec(self.spstring)
+        self.sp=spparser.parse_spec(self.spstring)
         self.sp.convert('photlam')
         self.bp=S.ObsBandpass('stis,ccd,g750l,c7751,s52x02')
         self.refwave=6200
@@ -196,7 +196,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
        try:
             self.oldpath=os.path.abspath(os.curdir)
             os.chdir(locations.specdir)
-            self.sp=etc.parse_spec(self.spectrum)
+            self.sp=spparser.parse_spec(self.spectrum)
             self.bp=S.ObsBandpass(self.obsmode)
             self.parameters=["spectrum=%s"%self.spectrum,
                              "instrument=%s"%self.obsmode]
@@ -214,10 +214,6 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
                           S.Observation,
                           self.sp, self.bp)
 
-    def testrate(self):
-        tstrate=etc.countrate(self.parameters)
-        q=(float(tstrate[0])-self.refrate)/self.refrate
-        self.failIf(abs(q)>0.01)
 
         
     def tearDown(self):

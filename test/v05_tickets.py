@@ -5,7 +5,7 @@ import testutil
 import pysynphot as S
 import numpy as N
 from pysynphot.units import Units
-from pysynphot import extinction, spectrum, units, etc, reddening, refs
+from pysynphot import extinction, spectrum, units, spparser, reddening, refs
 
 class aticket123(testutil.FPTestCase):
     #Some of the tests below will fail if this is not the FIRST
@@ -143,7 +143,7 @@ class ticket125(testutil.FPTestCase):
     def setUp(self):
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(nicmos,2,f222m),18,vegamag)"
     def testparse(self):
-        self.spstring=etc.parse_spec(self.spstring)
+        self.spstring=spparser.parse_spec(self.spstring)
 
 class ticket125_a(ticket125):
     def setUp(self):
