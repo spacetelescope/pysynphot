@@ -5,7 +5,7 @@ import testutil
 import pysynphot as S
 import pyfits
 import numpy as N
-from pysynphot import etc, exceptions
+from pysynphot import spparser, exceptions
 
 
 class Precision(testutil.FPTestCase):
@@ -45,7 +45,7 @@ class Sorted(testutil.FPTestCase):
         os.chdir(os.path.dirname(__file__))
         self.obsmode='wfc3,ir,f160w'
         self.spstring='rn(spec(data/bz_7.fits),band(cousins,i),28.0,vegamag)*ebmvx(0.04,gal1)'
-        self.sp=etc.parse_spec(self.spstring)
+        self.sp=spparser.parse_spec(self.spstring)
         self.sp.writefits(self.fname,precision='single')
 
     def tearDown(self):

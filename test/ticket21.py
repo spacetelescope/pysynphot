@@ -5,7 +5,7 @@ import os
 import testutil
 
 from pysynphot import spectrum,observationmode
-from pysynphot import locations
+from pysynphot import locations, refs
 
 
 old_comptable = None
@@ -16,14 +16,14 @@ def setUpModule():
     # updates to CDBS
     global old_comptable
     cmptb_name = os.path.join('mtab','rcb1833hm_tmc.fits')
-    old_comptable = observationmode.COMPTABLE
-    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    old_comptable = refs.COMPTABLE
+    refs.COMPTABLE = locations._refTable(cmptb_name)
     print "%s:" % os.path.basename(__file__)
-    print "   Tests are being run with %s" % observationmode.COMPTABLE
+    print "   Tests are being run with %s" % refs.COMPTABLE
 
 
 def tearDownModule():
-    observationmode.COMPTABLE = old_comptable
+    refs.COMPTABLE = old_comptable
 
 
 class ParmCase(testutil.FPTestCase):

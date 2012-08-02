@@ -1,5 +1,5 @@
 import pysynphot as S
-from pysynphot.etc import parse_spec
+from pysynphot.spparser import parse_spec
 
 class ForcePartial(object):
     __test__ = True

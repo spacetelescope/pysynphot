@@ -9,10 +9,11 @@ import warnings
 import numpy as N
 import pyfits
 
+import refs
 import spectrum
 import units
 import locations
-from locations import irafconvert, _refTable
+from locations import irafconvert
 import planck
 import wavetable
 from tables import CompTable, GraphTable
@@ -25,94 +26,6 @@ rootdir = locations.rootdir
 datadir = locations.specdir
 wavecat = locations.wavecat
 
-#Constants to hold tables.
-GRAPHTABLE= ''
-GRAPHDICT = {}
-COMPTABLE = ''
-COMPDICT = {}
-THERMTABLE = ''
-THERMDICT = {}
-HSTAREA = 45238.93416  # cm^2
-
-def _set_default_refdata():
-    global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA
-    # Component tables are defined here.
-
-    try:
-        GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
-        COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
-    except IOError, e:
-        GRAPHTABLE = None
-        COMPTABLE = None
-        warnings.warn("PYSYN_CDBS is undefined; No graph or component tables could be found; functionality will be SEVERELY crippled.",UserWarning)
-    try:
-        THERMTABLE = _refTable(os.path.join('mtab','*_tmt.fits'))
-    except IOError, e:
-        THERMTABLE = None
-        print "Warning: %s"%str(e)
-        print "         No thermal calculations can be performed."
-
-    HSTAREA = 45238.93416  # cm^2
-
-#Do this on import
-_set_default_refdata()
-
-
-def setref(graphtable=None, comptable=None, thermtable=None,
-           area=None):
-    """provide user access to global reference data.
-
-    Graph/comp/therm table names must be fully specified.
-    """
-
-    global GRAPHTABLE, COMPTABLE, THERMTABLE, HSTAREA, GRAPHDICT, COMPDICT
-    global THERMDICT
-
-    GRAPHDICT = {}
-    COMPDICT = {}
-    THERMDICT = {}
-
-    #Check for all None, which means reset
-    kwds = set([graphtable, comptable, thermtable, area])
-    if kwds == set([None]):
-        #then we should reset everything.
-        _set_default_refdata()
-        return
-
-    #Otherwise, check them all separately
-    if graphtable is not None:
-        GRAPHTABLE = irafconvert(graphtable)
-
-    if comptable is not None:
-        COMPTABLE = irafconvert(comptable)
-
-    if thermtable is not None:
-        THERMTABLE = irafconvert(thermtable)
-
-    #Area is a bit different:
-    if area is not None:
-        HSTAREA = area
-
-    #That's it.
-    return
-
-
-def getref():
-    """Collects & returns the current refdata as a dictionary"""
-
-    return dict(graphtable=GRAPHTABLE,
-                comptable=COMPTABLE,
-                thermtable=THERMTABLE,
-                area=HSTAREA)
-
-
-def showref():
-    """Prints the values settable by setref"""
-
-    refdata = getref()
-    for k, v in refdata.items():
-        print "%10s: %s" % (k, v)
-
 
 CLEAR = 'clear'
 
@@ -121,7 +34,7 @@ class BaseObservationMode(object):
     ''' Class that handles the graph table, common to both optical and
     thermal obsmodes.
     '''
-    def __init__(self, obsmode, method='HSTGraphTable',graphtable=None):
+    def __init__(self, obsmode, method='HSTGraphTable', graphtable=None):
         #Strip "band()" syntax if present
         tmatch=re.search(r'band\((.*?)\)',obsmode,re.IGNORECASE)
         if tmatch:
@@ -129,13 +42,8 @@ class BaseObservationMode(object):
         self._obsmode = obsmode
 
         if graphtable is None:
-            graphtable=GRAPHTABLE
+            graphtable = refs.GRAPHTABLE
 
-        self.area = HSTAREA
-
-        # For sensitivity calculations: 5.03411762e7 is hc in
-        # the appropriate units
-        self._constant = 5.03411762e7 * self.area
         self.pardict={}
 
         modes = obsmode.lower().split(',')
@@ -152,15 +60,24 @@ class BaseObservationMode(object):
             self.modes=modes
 
 #        gt = GraphTable(graphtable)
-        if graphtable in GRAPHDICT.keys():
-            gt = GRAPHDICT[graphtable]
+        if graphtable in refs.GRAPHDICT.keys():
+            gt = refs.GRAPHDICT[graphtable]
         else:
             gt = GraphTable(graphtable)
-            GRAPHDICT[graphtable] = gt
+            refs.GRAPHDICT[graphtable] = gt
 
-        self.gtname=graphtable
+        self.gtname = graphtable
 
-        self.compnames,self.thcompnames = gt.GetComponentsFromGT(self.modes,1)
+        self.compnames, self.thcompnames = gt.GetComponentsFromGT(self.modes,1)
+        
+        if hasattr(gt, 'primary_area'):
+            self.primary_area = gt.primary_area
+        else:
+            self.primary_area = refs.PRIMARY_AREA
+        
+        # For sensitivity calculations: 5.03411762e7 is hc in
+        # the appropriate units
+        self._constant = 5.03411762e7 * self.primary_area
 
         self.components = None #Will be filled by subclasses
         self.pixscale = None
@@ -274,18 +191,18 @@ class ObservationMode(BaseObservationMode):
                  comptable=None, component_dict = {}):
 
         if graphtable is None:
-            graphtable=GRAPHTABLE
+            graphtable = refs.GRAPHTABLE
         if comptable is None:
-            comptable=COMPTABLE
+            comptable = refs.COMPTABLE
 
         BaseObservationMode.__init__(self, obsmode, method, graphtable)
 
 #        ct = CompTable(comptable)
-        if comptable in COMPDICT.keys():
-            ct = COMPDICT[comptable]
+        if comptable in refs.COMPDICT.keys():
+            ct = refs.COMPDICT[comptable]
         else:
             ct = CompTable(comptable)
-            COMPDICT[comptable] = ct
+            refs.COMPDICT[comptable] = ct
 
         self.ctname = comptable
 
@@ -343,7 +260,7 @@ class ObservationMode(BaseObservationMode):
             throughput.waveunits = product.waveunits
             throughput.name='*'.join([str(x) for x in self.components])
 
-##            throughput = throughput.resample(spectrum.default_waveset)
+##            throughput = throughput.resample(spectrum._default_waveset)
 
             return throughput
 
@@ -376,11 +293,11 @@ class _ThermalObservationMode(BaseObservationMode):
                  comptable=None, thermtable=None):
 
         if graphtable is None:
-            graphtable = GRAPHTABLE
+            graphtable = refs.GRAPHTABLE
         if comptable is None:
-            comptable = COMPTABLE
+            comptable = refs.COMPTABLE
         if thermtable is None:
-            thermtable = THERMTABLE
+            thermtable = refs.THERMTABLE
 
 
         #The constructor of the parent class defines the self.thcompnames
@@ -391,22 +308,22 @@ class _ThermalObservationMode(BaseObservationMode):
             raise NotImplementedError("No thermal support provided for %s"%obsmode)
 
 #        ct = CompTable(comptable)
-        if comptable in COMPDICT.keys():
-            ct = COMPDICT[comptable]
+        if comptable in refs.COMPDICT.keys():
+            ct = refs.COMPDICT[comptable]
         else:
             ct = CompTable(comptable)
-            COMPDICT[comptable] = ct
+            refs.COMPDICT[comptable] = ct
 
         self.ctname=comptable
 
         throughput_filenames = self._getFileNames(ct, self.compnames)
 
 #        thct = CompTable(thermtable)
-        if thermtable in THERMDICT.keys():
-            thct = THERMDICT[thermtable]
+        if thermtable in refs.THERMDICT.keys():
+            thct = refs.THERMDICT[thermtable]
         else:
             thct = CompTable(thermtable)
-            THERMDICT[thermtable] = thct
+            refs.THERMDICT[thermtable] = thct
 
         self.thname = thermtable
 
@@ -500,8 +417,8 @@ class _ThermalObservationMode(BaseObservationMode):
         return sp
 
     def _getWavesetIntersection(self):
-        minw = spectrum.default_waveset[0]
-        maxw = spectrum.default_waveset[-1]
+        minw = refs._default_waveset[0]
+        maxw = refs._default_waveset[-1]
 
         for component in self.components[1:]:
             if component.emissivity != None:
@@ -590,14 +507,3 @@ class _ThermalComponent(_Component):
             self.emissivity = spectrum.ThermalSpectralElement(thermal_name)
         else:
             self.emissivity = None
-
-
-
-
-
-
-
-
-
-
-

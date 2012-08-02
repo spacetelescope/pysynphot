@@ -12,3 +12,13 @@ References
 .. _ref3:
 
 3. Koornneef et al., 1987
+
+.. _ref4:
+
+4. WFPC1 Instrument Handbook:
+   http://www.stsci.edu/hst/wfpc/documents/HST_WFPC_Instrument_Handbook.pdf
+
+.. _ref5:
+
+5. WFPC2 Instrument Handbook:
+   http://www.stsci.edu/instruments/wfpc2/Wfpc2_hand_current/wfpc2_ihb.pdf

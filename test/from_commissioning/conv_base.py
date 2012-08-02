@@ -7,7 +7,7 @@ import sys
 
 import numpy as N
 import pysynphot as S
-from pysynphot import etc
+from pysynphot import spparser
 #For thermal classes only
 from pysynphot.observationmode import ObservationMode
 
@@ -92,7 +92,7 @@ class SpecCase(object):
         #All the data lives in a parallel directory, so go sit there
         #in case we need a file
             os.chdir(DATADIR)
-            cls.sp = etc.parse_spec(cls.spectrum)
+            cls.sp = spparser.parse_spec(cls.spectrum)
             os.chdir(cls.location)
             tname = os.path.join(cls.location, cls.fname % kind)
             cls.sp.writefits(tname, clobber=True, trimzero=False)
@@ -250,7 +250,7 @@ class ThermCase(CommCase):
         cls.tra['thspec'] = cls.thspec.name
 
         cls.thspec.convert('counts')
-        cls.thermback = cls.thspec.integrate()*cls.omode.pixscale**2*cls.omode.area
+        cls.thermback = cls.thspec.integrate()*cls.omode.pixscale**2*cls.omode.primary
         x = dict(PSTHMBCK=(cls.thermback, 'thermback'))
         tname = os.path.join(cls.location, cls.fname % kind)
         cls.thspec.writefits(tname, clobber=True, trimzero=False, hkeys=x)

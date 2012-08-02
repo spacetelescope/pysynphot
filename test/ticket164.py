@@ -4,12 +4,12 @@ import copy
 
 import numpy as N
 
-from pysynphot import observationmode, units
+from pysynphot import observationmode, units, refs
 from pysynphot.obsbandpass import ObsBandpass
 from pysynphot.locations import irafconvert
 
 #Code under test
-from pysynphot.observationmode import setref, showref, getref
+from pysynphot.refs import setref, showref, getref, set_default_waveset
 from pysynphot import units  # uses area
 
 
@@ -25,7 +25,14 @@ class TestSet(unittest.TestCase):
         setref(graphtable=self.ref)
 
     def tearDown(self):
-        setref(**startup)
+        # Workaround for #234; TODO: change this back to setref(**startup) when
+        # that issue is fixed
+        # setref(**startup)
+        setref(graphtable=startup['graphtable'],
+               comptable=startup['comptable'],
+               thermtable=startup['thermtable'],
+               area=startup['area'])
+        set_default_waveset()
 
     def testset(self):
         tst=getref()[self.ttype]
@@ -87,7 +94,14 @@ class TestMulti(unittest.TestCase):
         self.pick = getref()
 
     def tearDown(self):
-        setref(**startup)
+        # Workaround for #234; TODO: change this back to setref(**startup) when
+        # that issue is fixed
+        # setref(**startup)
+        setref(graphtable=startup['graphtable'],
+               comptable=startup['comptable'],
+               thermtable=startup['thermtable'],
+               area=startup['area'])
+        set_default_waveset()
 
     def testgraph(self):
         self.assertEqual(self.pick['graphtable'],
@@ -112,7 +126,7 @@ class TestAreaChanges(unittest.TestCase):
     def testchange(self):
         ref=100
         setref(area=ref)
-        tst=units.observationmode.HSTAREA
+        tst=refs.PRIMARY_AREA
         self.assertEqual(ref,tst)
 
     def testcounts(self):

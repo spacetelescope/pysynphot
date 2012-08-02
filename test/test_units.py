@@ -5,7 +5,7 @@ import numpy as N
 import unittest
 
 from pysynphot.spectrum import ArraySourceSpectrum as ArraySpectrum
-from pysynphot import extinction, spectrum
+from pysynphot import extinction, spectrum, refs
 from pysynphot import BlackBody
 
 # Code Under Test:
@@ -15,7 +15,7 @@ class AddInverseMicron(testutil.FPTestCase):
     def setUp(self):
         self.x=units.Units('1/um')
         self.mwave=extinction._buildDefaultWaveset()[0:10]
-        self.awave=(spectrum.default_waveset.copy()[::10])[0:10]
+        self.awave=(refs._default_waveset.copy()[::10])[0:10]
         
     def teststr(self):
         self.failUnless(str(self.x)=='1/um')
@@ -81,7 +81,7 @@ class TestmuJy(testutil.FPTestCase):
         self.x=units.Units('mujy')
 
         # creates a 10 element array of simulated wavelength values in Angstroms
-        self.awave=(spectrum.default_waveset.copy()[::10])[0:10]
+        self.awave=(refs._default_waveset.copy()[::10])[0:10]
 
         # Creates a 10 element array of ones
         self.flux=N.ones(self.awave.shape)
@@ -138,7 +138,7 @@ class TestnJy(testutil.FPTestCase):
         self.x=units.Units('njy')
 
         # creates a 10 element array of simulated wavelength values in Angstroms
-        self.awave=(spectrum.default_waveset.copy()[::10])[0:10]
+        self.awave=(refs._default_waveset.copy()[::10])[0:10]
 
         # Creates a 10 element array of ones
         self.flux=N.ones(self.awave.shape)

@@ -86,6 +86,10 @@ class GraphTable(object):
         # In either case, process one row at a time
         if self.tname.endswith('.fits'):
             f = pyfits.open(self.tname)
+            
+            if 'PRIMAREA' in f[0].header:
+                self.primary_area = f[0].header['PRIMAREA']
+            
             for row in f[1].data:
                 if not row.field('compname').endswith('graph'):
                     #Make it a list because FITS_records don't fully
@@ -93,6 +97,8 @@ class GraphTable(object):
                     self._setrow(list(row))
                 else:
                     raise NotImplementedError('Segmented graph tables not yet supported')
+            
+            f.close()
 
         else: #Not a FITS file; assume text
             f=open(self.tname)

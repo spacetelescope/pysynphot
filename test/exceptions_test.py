@@ -2,7 +2,7 @@ from __future__ import division
 """Test that exceptions really are raised when they should be."""
 import unittest,sys,os
 import testutil
-from pysynphot import observationmode
+from pysynphot import observationmode, locations, refs
 import pysynphot as S
 
 class TMCmismatch(unittest.TestCase):
@@ -10,14 +10,14 @@ class TMCmismatch(unittest.TestCase):
 
     def setUp(self):
         tmcname = os.path.join('mtab','r1j2146sm_tmc.fits')
-        self.old_comptable = observationmode.COMPTABLE
-        observationmode.COMPTABLE = observationmode._refTable(tmcname)
+        self.old_comptable = refs.COMPTABLE
+        refs.COMPTABLE = locations._refTable(tmcname)
         tmgname = os.path.join('mtab','rbg2236im_tmg.fits')
-        observationmode.GRAPHTABLE = observationmode._refTable(tmgname)
+        refs.GRAPHTABLE = locations._refTable(tmgname)
         self.omstring='acs,hrc,f555w,mjd#54000'
 
     def tearDown(self):
-        observationmode.COMPTABLE = self.old_comptable
+        refs.COMPTABLE = self.old_comptable
 
     def test1(self):
         "compname not found in tmc"

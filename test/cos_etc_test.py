@@ -7,10 +7,10 @@ import numpy as N
 
 import etctest_base_class
 from pysynphot import spectrum, observationmode, exceptions
-from pysynphot import locations
+from pysynphot import locations, refs
 from pysynphot import spparser as P
 from pysynphot import units, planck
-from pysynphot import etc
+from pysynphot import spparser
 from pysynphot.observation import Observation
 from pysynphot import renorm
 import pysynphot as S
@@ -18,13 +18,11 @@ import pysynphot as S
 import testutil
 
 
-
 #Places used by test code
 testdata  = os.path.join(locations.rootdir, 'calspec', 'feige66_002.fits')
 testdir   = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'data')
 
 accuracy = 1.0e-5    # default floating point comparison accuracy
-etc.debug = 0        # suppress messages from ETC-support tasks
 
 old_comptable = None
 old_vegafile = None
@@ -35,14 +33,13 @@ def setUpModule():
     global old_comptable
     global old_vegafile
 
-    old_comptable = observationmode.COMPTABLE
+    old_comptable = refs.COMPTABLE
     cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
-    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    refs.COMPTABLE = locations._refTable(cmptb_name)
     print "%s:" % os.path.basename(__file__)
-    print "   Tests are being run with %s" % observationmode.COMPTABLE
+    print "   Tests are being run with %s" % refs.COMPTABLE
     print "   Synphot comparison results were computed with r1j2146sm_tmc.fits"
     #Synphot comparison results are identified with the varname synphot_ref.
-
     #Also set the version of Vega for similar reasons
     old_vegafile = locations.VegaFile
     locations.VegaFile = os.path.join(testdir, 'alpha_lyr_stis_002.fits')
@@ -50,7 +47,7 @@ def setUpModule():
 
 
 def tearDownModule():
-    observationmode.COMPTABLE = old_comptable
+    refs.COMPTABLE = old_comptable
     locations.VegaFile = old_vegafile
 
 
@@ -97,7 +94,7 @@ format_offset = {'win32':1,'sunos5':0,'linux2':0}
 def format(value):
     ''' Formats scientific notation according to platform.
     '''
-    str = format_spec%(value)
+    str = format_spec % (value)
 
     index1 = str.index('E') + 2
     index2 = index1 + format_offset[sys.platform]
@@ -255,15 +252,15 @@ class SpectrumTestCase(testutil.FPTestCase):
 
 class PlanckTestCase(testutil.FPTestCase):
     def testbb(self):
-        flux = planck.bb_photlam_arcsec(spectrum.default_waveset, 1000.)
-        self.assertApproxFP(flux[5000], 3.8914E-8, accuracy=0.0025)
+        flux = planck.bb_photlam_arcsec(refs._default_waveset, 1000.)
+        self.assertApproxFP(flux[5000], 3.89141e-08, accuracy=0.0025)
 
 
 class ObsmodeTestCase(testutil.FPTestCase):
 
     def test1(self):
         obsmode = observationmode.ObservationMode(values['obsmode'])
-        self.assertApproxFP(obsmode.area, values['hstarea'], accuracy=0.0025)
+        self.assertApproxFP(obsmode.primary_area, values['hstarea'], accuracy=0.0025)
         throughput = obsmode.Throughput()._throughputtable
         self.assertEqual(len(throughput), 11003)
         self.assertApproxFP(throughput[5000], 0.12232652011958853, accuracy=0.0025)
@@ -312,7 +309,7 @@ class FunctionTestCase(testutil.FPTestCase):
         sp = sp * box
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertApproxFP(fluxes.sum(), 5.53744E+12, accuracy=0.0025)
+        self.assertApproxFP(fluxes.sum(), 5.53744e+12, accuracy=0.0025)
 
 class ParserTestCase(testutil.FPTestCase):
     def setUp(self):
@@ -350,7 +347,7 @@ class ParserTestCase(testutil.FPTestCase):
         sp = P.interpret(P.parse(P.scan(expr)))
         wave = sp.GetWaveSet()
         fluxes = sp(wave)
-        self.assertApproxFP(fluxes.sum(), 5.53744E+12, accuracy=0.0025)
+        self.assertApproxFP(fluxes.sum(), 5.53744e+12, accuracy=0.0025)
 
     def testmult2(self):
         expr = "(unit(1,flam) * box(5500.0,20.0))"
@@ -374,7 +371,7 @@ class ParserTestCase(testutil.FPTestCase):
 
     def testzeroang(self):
         self.assertRaises(exceptions.ZeroWavelength,
-                          etc.parse_spec,
+                          spparser.parse_spec,
                           'spec(zeroang.dat)')
 
 
@@ -499,7 +496,7 @@ class ParserTestCase(testutil.FPTestCase):
                         ref=1.53329E-7,
                         epsilon=0.0025,
                         tst=flux[5000])
-        self.tda.update(S.observationmode.getref())
+        self.tda.update(refs.getref())
         self.assertApproxFP(flux[4954], 1.53329E-7, accuracy=0.0025)
 
     def testuserdir2(self):
@@ -669,23 +666,6 @@ class ETCTestCase_Spec1(testutil.FPTestCase):
 
     def tearDown(self):
         os.chdir(self.oldpath)
-
-class ETCTestCase_Spec3(testutil.FPTestCase):
-    def setUp(self):
-        self.oldpath=os.path.abspath(os.curdir)
-        if os.path.isdir(os.path.join(locations.specdir, 'generic')):
-            os.chdir(os.path.join(locations.specdir, 'generic'))
-        else:
-            os.chdir(locations.specdir)
-
-    def tearDown(self):
-        os.chdir(self.oldpath)
-    def test4(self):
-        spectrum = "spectrum=((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
-        instrument = "instrument=cos,fuv,g130m,c1309"
-        parameters = [spectrum, instrument]
-        countrate = etc.specrate(parameters)
-        self.assertApproxFP(float(countrate.split(';')[0]), 26.5409, accuracy=0.0025)
 
 
 class IcatTestCase(testutil.FPTestCase):
@@ -859,12 +839,6 @@ class Ticket87(testutil.FPTestCase):
         self.assert_(self.sp.wave.min() == tst.wave.min(),"wave.min=%f"%tst.wave.min())
 
 
-
-class SrvParserTestCase(testutil.FPTestCase):
-    def testtermamp(self):
-        self.cgistring='SpecSourcerateSpec&spectrum="spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))"&instrument="cos,fuv,g130m,c1309"&output=/Users/dmclean/IdeaProjects/etcDev/JUNIT/testFiles/specResults/2008/001/specAV5.fits&area="45238.93416"&mode="a"&grtbl="mtab$*_tmg.fits"&cmptbl="mtab$*_tmc.fits"&'
-        self.tokens=self.cgistring.split('&')
-        d=etc.getparms(self.tokens[1:])
 
 
 if __name__ == '__main__':

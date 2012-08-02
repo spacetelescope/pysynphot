@@ -55,12 +55,23 @@ KUR_TEMPLATE = os.path.join(rootdir, 'grid', '*')
 VegaFile = get_data_filename('alpha_lyr_stis_005.fits')
 
 
-extdir = os.path.join('grid', 'extinction')
+# CDBS is moving extinction files to $PYSYN_CDBS/extinction so here we
+# test whether that location exists and use it if it does.
+# If it doesn't exist we use the old location $PYSYN_CDBS/grid/extinction
+# and print a warning.
+if (os.path.exists(os.path.join(rootdir, 'extinction')) and
+    os.path.isdir(os.path.join(rootdir, 'extinction'))):
+    EXTDIR = 'extinction'
+else:
+    EXTDIR = os.path.join('grid', 'extinction')
+
+    warnings.warn('Extinction files should be moved to '
+                  '$PYSYN_CDBS/extinction for compatibility with '
+                  'future versions of pysynphot.')
+
 
 #Define wavecat file explicitly
 wavecat = get_data_filename('wavecat.dat')
-
-RedLaws = {}
 
 
 def _refTable(template):
@@ -68,28 +79,34 @@ def _refTable(template):
         names = glob.glob(os.path.join(os.environ['PYSYN_CDBS'], template))
         names.sort()
     except KeyError:
-        warnings.warn("PYSYN_CDBS is undefined; cannot find %s file"%template,
-                      UserWarning)
+        warnings.warn("PYSYN_CDBS is undefined; cannot find %s file" % template)
         return None
 
     try:
         return names[-1]
     except IndexError:
-        msg= "No files found for %s."%os.path.join(os.environ['PYSYN_CDBS'],
-                                                   template)
+        msg= "No files found for %s." % os.path.join(os.environ['PYSYN_CDBS'],
+                                                     template)
         raise IOError(msg)
 
+RedLaws = {}
 
 def _get_RedLaws():
     global RedLaws
 
-    # get all the fits files in $PYSYN_CDBS/grid/extinction/
-    globstr = os.path.join(rootdir,extdir,'*.fits')
+    extdir = os.path.join(rootdir, EXTDIR)
+
+    # get all the fits files in EXTDIR
+    globstr = os.path.join(extdir, '*.fits')
     files = glob.glob(globstr)
+
+    if not files:
+        warnings.warn('Extinction files not found in %s' % (extdir,))
+        return
 
     # replace ###.fits at the end of file names with *.fits
     # and get a unique set
-    files = set([f[:-8] + '*.fits' for f in files])
+    files = set(f[:-8] + '*.fits' for f in files)
 
     # use _refTable to get the most recent version of each extinction file
     # and add that to the RedLaws dict
@@ -103,19 +120,63 @@ def _get_RedLaws():
 # load the extintion law file names
 _get_RedLaws()
 
-#RedLaws={'mwavg':   'milkyway_diffuse_*.fits',
-#         'mwdense': 'milkyway_dense_*.fits',
-#         'lmcavg':  'lmc_diffuse_*.fits',
-#         'lmc30dor':'lmc_30dorshell_*.fits',
-#         'smcbar':  'smc_bar_*.fits',
-#         'xgalsb':  'xgal_starburst_*.fits'
-#           }
-#
-#for k in RedLaws:
-#    try:
-#        RedLaws[k]=_refTable(os.path.join(extdir,RedLaws[k]))
-#    except IOError,e:
-#        print 'Cannot open %s: %s'%(RedLaws[k],str(e))
+
+
+## This dictionary maps IRAF-specific directory names for synphot
+## directories into their Unix equivalents.
+#BUG: supports only a single variable in a string
+#............basically this is a weak routine that should be made
+#............more robust
+#BUG: this dictionary should be in a data file
+CONVERTDICT = {'crrefer':rootdir,
+              'crotacomp':os.path.join(rootdir,'comp','ota'),
+              'cracscomp':os.path.join(rootdir,'comp','acs'),
+              'crcalobs':os.path.join(rootdir,'calobs'),
+              'crcalspec':os.path.join(rootdir,'calspec'),
+              'croldcalspec':os.path.join(rootdir,'oldcalspec'),
+              'crcomp':os.path.join(rootdir,'comp'),
+              'crfgs':os.path.join(rootdir,'fgs'),
+              'crfields':os.path.join(rootdir,'fields'),
+              'crmodewave':os.path.join(rootdir,'modewave'),
+              'crcostarcomp':os.path.join(rootdir,'comp','costar'),
+              'cracscomp':os.path.join(rootdir,'comp','acs'),
+              'crfoccomp':os.path.join(rootdir,'comp','foc'),
+              'crfoscomp':os.path.join(rootdir,'comp','fos'),
+              'crfgscomp':os.path.join(rootdir,'comp','fgs'),
+              'crhrscomp':os.path.join(rootdir,'comp','hrs'),
+              'crhspcomp':os.path.join(rootdir,'comp','hsp'),
+              'crotacomp':os.path.join(rootdir,'comp','ota'),
+              'crnicmoscomp':os.path.join(rootdir,'comp','nicmos'),
+              'crnonhstcomp':os.path.join(rootdir,'comp','nonhst'),
+              'crstiscomp':os.path.join(rootdir,'comp','stis'),
+              'crstiscomp':os.path.join(rootdir,'comp','stis'),
+              'crwfc3comp':os.path.join(rootdir,'comp','wfc3'),
+              'crcoscomp':os.path.join(rootdir,'comp','cos'),
+              'coscomp':os.path.join(rootdir,'comp','cos'),
+              'crwave':os.path.join(rootdir,'crwave'),
+              'crwfpccomp':os.path.join(rootdir,'comp','wfpc'),
+              'crwfpc2comp':os.path.join(rootdir,'comp','wfpc2'),
+              'crgrid':os.path.join(rootdir,'grid'),
+              'crgridbz77':os.path.join(rootdir,'grid','bz77'),
+              'crgridgs':os.path.join(rootdir,'grid','gunnstryker'),
+              'crgridjac':os.path.join(rootdir,'grid','jacobi'),
+              'crgridbpgs':os.path.join(rootdir,'grid','bpgs'),
+              'crgridbk':os.path.join(rootdir,'grid','bkmodels'),
+              'crgridk93':os.path.join(rootdir,'grid','k93models'),
+              'crgridagn':os.path.join(rootdir,'grid','agn'),
+              'crgridgalactic':os.path.join(rootdir,'grid','galactic'),
+              'crgridkc96':os.path.join(rootdir,'grid','kc96'),
+              'mtab':os.path.join(rootdir,'mtab'),
+              'synphot': os.path.dirname(__file__) + os.path.sep,
+              # PATH for JWST instrument files
+              'crjwstotecomp':os.path.join(rootdir,'comp','jwstote'),
+              # PATH for JWST MIRI instrument files
+              'crmiricomp':os.path.join(rootdir,'comp','miri'),
+              # PATH for JWST NIRCam instrument files
+              'crnircamcomp':os.path.join(rootdir,'comp','nircam'),
+              # PATH for JWST NIRSpec instrument files
+              'crnirspeccomp':os.path.join(rootdir,'comp','nirspec'),
+              }
 
 
 def irafconvert(iraffilename):
@@ -127,52 +188,8 @@ def irafconvert(iraffilename):
           If '$' not found in the input string, just return
           the input string
           Non-string input raises an AttributeError'''
-    ## This dictionary maps IRAF-specific directory names for synphot
-    ## directories into their Unix equivalents.
 
-    #BUG: supports only a single variable in a string
-    #............basically this is a weak routine that should be made
-    #............more robust
-    #BUG: this dictionary should be in a data file
-    convertdic = {'crrefer':rootdir,
-                  'crotacomp':os.path.join(rootdir,'comp','ota'),
-                  'cracscomp':os.path.join(rootdir,'comp','acs'),
-                  'crcalobs':os.path.join(rootdir,'calobs'),
-                  'crcalspec':os.path.join(rootdir,'calspec'),
-                  'croldcalspec':os.path.join(rootdir,'oldcalspec'),
-                  'crcomp':os.path.join(rootdir,'comp'),
-                  'crfgs':os.path.join(rootdir,'fgs'),
-                  'crfields':os.path.join(rootdir,'fields'),
-                  'crmodewave':os.path.join(rootdir,'modewave'),
-                  'crcostarcomp':os.path.join(rootdir,'comp','costar'),
-                  'cracscomp':os.path.join(rootdir,'comp','acs'),
-                  'crfoccomp':os.path.join(rootdir,'comp','foc'),
-                  'crfoscomp':os.path.join(rootdir,'comp','fos'),
-                  'crfgscomp':os.path.join(rootdir,'comp','fgs'),
-                  'crhrscomp':os.path.join(rootdir,'comp','hrs'),
-                  'crhspcomp':os.path.join(rootdir,'comp','hsp'),
-                  'crotacomp':os.path.join(rootdir,'comp','ota'),
-                  'crnicmoscomp':os.path.join(rootdir,'comp','nicmos'),
-                  'crnonhstcomp':os.path.join(rootdir,'comp','nonhst'),
-                  'crstiscomp':os.path.join(rootdir,'comp','stis'),
-                  'crstiscomp':os.path.join(rootdir,'comp','stis'),
-                  'crwfc3comp':os.path.join(rootdir,'comp','wfc3'),
-                  'crcoscomp':os.path.join(rootdir,'comp','cos'),
-                  'coscomp':os.path.join(rootdir,'comp','cos'),
-                  'crwave':os.path.join(rootdir,'crwave'),
-                  'crwfpccomp':os.path.join(rootdir,'comp','wfpc'),
-                  'crwfpc2comp':os.path.join(rootdir,'comp','wfpc2'),
-                  'crgrid':os.path.join(rootdir,'grid'),
-                  'crgridbz77':os.path.join(rootdir,'grid','bz77'),
-                  'crgridgs':os.path.join(rootdir,'grid','gunnstryker'),
-                  'crgridjac':os.path.join(rootdir,'grid','jacobi'),
-                  'crgridbpgs':os.path.join(rootdir,'grid','bpgs'),
-                  'crgridbk':os.path.join(rootdir,'grid','bkmodels'),
-                  'crgridk93':os.path.join(rootdir,'grid','k93models'),
-                  'crgridagn':os.path.join(rootdir,'grid','agn'),
-                  'crgridgalactic':os.path.join(rootdir,'grid','galactic'),
-                  'crgridkc96':os.path.join(rootdir,'grid','kc96'),
-                  'mtab':os.path.join(rootdir,'mtab')}
+    convertdict = CONVERTDICT
 
     # remove duplicate separators and extraneous relative paths
     iraffilename = os.path.normpath(iraffilename)
@@ -191,11 +208,11 @@ def irafconvert(iraffilename):
         return unixfilename
     elif '$' in iraffilename:
         #Then it's an iraf-style variable
-        irafdir,basename=iraffilename.split('$')
+        irafdir, basename = iraffilename.split('$')
         if irafdir == 'synphot':
             return get_data_filename(os.path.basename(basename))
-        unixdir=convertdic[irafdir]
-        unixfilename=os.path.join(unixdir,basename)
+        unixdir = convertdict[irafdir]
+        unixfilename = os.path.join(unixdir, basename)
         return unixfilename
     else:
         #If no $ sign found, just return the filename unchanged

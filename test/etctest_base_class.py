@@ -3,7 +3,7 @@ import os
 import testutil
 from pysynphot import locations
 from pysynphot.observation import Observation
-from pysynphot import observationmode  # to freeze comptable
+from pysynphot import refs  # to freeze comptable
 
 
 cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
@@ -13,8 +13,8 @@ class ETCTestCase(testutil.FPTestCase):
     """Base class for cases generated from the ETC test listings"""
 
     def setUp(self):
-        self.oldref = observationmode.getref()
-        observationmode.setref(comptable=observationmode._refTable(cmptb_name))
+        self.old_comptable = refs.COMPTABLE
+        refs.COMPTABLE = locations._refTable(cmptb_name)
         self.oldpath = os.path.abspath(os.curdir)
         if os.path.isdir(os.path.join(locations.specdir, 'generic')):
             os.chdir(os.path.join(locations.specdir, 'generic'))
@@ -34,7 +34,7 @@ class ETCTestCase(testutil.FPTestCase):
 
     def tearDown(self):
         os.chdir(self.oldpath)
-        observationmode.setref(**self.oldref)
+        refs.COMPTABLE = self.old_comptable
 
     def testrate(self):
         if self.sp is not None:

@@ -23,5 +23,12 @@ class VarString(unittest.TestCase):
 
     def test1(self):
         ans = irafconvert(self.fstring)
-        self.tra=dict(ans=ans)
-        self.assertEqual(self.ref, ans)
+
+        ans = os.path.normpath(ans)
+        ref = os.path.normpath(self.ref)
+
+        ans = os.path.normcase(ans)
+        ref = os.path.normcase(ref)
+
+        self.tra=dict(ans=ans, ref=ref)
+        self.assertEqual(ref, ans)

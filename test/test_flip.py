@@ -5,7 +5,7 @@ import testutil
 import pysynphot as S
 import numpy as N
 from pysynphot.units import Units
-from pysynphot import extinction, spectrum, units, etc, reddening
+from pysynphot import extinction, spectrum, units, spparser, reddening
 
 class FlipTest(testutil.FPTestCase):
     def setUp(self):
@@ -44,11 +44,11 @@ class FlipSpec(FlipTest):
                                 flux=self.T)
         self.down=S.ArraySpectrum(wave=self.wavedown,
                                   flux=self.T[::-1])
-    
+
 class InterpTest(testutil.FPTestCase):
     def setUp(self):
         self.Y=N.arange(10)+5
-        
+
     def test1(self):
         A=N.arange(10)
         X=N.arange(10)
@@ -72,4 +72,4 @@ class InterpTest(testutil.FPTestCase):
         X=N.arange(10)
         ans=N.interp(A[::-1],X,self.Y)
         self.assertEqualNumpy(ans,self.Y)
-                                     
+

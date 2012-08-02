@@ -1,12 +1,12 @@
 from __future__ import division
 import pysynphot as S
 from pysynphot.observation import Observation
-from pysynphot import etc
+from pysynphot import spparser
 import os, sys
 import testutil
 import numpy as N
 
-from pysynphot import locations, observationmode
+from pysynphot import locations, refs
 
 #Places used by test code
 userdir   = os.path.join(os.path.dirname(__file__), 'data')
@@ -22,11 +22,11 @@ def setUpModule():
     global old_comptable
     global old_vegafile
 
-    old_comptable = observationmode.COMPTABLE
+    old_comptable = refs.COMPTABLE
     cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
-    observationmode.COMPTABLE = observationmode._refTable(cmptb_name)
+    refs.COMPTABLE = locations._refTable(cmptb_name)
     print "%s:" % os.path.basename(__file__)
-    print "   Tests are being run with %s" % observationmode.COMPTABLE
+    print "   Tests are being run with %s" % refs.COMPTABLE
     print "   Synphot comparison results were computed with r1j2146sm_tmc.fits"
     #Synphot comparison results are identified with the varname synphot_ref.
 
@@ -37,7 +37,7 @@ def setUpModule():
 
 
 def tearDownModule():
-    observationmode.COMPTABLE = old_comptable
+    refs.COMPTABLE = old_comptable
     locations.VegaFile = old_vegafile
 
 
@@ -84,7 +84,7 @@ class DiscoveryCase(OverlapBug):
         self.old_cwd = os.getcwd()
         os.chdir(os.path.dirname(__file__))
         self.spstring='rn(z(spec(%s),0.03),band(johnson,v),18,vegamag)' %fname
-        self.sp=etc.parse_spec(self.spstring)
+        self.sp=spparser.parse_spec(self.spstring)
         self.sp.convert('photlam')
         self.bp=S.ObsBandpass('stis,ccd,g750l,c7751,s52x02')
         self.refwave=6200
@@ -216,7 +216,8 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
                 os.chdir(os.path.join(locations.specdir, 'generic'))
             else:
                 os.chdir(locations.specdir)
-            self.sp = etc.parse_spec(self.spectrum)
+            self.sp = spparser.parse_spec(self.spectrum)
+            self.sp = spparser.parse_spec(self.spectrum)
             self.bp = S.ObsBandpass(self.obsmode)
             self.parameters = ["spectrum=%s" % self.spectrum,
                                "instrument=%s" % self.obsmode]
@@ -234,10 +235,6 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
                           S.Observation,
                           self.sp, self.bp)
 
-    def testrate(self):
-        tstrate=etc.countrate(self.parameters)
-        q=(float(tstrate[0])-self.refrate)/self.refrate
-        self.failIf(abs(q)>0.01)
 
 
     def tearDown(self):

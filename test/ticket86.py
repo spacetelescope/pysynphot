@@ -6,7 +6,7 @@ import testutil
 import numpy as N
 
 
-orig_ref = S.observationmode.getref()
+orig_ref = S.refs.getref()
 testdir = os.path.join(os.path.dirname(__file__), 'data')
 
 
@@ -16,7 +16,7 @@ def setUpModule():
 
 
 def tearDownModule():
-    S.setref(**orig_ref)
+    S.setref(comptable=orig_ref['comptable'])
 
 
 class Keepneg(testutil.FPTestCase):

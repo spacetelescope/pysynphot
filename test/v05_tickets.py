@@ -5,7 +5,7 @@ import testutil
 import pysynphot as S
 import numpy as N
 from pysynphot.units import Units
-from pysynphot import extinction, spectrum, units, etc, reddening
+from pysynphot import extinction, spectrum, units, spparser, reddening, refs
 
 
 class aticket123(testutil.FPTestCase):
@@ -145,7 +145,7 @@ class ticket125(testutil.FPTestCase):
     def setUp(self):
         self.spstring="rn(icat(k93models,44500,0.0,5.0),band(nicmos,2,f222m),18,vegamag)"
     def testparse(self):
-        self.spstring=etc.parse_spec(self.spstring)
+        self.spstring=spparser.parse_spec(self.spstring)
 
 
 class ticket125_a(ticket125):
@@ -173,7 +173,7 @@ class AddInverseMicron(testutil.FPTestCase):
     def setUp(self):
         self.x=Units('1/um')
         self.mwave=extinction._buildDefaultWaveset()[0:10]
-        self.awave=(spectrum.default_waveset.copy()[::10])[0:10]
+        self.awave=(refs._default_waveset.copy()[::10])[0:10]
 
     def teststr(self):
         self.failUnless(str(self.x)=='1/um')

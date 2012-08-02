@@ -9,7 +9,7 @@ import nose.tools
 import testutil
 
 import pysynphot as S
-from pysynphot import observationmode
+from pysynphot import observationmode, locations
 import pysynphot.exceptions as exceptions
 
 # test whether the InterpolatedSpectralElement grabs the correct column
@@ -19,7 +19,7 @@ class InterpErrorColCase(testutil.FPTestCase):
   def setUp(self):
     interp_val = 51252.0
     filename = os.path.join('comp','stis','stis_nm16_mjd_010_syn.fits')
-    filename = S.observationmode._refTable(filename) + '[MJD#]'
+    filename = locations._refTable(filename) + '[MJD#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):
@@ -103,7 +103,7 @@ class InterpNoDefaultCase(testutil.FPTestCase):
   def setUp(self):
     interp_val = 0.0
     filename = os.path.join('comp','acs','acs_wfc_aper_002_syn.fits')
-    filename = S.observationmode._refTable(filename) + '[aper#]'
+    filename = locations._refTable(filename) + '[aper#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):
@@ -127,7 +127,7 @@ class InterpInterpolationRequiredCase(testutil.FPTestCase):
   def setUp(self):
     interp_val = 51000.0
     filename = os.path.join('comp','stis','stis_nm16_mjd_010_syn.fits')
-    filename = S.observationmode._refTable(filename) + '[MJD#]'
+    filename = locations._refTable(filename) + '[MJD#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):
@@ -218,7 +218,7 @@ class InterpInterpolationRequiredCase(testutil.FPTestCase):
 def aper_no_extrap_test():
   interp_val = -5.
   filename = os.path.join('comp','acs','acs_wfc_aper_002_syn.fits')
-  filename = S.observationmode._refTable(filename) + '[aper#]'
+  filename = locations._refTable(filename) + '[aper#]'
   
   nose.tools.assert_raises(exceptions.ExtrapolationNotAllowed,
                             S.spectrum.InterpolatedSpectralElement,
@@ -229,7 +229,7 @@ class RampFilterTest(testutil.FPTestCase):
   def setUp(self):
     interp_val = 6480.
     filename = os.path.join('comp','acs','acs_fr656n_005_syn.fits')
-    filename = S.observationmode._refTable(filename) + '[fr656n#]'
+    filename = locations._refTable(filename) + '[fr656n#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):
@@ -306,7 +306,7 @@ class RampFilterExtrapTest(RampFilterTest):
   def setUp(self):
     interp_val = -5.
     filename = os.path.join('comp','acs','acs_fr656n_005_syn.fits')
-    filename = S.observationmode._refTable(filename) + '[fr656n#]'
+    filename = locations._refTable(filename) + '[fr656n#]'
     self.spec = S.spectrum.InterpolatedSpectralElement(filename,interp_val)
     
   def test_throughput(self):

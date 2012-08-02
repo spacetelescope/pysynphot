@@ -1,12 +1,12 @@
-# WAVECAT.DAT -- A list of wavelength sets that cover the range of each 
+# WAVECAT.DAT -- A list of wavelength sets that cover the range of each
 # observation mode. Spectrographic modes have the wavelength spacing set
 # to equal the detector spacing. Wavelength sets can either be specified
-# as a file or a set of coefficients. In the latter case, the coefficients 
+# as a file or a set of coefficients. In the latter case, the coefficients
 # are surrounded by parentheses and separated by commas. There are up to
-# four coefficients. In order, they are the short wavelength, long 
+# four coefficients. In order, they are the short wavelength, long
 # wavelength, dispersion at the short wavelength, and dispesion at the long
 # wavelength. Either one or both of the dispersions are optional. Units
-# of the wavelengths are in angstroms and of the dispersions are angstroms 
+# of the wavelengths are in angstroms and of the dispersions are angstroms
 # per pixel.
 #
 #_OBSMODE_______________FILENAME_______________________
@@ -320,3 +320,32 @@ cos,nuv,g285m,c3074    synphot$data/cos_nuv_g285m_3074.txt
 cos,nuv,g285m,c3094    synphot$data/cos_nuv_g285m_3094.txt
 cos,nuv,mirrora        synphot$data/cos_mirror.txt
 cos,nuv,mirrorb        synphot$data/cos_mirror.txt
+miri                    (20000.0,300000.0,10.0)
+miri,mrs,channel1,a   synphot$data/miri_mrs_1a.dat
+miri,mrs,channel1,b   synphot$data/miri_mrs_1b.dat
+miri,mrs,channel1,c   synphot$data/miri_mrs_1c.dat
+miri,mrs,channel2,a   synphot$data/miri_mrs_2a.dat
+miri,mrs,channel2,b   synphot$data/miri_mrs_2b.dat
+miri,mrs,channel2,c   synphot$data/miri_mrs_2c.dat
+miri,mrs,channel3,a   synphot$data/miri_mrs_3a.dat
+miri,mrs,channel3,b   synphot$data/miri_mrs_3b.dat
+miri,mrs,channel3,c   synphot$data/miri_mrs_3c.dat
+miri,mrs,channel4,a   synphot$data/miri_mrs_4a.dat
+miri,mrs,channel4,b   synphot$data/miri_mrs_4b.dat
+miri,mrs,channel4,c   synphot$data/miri_mrs_4c.dat
+nircam                  (6000.0,50000.0,1.0)
+nirspec                        synphot$data/nsp_msa_wavecat.txt
+nirspec,msa,clear,prism        synphot$data/nirspec_prism.wavecat
+nirspec,msa,f100lp,g140h       synphot$data/nirspec_g140h.wavecat
+nirspec,msa,f100lp,g140m       synphot$data/nirspec_g140m.wavecat
+nirspec,msa,f170lp,g235m       synphot$data/nirspec_g235m.wavecat
+nirspec,msa,f170lp,g235h       synphot$data/nirspec_g235h.wavecat
+nirspec,msa,f290lp,g395h       synphot$data/nirspec_g395h.wavecat
+nirspec,msa,f290lp,g395m       synphot$data/nirspec_g395m.wavecat
+nirspec,clear,prism        synphot$data/nirspec_prism.wavecat
+nirspec,f100lp,g140h       synphot$data/nirspec_g140h.wavecat
+nirspec,f100lp,g140m       synphot$data/nirspec_g140m.wavecat
+nirspec,f170lp,g235m       synphot$data/nirspec_g235m.wavecat
+nirspec,f170lp,g235h       synphot$data/nirspec_g235h.wavecat
+nirspec,f290lp,g395h       synphot$data/nirspec_g395h.wavecat
+nirspec,f290lp,g395m       synphot$data/nirspec_g395m.wavecat

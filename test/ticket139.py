@@ -10,7 +10,7 @@ import testutil
 import pysynphot as S
 
 
-orig_ref = S.observationmode.getref()
+orig_comptable = S.refs.getref()['comptable']
 
 
 def setUpModule():
@@ -19,7 +19,7 @@ def setUpModule():
 
 
 def tearDownModule():
-    S.setref(**orig_ref)
+    S.setref(comptable=orig_comptable)
 
 
 class JohnsonV(testutil.FPTestCase):

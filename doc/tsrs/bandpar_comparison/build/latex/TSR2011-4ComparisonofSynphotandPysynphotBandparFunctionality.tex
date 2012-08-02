@@ -56,7 +56,7 @@
 
 
 \title{TSR 2011-4: Comparison of Synphot and Pysynphot Bandpar Functionality}
-\date{November 15, 2011}
+\date{December 29, 2011}
 \release{2011-4 }
 \author{Matt Davis}
 \newcommand{\sphinxlogo}{\includegraphics{stsci_logo.pdf}\par}
@@ -155,8 +155,8 @@ Contents:
 \begin{abstract}
 
 Pysynphot attempts to replicate much of the functionality of the Synphot
-\href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{bandpar}
-utility but sometimes uses different formulae and algorithms.
+\href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{bandpar utility}
+but sometimes uses different formulae and algorithms.
 This TSR collects the calculations used in Pysynphot, Synphot, the
 formulae described in the \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual} in Section 5.1 on page 42,
 and the formulae in the Synphot help files.
@@ -169,18 +169,18 @@ and the formulae in the Synphot help files.
 
 \section{Summary}
 \label{main:summary}
-This value is added to image headers in the PHOTBW keyword.
+RMS width is added to image headers in the PHOTBW keyword.
 
 \textbf{Pysynphot}
 \begin{itemize}
 \item {} 
-\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1106}{SpectralElement.rmswidth}
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1083}{SpectralElement.rmswidth}
 
 \item {} 
 \emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
 
 \item {} 
-\emph{References}: {\hyperref[references:ref3]{\emph{3 page 836}}}
+\emph{References}: {\hyperref[references:ref3]{\emph{3: page 836}}}
 
 \end{itemize}
 
@@ -190,19 +190,20 @@ This value is added to image headers in the PHOTBW keyword.
 \emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{BANDW}
 
 \item {} 
-\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x}{rmslam} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by {\color{red}\bfseries{}{}`bandpar{}`\_}.
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x}{rmslam} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
 
 \item {} 
 \emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x}{rmslam.x}
 
 \item {} 
-\emph{References}: {\hyperref[references:ref1]{\emph{1 sections 5.1,7.1}}}, {\hyperref[references:ref2]{\emph{2}}}
+\emph{References}: {\hyperref[references:ref1]{\emph{1: sections 5.1,7.1}}}, {\hyperref[references:ref2]{\emph{2}}},
+{\hyperref[references:ref4]{\emph{4: page 46}}}
 
 \end{itemize}
 
 
 \section{Synphot Equations}
-\label{main:synphot-equations}\label{main:id1}
+\label{main:synphot-equations}\label{main:bandpar}
 The \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual} section 5.1 gives the equation for RMS bandwidth as
 \begin{gather}
 \begin{split}\lambda_{rms}^2 = \bar{\lambda}^2 \frac{\int P_{\lambda} \ln(\lambda/\bar{\lambda})^2
@@ -214,14 +215,11 @@ where
 {\int P_{\lambda} \,d\lambda/\lambda} \right].\end{split}\notag
 \end{gather}
 The Synphot function \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/rmslam.x}{rmslam} does appear to implement this procedure for
-calculating the RMS width of the bandpass. The source code references the WF/PC-1
-Instrument Handbook as the source of the equation for RMS width and references
+calculating the RMS width of the bandpass. The source code references the
+\href{http://www.stsci.edu/hst/wfpc/documents/HST\_WFPC\_Instrument\_Handbook.pdf}{WF/PC-1 Instrument Handbook}
+as the source of the equation for RMS width and references
 Schneider, Gunn and Hoessel (1983 ApJ 264,337) as the source for the equation
 for mean wavelength.
-
-A copy of the WF/PC-1 Instrument Handbook could not be found so it has not been
-verified that the Synphot code faithfully reproduces whatever may be documented
-there.
 
 The
 \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{bandpar help file}
@@ -244,8 +242,559 @@ where
 {\int P_{\lambda} \,d\lambda}.\end{split}\notag
 \end{gather}
 
+\chapter{Full Width Half-Max - FWHM}
+\label{main:full-width-half-max-fwhm}\label{main:rmswidth}
+
+\section{Summary}
+\label{main:id1}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1462}{SpectralElement.fwhm}
+
+\item {} 
+\emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{FWHM}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/fwhmlam.x}{fwhmlam}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/fwhmlam.x}{fwhmlam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: section 5.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id3}
+The FWHM is simply defined relative to the RMS width above:
+\begin{gather}
+\begin{split}fwhm = \sqrt{8\ln 2}\cdot rmswidth\end{split}\notag
+\end{gather}
+
+\section{Pysynphot Equations}
+\label{main:id4}
+Pysynphot does not currently implement a FWHM calculation.
+See \href{https://trac.assembla.com/astrolib/ticket/139}{https://trac.assembla.com/astrolib/ticket/139}.
+
+
+\chapter{Equivalent Width - EQUVW}
+\label{main:equivalent-width-equvw}
+
+\section{Summary}
+\label{main:id5}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1126}{SpectralElement.equvwidth}
+
+\item {} 
+\emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{EQUVW}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/widthlam.x}{widthlam}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/widthlam.x}{widthlam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: section 5.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id7}
+The equivalent width is simply the integral of the throughput:
+\begin{gather}
+\begin{split}equvw = \int P_{\lambda}\,d\lambda\end{split}\notag
+\end{gather}
+
+\section{Pysynphot Equations}
+\label{main:id8}
+Pysynphot calculates the equivalent width in the same manner as Synphot.
+
+
+\chapter{Rectangular Width - RECTW}
+\label{main:rectangular-width-rectw}
+
+\section{Summary}
+\label{main:id9}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1109}{SpectralElement.rectwidth}
+
+\item {} 
+\emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{RECTW}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/widthlam.x}{widthlam}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/widthlam.x}{widthlam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: section 5.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id13}
+Synphot calculates the rectangular width at the same time it calculates the
+equivalent width by simply dividing the equivalent width by the maximum
+throughput of the passband:
+\begin{gather}
+\begin{split}rectw = \frac{equvw}{\max(P_{\lambda})}\end{split}\notag
+\end{gather}
+This is equivalent to the formula given in section 5.1 of the \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual}:
+\begin{gather}
+\begin{split}rectw = \frac{\int P_{\lambda}\,d\lambda}{\max(P_{\lambda})}\end{split}\notag
+\end{gather}
+
+\section{Pysynphot Equations}
+\label{main:id14}
+Pysynphot calculates the rectangular width in functionally the same way as
+Synphot but does not defer any calculation to the equivalent width method.
+Instead, Pysynphot directly calculates the integral of the throughput and
+divides by the maximum within the \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1109}{rectwidth method}.
+
+
+\chapter{Unit Response - URESP - PHOTFLAM}
+\label{main:unit-response-uresp-photflam}
+
+\section{Summary}
+\label{main:id15}
+Unit response is added to image headers in the PHOTFLAM keyword.
+
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1429}{SpectralElement.unit\_response}
+
+\item {} 
+\emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{URESP}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/funit.x}{funit}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/funit.x}{funit.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: sections 5.1, 7.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id17}\begin{gather}
+\begin{split}U_{\lambda} = \frac{hc/A}{\int \lambda P_{\lambda}\,d\lambda}\end{split}\notag
+\end{gather}
+where $h$ and $c$ are the usual fundamental constants and
+$A$ is the area of the telescope primary mirror.
+
+
+\section{Pysynphot Equations}
+\label{main:id18}
+Pysynphot calculates the unit response in the same way as Synphot.
+
+
+\chapter{Pivot Wavelength - PIVWV - PHOTPLAM}
+\label{main:pivot-wavelength-pivwv-photplam}
+
+\section{Summary}
+\label{main:id19}
+Pivot wavelength is added to image headers in the PHOTPLAM keyword.
+
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1060}{SpectralElement.pivot}
+
+\item {} 
+\emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{PIVWV}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/pivlam.x}{pivlam}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/pivlam.x}{pivlam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: sections 5.1, 7.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id21}
+The pivot wavelength equation is recorded in sections 5.1 and 7.1 of the
+\href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{Synphot Manual} and matches in both places.
+\begin{gather}
+\begin{split}\lambda_p = \sqrt{\frac{\int \lambda P_{\lambda}\,d\lambda}
+                 {\int P_{\lambda}\,d\lambda/\lambda}}\end{split}\notag
+\end{gather}
+
+\section{Pysynphot Equations}
+\label{main:id22}
+Pysynphot calculates the pivot wavelength in the same way as Synphot.
+
+
+\chapter{Wavelength at Peak Throughput - WPEAK}
+\label{main:wavelength-at-peak-throughput-wpeak}
+
+\section{Summary}
+\label{main:id23}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}:
+
+\item {} 
+\emph{Source code}:
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{WPEAK}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/peaklam.x}{peaklam2}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/peaklam.x}{peaklam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: sections 5.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id24}
+Like the name implies, this is simply the wavelength at the point of peak
+throughput. Synphot finds it by looping over the throughput.
+
+
+\section{Pysynphot Equations}
+\label{main:id25}
+Pysynphot does not currently implement a peak wavelength calculation.
+See \href{https://trac.assembla.com/astrolib/ticket/139}{https://trac.assembla.com/astrolib/ticket/139}.
+
+
+\chapter{Peak Throughput - TPEAK}
+\label{main:peak-throughput-tpeak}
+
+\section{Summary}
+\label{main:id26}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}:
+
+\item {} 
+\emph{Source code}:
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{TPEAK}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/peaklam.x}{peaklam2}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/peaklam.x}{peaklam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: sections 5.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id29}
+This is simply the maximum throughput of the passband. Synphot finds it by
+looping over the throughput.
+
+
+\section{Pysynphot Equations}
+\label{main:id30}
+Pysynphot does not currently implement a peak throughput calculation.
+See \href{https://trac.assembla.com/astrolib/ticket/139}{https://trac.assembla.com/astrolib/ticket/139}.
+
+
+\chapter{Average Wavelength - AVGWV}
+\label{main:average-wavelength-avgwv}
+
+\section{Summary}
+\label{main:id31}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1039}{SpectralElement.avgwave}
+
+\item {} 
+\emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref3]{\emph{3: page 836}}}
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{AVGWV}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/avglam.x}{avglam}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/lib/synphot/avglam.x}{avglam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: sections 5.1, 7.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id33}\begin{gather}
+\begin{split}\lambda_0 = \frac{\int \lambda P_{\lambda}\,d\lambda}
+             {\int P_{\lambda}\,d\lambda}\end{split}\notag
+\end{gather}
+
+\section{Pysynphot Equations}
+\label{main:id34}
+Pysynphot calculates the average wavelength in the same way as Synphot.
+
+
+\chapter{Dimensionless Efficiency - QTLAM}
+\label{main:dimensionless-efficiency-qtlam}
+
+\section{Summary}
+\label{main:id35}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1131}{SpectralElement.efficiency}
+
+\item {} 
+\emph{Source code}: \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py}{spectrum.py}
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{QTLAM}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/qtlam.x}{qtlam}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/qtlam.x}{qtlam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: section 5.1}}}, {\hyperref[references:ref5]{\emph{5: page 152}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id38}\begin{gather}
+\begin{split}qtlam = \int P_{\lambda}\,d\lambda/\lambda\end{split}\notag
+\end{gather}
+
+\section{Pysynphot Equations}
+\label{main:id39}
+Pysynphot calculates the efficiency in the same way as Synphot.
+
+
+\chapter{Throughput at Reference Wavelength - TLAMBDA}
+\label{main:throughput-at-reference-wavelength-tlambda}
+
+\section{Summary}
+\label{main:id40}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}:
+
+\item {} 
+\emph{Source code}:
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{TLAMBDA}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/monolam.x}{monolam}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/monolam.x}{monolam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: sections 5.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id41}
+This is simply the bandpass throughput at a reference wavelength. By default
+the reference wavelength is the average wavelength as defined above.
+
+
+\section{Pysynphot Equations}
+\label{main:id42}
+The throughput of a Pysynphot SpectralElement object can be sampled at any
+wavelength using the \href{https://trac.assembla.com/astrolib/browser/trunk/pysynphot/lib/pysynphot/spectrum.py\#L1251}{sample() method}.
+There is no function specifically for retrieving the throughput at the
+average wavelength.
+
+
+\chapter{Equivalent Monochromatic Flux - EMFLX}
+\label{main:equivalent-monochromatic-flux-emflx}
+
+\section{Summary}
+\label{main:id43}
+\textbf{Pysynphot}
+\begin{itemize}
+\item {} 
+\emph{Function name}:
+
+\item {} 
+\emph{Source code}:
+
+\item {} 
+\emph{References}:
+
+\end{itemize}
+
+\textbf{Synphot}
+\begin{itemize}
+\item {} 
+\emph{Bandpar name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/doc/bandpar.hlp}{EMFLX}
+
+\item {} 
+\emph{Function name}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/monolam.x}{monolam}
+called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/comppar.x}{comppar} called by \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/bandpar/bandpar.x}{bandpar}.
+
+\item {} 
+\emph{Source code}: \href{https://svn.stsci.edu/trac/ssb/stsci\_python/browser/stsdas/trunk/stsdas/pkg/hst\_calib/synphot/newlib/monolam.x}{monolam.x}
+
+\item {} 
+\emph{References}: {\hyperref[references:ref1]{\emph{1: sections 5.1}}}
+
+\end{itemize}
+
+
+\section{Synphot Equations}
+\label{main:id46}
+The equivalent monochromatic flux is a combination of unit response,
+rectangular width, peak throughput and throughput at the average wavelength:
+\begin{gather}
+\begin{split}emflx = uresp \cdot rectw \cdot \frac{tpeak}{tlambda}\end{split}\notag
+\end{gather}
+
+\section{Pysynphot Equations}
+\label{main:id47}
+Pysynphot does not currently implement an equivalent monochromatic flux
+calculation. See \href{https://trac.assembla.com/astrolib/ticket/139}{https://trac.assembla.com/astrolib/ticket/139}.
+
+
+\chapter{Reference Wavelength - REFWAVE}
+\label{main:reference-wavelength-refwave}
+See the section on average wavelength above.
+
+
 \chapter{References}
-\label{references:references}\label{references::doc}\label{references:rmswidth}\phantomsection\label{references:ref1}\begin{enumerate}
+\label{references:references}\label{references::doc}\phantomsection\label{references:ref1}\begin{enumerate}
 \item {} 
 Synphot Manual: \href{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}{http://stsdas.stsci.edu/stsci\_python\_epydoc/SynphotManual.pdf}
 
@@ -260,6 +809,20 @@ Schneider, Gunn and Hoessel (1983 ApJ 264,337)
 \setcounter{enumi}{2}
 \item {} 
 Koornneef et al., 1987
+
+\end{enumerate}
+\phantomsection\label{references:ref4}\begin{enumerate}
+\setcounter{enumi}{3}
+\item {} 
+WFPC1 Instrument Handbook:
+\href{http://www.stsci.edu/hst/wfpc/documents/HST\_WFPC\_Instrument\_Handbook.pdf}{http://www.stsci.edu/hst/wfpc/documents/HST\_WFPC\_Instrument\_Handbook.pdf}
+
+\end{enumerate}
+\phantomsection\label{references:ref5}\begin{enumerate}
+\setcounter{enumi}{4}
+\item {} 
+WFPC2 Instrument Handbook:
+\href{http://www.stsci.edu/instruments/wfpc2/Wfpc2\_hand\_current/wfpc2\_ihb.pdf}{http://www.stsci.edu/instruments/wfpc2/Wfpc2\_hand\_current/wfpc2\_ihb.pdf}
 
 \end{enumerate}
 

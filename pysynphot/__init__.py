@@ -35,7 +35,7 @@ can be found at U{http://stsdas.stsci.edu/pysynphot/
 >>> import pysynphot as S
 >>> import os
 >>> print S.__version__
-0.9.2dev
+0.9.4dev
 >>> #Read a spectrum from a file
 >>> vega=S.FileSpectrum(S.locations.VegaFile)
 
@@ -161,7 +161,7 @@ from spectrum import Vega
 #Get cache
 import Cache
 #Permit resetting refdata
-from observationmode import setref, showref
+from refs import setref, showref
 #
 from locations import get_data_filename
 import tables

@@ -25,8 +25,8 @@ import warnings
 import pyfits
 import numpy as N
 
+import refs
 import units
-import observationmode
 import locations
 import planck
 import pysynphot.exceptions as exceptions #custom pysyn exceptions
@@ -51,27 +51,6 @@ MERGETHRESH = 1.e-12
 #This is the minimum separation in wavelength value necessary for
 #synphot to read the entries as distinct single-precision numbers.
 syn_epsilon=0.00032
-
-def _computeDefaultWaveset():
-    minwave = 500.
-    maxwave = 26000.
-    lenwave = 10000
-
-    w1 = math.log10(minwave)
-    w2 = math.log10(maxwave)
-
-    result = N.zeros(shape=[lenwave,],dtype=N.float64)
-
-    for i in range(lenwave):
-        frac = float(i) / lenwave
-        result[i] = 10 ** (w1 * (1.0 - frac) + w2 * frac)
-
-    return result
-
-# Default waveset is computed at load time, once and for all.
-# Note that this is not thread safe.
-global default_waveset
-default_waveset = _computeDefaultWaveset()
 
 
 def MergeWaveSets(waveset1, waveset2):
@@ -258,13 +237,19 @@ class SourceSpectrum(Integrator):
         '''Returns wavelength and flux arrays as a tuple, performing
            units conversion.
         '''
-        wave = self.GetWaveSet();
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+
+        wave = self.GetWaveSet()
         flux = self(wave)
 
-        flux = units.Photlam().Convert(wave, flux, self.fluxunits.name)
+        flux = units.Photlam().Convert(wave, flux,
+                                        self.fluxunits.name, area=area)
         wave = units.Angstrom().Convert(wave, self.waveunits.name)
 
-        return (wave, flux)
+        return wave, flux
 
     #Define properties for consistent UI
     def _getWaveProp(self):
@@ -275,8 +260,8 @@ class SourceSpectrum(Integrator):
         wave,flux=self.getArrays()
         return flux
 
-    wave=property(_getWaveProp,doc="Wavelength property")
-    flux=property(_getFluxProp,doc="Flux property")
+    wave=property(_getWaveProp, doc="Wavelength property")
+    flux=property(_getFluxProp, doc="Flux property")
 
     def validate_units(self):
         "Ensure that waveunits are WaveUnits and fluxunits are FluxUnits"
@@ -407,18 +392,39 @@ class SourceSpectrum(Integrator):
         return self.trapezoidIntegration(wave,flux)
 
 
-    def sample(self,wave):
+    def sample(self,wave, interp=True):
         """Return a flux array, in self.fluxunits, on the provided
         wavetable"""
-        # convert input wavelengths to Angstroms since the __call__ method
-        # will be expecting that
-        angwave = self.waveunits.ToAngstrom(wave)
 
-        #First use the __call__ to get it in photlam
-        flux = self(angwave)
+        if interp:
+            # convert input wavelengths to Angstroms since the __call__ method
+            # will be expecting that
+            angwave = self.waveunits.ToAngstrom(wave)
 
-        #Then convert to the desired units
-        ans = units.Photlam().Convert(angwave,flux,self.fluxunits.name)
+            #First use the __call__ to get it in photlam
+            flux = self(angwave)
+
+            if hasattr(self, 'primary_area'):
+                area = self.primary_area
+            else:
+                area = None
+
+            #Then convert to the desired units
+            ans = units.Photlam().Convert(angwave, flux,
+                                          self.fluxunits.name, area=area)
+
+        else:
+            # Get the arrays in the proper units
+            wave_array, flux_array = self.getArrays()
+            if N.isscalar(wave):
+                # Find the correct index
+                diff = abs(wave-wave_array)
+                idx = diff.argmin()
+
+                ans = flux_array[idx]
+
+            else:
+                raise NotImplementedError("Interp=False not yet supported for non-scalars")
 
         return ans
 
@@ -429,6 +435,7 @@ class SourceSpectrum(Integrator):
         units. Method getArrays does the actual computation.
         '''
         nunits = units.Units(targetunits)
+
         if nunits.isFlux:
             self.fluxunits = nunits
         else:
@@ -488,11 +495,14 @@ class CompositeSourceSpectrum(SourceSpectrum):
         self.component1 = source1
         self.component2 = source2
         self.operation = operation
-        self.name=str(self)
+
+        self.name = str(self)
+
         #Propagate warnings
         self.warnings={}
         self.warnings.update(source1.warnings)
         self.warnings.update(source2.warnings)
+
         # for now we keep these attributes here, in spite of the internal
         # units model. There is code that still breaks down if these attributes
         # are not here.
@@ -505,9 +515,39 @@ class CompositeSourceSpectrum(SourceSpectrum):
 
         self.isAnalytic = source1.isAnalytic and source2.isAnalytic
 
+        # check areas
+        if hasattr(source1, 'primary_area'):
+            source1_area = source1.primary_area
+        else:
+            source1_area = None
+
+        if hasattr(source2, 'primary_area'):
+            source2_area = source2.primary_area
+        else:
+            source2_area = None
+
+        if not source1_area and not source2_area:
+            self.primary_area = None
+
+        elif source1_area and not source2_area:
+            self.primary_area = source1_area
+
+        elif not source1_area and source2_area:
+            self.primary_area = source2_area
+
+        else:
+            if source1_area == source2_area:
+                self.primary_area = source1_area
+
+            else:
+                err = 'Components have different area attributes: %s: %f, %s: %f'
+                err = err % (str(source1), source1_area,
+                             str(source2), source2_area)
+                raise exceptions.IncompatibleSources(err)
+
     def __str__(self):
         opdict = {'add':'+','multiply':'*'}
-        return "%s %s %s"%(str(self.component1),opdict[self.operation],str(self.component2))
+        return "%s %s %s" % (str(self.component1),opdict[self.operation],str(self.component2))
 
     def __call__(self, wavelength):
         '''Add or multiply components, delegating the function calculation
@@ -515,6 +555,7 @@ class CompositeSourceSpectrum(SourceSpectrum):
         '''
         if self.operation == 'add':
             return self.component1(wavelength) + self.component2(wavelength)
+
         if self.operation == 'multiply':
             return self.component1(wavelength) * self.component2(wavelength)
 
@@ -628,6 +669,9 @@ class TabularSourceSpectrum(SourceSpectrum):
             return self.resample(wavelengths)._fluxtable
 
 
+
+
+
     def taper(self):
         '''Taper the spectrum by adding zeros to each end.
         '''
@@ -710,12 +754,22 @@ class TabularSourceSpectrum(SourceSpectrum):
         '''Convert to the internal representation of (angstroms, photlam).
         '''
         self.validate_units()
+
         savewunits = self.waveunits
         savefunits = self.fluxunits
+
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+
         angwave = self.waveunits.Convert(self.GetWaveSet(), 'angstrom')
-        phoflux = self.fluxunits.Convert(angwave, self._fluxtable, 'photlam')
+        phoflux = self.fluxunits.Convert(angwave, self._fluxtable, 'photlam',
+                                          area=area)
+
         self._wavetable = angwave.copy()
         self._fluxtable = phoflux.copy()
+
         self.waveunits = savewunits
         self.fluxunits = savefunits
 
@@ -845,8 +899,7 @@ class AnalyticSpectrum(SourceSpectrum):
         self.warnings={}
 
     def GetWaveSet(self):
-        global default_waveset
-        return default_waveset.copy()
+        return refs._default_waveset.copy()
 
 
 class GaussianSource(AnalyticSpectrum):
@@ -893,8 +946,13 @@ class GaussianSource(AnalyticSpectrum):
         flux = self.factor * \
                 N.exp(-0.5 * ((wave - self.center) / self.sigma)**2)
 
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+
         # convert flux to photlam before returning
-        return self._input_flux_units.ToPhotlam(wave,flux)
+        return self._input_flux_units.ToPhotlam(wave, flux, area=area)
 
     def GetWaveSet(self):
         '''Return a wavelength set that describes the Gaussian.
@@ -924,7 +982,7 @@ class FlatSpectrum(AnalyticSpectrum):
 
     def __call__(self, wavelength):
         if hasattr(wavelength,'shape'):
-            flux = self._fluxdensity*N.ones(wavelength.shape,dtype=N.float64)
+            flux = self._fluxdensity * N.ones(wavelength.shape, dtype=N.float64)
         else:
             flux = self._fluxdensity
 
@@ -933,7 +991,12 @@ class FlatSpectrum(AnalyticSpectrum):
         # attribute in photlam
         wave = units.Angstrom().Convert(wavelength,self.waveunits.name)
 
-        return self._input_flux_units.ToPhotlam(wave,flux)
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+
+        return self._input_flux_units.ToPhotlam(wave, flux, area=area)
 
 
     def redshift(self, z):
@@ -948,8 +1011,7 @@ class FlatSpectrum(AnalyticSpectrum):
 
 ##This change produces 5 errors and 17 failures in cos_etc_test.py
 ##     def GetWaveSet(self):
-##         global default_waveset
-##         return N.array([default_waveset[0],default_waveset[-1]])
+##         return N.array([_default_waveset[0],_default_waveset[-1]])
 
 
 class Powerlaw(AnalyticSpectrum):
@@ -985,8 +1047,13 @@ class Powerlaw(AnalyticSpectrum):
 
         flux = (wave / self._refwave) ** self._index
 
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = None
+
         # convert flux to photlam before returning
-        return self._input_flux_units.ToPhotlam(wave,flux)
+        return self._input_flux_units.ToPhotlam(wave, flux, area=area)
 
 
 class BlackBody(AnalyticSpectrum):
@@ -1104,8 +1171,22 @@ class SpectralElement(Integrator):
         return math.sqrt(num/den)
 
     def rmswidth(self, floor=0):
-        """Defines the lambda sub rms from Koornneef et al 1987,
-        p 836; should be definition of bandpar.bandw"""
+        """
+        Calculate the RMS width as in Koornneef et al 1987, p 836.
+
+        Parameters
+        ----------
+        floor : float, optional
+            Points with throughputs below this threshold are not
+            included in the calculation. By default all points
+            are included.
+
+        Returns
+        -------
+        rmswidth : float
+            RMS width of the bandpass.
+
+        """
 
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
@@ -1128,6 +1209,61 @@ class SpectralElement(Integrator):
         else:
             ans = math.sqrt(num/den)
             return ans
+
+    def photbw(self, floor=0):
+        """
+        This is a compatibility function allowing pysynphot to calculate
+        the bandpass RMS width in the same way as Synphot (documented
+        in the Synphot Manual section 5.1). This is the value returned
+        in the BANDW keyword by Synphot's bandpar function.
+
+        This function is designed only for use to get the same results
+        as Synphot. To calculate the bandpass RMS width use the
+        `rmswidth` method.
+
+        Parameters
+        ----------
+        floor : float, optional
+            Points with throughputs below this threshold are not
+            included in the calculation. By default all points
+            are included.
+
+        Returns
+        -------
+        photbw : float
+            RMS width of the bandpass.
+
+        """
+        mywaveunits = self.waveunits.name
+        self.convert('angstroms')
+
+        wave=self.wave
+        thru=self.throughput
+        self.convert(mywaveunits)
+
+        # calculate the average wavelength
+        num = self.trapezoidIntegration(wave, thru * N.log(wave) / wave)
+        den = self.trapezoidIntegration(wave, thru / wave)
+
+        if num == 0 or den == 0:
+            error_str = 'Could not calculate average wavelength of bandpass.'
+            raise exceptions.PysnphotErorr(error_str)
+
+        avg_wave = N.exp(num/den)
+
+        if floor != 0:
+            idx = N.where(thru >= floor)
+            wave = wave[idx]
+            thru = thru[idx]
+
+        # calcualte the rms width
+        integrand = thru * N.log(wave / avg_wave)**2 / wave
+        num = self.trapezoidIntegration(wave, integrand)
+
+        if num == 0 or den == 0:
+            return 0.0
+
+        return avg_wave * N.sqrt(num/den)
 
     def rectwidth(self):
         """RECTW = INT(THRU) / MAX(THRU)"""
@@ -1271,9 +1407,11 @@ class SpectralElement(Integrator):
         else:
             return self.resample(wavelengths)._throughputtable
 
-    def sample(self, wavelengths):
+    def sample(self, wave):
         """Provide a more normal user interface to the __call__"""
-        return self.__call__(wavelengths)
+        angwave = self.waveunits.ToAngstrom(wave)
+
+        return self.__call__(angwave)
 
 
     def taper(self):
@@ -1458,11 +1596,16 @@ class SpectralElement(Integrator):
 
         """
         hc = units.HC
-        area = observationmode.HSTAREA
+
+        if hasattr(self, 'primary_area'):
+            area = self.primary_area
+        else:
+            area = refs.PRIMARY_AREA
 
         wave = self.GetWaveSet()
         thru = self(wave)
-        return hc / (area * self.trapezoidIntegration(wave,thru*wave))
+
+        return hc / (area * self.trapezoidIntegration(wave, thru*wave))
 
 
     def GetWaveSet(self):
@@ -1497,19 +1640,55 @@ class CompositeSpectralElement(SpectralElement):
         if (not isinstance(component1, SpectralElement) or
             not isinstance(component2, SpectralElement)):
             raise TypeError("Arguments must be SpectralElements")
+
         self.component1 = component1
         self.component2 = component2
+
         self.isAnalytic = component1.isAnalytic and component2.isAnalytic
+
         if component1.waveunits.name == component2.waveunits.name:
             self.waveunits = component1.waveunits
         else:
             msg="Components have different waveunits (%s and %s)"%(component1.waveunits,component2.waveunits)
             raise NotImplementedError(msg)
+
         self.throughputunits = None
+
         self.name="(%s * %s)"%(str(self.component1),str(self.component2))
+
         self.warnings={}
         self.warnings.update(component1.warnings)
         self.warnings.update(component2.warnings)
+
+         # check areas
+        if hasattr(component1, 'primary_area'):
+            comp1_area = component1.primary_area
+        else:
+            comp1_area = None
+
+        if hasattr(component2, 'primary_area'):
+            comp2_area = component2.primary_area
+        else:
+            comp2_area = None
+
+        if not comp1_area and not comp2_area:
+            self.primary_area = None
+
+        elif comp1_area and not comp2_area:
+            self.primary_area = comp1_area
+
+        elif not comp1_area and comp2_area:
+            self.primary_area = comp2_area
+
+        else:
+            if comp1_area == comp2_area:
+                self.primary_area = comp1_area
+
+            else:
+                err = 'Components have different area attributes: %s: %f, %s: %f'
+                err = err % (str(component1), comp1_area,
+                             str(component2), comp2_area)
+                raise exceptions.IncompatibleSources(err)
 
     def __call__(self, wavelength):
         '''This is where the throughput calculation is delegated.
@@ -1555,7 +1734,7 @@ class UniformTransmission(SpectralElement):
         self.warnings={}
         #The ._wavetable is used only by the .writefits() method at this time
         #It is not for general use.
-        self._wavetable = N.array([default_waveset[0],default_waveset[-1]])
+        self._wavetable = N.array([refs._default_waveset[0],refs._default_waveset[-1]])
 
     def __str__(self):
         return "%g"%self.value
@@ -1574,12 +1753,11 @@ class UniformTransmission(SpectralElement):
 
         """
         pass
-        
+
 
 ## This produced 15 test failures in cos_etc_test.
 ##     def GetWaveSet(self):
-##         global default_waveset
-##         return N.array([default_waveset[0],default_waveset[-1]])
+##         return N.array([_default_waveset[0],_default_waveset[-1]])
 ##
 ##     wave = property(GetWaveSet,doc="wave for UniformTransmission")
 
@@ -1684,7 +1862,7 @@ class ArraySpectralElement(TabularSpectralElement):
         @param name: Description of this spectral element
         @type name: string
         """
-        if len(wave)!=len(throughput):
+        if len(wave) != len(throughput):
             raise ValueError("wave and throughput arrays must be of equal length")
 
         self._wavetable=wave
@@ -1934,9 +2112,10 @@ class Box(SpectralElement):
         upper = center + width / 2.0
         step = 0.05                     # fixed step for now (in A)
 
-        self.name='Box at %g (%g wide)'%(center,width)
+        self.name='Box at %g (%g wide)' % (center,width)
         nwaves = int(((upper - lower) / step)) + 2
         self._wavetable = N.zeros(shape=[nwaves,], dtype=N.float64)
+
         for i in range(nwaves):
             self._wavetable[i] = lower + step * i
 

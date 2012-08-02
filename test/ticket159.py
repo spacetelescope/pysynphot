@@ -4,22 +4,22 @@ import os
 
 import testutil
 import pysynphot as S
-from pysynphot import etc
-from pysynphot import locations
+from pysynphot import spparser
+from pysynphot import locations, refs
 
 class SuccessCase(testutil.FPTestCase):
     def setUp(self):
         self.sp=S.BlackBody(5000)
         self.bp=S.ObsBandpass('Johnson,V')
-        self.oldref = S.observationmode.getref()
+        self.oldref = S.refs.getref()
         S.setref(comptable='$PYSYN_CDBS/mtab/t260548pm_tmc.fits')
         self.tda=dict(spectrum=str(self.sp),
                       bp=str(self.bp)
                       )
-        self.tda.update(S.observationmode.getref())
+        self.tda.update(refs.getref())
 
     def tearDown(self):
-        S.setref(**self.oldref)
+        S.setref(comptable=self.oldref['comptable'])
 
     def testok(self):
         obs=S.Observation(self.sp,self.bp)
@@ -67,7 +67,7 @@ class ParserRenormCase(testutil.FPTestCase):
         os.chdir(self.oldcwd)
 
     def testwarn(self):
-        self.sp = etc.parse_spec(self.syncmd)
+        self.sp = spparser.parse_spec(self.syncmd)
         self.tra = dict(spwarn=str(self.sp.warnings),
                         name=str(self.sp))
         self.failIf('PartialRenorm' not in self.sp.warnings)
@@ -81,10 +81,10 @@ class ETCTestCase(testutil.FPTestCase):
         self.spectrum = "((earthshine.fits*0.5)%2brn(spec(Zodi.fits),band(V),22.7,vegamag)%2b(el1215a.fits*0.5)%2b(el1302a.fits*0.5)%2b(el1356a.fits*0.5)%2b(el2471a.fits*0.5))"
         self.obsmode = "acs,sbc,F140LP"
         self.refrate = 0.0877036
-        self.oldref = S.observationmode.getref()
+        self.oldref = S.refs.getref()
         S.setref(comptable='$PYSYN_CDBS/mtab/t260548pm_tmc.fits')
         self.tda = dict(spectrum=str(self.spectrum), bp=str(self.obsmode))
-        self.tda.update(S.observationmode.getref())
+        self.tda.update(refs.getref())
         self.setup2()
 
     def setup2(self):
@@ -94,7 +94,7 @@ class ETCTestCase(testutil.FPTestCase):
                 os.chdir(os.path.join(locations.specdir, 'generic'))
             else:
                 os.chdir(locations.specdir)
-            self.sp = etc.parse_spec(self.spectrum)
+            self.sp = spparser.parse_spec(self.spectrum)
             self.bp = S.ObsBandpass(self.obsmode)
             self.parameters = ["spectrum=%s" % self.spectrum,
                                "instrument=%s" % self.obsmode]
@@ -103,23 +103,13 @@ class ETCTestCase(testutil.FPTestCase):
 
     def tearDown(self):
         os.chdir(self.oldpath)
-        S.setref(**self.oldref)
+        S.setref(comptable=self.oldref['comptable'])
 
     def testwarn(self):
         obs = S.Observation(self.sp, self.bp, force='taper')
         self.tra = dict(warnings=obs.warnings)
         self.assert_('PartialOverlap' in obs.warnings)
 
-    def testcrwarn(self):
-        ans=etc.countrate(self.parameters)
-        self.tra=dict(ans=ans)
-        self.assert_('partial' in ans[-1])
-
-    def testcountrate(self):
-        ans=etc.countrate(self.parameters)
-        q=(float(ans[0])-self.refrate)/self.refrate
-        self.tra=dict(ans=ans, discrep=q)
-        self.failIf(abs(q)>0.01)
 
 
 class TestComposite(testutil.FPTestCase):

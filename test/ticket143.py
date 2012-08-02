@@ -76,7 +76,7 @@ class TestStisDef(unittest.TestCase):
     #Same tests for an actual disperser
     def setUp(self):
         #Use a defined comptab here: we're examining native arrays
-        self.oldref = S.observationmode.getref()
+        self.oldref = S.refs.getref()
         S.setref(comptable='$PYSYN_CDBS/mtab/u4c18498m_tmc.fits')
         self.sp=S.BlackBody(4400)
         self.bp=S.ObsBandpass('stis,fuvmama,g140m,c1470,s52x01')
@@ -88,7 +88,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['bandpass']=str(self.bp)
 
     def tearDown(self):
-        S.setref(**self.oldref)
+        S.setref(comptable=self.oldref['comptable'])
 
 ## >>> bp=S.ObsBandpass('stis,fuvmama,g140m,c1470,s52x01')
 ## >>> sp=S.BlackBody(4400)
