@@ -26,6 +26,16 @@ GT_FILE_NO = locations.irafconvert('mtab$n9i1408hm_tmg.fits')
 GT_FILE_100 = os.path.join(os.path.dirname(__file__), 'data', 'cdbs', 'mtab',
                            'n9i1408hm_tmg.fits')
 
+
+def setUpModule():
+    pass
+
+
+def tearDownModule():
+    # Reset refs
+    reload(refs)
+
+
 def test_graph_table1():
   gt = GraphTable(GT_FILE_100)
 

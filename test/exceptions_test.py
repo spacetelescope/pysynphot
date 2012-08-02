@@ -10,14 +10,15 @@ class TMCmismatch(unittest.TestCase):
 
     def setUp(self):
         tmcname = os.path.join('mtab','r1j2146sm_tmc.fits')
-        self.old_comptable = refs.COMPTABLE
+        self.oldrefs = refs.getref()
         refs.COMPTABLE = locations._refTable(tmcname)
         tmgname = os.path.join('mtab','rbg2236im_tmg.fits')
         refs.GRAPHTABLE = locations._refTable(tmgname)
         self.omstring='acs,hrc,f555w,mjd#54000'
 
     def tearDown(self):
-        refs.COMPTABLE = self.old_comptable
+        refs.COMPTABLE = self.oldrefs['comptable']
+        refs.GRAPHTABLE = self.oldrefs['graphtable']
 
     def test1(self):
         "compname not found in tmc"

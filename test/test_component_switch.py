@@ -17,10 +17,12 @@ class TestCompSwitch(TestCase):
         self.cdbs = os.environ['PYSYN_CDBS']
 
         graphtab = os.path.join('mtab','u921351jm_tmg.fits')
+        self.old_refs = refs.getref()
         refs.GRAPHTABLE = locations._refTable(graphtab)
 
     def tearDown(self):
-        refs.setref()
+        refs.setref(graphtable=self.old_refs['graphtable'])
+        refs.setref(comptable=self.old_refs['comptable'])
 
     def test_one(self):
         throughput_list = ['comp/ota/hst_ota_007_syn.fits',
