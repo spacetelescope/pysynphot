@@ -250,7 +250,7 @@ class ThermCase(CommCase):
         cls.tra['thspec'] = cls.thspec.name
 
         cls.thspec.convert('counts')
-        cls.thermback = cls.thspec.integrate()*cls.omode.pixscale**2*cls.omode.primary
+        cls.thermback = cls.thspec.integrate()*cls.omode.pixscale**2*cls.omode.primary_area
         x = dict(PSTHMBCK=(cls.thermback, 'thermback'))
         tname = os.path.join(cls.location, cls.fname % kind)
         cls.thspec.writefits(tname, clobber=True, trimzero=False, hkeys=x)
