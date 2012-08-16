@@ -24,16 +24,49 @@ try:
 except ImportError:
   utils_imported = False
 
+
+def validate_overlap(comp1, comp2, force):
+  
+  """Validate the overlap between the wavesets of the two components.
+  If force is not None, the components may be adjusted.
+  """
+  warnings = dict()
+  if force is None:
+      stat=comp2.check_overlap(comp1)
+      if stat=='full':
+          pass
+      elif stat == 'partial':
+          raise(ValueError('Spectrum and bandpass do not fully overlap. You may use force=[extrap|taper] to force this Observation anyway.'))
+      elif stat == 'none':
+          raise(ValueError('Spectrum and bandpass are disjoint'))
+
+  elif force.lower() == 'taper':
+      try:
+          comp1=comp1.taper()
+      except AttributeError:
+          comp1=comp1.tabulate().taper()
+          warnings['PartialOverlap']=force
+
+  elif force.lower().startswith('extrap'):
+      #default behavior works, but check the overlap so we can set the warning
+      stat=comp2.check_overlap(comp1)
+      if stat == 'partial':
+          warnings['PartialOverlap']=force
+
+  else:
+      raise(KeyError("Illegal value force=%s; legal values=('taper','extrap')"%force))
+  return comp1, comp2, warnings
+
 class Observation(spectrum.CompositeSourceSpectrum):
     """ obs = Observation(Spectrum object, Bandpass object,
     binset=numpy array to be used for binning when converting to counts.)
-
+    
     Most ObsBandpass objects have a built-in binset that is optimized
     for use with the specified observing mode; specifying the binset
     in the Observation constructor would overrirde that binset.
 
     An Observation is the end point of a chain of spectral manipulation."""
-
+    
 
     def __init__(self,spec,band,binset=None,force=None):
         """The normal means of producing an Observation is by means of the
@@ -44,7 +77,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
         self.warnings={}
         self.validate_overlap(force)
         self.binset = binset
-
+        
         keep=self.warnings
         spectrum.CompositeSourceSpectrum.__init__(self,
                                                   self.spectrum,
@@ -52,7 +85,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
                                                   'multiply')
 
         self.warnings.update(keep)
-
+        
         #The natural waveset of the observation is the merge of the
         #natural waveset of the spectrum with the natural waveset of the
         #bandpass. Because the Observation inherits from a
@@ -63,37 +96,17 @@ class Observation(spectrum.CompositeSourceSpectrum):
         self.initbinset(binset)
         #self.initbinflux()
 
-
+        
     def validate_overlap(self,force):
         """By default, it is required that the spectrum and bandpass fully
         overlap. Partial overlap will raise an error in the absence of the
         force keyword, which may be set to "taper" or "extrap". """
 
+        #Wrap the function for convenience
+        self.spectrum, self.bandpass, warn = validate_overlap(self.spectrum,
+                                                              self.bandpass, force)
+        self.warnings.update(warn)
 
-        if force is None:
-            stat=self.bandpass.check_overlap(self.spectrum)
-            if stat=='full':
-                pass
-            elif stat == 'partial':
-                raise(ValueError('Spectrum and bandpass do not fully overlap. You may use force=[extrap|taper] to force this Observation anyway.'))
-            elif stat == 'none':
-                raise(ValueError('Spectrum and bandpass are disjoint'))
-
-        elif force.lower() == 'taper':
-            try:
-                self.spectrum=self.spectrum.taper()
-            except AttributeError:
-                self.spectrum=self.spectrum.tabulate().taper()
-                self.warnings['PartialOverlap']=force
-
-        elif force.lower().startswith('extrap'):
-            #default behavior works, but check the overlap so we can set the warning
-            stat=self.bandpass.check_overlap(self.spectrum)
-            if stat == 'partial':
-                self.warnings['PartialOverlap']=force
-
-        else:
-            raise(KeyError("Illegal value force=%s; legal values=('taper','extrap')"%force))
 
     def initbinset(self,binset=None):
         if binset is None:
@@ -104,7 +117,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
             except (KeyError, AttributeError), e:
                 self.binwave = self.spectrum.wave
                 print(msg)
-
+            
             if self.binwave is None:
                 self.binwave = self.spectrum.wave
                 print(msg)
@@ -124,7 +137,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         Thus, it makes sense to interpolate .wave/.flux; it does not
         make sense to interpolate .binwave/.binflux.
-
+        
         """
 
         # compute endpoints of each summation bin from their centers.
@@ -132,12 +145,12 @@ class Observation(spectrum.CompositeSourceSpectrum):
         endpoints = N.empty(shape=[len(bin_edges)+2,],
                             dtype=N.float64)
         endpoints[1:-1] = bin_edges
-
+        
         #compute the first and last by making them symmetric
         endpoints[0]  = self.binwave[0]  - (bin_edges[0]   - self.binwave[0])
         endpoints[-1] = self.binwave[-1] + (self.binwave[-1] - bin_edges[-1])
-
-        # merge these endpoints in with the natural waveset
+        
+        # merge these endpoints in with the natural waveset 
         spwave = spectrum.MergeWaveSets(self.wave, endpoints)
         spwave = spectrum.MergeWaveSets(spwave,self.binwave)
 
@@ -147,10 +160,10 @@ class Observation(spectrum.CompositeSourceSpectrum):
         self._indices_last = indices[1:]
 
         # prepare integration variables.
-        flux = self(spwave)
+        flux = self(spwave) 
         avflux = (flux[1:] + flux[:-1]) / 2.0
         self._deltaw = spwave[1:] - spwave[:-1]
-
+        
         # sum over each bin.
         if utils_imported is True:
             self._binflux, self._intwave = \
@@ -169,33 +182,33 @@ class Observation(spectrum.CompositeSourceSpectrum):
                 last = self._indices_last[i]
                 self._binflux[i]=(avflux[first:last]*self._deltaw[first:last]).sum()/self._deltaw[first:last].sum()
                 self._intwave[i]=self._deltaw[first:last].sum()
-
+        
         #Save the endpoints for future use
         self._bin_edges = endpoints
 
     def _getBinfluxProp(self):
         if self._binflux is None:
             self.initbinflux()
-
+        
         if hasattr(self.bandpass, 'primary_area'):
             area = self.bandpass.primary_area
         else:
             area = None
-
+            
         binflux = units.Photlam().Convert(self.binwave,
                                           self._binflux,
                                           self.fluxunits.name,
                                           area=area)
         return binflux
-
+    
     def _getBinwaveProp(self):
         if self._binwave is None:
             self.initbinset(self.binset)
         return self._binwave
-
+    
     binflux = property(_getBinfluxProp,doc='Flux on binned wavelength set property')
 #    binwave = property(_getBinwaveProp,doc='Waveset for binned flux')
-
+    
 
     # Multiplication is handled by performing the operation on
     # the spectral component of the Observation, and then creating a
@@ -215,14 +228,14 @@ class Observation(spectrum.CompositeSourceSpectrum):
         # the forcing behavior also needs to be propagated.
 
         force = self.warnings.get('PartialOverlap', None)
-
+      
         result = Observation(self.spectrum,
                              self.bandpass * other,
                              binset=self.binset,
                              force=force
                                  )
         return result
-
+      
     def __rmul__(self, other):
         return __mul__(self, other)
 
@@ -233,7 +246,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
         return result
     def __radd__(self, other):
         raise NotImplementedError('Observations cannot be added')
-
+      
 
     def redshift(self,z):
         raise NotImplementedError('Observations cannot be redshifted')
@@ -249,7 +262,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
                                                    trimzero=trimzero,
                                                    binned=binned,
                                                    hkeys=hkeys)
-
+            
     def countrate(self,binned=True,range=None,force=False):
         """This is the calculation performed when the ETC invokes countrate.
         Essentially it wants the effstim in counts.
@@ -259,8 +272,8 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         range=[low,high]: if range is not None, it is expected to be a
             sequence with two floating-point elements specifying the low
-            and high wavelength range (specified in self.waveunits) over
-            which the integration will be performed.
+            and high wavelength range (specified in self.waveunits) over 
+            which the integration will be performed. 
 
             This is an _inclusive_ range.
 
@@ -292,26 +305,26 @@ class Observation(spectrum.CompositeSourceSpectrum):
                   range[1]<self.binwave[0]):
                 raise ValueError("%s is disjoint from obs.binwave %s"%(range,
                                                                        [self.binwave[0],self.binwave[-1]]))
-            #Partial overlap
+            #Partial overlap                     
             else:
-
+                
                 if range[0] < self._bin_edges[0]:
                     warn=True
                     lx=None
                 else:
                     lx=N.searchsorted(self._bin_edges,range[0])-1
-
+                    
                 if range[1] > self._bin_edges[-1]:
                     warn=True
                     ux=None
                 else:
                     ux=N.searchsorted(self._bin_edges,range[1])
-
+                
 
             ans = self.binflux[lx:ux].sum()
             if warn and not force:
                 raise ValueError("%s does not fully overlap binwave range %s. Countrate in overlap area is %f"%(range,[self.binwave[0],self.binwave[-1]],ans))
-
+                                                                                                             
         else:
             if range is None:
                 ans = self.flux.sum()
@@ -347,7 +360,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
         finally:
             self.convert(oldunits)
             del x
-
+            
         return ans
 
     def _fluxcheck(self,totalflux):
@@ -357,8 +370,8 @@ class Observation(spectrum.CompositeSourceSpectrum):
             raise ValueError('Integrated flux is NaN')
         if N.isinf(totalflux):
             raise ValueError('Integrated flux is infinite')
-
-
+                            
+    
     def pivot(self,binned=True):
         """This is the calculation performed when the ETC invokes calcphot.
         Does this need to be calculated on binned waveset, or may
@@ -411,7 +424,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
         """
 
         if self._binflux is None:
-            self.initbinflux()
+          self.initbinflux()
 
         if fluxunits != 'counts':
             raise NotImplementedError("Sorry, only counts are supported at this time")
@@ -422,7 +435,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
                 saveunits=self.fluxunits
                 self.convert('counts')
 
-
+                
         if binned:
             #Then we don't interpolate, just return the appropriate values
             #from binflux
@@ -451,106 +464,106 @@ class Observation(spectrum.CompositeSourceSpectrum):
             else:
                 ans = N.interp(wv, self.wave, self.flux)
 
-
+            
         #Change units back, if necessary, then return
         if saveunits is not None:
             self.convert(saveunits)
         return ans
-
+        
     def pixel_range(self, waverange, waveunits=None, round='round'):
         """
         Returns the number of wavelength bins within `waverange`.
-
+        
         .. note:: This calls the `obsbandpass.pixel_range` function with
            `self.binwave` as the first argument. See
            `obsbandpass.pixel_range` for full documentation.
-
+           
         Parameters
         ----------
         waveunits : str, optional
             The units of the wavelengths given in `waverange`. Defaults to None.
             If None, the wavelengths are assumed to be in the units of the
             `waveunits` attribute.
-
+            
         Raises
         ------
         pysynphot.exceptions.UndefinedBinset
             If the `binwave` attribute is None.
-
+           
         See Also
         --------
         `obsbandpass.pixel_range`
-
+        
         """
         # make sure we have a binset to work with
         if self.binwave is None:
             raise exceptions.UndefinedBinset('No binset specified for this bandpass.')
-
+        
         # start by converting waverange to self.waveunits, if necessary
         if waveunits is not None:
             waveunits = units.Units(waveunits)
-
+            
             if not isinstance(waverange,N.ndarray):
                 waverange = N.array(waverange)
-
+            
             # convert to angstroms and then whatever self.waveunits is
             waverange = waveunits.ToAngstrom(waverange)
-
+            
             waverange = units.Angstrom().Convert(waverange, self.waveunits.name)
-
+        
         return pixel_range(self.binwave, waverange, round=round)
-
-
+        
+        
     def wave_range(self, cenwave, npix, waveunits=None, round='round'):
         """
         Get the wavelength range covered by a number of pixels, `npix`, centered
         on wavelength `cenwave`.
-
+        
         .. note:: This calls the `obsbandpass.wave_range` function with
            `self.binwave` as the first argument. See
            `obsbandpass.wave_range` for full documentation.
-
+           
         Parameters
         ----------
         waveunits : str, optional
             Wavelength units of `cenwave` and the returned wavelength range.
-            Defaults to None. If None, the wavelengths are assumed to be in
+            Defaults to None. If None, the wavelengths are assumed to be in 
             the units of the `waveunits` attribute.
-
+        
         Raises
         ------
         pysynphot.exceptions.UndefinedBinset
             If the `binwave` attribute is None.
-
+        
         See Also
         --------
         `obsbandpass.wave_range`
-
+        
         """
         # make sure we have a binset to work with
         if self.binwave is None:
             raise exceptions.UndefinedBinset('No binset specified for this bandpass.')
-
+        
         # convert cenwave from waveunits to self.waveunits, if necessary
         if waveunits is not None:
             waveunits = units.Units(waveunits)
-
+            
             # convert to angstroms and then whatever self.waveunits is
             cenwave = waveunits.ToAngstrom(cenwave)
             cenwave = units.Angstrom().Convert(cenwave, self.waveunits.name)
-
-        wave1, wave2 = wave_range(self.binwave, cenwave, npix, round=round)
-
+            
+        wave1, wave2 = wave_range(self.binwave, cenwave, npix, round=round)    
+            
         # translate ends to waveunits, if necessary
         if waveunits is not None:
             # convert to angstroms
             wave1 = self.waveunits.ToAngstrom(wave1)
             wave2 = self.waveunits.ToAngstrom(wave2)
-
+            
             # then to waveunits
             wave1 = units.Angstrom().Convert(wave1, waveunits.name)
             wave2 = units.Angstrom().Convert(wave2, waveunits.name)
-
+            
         return wave1, wave2
 
     def as_spectrum(self, binned=True):
