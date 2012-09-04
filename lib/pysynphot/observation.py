@@ -24,6 +24,52 @@ try:
 except ImportError:
   utils_imported = False
 
+def check_overlap(a, b):
+    """ Check for wavelength overlap between two psyn instances.
+
+    Generalized from psyn.SpectralElement.check_overlap().
+    
+    Parameters
+    ----------
+    a: psyn.Integrator instance
+    b: psyn.Integrator instance
+       Typically a psyn.SourceSpectrum, psyn.SpectralElement,
+       psyn.Observation, or psyn.ObsBandpass
+
+    Returns
+    -------
+    result: str, ['full'|'partial'|'none']
+
+    """
+    if a.isAnalytic or b.isAnalytic:
+        #then it's defined everywhere
+        result = 'full'
+    else:
+        #get the wavelength arrays
+        waves = list()
+        for x in (a, b):
+            if hasattr(x,'throughput'):
+                wv = x.wave[N.where(x.throughput != 0)]
+            elif hasattr(x,'flux'):
+                wv = x.wave
+            else:
+                raise AttributeError("neither flux nor throughput in %s"%x)
+            waves.append(wv)
+
+        #get the endpoints
+        a1,a2 = waves[0].min(), waves[0].max()
+        b1,b2 = waves[1].min(), waves[1].max()
+
+        #do the comparison
+        if (a1>=b1 and a2<=b2):
+            result = 'full'
+        elif (a2<b1) or (b2<a1):
+            result = 'none'
+        else:
+            result = 'partial'
+
+    return result
+
 
 def validate_overlap(comp1, comp2, force):
   
@@ -32,7 +78,7 @@ def validate_overlap(comp1, comp2, force):
   """
   warnings = dict()
   if force is None:
-      stat=comp2.check_overlap(comp1)
+      stat = comp2.check_overlap(comp1)
       if stat=='full':
           pass
       elif stat == 'partial':
