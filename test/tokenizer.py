@@ -98,12 +98,18 @@ def test_tokens() :
 # into a test
 def ptl2(l) :
     for x in l : 
-        print " ( '%s', %s ),  "% ( x.type, repr(x.attr ) )
+        print "    ( '%s', %s ),  "% ( x.type, repr(x.attr ) )
     print ""
 
 def stream_t( text, result ) :
     l = scanner.tokenize( text )
     print_token_list(l)
+    if result is None :
+        print "NO EXPECT LIST"
+        print "    ["
+        ptl2(l)
+        print "    ]"
+        raise Exception()
     for x,y in zip(result,l) :
         print "x=",x
         print "y=",y
@@ -179,4 +185,177 @@ def test_stream_c() :
         ( 'IDENTIFIER', 'abmag' ),  
         ( 'RPAREN', None ),  
         ]) 
+
+def test_stream_d() :
+    stream_t('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))*0.5',
+        [
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'earthshine.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '*', None ),  
+        ( 'FLOAT', '0.5' ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'rn' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'Zodi.fits' ),  
+        ( 'RPAREN', None ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'band' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'johnson' ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'v' ),  
+        ( 'RPAREN', None ),  
+        ( ',', None ),  
+        ( 'FLOAT', '22.7' ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'vegamag' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1215a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1302a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1356a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el2471a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( 'RPAREN', None ),  
+        ( '*', None ),  
+        ( 'FLOAT', '0.5' ),  
+        ]
+    )
+
+def test_stream_e() :
+    stream_t('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)*0.1+spec(el1302a.fits)*0.066666667+spec(el1356a.fits)*0.0060+spec(el2471a.fits)*0.0050)',
+        [
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'earthshine.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '*', None ),  
+        ( 'FLOAT', '0.5' ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'rn' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'Zodi.fits' ),  
+        ( 'RPAREN', None ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'band' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'johnson' ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'v' ),  
+        ( 'RPAREN', None ),  
+        ( ',', None ),  
+        ( 'FLOAT', '22.7' ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'vegamag' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1215a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '*', None ),  
+        ( 'FLOAT', '0.1' ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1302a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '*', None ),  
+        ( 'FLOAT', '0.066666667' ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1356a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '*', None ),  
+        ( 'FLOAT', '0.0060' ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el2471a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '*', None ),  
+        ( 'FLOAT', '0.0050' ),  
+        ( 'RPAREN', None ),  
+        ]
+    )
+
+
+def test_stream_f() :
+    stream_t('spec(earthshine.fits)*0.5+rn(spec(Zodi.fits),band(johnson,v),22.7,vegamag)+(spec(el1215a.fits)+spec(el1302a.fits)+spec(el1356a.fits)+spec(el2471a.fits))',
+        [
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'earthshine.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '*', None ),  
+        ( 'FLOAT', '0.5' ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'rn' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'Zodi.fits' ),  
+        ( 'RPAREN', None ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'band' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'johnson' ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'v' ),  
+        ( 'RPAREN', None ),  
+        ( ',', None ),  
+        ( 'FLOAT', '22.7' ),  
+        ( ',', None ),  
+        ( 'IDENTIFIER', 'vegamag' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1215a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1302a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el1356a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( '+', None ),  
+        ( 'IDENTIFIER', 'spec' ),  
+        ( 'LPAREN', None ),  
+        ( 'IDENTIFIER', 'el2471a.fits' ),  
+        ( 'RPAREN', None ),  
+        ( 'RPAREN', None ),  
+        ]
+    )
+
+
+# ticket 162
 
