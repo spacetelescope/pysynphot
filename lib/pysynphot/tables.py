@@ -20,17 +20,22 @@ class CompTable(object):
         '''__init__ instantiates the CompTable object, given the comptable
         file name as an input string.
 
-        Input:   string CFile containing comptable name
-        Effect:  populates two data members: compnames and filenames
-                 Both are 1-d chararrays'''
-        
+        Parameters
+        -----------
+        Input :  ndarray of chars
+            string CFile containing comptable name
+        Effect : ndarray of chars
+            populates two data members: compnames and filenames
+
+        '''
+
         # None is common for various errors.
         # the default value of None is not useful; pyfits.open(None) does not work.
         if CFile is None :
             raise TypeError('initializing CompTable with CFile=None; possible bad/missing CDBS')
 
         cp = pyfits.open(CFile)
-        
+
         self.compnames = cp[1].data.field('compname')
         self.filenames = cp[1].data.field('filename')
         compdict = {}
@@ -49,13 +54,19 @@ class GraphTable(object):
         ''' __init__ instantiates the GraphTable object, given the graph
         table name as an input string.
 
-        Input:  string GFile containing graph table name
-        Effect: populates four data members:
+        Parameters
+        ----------
+        Input :  string
+            GFile containing graph table name
+        Effect : dict
+            populates four data members::
+
                 keywords: CharArray of keyword names
                 innodes:  Int32 array of innodes
                 outnodes: Int32 array of outnodes
-                compnames:CharArray of components names'''
-        
+                compnames:CharArray of components names
+        '''
+
 
         # None is common for various errors.
         # the default value of None is not useful; pyfits.open(None) does not work.
@@ -63,10 +74,10 @@ class GraphTable(object):
             raise TypeError('initializing GraphTable with GFile=None; possible bad/missing CDBS')
 
         gp = pyfits.open(GFile)
-        
+
         if 'PRIMAREA' in gp[0].header:
             self.primary_area = gp[0].header['PRIMAREA']
-        
+
         self.keywords = gp[1].data.field('keyword')
         self.innodes = gp[1].data.field('innode')
         self.outnodes = gp[1].data.field('outnode')
@@ -121,7 +132,7 @@ class GraphTable(object):
             if result != 0:
                 index = N.where(self.keywords[nodes]==mode)
                 outnode = self.outnodes[nodes[0][index[0]]]
-                
+
 
         ## Return the outnode corresponding either to the matched mode,
         ## or to 'default'
@@ -141,7 +152,7 @@ class GraphTable(object):
         while outnode >= 0:
             if (DEBUG and (outnode < 0)):
                 print "outnode == %d: stop condition"%outnode
-       
+
             previous_outnode = outnode
 
             nodes = N.where(self.innodes == innode)
@@ -206,11 +217,10 @@ class GraphTable(object):
                 print "outnode == %d: stop condition"%outnode
             raise ValueError("Incomplete obsmode %s"%str(modes))
 
-        
+
         #Check for unused modes
         if inmodes != used_modes:
             unused=str(inmodes.difference(used_modes))
             raise ValueError("Warning: unused keywords %s"%unused)
-        
-        return (components,thcomponents)
 
+        return (components,thcomponents)

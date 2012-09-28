@@ -1,6 +1,6 @@
 """ Graph table re-implementation
-  Data structure & traversal algorithm suggested by Alex Martelli,
- http://stackoverflow.com/questions/844505/is-a-graph-library-eg-networkx-the-right-solution-for-my-python-problem
+Data structure & traversal algorithm suggested by Alex Martelli,
+http://stackoverflow.com/questions/844505/is-a-graph-library-eg-networkx-the-right-solution-for-my-python-problem
 """
 from __future__ import division
 from collections import defaultdict
@@ -12,7 +12,7 @@ class GraphNode(object):
     which must be filled later.
     This structure will be the value associated with the GraphTab dict.
     """
-    
+
     def __init__(self):
         """ ( (default_outnode, compname, thcompname),
               {'kwd':(outnode, compname, thcompname)} )"""
@@ -45,9 +45,15 @@ class GraphPath(object):
     """Simple class containing the result of a traversal of the GraphTable"""
 
     def __init__(self, obsmode_string, optical, thermal, params, tname):
-        """ optical: list of optical component names
-            thermal: list of thermal component names
-            params:  dictionary of {compname:parameterized value} for
+        """
+        Parameters
+        -----------
+        optical : list of strings
+            optical component names
+        thermal : list of strings
+            thermal component names
+        params : dict
+            dictionary of {compname:parameterized value} for
                      any parameterized keywords used in the obsmode string
         """
         self.obsmode = obsmode_string
@@ -62,7 +68,7 @@ class GraphPath(object):
     def __len__(self):
         return max(len(self.optical),
                    len(self.thermal))
-    
+
 class GraphTable(object):
     def __init__(self, fname):
         self.tab = defaultdict(GraphNode)
@@ -80,16 +86,16 @@ class GraphTable(object):
         for node in self.tab:
             self.all_nodes.add(node)
             self.add_descendants(node, self.all_nodes)
-        
+
     def inittab(self):
         #Both FITS files and text files are supported
         # In either case, process one row at a time
         if self.tname.endswith('.fits'):
             f = pyfits.open(self.tname)
-            
+
             if 'PRIMAREA' in f[0].header:
                 self.primary_area = f[0].header['PRIMAREA']
-            
+
             for row in f[1].data:
                 if not row.field('compname').endswith('graph'):
                     #Make it a list because FITS_records don't fully
@@ -97,7 +103,7 @@ class GraphTable(object):
                     self._setrow(list(row))
                 else:
                     raise NotImplementedError('Segmented graph tables not yet supported')
-            
+
             f.close()
 
         else: #Not a FITS file; assume text
@@ -112,9 +118,15 @@ class GraphTable(object):
             f.close()
 
     def _setrow(self, row):
-        """ row = a list or tuple containing ordered elements
-        kwd, innode, outnode, compname, thcomp
-        followed by comments & other ignored things
+        """
+        Parameters
+        ----------
+        row : a list or tuple
+            the list or tuple containing ordered elements::
+
+                kwd, innode, outnode, compname, thcomp
+
+            followed by comments & other ignored things
         """
         try:
             compname, kwd, innode, outnode, thcomp = row[0:5]
@@ -149,7 +161,7 @@ class GraphTable(object):
         used = set()
         paramcomp = dict()
         nodelist = list()
-        
+
         #Returns a list of keywords and a dict of paramkeys
         kws, paramdict = extract_keywords(icss)
         if verbose:
@@ -164,8 +176,8 @@ class GraphTable(object):
 
             #Check if the keywords match a named option
             found = kws & set(othernodes)
-            
-            
+
+
             if found:
                 if verbose: print found
                 #...and that we don't have ambiguity
@@ -213,7 +225,7 @@ class GraphTable(object):
         "auxiliary function: add all descendants of node to someset"
         someset = set()
         startnode = self.tab[node]
-        
+
         defout = startnode.default[0]
         if defout is not None:
             someset.add(defout)
@@ -246,7 +258,7 @@ class GraphTable(object):
             msg.append("%d unreachable nodes: "%len(unreachable))
             for node in unreachable:
                 msg.append(str(node))
-                
+
         if problemset:
             msg.append("Loop involving %d nodes"%len(problemset))
             for node in problemset:
@@ -256,12 +268,22 @@ class GraphTable(object):
             return msg
         else:
             return True
-        
+
 def extract_keywords(icss):
     """Helper function
-      icss: input comma-separated string
-       returns a set of keywords, plus a dict of {parameterized_keyword:
-       parameter_value}
+
+        Parameters
+        ----------
+        icss : string
+            comma-separated string
+
+        Returns
+        -------
+        kws : list of string
+            set of keywords
+        paramdict : dict
+            dict of {parameterized_keyword: parameter_value}
+
     """
     # Force to lower case & split into keywords
     kws=set(icss.lower().split(','))
@@ -282,7 +304,7 @@ def extract_keywords(icss):
 class CompTable(object):
     """This class will cooperate with a GraphPath to produce a
     realized list of files"""
-    
+
     def __init__(self, fname):
         self.tab = dict()
         self.tname = fname
@@ -290,7 +312,7 @@ class CompTable(object):
 
     def __getitem__(self, key):
         return self.tab[key]
-    
+
     def inittab(self):
         #Support fits or text files
         #Should the filenames be converted at this point, or later?
@@ -306,4 +328,3 @@ class CompTable(object):
                 compname, filename = line.split()
                 self.tab[compname] = filename
             f.close()
-            

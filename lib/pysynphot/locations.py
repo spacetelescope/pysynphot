@@ -148,8 +148,13 @@ def irafconvert(iraffilename):
     '''Convert the IRAF file name (in directory$file format) to its
     unix equivalent
 
+    Parameters
+    ----------
     Input:    string iraffilename
-    Output:   returns string unixfilename
+
+    Returns
+    --------
+    Output:   string unixfilename
           If '$' not found in the input string, just return
           the input string
           Non-string input raises an AttributeError'''
@@ -179,5 +184,3 @@ def irafconvert(iraffilename):
     else:
         #If no $ sign found, just return the filename unchanged
         return iraffilename
-
-

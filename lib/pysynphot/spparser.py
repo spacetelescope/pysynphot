@@ -1,3 +1,22 @@
+"""
+This file implements the pysynphot language parser.
+
+The language definition is in the docstring of class BaseParser,
+function p_top.  The parser code in spark.py builds its internal
+tables by reading the docstring, so you can't put anything else
+(like documentation) there.
+::
+
+  l = scan('text') returns a list of tokens
+
+  t = parse(l) converts the list of tokens into an Abstract Syntax Tree
+
+  r = interpret(t) converts that abstract syntax tree into a (tree
+    of?) pysynphot object, based on the conversion rules in class Interpreter
+
+In class Interpreter, the docstring of every function named with p\_
+is part of the instructions to the parser.
+"""
 from __future__ import division
 from spark import GenericScanner, GenericParser, GenericASTTraversal
 from spark import GenericASTBuilder, GenericASTMatcher
@@ -8,23 +27,6 @@ import locations
 import catalog
 import os
 from obsbandpass import ObsBandpass
-
-# This file implements the pysynphot language parser.
-#
-# The language definition is in the docstring of class BaseParser,
-# function p_top.  The parser code in spark.py builds its internal
-# tables by reading the docstring, so you can't put anything else
-# (like documentation) there.
-#
-# l = scan('text') returns a list of tokens
-#
-# t = parse(l) converts the list of tokens into an Abstract Syntax Tree
-#
-# r = interpret(t) converts that abstract syntax tree into a (tree
-#     of?) pysynphot object, based on the conversion rules in class Interpreter
-#
-# In class Interpreter, the docstring of every function named with p_
-# is part of the instructions to the parser.
 
 syfunctions = [
     'spec',
@@ -71,7 +73,7 @@ class Token:
         return cmp(self.type, o)
     def __repr__(self):
         if self.attr is not None:
-            return str(self.attr) 
+            return str(self.attr)
         else:
             return self.type
 
@@ -295,7 +297,7 @@ class Interpreter(GenericASTMatcher):
                 tree.value = "would call %s with the following args: %s" % (fname, repr(args))
 
 
-# stuff not yet handled, namely, Filelist, should be handled in interp function        
+# stuff not yet handled, namely, Filelist, should be handled in interp function
 zzz =   '''
 
             top ::= FILELIST

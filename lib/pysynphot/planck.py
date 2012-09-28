@@ -1,5 +1,5 @@
 from __future__ import division
-## Automatically adapted for numpy.numarray Mar 05, 2007 by 
+## Automatically adapted for numpy.numarray Mar 05, 2007 by
 
 import math
 import numpy as N
@@ -93,11 +93,3 @@ def bb_photlam_arcsec(wave, temperature):
 #       >>> af * sf * 1.0e-10   # per m  -->  per Angstrom
 #       2.3504386381829069e-25
 #
-
-
-
-
-
-
-
-        

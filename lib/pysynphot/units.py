@@ -1,11 +1,13 @@
-from __future__ import division
 """
 Units class hierarchy: is used to manage both wavelength and flux
 unit conversions
 
-Warning: vegamag unit conversions require spectrum and locations => circular
-imports.
+.. warning::
+
+  vegamag unit conversions require spectrum and locations modules => circular imports.
+
 """
+from __future__ import division
 
 import math
 import numpy as N
@@ -15,7 +17,7 @@ import refs #needed for PRIMARY_AREA
 #cannot just import the constant because it won't get updated
 #when the setref() function is used to change it.
 
-        
+
 C = 2.99792458e18 # speed of light in Angstrom/sec
 H = 6.62620E-27   # Planck's constant in ergs * sec
 HC = H * C
@@ -76,7 +78,7 @@ def ismatch(a,b):
                             return True
                         else:
                             return False
-            
+
 #......................................................................
 #Base classes
 
@@ -96,6 +98,7 @@ class BaseUnit(object):
         except KeyError:
             raise TypeError("%s cannot be converted to %s"%(self.name,
                                                             target_units))
+
 
 class WaveUnits(BaseUnit):
     """All WaveUnits know how to convert themselves to Angstroms"""
@@ -129,7 +132,7 @@ class FluxUnits(BaseUnit):
         # be defined in the renorm.py module; they can't be done here
         # because of a circular import problem. If you add a new fluxunit
         # in this file, you must define its StdSpectrum in renorm.py.
-        
+
     def Convert(self, wave, flux, target_units, area=None):
         """FluxUnits need both wavelength and flux tables to do a unit conversion."""
         try:
@@ -140,7 +143,7 @@ class FluxUnits(BaseUnit):
     def ToPhotlam(self, wave, flux, area=None):
         raise NotImplementedError("Required method ToPhotlam not yet implemented")
 
-    
+
 class LogFluxUnits(FluxUnits):
     """Base class for magnitudes, which often require special handling"""
     def __init__(self):
@@ -167,17 +170,17 @@ class Angstrom(WaveUnits):
                          'cm': self.ToCm,
                          'm': self.ToMeter,
                          'hz': self.ToHz}
-        
+
 
     def ToAngstrom(self, wave):
         if hasattr(wave,'copy'):
           return wave.copy()      # to avoid writing over any internal wave objects
         else:
           return wave             # probably a scalar
-    
+
     def ToNm(self, wave):
         return wave / 10.0
-    
+
     def ToMicron(self, wave):
         return wave * 1.0e-4
 
@@ -186,13 +189,13 @@ class Angstrom(WaveUnits):
 
     def ToMm(self, wave):
         return wave * 1.0e-7
-    
+
     def ToCm(self, wave):
         return wave * 1.0e-8
-    
+
     def ToMeter(self, wave):
         return wave * 1.0e-10
-    
+
     def ToHz(self, wave):
         return C / wave
 
@@ -224,7 +227,7 @@ class Photlam(FluxUnits):
 
         self.nativewave = Angstrom
 
-    
+
     def unitResponse(self, band):
         """Put a flat spectrum of 1 photlam through this band, & integrate"""
         #sumfilt(wave,0,band)
@@ -250,7 +253,7 @@ class Photlam(FluxUnits):
 
     def ToJy(self, wave, flux, **kwargs):
         return 1.0e+23 * H * flux * wave
-    
+
     def TomJy(self, wave, flux, **kwargs):
         return 1.0e+26 * H * flux * wave
 
@@ -259,23 +262,23 @@ class Photlam(FluxUnits):
 
     def TonJy(self, wave, flux, **kwargs):
         return 1.0e+32 * H * flux * wave
-    
+
     def ToABMag(self, wave, flux, **kwargs):
         arg = H * flux * wave
         return -1.085736 * N.log(arg) + ABZERO
-    
+
     def ToSTMag(self, wave, flux, **kwargs):
         arg = H * C* flux / wave
         return -1.085736 * N.log(arg) + STZERO
-    
+
     def ToOBMag(self, wave, flux, area=None):
         dw = _getDeltaWave(wave)
-        
+
         if area:
             arg = flux * dw * area
         else:
             arg = flux * dw * refs.PRIMARY_AREA
-        
+
         return -1.085736 * N.log(arg)
 
     def ToVegaMag(self, wave, flux, **kwargs):
@@ -289,7 +292,7 @@ class Photlam(FluxUnits):
             f = flux * _getDeltaWave(wave) * area
         else:
             f = flux * _getDeltaWave(wave) * refs.PRIMARY_AREA
-        
+
         return f
 
 
@@ -311,7 +314,7 @@ class InverseMicron(WaveUnits):
 
     def ToAngstrom(self, wave):
         return 1.0e4/wave
-        
+
 class _MetricWavelength(WaveUnits):
     """ Encapsulates some easy unit-conversion machinery. Angstrom
     is not subclassed from here because it needs to be especially smart in
@@ -324,7 +327,7 @@ class Nm(_MetricWavelength):
         _MetricWavelength.__init__(self)
         self.name = 'nm'
         self.factor = 10.0
-    
+
 class Micron(_MetricWavelength):
     def __init__(self):
         _MetricWavelength.__init__(self)
@@ -360,11 +363,11 @@ class Flam(FluxUnits):
         FluxUnits.__init__(self)
         self.name='flam'
         self.nativewave = Angstrom
-        
+
     def ToPhotlam(self, wave, flux, **kwargs):
         return flux * wave / HC
 
-    
+
     def unitResponse(self,band):
         #sumfilt(wave,1,band)
         # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
@@ -380,11 +383,11 @@ class Photnu(FluxUnits):
         FluxUnits.__init__(self)
         self.name = 'photnu'
         self.nativewave = Hz
-    
+
     def ToPhotlam(self, wave, flux, **kwargs):
         return C * flux / (wave * wave)
 
-    
+
     def unitResponse(self,band):
         #sumfilt(wave,-2,band)
         # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
@@ -400,7 +403,7 @@ class Fnu(FluxUnits):
         FluxUnits.__init__(self)
         self.name = 'fnu'
         self.nativewave = Hz
-    
+
     def ToPhotlam(self, wave, flux, **kwargs):
         return flux /wave / H
 
@@ -442,7 +445,7 @@ class mJy(FluxUnits):
     def ToPhotlam(self, wave, flux, **kwargs):
         return flux / wave * (1.0e-26 / H)
 
-    
+
     def unitResponse(self,band):
         #sumfilt(wave,-1,band)
         # SUMFILT = Sum [ FILT(I) * WAVE(I) ** NPOW * DWAVE(I) ]
@@ -460,7 +463,7 @@ class muJy(FluxUnits):	# New
 
     def ToPhotlam(self, wave, flux, **kwargs):
         return flux / wave * (1.0e-29 / H)
-   
+
     def unitResponse(self,band):
         wave=band.wave
         total = band.trapezoidIntegration(wave,band.throughput/wave)
@@ -476,7 +479,7 @@ class nJy(FluxUnits):  # New
 
     def ToPhotlam(self, wave, flux, **kwargs):
         return flux / wave * (1.0e-32 / H)
-   
+
     def unitResponse(self,band):
         wave=band.wave
         total = band.trapezoidIntegration(wave,band.throughput/wave)
@@ -489,8 +492,8 @@ class ABMag(LogFluxUnits):
         self.name = 'abmag'
         self.linunit = Fnu()
         self.zeropoint = ABZERO
-        
-    
+
+
     def ToPhotlam(self, wave, flux, **kwargs):
         return 1.0 / (H * wave) * 10.0**(-0.4 * (flux - ABZERO))
 
@@ -508,8 +511,8 @@ class STMag(LogFluxUnits):
         self.name = 'stmag'
         self.linunit = Flam()
         self.zeropoint = STZERO
-        
-    
+
+
     def ToPhotlam(self, wave, flux, **kwargs):
         return wave / H / C * 10.0**(-0.4 * (flux - STZERO))
 
@@ -528,15 +531,15 @@ class OBMag(LogFluxUnits):
         self.linunit = Counts()
         self.zeropoint = 0.0
         self.isDensity = False
-    
+
     def ToPhotlam(self, wave, flux, area=None):
         dw = _getDeltaWave(wave)
-        
+
         if area:
             f = 10.0**(-0.4 * flux) / (dw * area)
         else:
             f = 10.0**(-0.4 * flux) / (dw * refs.PRIMARY_AREA)
-        
+
         return f
 
     def unitResponse(self,band):
@@ -549,7 +552,7 @@ class VegaMag(LogFluxUnits):
         LogFluxUnits.__init__(self)
         self.name = 'vegamag'
         self.vegaspec = spectrum.Vega
-    
+
     def ToPhotlam(self, wave, flux, **kwargs):
         resampled = self.vegaspec.resample(wave)
         return resampled.flux * 10.0**(-0.4 * flux)
@@ -564,16 +567,16 @@ class Counts(FluxUnits):
         FluxUnits.__init__(self)
         self.name = 'counts'
         self.isDensity = False
-    
+
     def ToPhotlam(self, wave, flux, area=None):
         if area:
             f = flux / (_getDeltaWave(wave) * area)
         else:
             f = flux / (_getDeltaWave(wave) * refs.PRIMARY_AREA)
-        
+
         return f
 
-    
+
     def unitResponse(self,band):
         #sum = asumr(band,nwave)
         total = band.throughput.sum()
@@ -624,7 +627,7 @@ def _getDeltaWave(wave):
     """ Compute delta wavelngth for an array of wavelengths.
     If we had a WaveTable class, this function would be a method
     on that class: possible refactoring candidate. """
-    
+
     last = wave.shape[0]-1
 
     hold1 = N.empty(shape=wave.shape, dtype=N.float64)
