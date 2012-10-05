@@ -1,6 +1,8 @@
 import sys
 import pysynphot.spparser as p
 
+# Be sure to set global tda={ } and tra={ } in every test.
+
 def print_token_list(l) :
     for x in l : 
         print "%-20s "% x.type, x.attr
@@ -68,30 +70,42 @@ scanner = p.Scanner()
 def test_tokens() :
     fail = 0
 
+    global tda, tra
+    tda = { 'tda_expr' : [ ] }
+    tra = { 'tra_error' : [ ] }
+
     for x in tokens :
-        print "XXXX",x
         typ, val = x
         l = scanner.tokenize(val)
-        print "tokens:",len(l)
-        print_token_list(l)
+
+        err = None
 
         if not len(l) == 1 :
-            print "too many tokens"
+            err= "too many tokens"
             fail = 1
 
-        if not l[0].type == typ :
-            print "wrong type"
+        elif not l[0].type == typ :
+            err= "wrong type: found %s want %s"%(l[0].type, typ)
             fail = 1
 
-        if not (
+        elif not (
                 ( l[0].attr == val ) 
             or  ( l[0].attr is None ) 
             or  ( val.startswith('@') and ( l[0].attr == val[1:] ) )
             ) :
-            print "token value incorrect"
+            err= "token value incorrect: found %s want %s"%(l[0].attr, val)
             fail = 1
-        
+
+
+        if err :
+            print "XXXX",x
+            print err
+            print_token_list(l)
+            tda['tda_expr'].append(val)
+            tra['tra_error'].append(err)
+
     assert not fail
+    
 
 
 # use this to generate the list of tokens in a form easy to copy/paste
@@ -101,7 +115,14 @@ def ptl2(l) :
         print "    ( '%s', %s ),  "% ( x.type, repr(x.attr ) )
     print ""
 
+# Parse a bit of text and compare it to the expected token stream.
+# Each actual test function calls this.
+
 def stream_t( text, result ) :
+    global tda, tra
+    tda = { 'tda_expr' : text }
+    tra = { }
+
     l = scanner.tokenize( text )
     print_token_list(l)
     if result is None :
@@ -110,11 +131,17 @@ def stream_t( text, result ) :
         ptl2(l)
         print "    ]"
         raise Exception()
-    for x,y in zip(result,l) :
-        print "x=",x
-        print "y=",y
-        assert x[0] == y.type
-        assert x[1] == y.attr
+    for n,(expect,actual) in enumerate(zip(result,l)) :
+        print n, "expect=", expect, "actual=", (actual.type, actual.attr)
+        if ( expect[0] != actual.type ) or ( expect[1] != actual.attr ) :
+            tra = { 
+                'tra_expected_token'    : expect[1],
+                'tra_expected_type'     : expect[0],
+                'tra_actual_token'      : actual.attr,
+                'tra_actual_type'       : actual.type,
+                }
+
+            assert False, "fail"
 
 
 def test_stream_a() :
@@ -355,7 +382,4 @@ def test_stream_f() :
         ( 'RPAREN', None ),  
         ]
     )
-
-
-# ticket 162
 
