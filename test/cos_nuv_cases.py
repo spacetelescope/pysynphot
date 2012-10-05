@@ -5,6 +5,8 @@ from pysynphot import ObsBandpass, refs
 import testutil
 import sys,os
 
+refs.setref(comptable='$PYSYN_CDBS/mtab/r1j2146sm_tmc.fits',
+            graphtable='$PYSYN_CDBS/mtab/w3j2015mm_tmg.fits')
 print "%s:" % os.path.basename(__file__)
 print "   Tests are being run with %s" % refs.COMPTABLE
 print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
