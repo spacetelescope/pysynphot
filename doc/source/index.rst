@@ -5,8 +5,14 @@
 
 Welcome to PySynphot's documentation!
 ======================================
+.. currentmodule:: pysynphot
 
-Modules:
+.. automodule:: pysynphot
+
+
+
+Modules
+-------
 
 .. toctree::
    :maxdepth: 1
