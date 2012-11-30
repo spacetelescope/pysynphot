@@ -100,7 +100,8 @@ acs,hrc,f555w
 >>> len(bp1)
 6
 
-.. ## >>> sp1=S.FileSpectrum('/grp/hst/cdbs/calspec/feige66_002.fits')
+..  ## >>> sp1=S.FileSpectrum('/grp/hst/cdbs/calspec/feige66_002.fits')
+
 >>> print bp1.waveunits
 angstrom
 
