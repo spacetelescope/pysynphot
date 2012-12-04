@@ -141,7 +141,7 @@ if False :
     except:
         pass
 else :
-    __version__ = '0.9.4dev'
+    __version__ = '0.9.5dev'
 
 
 if 0 :
