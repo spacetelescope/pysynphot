@@ -14,6 +14,13 @@
 import sys, os
 from stsci.sphinxext.conf import *
 
+# work around that annoying warning that pysynphot always prints
+import warnings
+with warnings.catch_warnings() :
+    warnings.simplefilter('ignore')
+    import pysynphot
+
+
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
