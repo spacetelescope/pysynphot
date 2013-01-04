@@ -9,8 +9,7 @@ their subclasses.
 Also contains the Vega object, which is an instance of a FileSourceSpectrum
 that can be imported from this file and used for Vega-related calculations.
 
-Dependencies:
-=============
+:Dependencies:
 pyfits, numpy
 
 
@@ -273,15 +272,22 @@ class SourceSpectrum(Integrator):
     def writefits(self, filename, clobber=True, trimzero=True,
                   binned=False,precision=None,hkeys=None):
         """Write the spectrum to a FITS file.
-        filename:      name of file to write to
-        clobber=True:  Will clobber existing file by default
-        trimzero=True: Will trim zero-flux elements from both ends
-                   by default
-        binned=False:  Will write in native waveset by default
-        precision:     Will write in native precision by default; can be
-                   set to "single" or "double"
-        hkeys:         Optional dictionary of {keyword:(value,comment)}
-                   to be added to primary FITS header
+
+        Parameters
+        ----------
+        filename : string
+            name of file to write to
+        clobber : bool [Default: True]
+            Will clobber existing file by default
+        trimzero : bool [Default:True]
+            Will trim zero-flux elements from both ends by default
+        binned : bool [Default: False]
+            Will write in native waveset by default
+        precision : {'single','double', None}
+            Will write in native precision by default
+        hkeys :  dict
+            Optional dictionary of {keyword:(value,comment)} to be added to primary FITS header
+
         """
 
         pcodes={'d':'D','s':'E'}
@@ -698,8 +704,12 @@ class TabularSourceSpectrum(SourceSpectrum):
     def resample(self, resampledWaveTab):
         '''Interpolate flux given a wavelength array that is monotonically
         increasing and the TabularSourceSpectrum object.
-        @param resampledWaveTab: new wavelength table IN ANGSTROMS
-        @type ressampledWaveTab: ndarray
+
+        Parameters
+        ----------
+        resampledWaveTab : ndarray
+            new wavelength table IN ANGSTROMS
+
         '''
 
         ##Check whether the input wavetab is in descending order
@@ -774,7 +784,9 @@ class TabularSourceSpectrum(SourceSpectrum):
         self.fluxunits = savefunits
 
 class ArraySourceSpectrum(TabularSourceSpectrum):
-    """ spec = ArraySpectrum(numpy array containing wavelenght table,
+    """Create a spectrum from arrays.
+
+    spec = ArraySpectrum(numpy array containing wavelength table,
     numpy array containing flux table, waveunits, fluxunits,
     name=human-readable nickname for spectrum, keepneg=True to
     override the default behavior of setting negative flux values to zero)
@@ -783,20 +795,23 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
                  waveunits='angstrom', fluxunits='photlam',
                  name='UnnamedArraySpectrum',
                  keepneg=False):
-        """Create a spectrum from arrays.
-        @param wave: Wavelength array
-        @param flux: Flux array
-        @type wave,flux:  Numpy array with numerical data
+        """
 
-        @param waveunits: Units of wave
-        @param fluxunits: Units of flux
-        @type waveunits:  L{units.WaveUnits} or subclass
-        @type fluxunits: L{units.FluxUnits} or subclass
+        Parameters
+        -----------
+        wave : ndarray
+            Wavelength array
+        flux : ndarray
+            Flux array
+        waveunits : :py:class:`~pysynphot.units.WaveUnits` object or subclass
+            Units of wave
+        fluxunits : :py:class:`~pysynphot.units.FluxUnits` object or subclass
+            Units of flux
+        name : string
+            Description of this array
+        keepneg :  bool [Default: False]
+            If true, negative flux values will be retained; by default, they are forced to zero
 
-        @param name: Description of this array
-        @type name: string
-        @param keepneg: If true, negative flux values will be retained; by default, they are forced to zero
-        @type keepneg: bool
         """
         if len(wave)!=len(flux):
             raise ValueError("wave and flux arrays must be of equal length")
@@ -818,21 +833,25 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
 
 
 class FileSourceSpectrum(TabularSourceSpectrum):
-    """spec = FileSpectrum(filename (FITS or ASCII),
+    """ Create a spectrum from a file.
+
+    spec = FileSpectrum(filename (FITS or ASCII),
     fluxname=column name containing flux (for FITS tables only),
     keepneg=True to override thedefault behavior of setting negative
     flux values to zero)"""
 
     def __init__(self, filename, fluxname=None, keepneg=False):
-        """Create a spectrum from a file.
-        @param filename: FITS or ASCII file containing the spectrum
-        @type filename: string
+        """
+        Parameters
+        -----------
+        filename : string
+            FITS or ASCII file containing the spectrum
 
-        @param fluxname: Column name specifying the flux (FITS only)
-        @type fluxname: string
+        fluxname : string
+            Column name specifying the flux (FITS only)
 
-        @param keepneg: If true, negative flux values will be retained; by default, they are forced to zero
-        @type keepneg: bool
+        keepneg : bool [Default: False]
+            If true, negative flux values will be retained; by default, they are forced to zero
 
         """
         self.name = locations.irafconvert(filename)
@@ -903,15 +922,31 @@ class AnalyticSpectrum(SourceSpectrum):
 
 
 class GaussianSource(AnalyticSpectrum):
-    """spec = GaussianSource(TotalFlux under Gaussian,
+    """ Defines a gaussian source
+
+
+    spec = GaussianSource(TotalFlux under Gaussian,
                              central wavelength of Gaussian,
                              FWHM of Gaussian,
                              waveunits, fluxunits)
 
-
     """
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
                  fluxunits='flam'):
+        """
+        Parameters
+        ----------
+        flux : float
+            TotalFlux under gaussian
+        center : float
+            central wavelength of gaussian
+        fwhm : float
+            full-width half-maximum (FWHM) of gaussian
+        waveunits : string [Default: 'angstrom']
+            units of input wavelengths
+        fluxunits : string [Default: 'flam']
+            units of input fluxes
+        """
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
 
         self.center = center
@@ -968,8 +1003,10 @@ class GaussianSource(AnalyticSpectrum):
 
 
 class FlatSpectrum(AnalyticSpectrum):
-    """spec = FlatSpectrum(Flux density, waveunits, fluxunits). Defines a
-    flat spectrum in units of fluxunits."""
+    """ Defines a flat spectrum in units of fluxunits.
+
+    spec = FlatSpectrum(Flux density, waveunits, fluxunits).
+    """
     def __init__(self, fluxdensity, waveunits='angstrom', fluxunits='photlam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
         self.wavelength = None
@@ -1015,7 +1052,9 @@ class FlatSpectrum(AnalyticSpectrum):
 
 
 class Powerlaw(AnalyticSpectrum):
-    """spec=PowerLaw(refwave, exponent, waveunits, fluxunits).
+    """ Defines a power law spectrum
+
+    spec=PowerLaw(refwave, exponent, waveunits, fluxunits).
 
     Power law spectrum of the form (lambda/refval)**exponent,
     where refval is in Angstroms.
@@ -1057,10 +1096,10 @@ class Powerlaw(AnalyticSpectrum):
 
 
 class BlackBody(AnalyticSpectrum):
-    """
+    """     Blackbody spectrum with specified temperature, in Kelvin.
+
     spec = BlackBody(T in Kelvin)
 
-    Blackbody spectrum with specified temperature, in Kelvin.
     The flux of the spectrum is normalized to a star of solar radius
     at a distance of 1 kpc.L
     """
@@ -1395,9 +1434,9 @@ class SpectralElement(Integrator):
     def __call__(self, wavelengths):
         '''This is where the throughput array is calculated for a given
         input wavelength table.
-        @param wavelengths: an array of wavelengths in Angstroms at which the
+        wavelengths : ndarray
+            an array of wavelengths in Angstroms at which the
                              throughput should be sampled
-        @type wavelengths: ndarray
         '''
         if N.isscalar(wavelengths):
             delta=0.0001
@@ -1441,13 +1480,19 @@ class SpectralElement(Integrator):
     def writefits(self, filename, clobber=True, trimzero=True,
                   precision=None, hkeys=None):
         """Write the bandpass to a FITS file.
-        filename:      name of file to write to
-        clobber=True:  Will clobber existing file by default
-        trimzero=True: Will trim zero-flux elements from both ends
-                   by default
-        precision:     Will write in native precision by default; can be
-                   set to "single" or "double"
-        hkeys:         Optional dictionary of {keyword:(value,comment)}
+
+        Parameters
+        -----------
+        filename : string
+            name of file to write to
+        clobber : bool [Default: True]
+            Will clobber existing file by default
+        trimzero : bool [Default: True]
+            Will trim zero-flux elements from both ends by default
+        precision : {'single','double',None}
+            Will write in native precision by default
+        hkeys : dict, optional
+            Optional dictionary of {keyword:(value,comment)}
                    to be added to primary FITS header
 
         """
@@ -1722,7 +1767,10 @@ class CompositeSpectralElement(SpectralElement):
 class UniformTransmission(SpectralElement):
     '''bandpass=UniformTransmission(dimensionless throughput)
 
-    @todo: Need to add a GetWaveSet method (or just return None).
+    .. todo::
+
+        Need to add a GetWaveSet method (or just return None).
+
     '''
     def __init__(self, value, waveunits='angstrom'):
         SpectralElement.__init__(self)
@@ -1852,15 +1900,18 @@ class ArraySpectralElement(TabularSpectralElement):
                  name='UnnamedArrayBandpass'):
 
         """Create a spectrum from arrays.
-        @param wave: Wavelength array
-        @param throughput: Throughput array
-        @type wave,throughput:  Numpy array with numerical data
 
-        @param waveunits: Units of wave
-        @type waveunits:  L{units.WaveUnits} or subclass
+        Parameters
+        ----------
+        wave : ndarray
+            Wavelength array
+        throughput : ndarray
+            Throughput array
+        waveunits : :py:class:`~pysynphot.units.WaveUnits` object or subclass
+            Units of wave
+        name : string
+            Description of this spectral element
 
-        @param name: Description of this spectral element
-        @type name: string
         """
         if len(wave) != len(throughput):
             raise ValueError("wave and throughput arrays must be of equal length")
@@ -1879,18 +1930,22 @@ class ArraySpectralElement(TabularSpectralElement):
 
 
 class FileSpectralElement(TabularSpectralElement):
-    """spec = FileSpectrum(filename (FITS or ASCII),
+    """ Create a bandpass from a file.
+
+    spec = FileSpectrum(filename (FITS or ASCII),
     throughputname=column name containing throughput (for FITS tables only),
     keepneg=True to override the default behavior of setting negative
     throughput values to zero)"""
 
     def __init__(self, filename, thrucol=None):
-        """Create a bandpass from a file.
-        @param filename: FITS or ASCII file containing the bandpass
-        @type filename: string
+        """
 
-        @param thrucol: Column name specifying the throughput (FITS only)
-        @type thrucol: string
+        Parameters
+        -----------
+        filename : string
+            FITS or ASCII file containing the bandpass
+        thrucol : string
+            Column name specifying the throughput (FITS only)
 
         """
         self.name = locations.irafconvert(filename)

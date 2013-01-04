@@ -14,9 +14,12 @@ import units
 import pysynphot.exceptions as exceptions
 
 def ObsBandpass(obstring, graphtable=None, comptable=None, component_dict={}):
-    """ obsband = ObsBandpass(string specifying obsmode; for details
-    see the Synphot Data User's Guide,
-    U{http://www.stsci.edu/hst/HST_overview/documents/synphot/hst_synphotTOC.html}"""
+    """ Generate an ObsModeBandPass or TabularSpectralElement instance
+
+    obsband = ObsBandpass(string specifying obsmode; for details
+    see the Synphot Data User's Guide at
+    http://www.stsci.edu/hst/HST_overview/documents/synphot/hst_synphotTOC.html
+    """
 
     ##Temporarily create an Obsmode to determine whether an
     ##ObsModeBandpass or a TabularSpectralElement will be returned.
@@ -99,9 +102,11 @@ class ObsModeBandpass(CompositeSpectralElement):
         """
         Returns the number of wavelength bins within `waverange`.
 
-        .. note:: This calls the `obsbandpass.pixel_range` function with
+        .. note::
+
+           This calls the `pixel_range` function with
            `self.binset` as the first argument. See
-           `obsbandpass.pixel_range` for full documentation.
+           `pixel_range` for full documentation.
 
         Parameters
         ----------
@@ -117,7 +122,7 @@ class ObsModeBandpass(CompositeSpectralElement):
 
         See Also
         --------
-        `obsbandpass.pixel_range`
+        pixel_range, pysynphot.exceptions.UndefinedBinset
 
         """
         # make sure we have a binset to work with
@@ -143,9 +148,11 @@ class ObsModeBandpass(CompositeSpectralElement):
         Get the wavelength range covered by a number of pixels, `npix`, centered
         on wavelength `cenwave`.
 
-        .. note:: This calls the `obsbandpass.wave_range` function with
+        .. note::
+
+           This calls the `wave_range` function with
            `self.binset` as the first argument. See
-           `obsbandpass.wave_range` for full documentation.
+           `wave_range` for full documentation.
 
         Parameters
         ----------
@@ -156,12 +163,12 @@ class ObsModeBandpass(CompositeSpectralElement):
 
         Raises
         ------
-        pysynphot.exceptions.UndefinedBinset
+        exceptions.UndefinedBinset
             If the `binset` attribute is None.
 
         See Also
         --------
-        `obsbandpass.wave_range`
+        wave_range, pysynphot.exceptions.UndefinedBinset
 
         """
         # make sure we have a binset to work with

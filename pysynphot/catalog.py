@@ -33,13 +33,26 @@ class Icat(spectrum.TabularSourceSpectrum):
     """
     This class constructs a model from the grid available in catalogs such
     as the Castelli & Kurucz. See the Synphot User's Data Manual, Appendix A,
-    for more information
-    U{http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs4.html#48115}
+    for more information at
+    http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs4.html#48115
 
     spec = Icat(CDBS directory name,Teff,metallicity,logG).
 
     """
     def __init__(self,catdir,Teff,metallicity,log_g):
+        """
+        Parameters
+        ----------
+        catdir : str
+            name of directory holding the catalogs
+        Teff : float
+            effective temperature of model
+        metallicity : float
+            metallicity of model
+        log_g : float
+            log of gravity term for model
+
+        """
         self.isAnalytic=False
 
         # this is useful for reporting in exceptions which parameter is
@@ -184,8 +197,3 @@ class Icat(spectrum.TabularSourceSpectrum):
         result.append(sp)
 
         return result
-
-
-
-
-

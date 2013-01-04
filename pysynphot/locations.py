@@ -1,5 +1,4 @@
 from __future__ import division
-
 import glob
 import os
 import re
@@ -26,7 +25,14 @@ if not os.path.isdir(specdir):
     setup_py = os.path.join(pardir, 'setup.py')
     # Ensure that we're actually in the source tree
     if not os.path.exists(specdir) or not os.path.exists(setup_py):
-        raise RuntimeError('pysynphot data directory missing!')
+        # It's possible when running ./setup.py nosetests that we're running
+        # out of the build/ directory so check for that case too (note we
+        # can't guarnatee the directory is named 'build')
+        pardir = os.path.join(pardir, os.pardir, os.pardir)
+        specdir = os.path.join(pardir, 'data')
+        setup_py = os.path.join(pardir, 'setup.py')
+        if not os.path.exists(specdir) or not os.path.exists(setup_py):
+            raise RuntimeError('pysynphot data directory missing!')
     del pardir
     del setup_py
 
@@ -183,8 +189,13 @@ def irafconvert(iraffilename):
     '''Convert the IRAF file name (in directory$file format) to its
     unix equivalent
 
+    Parameters
+    ----------
     Input:    string iraffilename
-    Output:   returns string unixfilename
+
+    Returns
+    --------
+    Output:   string unixfilename
           If '$' not found in the input string, just return
           the input string
           Non-string input raises an AttributeError'''
@@ -217,5 +228,3 @@ def irafconvert(iraffilename):
     else:
         #If no $ sign found, just return the filename unchanged
         return iraffilename
-
-

@@ -180,8 +180,8 @@ class GenericParser:
                 return None
 
         def error(self, token):
-                print "Syntax error at or near `%s' token" % token
-                raise ValueError("problem in the parsing phase")
+                s = "Pysynphot syntax error at or near '%s' token" % token
+                raise ValueError(s)
 
         def parse(self, tokens):
                 tree = {}

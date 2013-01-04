@@ -1,11 +1,13 @@
-from __future__ import division
 """
 Units class hierarchy: is used to manage both wavelength and flux
 unit conversions
 
-Warning: vegamag unit conversions require spectrum and locations => circular
-imports.
+.. warning::
+
+  vegamag unit conversions require spectrum and locations modules => circular imports.
+
 """
+from __future__ import division
 
 import math
 import numpy as N
@@ -18,6 +20,7 @@ import refs  # needed for PRIMARY_AREA
 
 C = 2.99792458e18  # speed of light in Angstrom/sec
 H = 6.62620E-27    # Planck's constant in ergs * sec
+
 HC = H * C
 ABZERO = -48.60    # magnitude zero points
 STZERO = -21.10
@@ -96,6 +99,7 @@ class BaseUnit(object):
         except KeyError:
             raise TypeError("%s cannot be converted to %s"%(self.name,
                                                             target_units))
+
 
 class WaveUnits(BaseUnit):
     """All WaveUnits know how to convert themselves to Angstroms"""
@@ -270,12 +274,12 @@ class Photlam(FluxUnits):
 
     def ToOBMag(self, wave, flux, area=None):
         dw = _getDeltaWave(wave)
-        
+
         if area:
             arg = flux * dw * area
         else:
             arg = flux * dw * refs.PRIMARY_AREA
-        
+
         return -1.085736 * N.log(arg)
 
     def ToVegaMag(self, wave, flux, **kwargs):
@@ -289,7 +293,7 @@ class Photlam(FluxUnits):
             f = flux * _getDeltaWave(wave) * area
         else:
             f = flux * _getDeltaWave(wave) * refs.PRIMARY_AREA
-        
+
         return f
 
 
@@ -531,12 +535,12 @@ class OBMag(LogFluxUnits):
 
     def ToPhotlam(self, wave, flux, area=None):
         dw = _getDeltaWave(wave)
-        
+
         if area:
             f = 10.0**(-0.4 * flux) / (dw * area)
         else:
             f = 10.0**(-0.4 * flux) / (dw * refs.PRIMARY_AREA)
-        
+
         return f
 
     def unitResponse(self,band):
@@ -570,7 +574,7 @@ class Counts(FluxUnits):
             f = flux / (_getDeltaWave(wave) * area)
         else:
             f = flux / (_getDeltaWave(wave) * refs.PRIMARY_AREA)
-        
+
         return f
 
 

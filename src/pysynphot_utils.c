@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <Python.h>
+#include "Python.h"
 #include <numpy/arrayobject.h>
 
 static PyObject * py_calcbinflux(PyObject *self, PyObject *args) {

@@ -1,13 +1,31 @@
 from __future__ import division
-import etctest_base_class 
+import etctest_base_class
 from pysynphot.spparser import parse_spec
 from pysynphot import ObsBandpass, refs
 import testutil
-import sys,os
+import sys
+import os
 
-print "%s:" % os.path.basename(__file__)
-print "   Tests are being run with %s" % refs.COMPTABLE
-print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
+
+old_comptable = None
+old_graphtable = None
+
+def setUpModule():
+    global old_comptable
+    global old_graphtable
+
+    old_comptable = refs.COMPTABLE
+    old_graphtable = refs.GRAPHTABLE
+    refs.setref(comptable='$PYSYN_CDBS/mtab/r1j2146sm_tmc.fits',
+                graphtable='$PYSYN_CDBS/mtab/w3j2015mm_tmg.fits')
+    print "%s:" % os.path.basename(__file__)
+    print "   Tests are being run with %s" % refs.COMPTABLE
+    print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
+
+
+def tearDownModule():
+    refs.COMPTABLE = old_comptable
+    refs.GRAPHTABLE = old_graphtable
 
 
 class C1(etctest_base_class.ETCTestCase):
