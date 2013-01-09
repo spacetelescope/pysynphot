@@ -12,6 +12,7 @@ from __future__ import division
 import math
 import numpy as N
 import locations, spectrum #Circular import
+import binning
 
 import refs #needed for PRIMARY_AREA
 #cannot just import the constant because it won't get updated
@@ -272,12 +273,11 @@ class Photlam(FluxUnits):
         return -1.085736 * N.log(arg) + STZERO
 
     def ToOBMag(self, wave, flux, area=None):
-        dw = _getDeltaWave(wave)
+        area = area if area else refs.PRIMARY_AREA
+        bin_widths = \
+            binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
-        if area:
-            arg = flux * dw * area
-        else:
-            arg = flux * dw * refs.PRIMARY_AREA
+        arg = flux * bin_widths * area
 
         return -1.085736 * N.log(arg)
 
@@ -288,12 +288,11 @@ class Photlam(FluxUnits):
         return -2.5 * N.log10(normalized)
 
     def ToCounts(self, wave, flux, area=None):
-        if area:
-            f = flux * _getDeltaWave(wave) * area
-        else:
-            f = flux * _getDeltaWave(wave) * refs.PRIMARY_AREA
+        area = area if area else refs.PRIMARY_AREA
+        bin_widths = \
+            binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
-        return f
+        return flux * bin_widths * area
 
 
 #................................................................
@@ -533,14 +532,11 @@ class OBMag(LogFluxUnits):
         self.isDensity = False
 
     def ToPhotlam(self, wave, flux, area=None):
-        dw = _getDeltaWave(wave)
+        area = area if area else refs.PRIMARY_AREA
+        bin_widths = \
+            binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
-        if area:
-            f = 10.0**(-0.4 * flux) / (dw * area)
-        else:
-            f = 10.0**(-0.4 * flux) / (dw * refs.PRIMARY_AREA)
-
-        return f
+        return 10.0**(-0.4 * flux) / (bin_widths * area)
 
     def unitResponse(self,band):
         #sum = asumr(band,nwave)
@@ -569,13 +565,11 @@ class Counts(FluxUnits):
         self.isDensity = False
 
     def ToPhotlam(self, wave, flux, area=None):
-        if area:
-            f = flux / (_getDeltaWave(wave) * area)
-        else:
-            f = flux / (_getDeltaWave(wave) * refs.PRIMARY_AREA)
+        area = area if area else refs.PRIMARY_AREA
+        bin_widths = \
+            binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
-        return f
-
+        return flux / (bin_widths * area)
 
     def unitResponse(self,band):
         #sum = asumr(band,nwave)
@@ -622,23 +616,3 @@ def factory(uname, *args, **kwargs):
     key=uname.lower()
     ans= unitsClasses[key]()
     return ans
-
-def _getDeltaWave(wave):
-    """ Compute delta wavelngth for an array of wavelengths.
-    If we had a WaveTable class, this function would be a method
-    on that class: possible refactoring candidate. """
-
-    last = wave.shape[0]-1
-
-    hold1 = N.empty(shape=wave.shape, dtype=N.float64)
-    hold2 = N.empty(shape=wave.shape, dtype=N.float64)
-
-    hold1[1::] = wave[0:last]
-    hold2[0:last] = wave[1::]
-
-    delta = (hold2 - hold1) / 2.0
-
-    delta[0] = wave[1] - wave[0]
-    delta[last] = wave[last] - wave[last-1]
-
-    return delta

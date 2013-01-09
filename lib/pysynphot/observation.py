@@ -4,14 +4,12 @@ a new Observation class, subclassed from CompositeSourceSpectrum,
 that has some special methods and attributes and explicitly removes
 certain other methods."""
 
-import os
-import types
-
-import numpy as N
+import numpy as np
 import math
 
 import spectrum
 import units
+import binning
 
 from obsbandpass import pixel_range, wave_range
 from spectrum import ArraySourceSpectrum
@@ -53,7 +51,7 @@ def check_overlap(a, b):
         waves = list()
         for x in (a, b):
             if hasattr(x,'throughput'):
-                wv = x.wave[N.where(x.throughput != 0)]
+                wv = x.wave[np.where(x.throughput != 0)]
             elif hasattr(x,'flux'):
                 wv = x.wave
             else:
@@ -164,7 +162,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
             try:
                 self.binwave = self.bandpass.binset
-            except (KeyError, AttributeError), e:
+            except (KeyError, AttributeError):
                 self.binwave = self.spectrum.wave
                 print(msg)
 
@@ -191,23 +189,14 @@ class Observation(spectrum.CompositeSourceSpectrum):
         make sense to interpolate .binwave/.binflux.
 
         """
-
-        # compute endpoints of each summation bin from their centers.
-        bin_edges = (self.binwave[1:] + self.binwave[:-1]) / 2.0
-        endpoints = N.empty(shape=[len(bin_edges)+2,],
-                            dtype=N.float64)
-        endpoints[1:-1] = bin_edges
-
-        #compute the first and last by making them symmetric
-        endpoints[0]  = self.binwave[0]  - (bin_edges[0]   - self.binwave[0])
-        endpoints[-1] = self.binwave[-1] + (self.binwave[-1] - bin_edges[-1])
+        endpoints = binning.calculate_bin_edges(self.binwave)
 
         # merge these endpoints in with the natural waveset
         spwave = spectrum.MergeWaveSets(self.wave, endpoints)
         spwave = spectrum.MergeWaveSets(spwave,self.binwave)
 
         # compute indices associated to each endpoint.
-        indices = N.searchsorted(spwave, endpoints)
+        indices = np.searchsorted(spwave, endpoints)
         self._indices = indices[:-1]
         self._indices_last = indices[1:]
 
@@ -227,8 +216,8 @@ class Observation(spectrum.CompositeSourceSpectrum):
         else:
             #Note that, like all Python striding, the range over which
             #we integrate is [first:last).
-            self._binflux = N.empty(shape=self.binwave.shape,dtype=N.float64)
-            self._intwave = N.empty(shape=self.binwave.shape,dtype=N.float64)
+            self._binflux = np.empty(shape=self.binwave.shape,dtype=np.float64)
+            self._intwave = np.empty(shape=self.binwave.shape,dtype=np.float64)
             for i in range(len(self._indices)):
                 first = self._indices[i]
                 last = self._indices_last[i]
@@ -284,18 +273,16 @@ class Observation(spectrum.CompositeSourceSpectrum):
         result = Observation(self.spectrum,
                              self.bandpass * other,
                              binset=self.binset,
-                             force=force
-                                 )
+                             force=force)
         return result
 
     def __rmul__(self, other):
-        return __mul__(self, other)
+        return self.__mul__(self, other)
 
     #Disable methods that should not be supported by this class
     def __add__(self, other):
         raise NotImplementedError('Observations cannot be added')
 
-        return result
     def __radd__(self, other):
         raise NotImplementedError('Observations cannot be added')
 
@@ -372,13 +359,13 @@ class Observation(spectrum.CompositeSourceSpectrum):
                     warn=True
                     lx=None
                 else:
-                    lx=N.searchsorted(self._bin_edges,range[0])-1
+                    lx=np.searchsorted(self._bin_edges,range[0])-1
 
                 if range[1] > self._bin_edges[-1]:
                     warn=True
                     ux=None
                 else:
-                    ux=N.searchsorted(self._bin_edges,range[1])
+                    ux=np.searchsorted(self._bin_edges,range[1])
 
 
             ans = self.binflux[lx:ux].sum()
@@ -426,9 +413,9 @@ class Observation(spectrum.CompositeSourceSpectrum):
     def _fluxcheck(self,totalflux):
         if totalflux <= 0.0:
             raise ValueError('Integrated flux is <= 0')
-        if N.isnan(totalflux):
+        if np.isnan(totalflux):
             raise ValueError('Integrated flux is NaN')
-        if N.isinf(totalflux):
+        if np.isinf(totalflux):
             raise ValueError('Integrated flux is infinite')
 
 
@@ -487,42 +474,47 @@ class Observation(spectrum.CompositeSourceSpectrum):
           self.initbinflux()
 
         if fluxunits != 'counts':
-            raise NotImplementedError("Sorry, only counts are supported at this time")
+            s = "Sorry, only counts are supported at this time"
+            raise NotImplementedError(s)
         else:
             #Save current fluxunits, in case they're different
-            saveunits=None
+            saveunits = None
             if not units.ismatch('counts', self.fluxunits):
-                saveunits=self.fluxunits
+                saveunits = self.fluxunits
                 self.convert('counts')
 
 
         if binned:
             #Then we don't interpolate, just return the appropriate values
             #from binflux
-            if not isinstance(swave,(types.IntType, types.FloatType)):
-                #The logic for this case doesn't yet work on arrays
-                raise NotImplementedError("Sorry, only scalar samples are supported at this time")
-            else:
+            if np.isscalar(swave):
                 #Find the bin in which it belongs.
                 #_bin_edge[i] is the low edge of the bin centered
                 #at binwave[i].
 
-                idx = N.where(swave >= self._bin_edges)[0]
+                idx = np.where(swave >= self._bin_edges)[0]
                 #idx[-1] is the largest edge that is still smaller
                 #than swave
                 try:
                     ans = self.binflux[idx[-1]]
                 except IndexError:
-                    raise ValueError("Value out of range: wavelength %g not contained in range [%g, %g]"%(swave,self.binwave[0],self.binwave[-1]))
+                    s = 'Value out of range: wavelength %g not contained in range [%g, %g]'
+                    s = s % (swave, self.binwave[0], self.binwave[-1])
+                    raise ValueError(s)
+
+            else:
+                #The logic for this case doesn't yet work on arrays
+                s = "Sorry, only scalar samples are supported at this time"
+                raise NotImplementedError(s)
 
         else:
             #Then we do interpolate on wave/flux
-            if isinstance(swave,(types.IntType, types.FloatType)):
-                delta=0.00001
-                wv=N.array([swave-delta, swave, swave+delta])
-                ans = N.interp(wv, self.wave, self.flux)[1]
+            if np.isscalar(swave):
+                delta = 0.00001
+                wv = np.array([swave - delta, swave, swave + delta])
+                ans = np.interp(wv, self.wave, self.flux)[1]
             else:
-                ans = N.interp(wv, self.wave, self.flux)
+                ans = np.interp(wv, self.wave, self.flux)
 
 
         #Change units back, if necessary, then return
@@ -565,8 +557,8 @@ class Observation(spectrum.CompositeSourceSpectrum):
         if waveunits is not None:
             waveunits = units.Units(waveunits)
 
-            if not isinstance(waverange,N.ndarray):
-                waverange = N.array(waverange)
+            if not isinstance(waverange, np.ndarray):
+                waverange = np.array(waverange)
 
             # convert to angstroms and then whatever self.waveunits is
             waverange = waveunits.ToAngstrom(waverange)
