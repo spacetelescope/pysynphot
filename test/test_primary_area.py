@@ -7,13 +7,13 @@ import numpy as np
 
 from pysynphot import locations
 from pysynphot import refs
+from pysynphot import binning
 from pysynphot.tables import GraphTable
 from pysynphot.observationmode import ObservationMode
 from pysynphot.obsbandpass import ObsBandpass
 from pysynphot.spectrum import FlatSpectrum
 from pysynphot.spectrum import Integrator
 from pysynphot.spectrum import CompositeSpectralElement
-from pysynphot.spectrum import CompositeSourceSpectrum
 from pysynphot.observation import Observation
 from pysynphot.exceptions import IncompatibleSources
 
@@ -164,7 +164,8 @@ def test_flat_spectrum():
 
     f.convert('counts')
 
-    delta_wave = units._getDeltaWave(f.wave)
+    delta_wave = \
+      binning.calculate_bin_widths(binning.calculate_bin_edges(f.wave))
 
     ref = delta_wave * refs.PRIMARY_AREA
 
@@ -191,7 +192,8 @@ def test_photlam1():
 
   flux = np.ones_like(wave)
 
-  delta_wave = units._getDeltaWave(wave)
+  delta_wave = \
+      binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
   ref = -1.085736 * np.log(flux*delta_wave)
 
@@ -214,7 +216,8 @@ def test_photlam2():
 
   flux = np.ones_like(wave)
 
-  delta_wave = units._getDeltaWave(wave)
+  delta_wave = \
+      binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
   ref = -1.085736 * np.log(flux * delta_wave * refs.PRIMARY_AREA)
 
@@ -239,7 +242,8 @@ def test_obmag1():
 
   flux = np.ones_like(wave)
 
-  delta_wave = units._getDeltaWave(wave)
+  delta_wave = \
+      binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
   ref = 10.0**(-0.4 * flux) / delta_wave
 
@@ -255,7 +259,8 @@ def test_obmag2():
 
   flux = np.ones_like(wave)
 
-  delta_wave = units._getDeltaWave(wave)
+  delta_wave = \
+      binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
   ref = 10.0**(-0.4 * flux) / (delta_wave * refs.PRIMARY_AREA)
 
@@ -273,7 +278,8 @@ def test_counts1():
 
   flux = np.ones_like(wave)
 
-  delta_wave = units._getDeltaWave(wave)
+  delta_wave = \
+      binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
   ref = flux / delta_wave
 
@@ -289,7 +295,8 @@ def test_counts2():
 
   flux = np.ones_like(wave)
 
-  delta_wave = units._getDeltaWave(wave)
+  delta_wave = \
+      binning.calculate_bin_widths(binning.calculate_bin_edges(wave))
 
   ref = flux / (delta_wave * refs.PRIMARY_AREA)
 
