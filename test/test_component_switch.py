@@ -17,10 +17,12 @@ class TestCompSwitch(TestCase):
         self.cdbs = os.environ['PYSYN_CDBS']
 
         graphtab = os.path.join('mtab','u921351jm_tmg.fits')
+        self.old_refs = refs.getref()
         refs.GRAPHTABLE = locations._refTable(graphtab)
 
     def tearDown(self):
-        refs.setref()
+        refs.setref(graphtable=self.old_refs['graphtable'])
+        refs.setref(comptable=self.old_refs['comptable'])
 
     def test_one(self):
         throughput_list = ['comp/ota/hst_ota_007_syn.fits',
@@ -30,10 +32,10 @@ class TestCompSwitch(TestCase):
                            'comp/acs/acs_hrc_win_005_syn.fits',
                            'comp/acs/acs_hrc_ccd_013_syn.fits']
 
-        for i,f in enumerate(throughput_list):
-            throughput_list[i] = os.path.join(self.cdbs,f)
+        for i, f in enumerate(throughput_list):
+            throughput_list[i] = os.path.join(self.cdbs, f)
 
-        cmptb_name = os.path.join('mtab','ub31649mm_tmc.fits')
+        cmptb_name = os.path.join('mtab', 'ub31649mm_tmc.fits')
         refs.COMPTABLE = locations._refTable(cmptb_name)
 
         obs = observationmode.ObservationMode('acs,hrc,f435w')
@@ -52,10 +54,10 @@ class TestCompSwitch(TestCase):
                            'comp/acs/acs_hrc_win_005_syn.fits',
                            'comp/acs/acs_hrc_ccd_011_syn.fits']
 
-        for i,f in enumerate(throughput_list):
-            throughput_list[i] = os.path.join(self.cdbs,f)
+        for i, f in enumerate(throughput_list):
+            throughput_list[i] = os.path.join(self.cdbs, f)
 
-        cmptb_name = os.path.join('mtab','r1j2146sm_tmc.fits')
+        cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
         refs.COMPTABLE = locations._refTable(cmptb_name)
 
         obs = observationmode.ObservationMode('acs,hrc,f435w')
@@ -66,20 +68,20 @@ class TestCompSwitch(TestCase):
         if n:
             raise AssertionError(n)
 
-    def check_list( self, expect_list, in_list ) :
-        missing = [ ]
+    def check_list(self, expect_list, in_list) :
+        missing = []
 
-        for i,x in enumerate(expect_list) :
+        for i, x in enumerate(expect_list) :
             x = os.path.normpath(x)
             x = os.path.normcase(x)
             expect_list[i] = x
-            print "EXPECT",expect_list[i]
+            print "EXPECT", expect_list[i]
 
-        for i,x in enumerate(in_list) :
+        for i, x in enumerate(in_list) :
             x = os.path.normpath(x)
             x = os.path.normcase(x)
             in_list[i] = x
-            print "IN    ",in_list[i]
+            print "IN    ", in_list[i]
 
         for x in expect_list :
             if not x in in_list :
@@ -88,5 +90,5 @@ class TestCompSwitch(TestCase):
         if len(missing) == 0 :
             return False
 
-        self.tra = { 'missing' : str(missing) }
-        return "Missing: %s"%str(missing)
+        self.tra = {'missing' : str(missing)}
+        return "Missing: %s" % missing

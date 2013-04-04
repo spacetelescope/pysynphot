@@ -4,14 +4,17 @@ import math
 
 import numpy as N
 import pyfits
-import testutil 
+import testutil
 import pysynphot as S
 from pysynphot import units, locations
+
 
 class EnforceWave(testutil.FPTestCase):
     """Ticket #85: enforce monotonic ascending wavesets
     for ArraySourceSpectrum objects.
     **Already moved to cos_etc_test.**"""
+
+    @testutil.skip
     def setUp(self):
         self.gendata()
         #make some bad wavesets here
@@ -41,11 +44,13 @@ class EnforceWave(testutil.FPTestCase):
         sp=self.constructor(*self.args)
         self.assertEqualNumpy(sp.wave,self.descending[::-1])
 
-                    
+
 class EnforceWaveFile(EnforceWave):
     """Ticket *85: enforce monotonic ascending wavesets
         for FileSourceSpectrum objects
         **already moved to cos_etc_test"""
+
+    @testutil.skip
     def setUp(self):
         self.gendata()
         self.writedata()
@@ -74,12 +79,13 @@ class EnforceWaveFile(EnforceWave):
         for k in self.cases:
             self.writeone(self.cases[k], self.waves[k])
             self.argdict[k]=(self.cases[k],)
+
     def tearDown(self):
         for k in self.cases:
             os.remove(self.cases[k])
 
-                            
-                            
+
+
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)

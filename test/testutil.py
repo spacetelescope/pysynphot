@@ -1,8 +1,3 @@
-from __future__ import division
-
-import math
-import unittest
-import numpy as N
 """
 Copied from stsci_python.pytools so that pysynphot can be tested without
 an extra dependency.
@@ -59,6 +54,34 @@ explicitly. The modules you are testing must be visible in your sys.path.
 
 """
 
+from __future__ import division
+
+import math
+import unittest
+import numpy as N
+
+try:
+    from nose.tools import nottest
+except ImportError:
+    # A noop placeholder
+    def nottest(func):
+        return func
+
+def skip(func):
+    """A decorator to indicate to nose that a test should be skipped."""
+
+    try:
+        from nose.plugins.skip import SkipTest
+        import functools
+
+        @functools.wraps(func)
+        def test_skipped(*args, **kwargs):
+            raise SkipTest('Test %s is marked as skipped' % func.__name__)
+        return test_skipped
+    except ImportError:
+        return func
+
+
 class FPTestCase(unittest.TestCase):
     ''' Base class to hold some functionality related to floating-point
     precision and array comparisons'''
@@ -88,6 +111,7 @@ def debug(module):
     """ Build the test suite, then run in debug mode, which allows for postmortems"""
     buildsuite(module).debug()
 
+@nottest
 def testall(module,verb=0):
     """ Build and run the suite through the testrunner. Verbosity level
     defaults to quiet but can be set to 2 to produce a line as it runs

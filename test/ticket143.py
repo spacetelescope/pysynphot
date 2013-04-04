@@ -15,7 +15,7 @@ class TestDefault(unittest.TestCase):
         self.tra=dict()
         self.tda['spectrum']=str(self.sp)
         self.tra['bandpass']=str(self.bp)
-        
+
     def testref(self):
         self.tda['wave']=self.refwave
         #Computed by hand for a case that matches exactly:
@@ -34,7 +34,7 @@ class TestDefault(unittest.TestCase):
 ## /grp/hst/cdbs/mtab/t2605492m_tmg.fits
 ## >>> print obs.bandpass.obsmode.ctname
 ## /grp/hst/cdbs/mtab/t8h1822tm_tmc.fits
-        
+
         ref = self.obs.binflux[self.obs.binwave == 5500.0]
         tst = self.obs.sample(self.refwave,
                               binned=True,
@@ -52,7 +52,7 @@ class TestDefault(unittest.TestCase):
         self.tda['wave']=5523.3
         #Important note: binwave contains bin _centers_.
         ref=self.obs.binflux[self.obs.binwave == 5523.0]
-        
+
         tst = self.obs.sample(self.tda['wave'],binned=True,fluxunits='counts')
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
@@ -64,7 +64,7 @@ class TestDefault(unittest.TestCase):
         self.tda['wave']=5523.8
         #Important note: binwave contains bin _centers_.
         ref=self.obs.binflux[self.obs.binwave == 5524.0]
-        
+
         tst = self.obs.sample(self.tda['wave'],binned=True,fluxunits='counts')
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
@@ -76,6 +76,7 @@ class TestStisDef(unittest.TestCase):
     #Same tests for an actual disperser
     def setUp(self):
         #Use a defined comptab here: we're examining native arrays
+        self.oldref = S.refs.getref()
         S.setref(comptable='$PYSYN_CDBS/mtab/u4c18498m_tmc.fits')
         self.sp=S.BlackBody(4400)
         self.bp=S.ObsBandpass('stis,fuvmama,g140m,c1470,s52x01')
@@ -85,7 +86,10 @@ class TestStisDef(unittest.TestCase):
         self.tra=dict()
         self.tda['spectrum']=str(self.sp)
         self.tra['bandpass']=str(self.bp)
-        
+
+    def tearDown(self):
+        S.setref(comptable=self.oldref['comptable'])
+
 ## >>> bp=S.ObsBandpass('stis,fuvmama,g140m,c1470,s52x01')
 ## >>> sp=S.BlackBody(4400)
 ## >>> obs=S.Observation(sp,bp)
@@ -98,7 +102,7 @@ class TestStisDef(unittest.TestCase):
 ## array([  4.43311555e-08,   4.43461351e-08])
 
 
-    
+
     def testref(self):
         ref= 4.43311555e-08
         tst = self.obs.sample(self.refwave, binned=True, fluxunits='counts')
@@ -132,7 +136,7 @@ class TestStisDef(unittest.TestCase):
         self.obs.convert('counts')
         ref=self.obs.flux[self.obs.wave==self.refwave]
         self.obs.convert('photlam')
-        
+
         tst = self.obs.sample(self.refwave,
                               binned=False,
                               fluxunits='counts')
@@ -143,7 +147,7 @@ class TestStisDef(unittest.TestCase):
         #an exact match in the lookup,
         self.assert_(ref == tst,
                      'expected %f, got %f'%(ref,tst))
-        
+
 ## >>> N.where(obs.wave == 1450)
 ## (array([3940]),)
 ## >>> print obs.wave[3940:3950]

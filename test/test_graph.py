@@ -2,10 +2,13 @@ from __future__ import division
 from unittest import TestCase
 import os
 
+from testutil import skip
+
 try:
     from pysynphot.graphtab import GraphTable
 except ImportError:
     print "Warning, the tests won't run; GraphTable not yet implemented"
+
 
 def make_tmg(strdata,tmgname):
     """Helper function"""
@@ -16,8 +19,8 @@ def make_tmg(strdata,tmgname):
     out.close()
 ##     tbhdu=pyfits.tcreate('data.txt',cdfile='cdfile.txt',hfile='h1.txt')
 ##     tbhdu.writeto(tmgname, clobber=True)
-      
-    
+
+
 class GraphCase(TestCase):
     #Drat, put compname first like in real table
     old_simple1="""acs 1 20 clear clear
@@ -62,6 +65,10 @@ acs_wfc_ebe_win12f  wfc1  10300  10310  clear
 acs_wfc_ccd1  default  10310  10320  clear
 acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
 
+    # Putting @skip on the setUp method is a shortcut to skip all tests in the
+    # class (might be possible to write a @skip class decorator, but this is
+    # fine for now)
+    @skip
     def setUp(self):
         self.fname='/tmp/simple1.tmg'
         make_tmg(self.simple1, self.fname)
@@ -70,7 +77,7 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
     def tearDown(self):
         os.unlink(self.fname)
         #os.unlink('data.txt')
-        
+
     def test1(self):
         self.instring='acs,wfc1,f555w'
         self.ref=['hst_ota',
@@ -102,20 +109,18 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
                           self.G.traverse,
                           self.instring)
 
-
     def testincomplete(self):
         self.instring="acs"
         self.assertRaises(ValueError,
                           self.G.traverse,
                           self.instring)
-                          
 
     def testambiguous(self):
         self.instring="acs,wfc1,f550m,f555w"
         self.assertRaises(ValueError,
                           self.G.traverse,
                           self.instring)
-                          
+
 
     #Included in validate: not separately available.
     #it -could- be, but that would be very inefficient
@@ -132,7 +137,6 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
     #also included in validate but not separately
     #def testreachable(self):
     #    self.assert_(self.G._orphancheck())
-
     def testvalidate(self):
         #Performs all the earlier checks
         self.assert_(self.G.validate())
@@ -147,11 +151,12 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
                       'acs, wfc1, f555w'])
         tst=self.G.allmodes()
         self.assertEqual(self.ref,tst)
-                        
+
 
 class ThermalCase(GraphCase):
     simpletherm="""something with thermal modes"""
 
+    @skip
     def setUp(self):
         self.fname='/tmp/t2605492m_tmg.fits' #simpletherm_tmg.fits'
         self.G=GraphTable(self.fname)
@@ -163,7 +168,7 @@ class ThermalCase(GraphCase):
         self.instring='nicmos,3,f222m'
 
         path =self.G.traverse(self.instring)
-        #Or is this the right UI? 
+        #Or is this the right UI?
         #thm=self.G.traverse(self.instring,thermal=True)
         #The thermal path must be a superset of the optical path,
         #though it need not be a strict superset.
@@ -193,12 +198,13 @@ clear cos 20 30 clear
 clear cos 30 40 clear
 clear cos 40 20 clear
 """
+    @skip
     def setUp(self):
         self.fname='/tmp/badgraph_tmg.txt'
         f=open(self.fname,'w')
         f.write(self.badgraph)
         f.close()
-        self.G=GraphTable(self.fname)        
+        self.G=GraphTable(self.fname)
 
     def testorphan(self):
         msg = self.G.validate()
@@ -211,6 +217,7 @@ clear cos 40 20 clear
 class MissingGraph(TestCase):
     #remove the last column of the simple graph case
     missinggraph=GraphCase.simple1.replace('clear\n','\n')
+    @skip
     def setUp(self):
         self.fname='/tmp/missinggraph_tmg.txt'
         f=open(self.fname,'w')
@@ -222,9 +229,9 @@ class MissingGraph(TestCase):
             os.unlink(self.fname)
         except Exception: #ok
             pass
-        
+
     def testconstructor(self):
         self.assertRaises(ValueError,
                           GraphTable,
                           self.fname)
-                          
+

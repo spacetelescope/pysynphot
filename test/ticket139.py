@@ -9,8 +9,18 @@ import testutil
 
 import pysynphot as S
 
-#Answers computed using specified comptable
-S.setref(comptable='mtab$t9m1635am_tmc.fits')
+
+orig_comptable = S.refs.getref()['comptable']
+
+
+def setUpModule():
+    #Answers computed using specified comptable
+    S.setref(comptable='mtab$t9m1635am_tmc.fits')
+
+
+def tearDownModule():
+    S.setref(comptable=orig_comptable)
+
 
 class JohnsonV(testutil.FPTestCase):
     def setUp(self):
