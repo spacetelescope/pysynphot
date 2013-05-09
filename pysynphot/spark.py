@@ -298,7 +298,7 @@ class GenericParser:
                                                                 continue
                                                 first = self.first[prhs0]
                                                 if None not in first and \
-                                                   ttype not in not first:
+                                                   ttype not in first:
                                                         continue
                                                 state.append(new)
                                         continue
