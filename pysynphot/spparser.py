@@ -27,6 +27,7 @@ import locations
 import catalog
 import os
 from obsbandpass import ObsBandpass
+from .exceptions import DisjointError, OverlapError
 
 syfunctions = [
     'spec',
@@ -265,12 +266,17 @@ class Interpreter(GenericASTMatcher):
                 if not isinstance(sp,spectrum.SourceSpectrum):
                     name=_handleIRAFName(args[0])
                     sp = spectrum.TabularSourceSpectrum(name)
-                #Always force the renormalization to occur: prevent exceptions
+                #
+                # Always force the renormalization to occur: prevent exceptions
                 #in case of partial overlap. Less robust but duplicates synphot.
-
+                # Force the renormalization in the case of partial overlap (OverlapError),
+                # but raise an exception if the spectrum and bandpass are entirely
+                # disjoint (DisjointError)
                 try:
                     tree.value = sp.renorm(args[2],args[3],args[1])
-                except ValueError:
+                except DisjointError:
+                    raise
+                except OverlapError:
                     tree.value = sp.renorm(args[2],args[3],args[1],force=True)
                     tree.value.warnings['force_renorm'] = 'Warning: Renormalization of the spectrum, to the specified value, in the specified units, exceeds the limit of the specified passband.'
 

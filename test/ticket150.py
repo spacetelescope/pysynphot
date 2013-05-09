@@ -2,6 +2,7 @@ from __future__ import division
 import pysynphot as S
 from pysynphot.observation import Observation
 from pysynphot import spparser
+from pysynphot.exceptions import OverlapError
 import os, sys
 import testutil
 import numpy as N
@@ -47,7 +48,7 @@ class RenormOverlap(testutil.FPTestCase):
         self.ref = 0.00718543  # expected renorm factor
 
     def testraise(self):
-        self.assertRaises(ValueError,
+        self.assertRaises(OverlapError,
                           self.sp.renorm,
                           16.0,'stmag',self.bp)
 
