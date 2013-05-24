@@ -59,7 +59,7 @@ def MergeWaveSets(waveset1, waveset2):
         MergedWaveSet = waveset2
     elif waveset2 is None and waveset1 is not None:
         MergedWaveSet = waveset1
-    elif waveset1 is None and Waveset2 is None:
+    elif waveset1 is None and waveset2 is None:
         MergedWaveSet = None
     else:
         MergedWaveSet = N.union1d(waveset1, waveset2)
@@ -76,8 +76,8 @@ def MergeWaveSets(waveset1, waveset2):
 
         if not (delta > MERGETHRESH).all():
             newlen = len(delta[delta > MERGETHRESH]) + 1
-            newmerged = N.zeros(newlen,dtype=MergedWaveSet.dtype)
-            newmerged[:-1] = MergedWaveSet[delta > MERGETHRESH]
+            newmerged = N.zeros(newlen, dtype=MergedWaveSet.dtype)
+            newmerged[:-1] = MergedWaveSet[:-1][delta > MERGETHRESH]
             newmerged[-1] = MergedWaveSet[-1]
 
             MergedWaveSet = newmerged
