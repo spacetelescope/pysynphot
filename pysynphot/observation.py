@@ -84,9 +84,9 @@ def validate_overlap(comp1, comp2, force):
       if stat=='full':
           pass
       elif stat == 'partial':
-          raise(ValueError('Spectrum and bandpass do not fully overlap. You may use force=[extrap|taper] to force this Observation anyway.'))
+          raise(exceptions.PartialOverlap('Spectrum and bandpass do not fully overlap. You may use force=[extrap|taper] to force this Observation anyway.'))
       elif stat == 'none':
-          raise(ValueError('Spectrum and bandpass are disjoint'))
+          raise(exceptions.DisjointError('Spectrum and bandpass are disjoint'))
 
   elif force.lower() == 'taper':
       try:
@@ -350,7 +350,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
             #Range is disjoint from binwave
             elif (range[0]>self.binwave[-1] or
                   range[1]<self.binwave[0]):
-                raise ValueError("%s is disjoint from obs.binwave %s"%(range,
+                raise exceptions.DisjointError("%s is disjoint from obs.binwave %s"%(range,
                                                                        [self.binwave[0],self.binwave[-1]]))
             #Partial overlap
             else:
@@ -370,7 +370,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
             ans = self.binflux[lx:ux].sum()
             if warn and not force:
-                raise ValueError("%s does not fully overlap binwave range %s. Countrate in overlap area is %f"%(range,[self.binwave[0],self.binwave[-1]],ans))
+                raise exceptions.PartialOverlap("%s does not fully overlap binwave range %s. Countrate in overlap area is %f"%(range,[self.binwave[0],self.binwave[-1]],ans))
 
         else:
             if range is None:
