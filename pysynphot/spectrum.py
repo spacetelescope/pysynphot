@@ -1285,8 +1285,7 @@ class SpectralElement(Integrator):
         den = self.trapezoidIntegration(wave, thru / wave)
 
         if num == 0 or den == 0:
-            error_str = 'Could not calculate average wavelength of bandpass.'
-            raise exceptions.PysynphotError(error_str)
+            return 0.0
 
         avg_wave = N.exp(num/den)
 
