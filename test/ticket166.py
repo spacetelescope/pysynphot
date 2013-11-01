@@ -2,6 +2,7 @@ from __future__ import division
 import os
 import testutil
 import pysynphot as S
+from pysynphot.exceptions import DisjointError, PartialOverlap
 import numpy as N
 
 class Handmade(testutil.FPTestCase):
@@ -67,7 +68,7 @@ class Handmade(testutil.FPTestCase):
 
     def testdisjointbin(self):
         #Ask for something outside the bin range
-        self.assertRaises(ValueError,
+        self.assertRaises(DisjointError,
                           self.obs.countrate,
                           range=[1025,1030]
                           )
@@ -78,17 +79,17 @@ class Handmade(testutil.FPTestCase):
         try:
             self.tst=self.obs.countrate(range=[1016,1026])
             self.assert_("No exception raised")
-        except ValueError, e:
+        except PartialOverlap, e:
             print "Exception: ",str(e)
             self.failUnless(str(self.ref) in str(e))
-            
+
     def testovlplobin(self):
         #Ask for something _partly_ outside the bin range
         self.ref=172.75
         try:
             self.tst=self.obs.countrate(range=[1000,1016])
             self.assert_(False, "No exception raised")
-        except ValueError, e:
+        except PartialOverlap, e:
             print "Exception: ",str(e)
             self.failUnless(str(self.ref) in str(e))
 

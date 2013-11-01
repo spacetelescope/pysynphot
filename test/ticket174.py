@@ -1,4 +1,5 @@
 import pysynphot as S
+from pysynphot.exceptions import PartialOverlap
 from pysynphot.spparser import parse_spec
 
 class ForcePartial(object):
@@ -14,13 +15,10 @@ class ForcePartial(object):
     def test_noforce(self):
         try:
             x=self.obs.countrate(range=self.rband)
-            raise AssertionError('exception not raised')
-        except ValueError:
+        except PartialOverlap:
             pass
+        else:
+            raise AssertionError('exception not raised')
 
     def test_force(self):
-        try:
-            x=self.obs.countrate(range=self.rband,force=True)
-        except ValueError:
-            raise AssertionError("exception still raised")
-                           
+        x=self.obs.countrate(range=self.rband,force=True)

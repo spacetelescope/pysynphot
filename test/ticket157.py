@@ -1,5 +1,6 @@
 from __future__ import division
 import pysynphot as S
+from pysynphot.exceptions import PartialOverlap
 from pysynphot.observation import Observation
 from pysynphot import spparser
 import os, sys
@@ -73,7 +74,7 @@ class OverlapBug(testutil.FPTestCase):
 ##         self.assertEqualNumpy(self.ref,ans)
 
     def testraise(self):
-        self.assertRaises(ValueError,
+        self.assertRaises(PartialOverlap,
                           S.Observation,
                           self.sp, self.bp)
 
@@ -185,7 +186,7 @@ class CalcphotTestCase(testutil.FPTestCase):
         self.reflam = 5304.462
 
     def testraises(self):
-        self.assertRaises(ValueError,
+        self.assertRaises(PartialOverlap,
                           S.Observation,
                           self.sp, self.bandpass)
 
@@ -231,7 +232,7 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         #Replaced answer for r618 (no tapering)
         #The throughput files used in this case don't actually go
         #all the way to zero.
-        self.assertRaises(ValueError,
+        self.assertRaises(PartialOverlap,
                           S.Observation,
                           self.sp, self.bp)
 
