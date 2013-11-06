@@ -274,8 +274,6 @@ class Interpreter(GenericASTMatcher):
                 # disjoint (DisjointError)
                 try:
                     tree.value = sp.renorm(args[2],args[3],args[1])
-                except DisjointError:
-                    raise
                 except OverlapError:
                     tree.value = sp.renorm(args[2],args[3],args[1],force=True)
                     tree.value.warnings['force_renorm'] = 'Warning: Renormalization of the spectrum, to the specified value, in the specified units, exceeds the limit of the specified passband.'
