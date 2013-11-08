@@ -30,6 +30,8 @@ class RenormCase(testutil.FPTestCase):
     def setUp(self):
         self.oldcwd = os.getcwd()
         os.chdir(os.path.dirname(__file__))
+        self.oldref = S.refs.getref()
+        S.setref(comptable='$PYSYN_CDBS/mtab/t260548pm_tmc.fits')
         self.spectrum="data/qso_template.fits"
         self.obsmode="cos,fuv,g140l,c1230,PSA"
         self.bp=S.ObsBandpass(self.obsmode)
@@ -41,6 +43,7 @@ class RenormCase(testutil.FPTestCase):
                       file=S.__file__)
 
     def tearDown(self):
+        S.setref(comptable=self.oldref['comptable'])
         os.chdir(self.oldcwd)
 
     def testwarn(self):
@@ -54,6 +57,8 @@ class ParserRenormCase(testutil.FPTestCase):
     def setUp(self):
         self.oldcwd = os.getcwd()
         os.chdir(os.path.dirname(__file__))
+        self.oldref = S.refs.getref()
+        S.setref(comptable='$PYSYN_CDBS/mtab/t260548pm_tmc.fits')
         self.spectrum = "data/qso_template.fits"
         self.obsmode = "cos,fuv,g140l,c1230,PSA"
         self.syncmd = "rn(spec(%s),band(%s),17.0,vegamag)" % (self.spectrum,
@@ -64,6 +69,7 @@ class ParserRenormCase(testutil.FPTestCase):
                         file=S.__file__)
 
     def tearDown(self):
+        S.setref(comptable=self.oldref['comptable'])
         os.chdir(self.oldcwd)
 
     def testwarn(self):
