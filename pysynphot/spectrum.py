@@ -639,10 +639,12 @@ class TabularSourceSpectrum(SourceSpectrum):
     def _readFITS(self, filename, fluxname):
         fs = pyfits.open(filename)
 
-        self._wavetable = fs[1].data.field('wavelength')
+        # pyfits cannot close the file on .close() if there are still
+        # references to mmapped data
+        self._wavetable = fs[1].data.field('wavelength').copy()
         if fluxname == None:
             fluxname = 'flux'
-        self._fluxtable = fs[1].data.field(fluxname)
+        self._fluxtable = fs[1].data.field(fluxname).copy()
 
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.fluxunits = units.Units(fs[1].header['tunit2'].lower())
@@ -873,10 +875,12 @@ class FileSourceSpectrum(TabularSourceSpectrum):
     def _readFITS(self, filename, fluxname):
         fs = pyfits.open(filename)
 
-        self._wavetable = fs[1].data.field('wavelength')
+        # pyfits cannot close the file on .close() if there are still
+        # references to mmapped data
+        self._wavetable = fs[1].data.field('wavelength').copy()
         if fluxname == None:
             fluxname = 'flux'
-        self._fluxtable = fs[1].data.field(fluxname)
+        self._fluxtable = fs[1].data.field(fluxname).copy()
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.fluxunits = units.Units(fs[1].header['tunit2'].lower())
 
@@ -1871,8 +1875,10 @@ class TabularSpectralElement(SpectralElement):
     def _readFITS(self,filename,thrucol='throughput'):
         fs = pyfits.open(filename)
 
-        self._wavetable = fs[1].data.field('wavelength')
-        self._throughputtable = fs[1].data.field(thrucol)
+        # pyfits cannot close the file on .close() if there are still
+        # references to mmapped data
+        self._wavetable = fs[1].data.field('wavelength').copy()
+        self._throughputtable = fs[1].data.field(thrucol).copy()
 
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
         self.throughputunits = 'none'
@@ -1965,10 +1971,12 @@ class FileSpectralElement(TabularSpectralElement):
     def _readFITS(self, filename, throughputname):
         fs = pyfits.open(filename)
 
-        self._wavetable = fs[1].data.field('wavelength')
+        # pyfits cannot close the file on .close() if there are still
+        # references to mmapped data
+        self._wavetable = fs[1].data.field('wavelength').copy()
         if throughputname == None:
             throughputname = 'throughput'
-        self._throughputtable = fs[1].data.field(throughputname)
+        self._throughputtable = fs[1].data.field(throughputname).copy()
         self.waveunits = units.Units(fs[1].header['tunit1'].lower())
 
         #Retain the header information as a convenience for the user.
@@ -2031,9 +2039,11 @@ class InterpolatedSpectralElement(SpectralElement):
         else:
             extrapolate = False
 
-        #The wavelength table will have to be adjusted before use
-        wave0 = fs[1].data.field('wavelength')
+        # The wavelength table will have to be adjusted before use.
 
+        # pyfits cannot close the file on .close() if there are still
+        # references to mmapped data
+        wave0 = fs[1].data.field('wavelength').copy()
 
         #Determine the columns that bracket the desired value
         # grab all columns that beging with the parameter name (e.g. 'MJD#')
