@@ -40,8 +40,8 @@ Modules
    
 SVN Version 
 ^^^^^^^^^^^
-.. autodata:: pysynphot.svn_version.__svn_version__
-.. autodata:: pysynphot.svn_version.setupdate
+.. autodata:: pysynphot.version.stsci_distutils_version
+#.. autodata:: pysynphot.svn_version.setupdate
    
 Indices and tables
 ==================
