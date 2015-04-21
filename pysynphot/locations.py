@@ -58,7 +58,7 @@ CAT_TEMPLATE = os.path.join(rootdir, 'grid', '*', 'catalog.fits')
 KUR_TEMPLATE = os.path.join(rootdir, 'grid', '*')
 
 #Vega
-VegaFile = get_data_filename('alpha_lyr_stis_005.fits')
+VegaFile = get_data_filename('alpha_lyr_stis_008.fits')
 
 
 # CDBS is moving extinction files to $PYSYN_CDBS/extinction so here we
