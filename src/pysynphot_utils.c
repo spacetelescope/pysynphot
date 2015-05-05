@@ -86,7 +86,35 @@ static PyMethodDef pysynphot_utils_methods[] =
 
 };
 
-PyMODINIT_FUNC initpysynphot_utils(void) {
-  (void) Py_InitModule("pysynphot_utils", pysynphot_utils_methods);
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef moduledef = {
+  PyModuleDef_HEAD_INIT,
+  "pysynphot_utils",       /* m_name */
+  "Pysnphot utilities",    /* m_doc */
+  -1,                      /* m_size */
+  pysynphot_utils_methods, /* m_methods */
+  NULL,                    /* m_reload */
+  NULL,                    /* m_traverse */
+  NULL,                    /* m_clear */
+  NULL,                    /* m_free */
+};
+#endif
+
+PyMODINIT_FUNC
+#if PY_MAJOR_VERSION >= 3
+PyInit_pysynphot_utils(void)
+#else
+initpysynphot_utils(void)
+#endif
+{
+  PyObject* m;
   import_array(); /* Must be present for NumPy */
+  
+#if PY_MAJOR_VERSION >= 3
+  m = PyModule_Create(&moduledef);
+  return m;
+#else
+  (void) Py_InitModule("pysynphot_utils", pysynphot_utils_methods);
+  return;
+#endif
 }

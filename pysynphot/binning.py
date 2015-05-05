@@ -98,7 +98,7 @@ def calculate_bin_centers(edges):
 
     centers[0] = edges[:2].mean()
 
-    for i in xrange(1, centers.size):
+    for i in range(1, centers.size):
         centers[i] = 2. * edges[i] - centers[i - 1]
 
     return centers

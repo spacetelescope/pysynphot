@@ -1,9 +1,11 @@
+from __future__ import print_function
+
 import os.path
 import warnings
 
 import numpy as np
 
-from locations import irafconvert, _refTable
+from .locations import irafconvert, _refTable
 
 _default_waveset = None
 _default_waveset_str = None
@@ -89,7 +91,7 @@ def _set_default_refdata():
     try:
         GRAPHTABLE = _refTable(os.path.join('mtab','*_tmg.fits'))
         COMPTABLE  = _refTable(os.path.join('mtab','*_tmc.fits'))
-    except IOError, e:
+    except IOError as e:
         GRAPHTABLE = None
         COMPTABLE = None
         warnings.warn('No graph or component tables found; '
@@ -97,7 +99,7 @@ def _set_default_refdata():
 
     try:
         THERMTABLE = _refTable(os.path.join('mtab','*_tmt.fits'))
-    except IOError, e:
+    except IOError as e:
         THERMTABLE = None
         warnings.warn('No thermal tables found, '
                       'no thermal calculations can be performed. ' + str(e))
@@ -181,4 +183,4 @@ def showref():
     """Prints the values settable by setref"""
     refdata = getref()
     for k, v in refdata.items():
-        print "%10s: %s" % (k,v)
+        print("%10s: %s" % (k,v))

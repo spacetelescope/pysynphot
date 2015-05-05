@@ -1,8 +1,7 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import testutil
 import numpy as N
-import unittest
 
 from pysynphot.spectrum import ArraySourceSpectrum as ArraySpectrum
 from pysynphot import extinction, spectrum, refs
@@ -105,11 +104,11 @@ class TestmuJy(testutil.FPTestCase):
         # Verify that the conversion from photlam to muJy is correct
         photlam=units.Units('photlam')
         test=photlam.Convert(self.awave,self.flux,'mujy')
-        print ' '
-        print 'TEST: ',test
-        print ' '
-        print 'SELF REF MUJY: ',self.ref_mujy
-        print ' '
+        print(' ')
+        print('TEST: ',test)
+        print(' ')
+        print('SELF REF MUJY: ',self.ref_mujy)
+        print(' ')
         self.assertApproxNumpy(test,self.ref_mujy)
 
     def testfromphotlam2(self):

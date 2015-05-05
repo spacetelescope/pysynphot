@@ -5,7 +5,7 @@ variable is switched within the same code.
 
 """
 
-from __future__ import division
+from __future__ import division, print_function
 
 import os
 from unittest import TestCase
@@ -75,13 +75,13 @@ class TestCompSwitch(TestCase):
             x = os.path.normpath(x)
             x = os.path.normcase(x)
             expect_list[i] = x
-            print "EXPECT", expect_list[i]
+            print("EXPECT", expect_list[i])
 
         for i, x in enumerate(in_list) :
             x = os.path.normpath(x)
             x = os.path.normcase(x)
             in_list[i] = x
-            print "IN    ", in_list[i]
+            print("IN    ", in_list[i])
 
         for x in expect_list :
             if not x in in_list :

@@ -1,9 +1,9 @@
 from __future__ import division
-import string
+
 import numpy as N
-import spectrum
-import units
-import refs
+from . import spectrum
+from . import units
+from . import refs
 
 _seatonx = N.array([0.,  1.0, 1.1, 1.2, 1.3, 1.4, 1.5, \
                                 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, \
@@ -175,7 +175,12 @@ reddeningClasses = {'gal1': Gal1,
                     'xgal': Xgal}
 
 def factory(redlaw, *args, **kwargs):
-    return apply(reddeningClasses[string.lower(redlaw)], args, kwargs)
+    import sys
+    if sys.version_info[0] < 3:
+        return apply(reddeningClasses[redlaw.lower()], args, kwargs)
+    else:
+        reddening = reddeningClasses[redlaw.lower()]
+        return reddening(*args, **kwargs)
 
 class DeprecatedExtinction(spectrum.SpectralElement):
     """extinction = Extinction(extinction in magnitudes,

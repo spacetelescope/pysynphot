@@ -17,16 +17,13 @@ tables by reading the docstring, so you can't put anything else
 In class Interpreter, the docstring of every function named with p\_
 is part of the instructions to the parser.
 """
-from __future__ import division
-from spark import GenericScanner, GenericParser, GenericASTTraversal
-from spark import GenericASTBuilder, GenericASTMatcher
-import spectrum
-import reddening
-import observationmode
-import locations
-import catalog
-import os
-from obsbandpass import ObsBandpass
+from __future__ import absolute_import, division, print_function
+from .spark import GenericScanner, GenericASTBuilder, GenericASTMatcher
+from . import spectrum
+from . import reddening
+from . import locations
+from . import catalog
+from .obsbandpass import ObsBandpass
 from .exceptions import DisjointError, OverlapError
 
 syfunctions = [
@@ -66,7 +63,7 @@ syredlaws = [
     'xgal'
     ]
 
-class Token:
+class Token(object):
     def __init__(self, type=None, attr=None):
         self.type = type
         self.attr = attr
@@ -78,7 +75,7 @@ class Token:
         else:
             return self.type
 
-class AST:
+class AST(object):
     def __init__(self, type):
         self.type = type
         self._kids = []
@@ -228,7 +225,7 @@ class Interpreter(GenericASTMatcher):
             args = tree[2].value
         fname = tree[0].value
         if fname not in syfunctions:
-            print "Error: unknown function:", fname
+            print("Error: unknown function:", fname)
             self.error(fname)
         else:
             if fname == 'unit':
@@ -240,7 +237,7 @@ class Interpreter(GenericASTMatcher):
             elif fname == 'pl':
                 # power law
                 if args[2] not in synforms:
-                    print "Error: unrecognized units:", args[2]
+                    print("Error: unrecognized units:", args[2])
                 # code to create powerlaw spectrum object
                 tree.value = spectrum.Powerlaw(args[0],args[1],fluxunits=args[2])
             elif fname == 'box':
@@ -337,7 +334,7 @@ def interpret(ast):
 
 def ptokens(tlist):
     for token in tlist:
-        print token.type, token.attr
+        print(token.type, token.attr)
 
 
 def _handleIRAFName(name):

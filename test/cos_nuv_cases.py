@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 import etctest_base_class
 from pysynphot.spparser import parse_spec
 from pysynphot import ObsBandpass, refs
@@ -18,9 +18,9 @@ def setUpModule():
     old_graphtable = refs.GRAPHTABLE
     refs.setref(comptable='$PYSYN_CDBS/mtab/r1j2146sm_tmc.fits',
                 graphtable='$PYSYN_CDBS/mtab/w3j2015mm_tmg.fits')
-    print "%s:" % os.path.basename(__file__)
-    print "   Tests are being run with %s" % refs.COMPTABLE
-    print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
+    print("%s:" % os.path.basename(__file__))
+    print("   Tests are being run with %s" % refs.COMPTABLE)
+    print("   ETC comparison results were computed with r1j2146sm_tmc.fits")
 
 
 def tearDownModule():

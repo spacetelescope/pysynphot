@@ -1,14 +1,14 @@
-import sys
+from __future__ import print_function
 from nose.exc import SkipTest
 import pysynphot.spparser as p
 
 # Be sure to set global tda={ } and tra={ } in every test.
 
 def print_token_list(l) :
-    print "Token list: %d items"%len(l)
+    print("Token list: %d items"%len(l))
     for x in l : 
-        print "%-20s "% x.type, x.attr
-    print "---"
+        print("%-20s "% x.type, x.attr)
+    print("---")
 
 
 # Test of a single instance of each token.  does not test them in
@@ -78,7 +78,7 @@ def test_tokens() :
     tra = { 'tra_error' : [ ] }
 
     for x in tokens :
-        print "XXXX",x
+        print("XXXX",x)
         typ, val = x
         l = scanner.tokenize(val)
 
@@ -102,9 +102,9 @@ def test_tokens() :
 
 
         if err :
-            print err
-            print_token_list(l)
-            print ""
+            print(err)
+            print(print_token_list(l))
+            print("")
             tda['tda_expr'].append(val)
             tra['tra_error'].append(err)
 
@@ -116,8 +116,8 @@ def test_tokens() :
 # into a test
 def ptl2(l) :
     for x in l : 
-        print "    ( '%s', %s ),  "% ( x.type, repr(x.attr ) )
-    print ""
+        print("    ( '%s', %s ),  "% ( x.type, repr(x.attr ) ))
+    print("")
 
 # Parse a bit of text and compare it to the expected token stream.
 # Each actual test function calls this.
@@ -130,13 +130,13 @@ def stream_t( text, result ) :
     l = scanner.tokenize( text )
     print_token_list(l)
     if result is None :
-        print "NO EXPECT LIST"
-        print "    ["
+        print("NO EXPECT LIST")
+        print("    [")
         ptl2(l)
-        print "    ]"
+        print("    ]")
         raise Exception()
     for n,(expect,actual) in enumerate(zip(result,l)) :
-        print n, "expect=", expect, "actual=", (actual.type, actual.attr)
+        print(n, "expect=", expect, "actual=", (actual.type, actual.attr))
         if ( expect[0] != actual.type ) or ( expect[1] != actual.attr ) :
             tra = { 
                 'tra_expected_token'    : expect[1],

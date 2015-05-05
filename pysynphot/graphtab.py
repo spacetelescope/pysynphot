@@ -2,7 +2,8 @@
 Data structure & traversal algorithm suggested by Alex Martelli,
 http://stackoverflow.com/questions/844505/is-a-graph-library-eg-networkx-the-right-solution-for-my-python-problem
 """
-from __future__ import division
+from __future__ import division, print_function
+
 from collections import defaultdict
 import pyfits
 
@@ -77,10 +78,10 @@ class GraphTable(object):
         self.inittab()
 
         if self.problemset:
-           print "warning, ambiguous nodes encountered"
-           print "(innode, kwd, (outnode, compname, thcompname)"
+           print("warning, ambiguous nodes encountered")
+           print("(innode, kwd, (outnode, compname, thcompname)")
            for k in self.problemset:
-               print k
+               print(k)
 
         self.all_nodes = set()
         for node in self.tab:
@@ -111,8 +112,8 @@ class GraphTable(object):
             for line in f:
                 try:
                     row = line.split()
-                except ValueError,e:
-                    print "Error parsine line %s"%line
+                except ValueError as e:
+                    print("Error parsine line %s"%line)
                     raise e
                 self._setrow(row)
             f.close()
@@ -165,8 +166,8 @@ class GraphTable(object):
         #Returns a list of keywords and a dict of paramkeys
         kws, paramdict = extract_keywords(icss)
         if verbose:
-            print kws
-            print paramdict
+            print(kws)
+            print(paramdict)
         #Always start with innode=1
         nextnode = 1
 
@@ -179,7 +180,7 @@ class GraphTable(object):
 
 
             if found:
-                if verbose: print found
+                if verbose: print(found)
                 #...and that we don't have ambiguity
                 if len(found) == 1:
                     used.update(found)
@@ -206,10 +207,10 @@ class GraphTable(object):
                 paramcomp[tcomp]=float(paramdict[matchkey])
 
 
-            if verbose: print matchnode
+            if verbose: print(matchnode)
 
             if nextnode is None:
-                raise ValueError("Incomplete obsmode: legal possibilities %s"%str(othernodes.keys()))
+                raise ValueError("Incomplete obsmode: legal possibilities %s"%str(list(othernodes.keys())))
 
         #We're done with the table. If there are any keywords left over,
         #raise an exception.

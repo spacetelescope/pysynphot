@@ -1,12 +1,11 @@
-from __future__ import division
+from __future__ import absolute_import, division
 """ This module handles the wavecat.dat table presently used by the
 synphot countrate task (and thus the ETC) to select an appropriate wavelength
 set for a given obsmode. """
 
 import re
-import os
 import numpy as N
-import locations
+from . import locations
 
 
 class Wavetable(object):

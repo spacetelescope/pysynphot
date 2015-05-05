@@ -1,17 +1,16 @@
-from __future__ import division
 """The ObsBandpass user interface needs to support either the usual
 (acs,hrc,f555w) obsmode style that produce a set of chained throughput
 files; or something like (johnson,v) that has a single throughput file.
 Thus ObsBandpass must be a factory function, returning either an
 ObsModeBandpass (ack, terrible name) or a TabularSpectralElement."""
 
+from __future__ import division, print_function
 import numpy as np
 
-from observationmode import ObservationMode
-from spectrum import CompositeSpectralElement, TabularSpectralElement
-import wavetable
-import units
-import pysynphot.exceptions as exceptions
+from .observationmode import ObservationMode
+from .spectrum import CompositeSpectralElement, TabularSpectralElement
+from . import units
+from . import exceptions
 
 def ObsBandpass(obstring, graphtable=None, comptable=None, component_dict={}):
     """ Generate an ObsModeBandPass or TabularSpectralElement instance
@@ -79,7 +78,7 @@ class ObsModeBandpass(CompositeSpectralElement):
     def _checkbounds(self):
         thru=self.throughput
         if thru[0] != 0 or thru[-1] != 0:
-            print "Warning: throughput for this obsmode is not bounded by zeros. Endpoints: thru[0]=%g, thru[-1]=%g"%(thru[0],thru[-1])
+            print("Warning: throughput for this obsmode is not bounded by zeros. Endpoints: thru[0]=%g, thru[-1]=%g"%(thru[0],thru[-1]))
 
     def thermback(self):
         """Expose the thermal background calculation presently hidden

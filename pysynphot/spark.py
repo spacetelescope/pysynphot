@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 #  Copyright (c) 1998-2000 John Aycock
 #  
 #  Permission is hereby granted, free of charge, to any person obtaining
@@ -23,8 +23,6 @@ from __future__ import division
 __version__ = 'SPARK-0.6.1'
 
 import re
-import sys
-import string
 
 def _namelist(instance):
         namelist, namedict, classlist = [], {}, [instance.__class__]
@@ -35,9 +33,10 @@ def _namelist(instance):
                         if name not in namedict:
                                 namelist.append(name)
                                 namedict[name] = 1
+
         return namelist
 
-class GenericScanner:
+class GenericScanner(object):
         def __init__(self):
                 pattern = self.reflect()
                 self.re = re.compile(pattern, re.VERBOSE)
@@ -58,10 +57,10 @@ class GenericScanner:
                                 rv.append(self.makeRE(name))
 
                 rv.append(self.makeRE('t_default'))
-                return string.join(rv, '|')
+                return '|'.join(rv)
 
         def error(self, s, pos):
-                print "Lexical error at position %s" % pos
+                print("Lexical error at position %s" % pos)
                 raise SystemExit
 
         def tokenize(self, s):
@@ -82,7 +81,7 @@ class GenericScanner:
                 r'( . | \n )+'
                 pass
 
-class GenericParser:
+class GenericParser(object):
         def __init__(self, start):
                 self.rules = {}
                 self.rule2func = {}
@@ -100,7 +99,7 @@ class GenericParser:
         def preprocess(self, rule, func):       return rule, func
 
         def addRule(self, doc, func):
-                rules = string.split(doc)
+                rules = doc.split()
 
                 index = []
                 for i in range(len(rules)):
@@ -185,17 +184,19 @@ class GenericParser:
 
         def parse(self, tokens):
                 tree = {}
+
                 tokens.append(self._EOF)
                 states = { 0: [ (self.startRule, 0, 0) ] }
                 
                 if self.ruleschanged:
                         self.makeFIRST()
 
-                for i in xrange(len(tokens)):
+                for i in range(len(tokens)):
                         states[i+1] = []
 
                         if states[i] == []:
                                 break                           
+
                         self.buildState(tokens[i], states, i, tree)
 
                 #_dump(tokens, states)
@@ -211,6 +212,7 @@ class GenericParser:
                 needsCompletion = {}
                 state = states[i]
                 predicted = {}
+                
                 
                 for item in state:
                         rule, pos, parent = item
@@ -322,7 +324,7 @@ class GenericParser:
                         elif token == nextSym:
                                 #assert new not in states[i+1]
                                 states[i+1].append((rule, pos+1, parent))
-
+                
         def buildTree(self, tokens, tree, root):
                 stack = []
                 self.buildTree_r(stack, tokens, -1, tree, root)
@@ -389,8 +391,8 @@ class GenericParser:
                         sortlist.append((len(rhs), name))
                         name2index[name] = i
                 sortlist.sort()
-                list = map(lambda (a,b): b, sortlist)
-                return children[name2index[self.resolve(list)]]
+                alist = [s[1] for s in sortlist]
+                return children[name2index[self.resolve(alist)]]
 
         def resolve(self, list):
                 #
@@ -446,10 +448,10 @@ class GenericASTBuilder(GenericParser):
 #  preorder traversal.  Node type is determined via the typestring() method.
 #
 
-class GenericASTTraversalPruningException:
+class GenericASTTraversalPruningException(Exception):
         pass
 
-class GenericASTTraversal:
+class GenericASTTraversal(object):
         def __init__(self, ast):
                 self.ast = ast
 
@@ -554,14 +556,14 @@ class GenericASTMatcher(GenericParser):
 
 def _dump(tokens, states):
         for i in range(len(states)):
-                print 'state', i
+                print('state', i)
                 for (lhs, rhs), pos, parent in states[i]:
-                        print '\t', lhs, '::=',
-                        print string.join(rhs[:pos]),
-                        print '.',
-                        print string.join(rhs[pos:]),
-                        print ',', parent
+                        print('\t', lhs, '::=', end=' ')
+                        print(' '.join(rhs[:pos]), end=' ')
+                        print('.', end=' ')
+                        print(' '.join(rhs[pos:]), end=' ')
+                        print(',', parent)
                 if i < len(tokens):
-                        print
-                        print 'token', str(tokens[i])
-                        print
+                        print()
+                        print('token', str(tokens[i]))
+                        print()

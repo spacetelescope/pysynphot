@@ -111,7 +111,7 @@ class TestCatalogCache(testutil.FPTestCase):
 
     self.assertTrue(len(Cache.CATALOG_CACHE) == 1)
 
-    k = Cache.CATALOG_CACHE.keys()[0]
+    k = next(key for key in Cache.CATALOG_CACHE.keys())
 
     from pysynphot.locations import irafconvert
     import os.path

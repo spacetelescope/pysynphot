@@ -106,12 +106,12 @@ class SpecCase(object):
             kind = 'obs'
             try:
                 cls.obs = S.Observation(cls.sp, cls.bp)
-            except ValueError, e:
+            except ValueError as e:
                 #Force extrapolation in the case of partialoverlap
                 try:
                     cls.obs = S.Observation(cls.sp, cls.bp, force='extrap')
                     cls.tda['extrap']=True
-                except ValueError, e:
+                except ValueError as e:
                     cls.tra['obs_error'] = str(e)
                     cls.obs = str(e)
                     return  # then the obs tests should raise errors

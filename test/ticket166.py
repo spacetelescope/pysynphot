@@ -1,5 +1,4 @@
-from __future__ import division
-import os
+from __future__ import division, print_function
 import testutil
 import pysynphot as S
 from pysynphot.exceptions import DisjointError, PartialOverlap
@@ -79,8 +78,8 @@ class Handmade(testutil.FPTestCase):
         try:
             self.tst=self.obs.countrate(range=[1016,1026])
             self.assert_("No exception raised")
-        except PartialOverlap, e:
-            print "Exception: ",str(e)
+        except PartialOverlap as e:
+            print("Exception: ",str(e))
             self.failUnless(str(self.ref) in str(e))
 
     def testovlplobin(self):
@@ -89,8 +88,8 @@ class Handmade(testutil.FPTestCase):
         try:
             self.tst=self.obs.countrate(range=[1000,1016])
             self.assert_(False, "No exception raised")
-        except PartialOverlap, e:
-            print "Exception: ",str(e)
+        except PartialOverlap as e:
+            print("Exception: ",str(e))
             self.failUnless(str(self.ref) in str(e))
 
 

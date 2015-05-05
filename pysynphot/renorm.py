@@ -3,11 +3,10 @@ from __future__ import division
 one that works, turn it into a method on the spectrum class."""
 import math
 import numpy as np
+from . import units
 from .spectrum import FlatSpectrum, Vega
 from .refs import _default_waveset
 from .exceptions import DisjointError, OverlapError
-import units
-
 
 def DefineStdSpectraForUnits():
     """Adorn the units with the appropriate kind of spectrum for

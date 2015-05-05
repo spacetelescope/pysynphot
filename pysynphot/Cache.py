@@ -5,7 +5,7 @@ read in only once, and then re-used from memory.
 This is planned to include the reddening laws and some indexes for the
 Kurucz and Castelli-Kurucz model atlases."""
 
-from locations import RedLaws
+from .locations import RedLaws
 
 # if PYSYN_CDBS is undefined RedLaws will be an empty dictionary
 # so we should check whether these assignments are possible

@@ -7,14 +7,13 @@ unit conversions
   vegamag unit conversions require spectrum and locations modules => circular imports.
 
 """
-from __future__ import division
+from __future__ import absolute_import, division
 
 import math
 import numpy as N
-import locations, spectrum  # Circular import
-import binning
+from . import binning
+from . import refs  # needed for PRIMARY_AREA
 
-import refs  # needed for PRIMARY_AREA
 # cannot just import the constant because it won't get updated
 # when the setref() function is used to change it.
 
@@ -52,7 +51,6 @@ def Units(uname):
 def ismatch(a,b):
     """Method to allow smart comparisons between classes, instances,
     and string representations of units and give the right answer."""
-    match=False
     #Try the easy case
     if a == b:
         return True
@@ -283,7 +281,7 @@ class Photlam(FluxUnits):
         return -1.085736 * N.log(arg)
 
     def ToVegaMag(self, wave, flux, **kwargs):
-
+        from . import spectrum
         resampled = spectrum.Vega.resample(wave)
         normalized = flux / resampled._fluxtable
         return -2.5 * N.log10(normalized)
@@ -546,6 +544,7 @@ class OBMag(LogFluxUnits):
 
 class VegaMag(LogFluxUnits):
     def __init__(self):
+        from . import spectrum
         LogFluxUnits.__init__(self)
         self.name = 'vegamag'
         self.vegaspec = spectrum.Vega

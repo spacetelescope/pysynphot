@@ -7,14 +7,14 @@ certain other methods."""
 import numpy as np
 import math
 
-import spectrum
-import units
-import binning
+from . import spectrum
+from . import units
+from . import binning
+from . import exceptions
 
-from obsbandpass import pixel_range, wave_range
-from spectrum import ArraySourceSpectrum
+from .obsbandpass import pixel_range, wave_range
+from .spectrum import ArraySourceSpectrum
 
-import pysynphot.exceptions as exceptions
 
 try:
   import pysynphot_utils

@@ -50,6 +50,8 @@ def get_data_filename(filename):
             for fname in files:
                 _data_map[fname] = os.path.join(root, fname)
 
+    if filename not in _data_map:
+        raise KeyError(filename + ' not found in ' + specdir)
     return _data_map[filename]
 
 

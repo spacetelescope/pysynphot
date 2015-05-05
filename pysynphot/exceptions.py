@@ -1,6 +1,6 @@
 """Custom exceptions for pysynphot to raise"""
 
-
+# TODO: error message about BaseException
 class PysynphotError(Exception):
     """parent class"""
     def __init__(self,msg):

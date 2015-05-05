@@ -91,7 +91,7 @@ class calcspecCase(testutil.LogTestCase):
                                instrument=self.obsmode,
                                output=output,form=form)
                 break
-            except iraf.IrafError,e:
+            except iraf.IrafError as e:
                 count+=1
                 pass
 
@@ -197,7 +197,7 @@ class calcspecCase(testutil.LogTestCase):
                                wavecat=wname,
                                hiwave=self.sptest.wave.max())
                 break
-            except iraf.IrafError,e:
+            except iraf.IrafError as e:
                 count+=1
                 pass
 

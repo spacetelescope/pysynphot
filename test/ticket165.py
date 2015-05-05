@@ -11,6 +11,6 @@ def test_aper():
         def makebp(mode):
             try:
                 bp = S.ObsBandpass(mode)
-            except KeyError,e:
+            except KeyError as e:
                 raise AssertionError(e.message)
         yield makebp, mode

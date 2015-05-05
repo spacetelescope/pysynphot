@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import os
 import sys
@@ -16,14 +16,14 @@ old_vegafile = None
 def setUpModule():
     global old_vegafile
 
-    print "%s:" % os.path.basename(__file__)
-    print "   Tests are being run with %s" % refs.COMPTABLE
-    print "   ETC comparison results were computed with r1j2146sm_tmc.fits"
+    print("%s:" % os.path.basename(__file__))
+    print("   Tests are being run with %s" % refs.COMPTABLE)
+    print("   ETC comparison results were computed with r1j2146sm_tmc.fits")
 
     # Also set the version of Vega for similar reasons
     old_vegafile = locations.VegaFile
     locations.VegaFile = os.path.join(testdir, 'alpha_lyr_stis_002.fits')
-    print "Using Vega spectrum: %s" % locations.VegaFile
+    print("Using Vega spectrum: %s" % locations.VegaFile)
 
 
 def tearDownModule():

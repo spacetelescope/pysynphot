@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 from unittest import TestCase
 import os
 
@@ -7,7 +7,7 @@ from testutil import skip
 try:
     from pysynphot.graphtab import GraphTable
 except ImportError:
-    print "Warning, the tests won't run; GraphTable not yet implemented"
+    print("Warning, the tests won't run; GraphTable not yet implemented")
 
 
 def make_tmg(strdata,tmgname):

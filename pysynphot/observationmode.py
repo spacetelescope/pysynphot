@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import absolute_import, division, print_function
 ## Automatically adapted for numpy.numarray Mar 05, 2007 by
 
 import string
@@ -9,14 +9,14 @@ import warnings
 import numpy as N
 import pyfits
 
-import refs
-import spectrum
-import units
-import locations
-from locations import irafconvert
-import planck
-import wavetable
-from tables import CompTable, GraphTable
+from . import refs
+from . import spectrum
+from . import units
+from . import locations
+from .locations import irafconvert
+from . import planck
+from . import wavetable
+from .tables import CompTable, GraphTable
 
 
 #Flag to control verbosity
@@ -86,12 +86,12 @@ class BaseObservationMode(object):
 
         try:
             self.binset = wavetable.wavetable[obm]
-        except KeyError,e:
+        except KeyError as e:
             #If zero candidates were found, that's ok.
             pass
-        except ValueError,e:
+        except ValueError as e:
             #wavetable will raise a ValueError if the key was ambiguous
-            print "Warning, %s"%str(e)
+            print("Warning, %s"%str(e))
 
 
     def __str__(self):
@@ -124,7 +124,7 @@ class BaseObservationMode(object):
         """ Duplicate synphot showfiles behavior"""
         for name in self._throughput_filenames:
             if name != 'clear':
-                print name
+                print(name)
 
     def bandWave(self):
         """ Return the binned waveset most appropriate for the obsmode,
@@ -350,7 +350,7 @@ class _ThermalObservationMode(BaseObservationMode):
                 tokens = regx.findall(line)
                 if tokens[0] == obsmode:
                     break
-            except Exception, e:
+            except Exception as e:
                 raise ValueError("Error processing %s: %s"%(fname,str(e)))
 
         return float(tokens[1])

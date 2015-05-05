@@ -25,7 +25,7 @@ class TestThermal(unittest.TestCase):
     def test1(self):
         try:
             self.omode = _ThermalObservationMode(self.ostring)
-        except Exception, e:
+        except Exception as e:
             self.fail(str(e))
 
 
@@ -39,7 +39,7 @@ class TestThermback(unittest.TestCase):
     def testruns(self):
         try:
             ans=self.bp.thermback()
-        except Exception, e:
+        except Exception as e:
             self.fail(str(type(e))+str(e))
 
 class TestThermbackException(unittest.TestCase):

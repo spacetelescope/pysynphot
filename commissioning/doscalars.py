@@ -1,3 +1,4 @@
+from __future__ import print_function
 import kwfile_dict
 import glob, os, sys
 import numpy as N
@@ -117,6 +118,6 @@ if __name__ == '__main__':
     #dirpath, fieldname, instr=sys.argv[1:]
     try:
         run(*sys.argv[1:])
-    except TypeError,e:
-        print "sys.argv[1:] = ",sys.argv[1:]
+    except TypeError as e:
+        print("sys.argv[1:] = ",sys.argv[1:])
         raise e

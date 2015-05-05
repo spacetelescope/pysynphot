@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import sys
 import os
@@ -18,8 +18,8 @@ def setUpModule():
     cmptb_name = os.path.join('mtab','rcb1833hm_tmc.fits')
     old_comptable = refs.COMPTABLE
     refs.COMPTABLE = locations._refTable(cmptb_name)
-    print "%s:" % os.path.basename(__file__)
-    print "   Tests are being run with %s" % refs.COMPTABLE
+    print("%s:" % os.path.basename(__file__))
+    print("   Tests are being run with %s" % refs.COMPTABLE)
 
 
 def tearDownModule():
@@ -42,9 +42,9 @@ class ParmCase(testutil.FPTestCase):
         try:
             self.idx=self.rnames.index(self.reffile)
         except ValueError:
-            print "looking for ",self.reffile
+            print("looking for ",self.reffile)
             for fname in self.rnames:
-                print fname
+                print(fname)
 
     def test1(self):
         "parm# in modes"
@@ -65,8 +65,8 @@ class ParmCase(testutil.FPTestCase):
             self.assert_(isinstance(self.om.components[self.idx].throughput,
                                 spectrum.InterpolatedSpectralElement))
         except IndexError:
-            print len(self.om.components)
-            print self.idx
+            print(len(self.om.components))
+            print(self.idx)
 
 
 class TwoParms(testutil.FPTestCase):

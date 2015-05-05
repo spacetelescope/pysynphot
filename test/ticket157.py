@@ -1,9 +1,9 @@
-from __future__ import division
+from __future__ import division, print_function
 import pysynphot as S
 from pysynphot.exceptions import PartialOverlap
 from pysynphot.observation import Observation
 from pysynphot import spparser
-import os, sys
+import os
 import testutil
 import numpy as N
 
@@ -26,15 +26,15 @@ def setUpModule():
     old_comptable = refs.COMPTABLE
     cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
     refs.COMPTABLE = locations._refTable(cmptb_name)
-    print "%s:" % os.path.basename(__file__)
-    print "   Tests are being run with %s" % refs.COMPTABLE
-    print "   Synphot comparison results were computed with r1j2146sm_tmc.fits"
+    print("%s:" % os.path.basename(__file__))
+    print("   Tests are being run with %s" % refs.COMPTABLE)
+    print("   Synphot comparison results were computed with r1j2146sm_tmc.fits")
     #Synphot comparison results are identified with the varname synphot_ref.
 
     #Also set the version of Vega for similar reasons
     old_vegafile = locations.VegaFile
     locations.VegaFile = os.path.join(testdir, 'alpha_lyr_stis_002.fits')
-    print "Using Vega spectrum: %s" % locations.VegaFile
+    print("Using Vega spectrum: %s" % locations.VegaFile)
 
 
 def tearDownModule():
@@ -235,11 +235,6 @@ class ETCTestCase_Imag2(testutil.FPTestCase):
         self.assertRaises(PartialOverlap,
                           S.Observation,
                           self.sp, self.bp)
-
-
-
-    def tearDown(self):
-        os.chdir(self.oldpath)
 
 
 

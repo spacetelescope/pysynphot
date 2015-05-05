@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 import sys
 import os
 import math
@@ -21,7 +21,7 @@ class MergeTestCase(testutil.FPTestCase):
 
     def testwave(self):
         """tickettest.MergeTestCase('testwave'): merge simple identical wavesets: #34"""
-        foo=N.array(range(10,20),dtype=N.float64)
+        foo=N.array(list(range(10,20)),dtype=N.float64)
         x=spectrum.MergeWaveSets(foo,foo)
         self.assertEqualNumpy(foo,x)
 
@@ -159,9 +159,9 @@ class BandTestCase(testutil.FPTestCase):
         cmptb_name=os.path.join('mtab','r1j2146sm_tmc.fits')
         self.old_comptable = refs.COMPTABLE
         refs.COMPTABLE = locations._refTable(cmptb_name)
-        print "ui_Test.BandTests:"
-        print "  Tests are being run with comptable",refs.COMPTABLE
-        print "  Comparison results were computed with r1j2146sm_tmc.fits"
+        print("ui_Test.BandTests:")
+        print("  Tests are being run with comptable",refs.COMPTABLE)
+        print("  Comparison results were computed with r1j2146sm_tmc.fits")
 
     def tearDown(self):
         refs.COMPTABLE = self.old_comptable

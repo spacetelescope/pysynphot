@@ -1,10 +1,10 @@
-from __future__ import division
+from __future__ import division, print_function
 from unittest import TestCase
 from testutil import skip
 try:
     from pysynphot.graphtab import CompTable
 except ImportError:
-    print "not implemented yet"
+    print("not implemented yet")
 
 class CompCase(TestCase):
     @skip

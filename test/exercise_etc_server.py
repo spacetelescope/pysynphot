@@ -98,9 +98,6 @@ Server disconnected from ('127.0.0.1', 58516)
 Debug mode is controlled by the etc.debug setting in *this* module.
 """
 import os
-import socket
-import threading
-import SocketServer
 from pysynphot.client import Client
 
 #Places used by test code

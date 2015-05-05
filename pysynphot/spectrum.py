@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import absolute_import, division, print_function
 
 """
 Module: spectrum.py
@@ -15,7 +15,6 @@ pyfits, numpy
 
 """
 
-import string
 import re
 import os
 import math
@@ -24,10 +23,10 @@ import warnings
 import pyfits
 import numpy as N
 
-import refs
-import units
-import locations
-import planck
+from . import refs
+from . import units
+from . import locations
+from . import planck
 import pysynphot.exceptions as exceptions #custom pysyn exceptions
 
 from pysynphot import __version__
@@ -145,7 +144,7 @@ class Integrator(object):
                     if len(cols) >= 2:
                         wlist.append(float(cols[0]))
                         flist.append(float(cols[1]))
-                except Exception, e:
+                except Exception as e:
                     raise exceptions.BadRow("Error reading %s: %s"%(filename,str(e)),rows=lcount)
 
         return wlist, flist
@@ -182,7 +181,7 @@ class Integrator(object):
             and (self._fluxtable.min() < 0)):
             idx=N.where(self._fluxtable < 0)
             self._fluxtable[idx]=0.0
-            print "Warning, %d of %d bins contained negative fluxes; they have been set to zero."%(len(idx[0]),len(self._fluxtable))
+            print("Warning, %d of %d bins contained negative fluxes; they have been set to zero."%(len(idx[0]),len(self._fluxtable)))
 
 
 class SourceSpectrum(Integrator):
@@ -486,11 +485,11 @@ class SourceSpectrum(Integrator):
         Calls a function in another module to alleviate circular import
         issues."""
 
-        from renorm import StdRenorm
+        from .renorm import StdRenorm
         return StdRenorm(self,band,RNval,RNUnits,force=force)
 
     def effstim(self,fluxunits='photlam'):
-        print "?? %s"%fluxunits
+        print("?? %s"%fluxunits)
         raise NotImplementedError("Ticket #140: calcphot.effstim functionality")
 
 class CompositeSourceSpectrum(SourceSpectrum):
@@ -1151,8 +1150,8 @@ class SpectralElement(Integrator):
             return CompositeSpectralElement(self, UniformTransmission(other))
 
         else:
-            print "SpectralElements can only be multiplied by other " + \
-                  "SpectralElements or SourceSpectrum objects"
+            print("SpectralElements can only be multiplied by other " + 
+                  "SpectralElements or SourceSpectrum objects")
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -2052,7 +2051,7 @@ class InterpolatedSpectralElement(SpectralElement):
         colWaves = [float(cn.split('#')[1]) for cn in colNames]
 
         if colNames == []:
-            raise StandardError('File %s contains no interpolated columns.' % (fileName,))
+            raise Exception('File %s contains no interpolated columns.' % (fileName,))
 
         # easy case: wavelength matches a column
         if self.interpval in colWaves:

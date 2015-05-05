@@ -27,7 +27,7 @@ class WaveProblems(unittest.TestCase):
     def testrows(self):
         try:
             sp=spectrum.ArraySourceSpectrum(self.wv, self.fx)
-        except exceptions.DuplicateWavelength, e:
+        except exceptions.DuplicateWavelength as e:
             self.assertEqual(e.rows, 1)
 
     def testneg(self):
@@ -59,7 +59,7 @@ class TestFile(unittest.TestCase):
     def tearDown(self):
         try:
             os.unlink(self.fname)
-        except Exception, e:
+        except Exception as e:
             pass #ok, not there
 
     def testraises(self):
@@ -70,5 +70,5 @@ class TestFile(unittest.TestCase):
     def testrow(self):
         try:
             sp=spectrum.FileSourceSpectrum(self.fname)
-        except exceptions.BadRow, e:
+        except exceptions.BadRow as e:
             self.assertEqual(e.rows, 3)

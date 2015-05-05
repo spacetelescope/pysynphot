@@ -1,4 +1,3 @@
-from __future__ import division
 """
 This module is useful for working with catalog spectra such as Castelli & Kurucz.
 
@@ -22,10 +21,10 @@ import os
 import numpy as N
 import pyfits
 
-import spectrum
-import locations
+from . import spectrum
+from . import locations
 
-from Cache import CATALOG_CACHE
+from .Cache import CATALOG_CACHE
 
 import pysynphot.exceptions as exceptions
 

@@ -1,6 +1,5 @@
-from __future__ import division
+from __future__ import division, print_function
 import pysynphot as S
-from pysynphot.observation import Observation
 from pysynphot import spparser
 from pysynphot.exceptions import OverlapError
 import os, sys
@@ -23,13 +22,13 @@ def setUpModule():
     cmptb_name = os.path.join('mtab', 't260548pm_tmc.fits')
     old_comptable = refs.COMPTABLE
     refs.COMPTABLE = locations._refTable(cmptb_name)
-    print "%s:" % os.path.basename(__file__)
-    print "  Tests are being run with %s" % refs.COMPTABLE
+    print("%s:" % os.path.basename(__file__))
+    print("  Tests are being run with %s" % refs.COMPTABLE)
 
     # Also set the version of Vega for similar reasons
     old_vegafile = locations.VegaFile
     locations.VegaFile = os.path.join('crcalspec', 'alpha_lyr_stis_003.fits')
-    print "Using Vega spectrum: %s" % locations.VegaFile
+    print("Using Vega spectrum: %s" % locations.VegaFile)
 
 
 def tearDownModule():
@@ -58,7 +57,7 @@ class RenormOverlap(testutil.FPTestCase):
         self.failUnless(N.all(1-abs(ratio/self.ref)<0.0001))
 
     def testparse(self):
-        sp2=S.spparser.parse_spec(self.cmd)
+        sp2=spparser.parse_spec(self.cmd)
         ratio=sp2.flux/self.sp.flux
         self.failUnless(N.all(1-abs(ratio/self.ref)<0.0001))
 
@@ -66,7 +65,7 @@ class RenormOverlap(testutil.FPTestCase):
         jv=S.ObsBandpass('johnson,v')
         try:
             sp2=self.sp.renorm(17.0,'abmag',jv)
-        except ValueError,e:
+        except ValueError as e:
             self.fail(e.message)
 
 
@@ -78,7 +77,7 @@ class SmarterOverlap(RenormOverlap):
         acs=S.ObsBandpass('acs,hrc,f555w')
         try:
             sp2=self.sp.renorm(17.0,'abmag',acs)
-        except ValueError,e:
+        except ValueError as e:
             self.fail(e.message)
 
 
@@ -100,7 +99,7 @@ class CornerCase(testutil.FPTestCase):
     def testsmart(self):
         try:
             sp2=self.sp.renorm(17.0,'abmag',self.bp)
-        except ValueError,e:
+        except ValueError as e:
             self.fail(e.message)
 
 

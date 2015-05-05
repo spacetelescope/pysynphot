@@ -39,7 +39,7 @@ def genstis(outname):
               '/grp/hst/cdbs/calspec/g191b2b_mod_004.fits']
 
     glist={'g140l':'fuvmama','g230l':'nuvmama','g430l':'ccd','g750l':'ccd',
-    'g230lb':'ccd']
+    'g230lb':'ccd'}
 
     out=open(outname,'a')
     out.write("""from pytools import testutil
