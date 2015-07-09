@@ -1,3 +1,25 @@
+"""This module handles constants and look-up tables used in calculations.
+
+**Global Variables**
+
+* ``pysynphot.refs._default_waveset`` - Default wavelength set to use if no
+  instrument-specific values found.
+* ``pysynphot.refs._default_waveset_str`` - Description of the default
+  wavelength set above.
+* ``pysynphot.refs.PRIMARY_AREA`` - Telescope collecting area, i.e., the primary
+  mirror, in :math:`\\textnormal{cm}^{2}`. The value for HST is 45238.93416.
+
+These are used in `~pysynphot.observationmode` to look up throughput files for
+a given bandpass:
+
+* ``pysynphot.refs.GRAPHTABLE``
+* ``pysynphot.refs.GRAPHDICT``
+* ``pysynphot.refs.COMPTABLE``
+* ``pysynphot.refs.COMPDICT``
+* ``pysynphot.refs.THERMTABLE``
+* ``pysynphot.refs.THERMDICT``
+
+"""
 from __future__ import print_function
 
 import os.path
@@ -22,32 +44,25 @@ PRIMARY_AREA = 45238.93416  # cm^2 - default to HST mirror
 
 def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
                         delta=None, log=True):
-    """
-    Set the default waveset for pysynphot spectral types. Calculated wavesets
-    are inclusive of `minwave` and exclusive of `maxwave`.
+    """Set the default wavelength set, ``pysynphot.refs._default_waveset``.
 
     Parameters
     ----------
-    minwave : float, optional
-        The starting point of the waveset.
-
-    maxwave : float, optional
-        The end point of the waveset.
+    minwave, maxwave : float, optional
+        The start (inclusive) and end (exclusive) points of the wavelength set.
+        Values should be given in linear space regardless of ``log``.
 
     num : int, optional
-        The number of elements in the waveset. If `delta` is not None this
-        is ignored.
+        The number of elements in the wavelength set.
+        Only used if ``delta=None``.
 
     delta : float, optional
-        Delta between values in the waveset. If not None, this overrides
-        the `num` parameter. If `log` is True then `delta` is assumed to be
-        the spacing in log space.
+        Delta between values in the wavelength set.
+        If ``log=True``, this defines wavelegth spacing in log space.
 
     log : bool, optional
-        Sets whether the waveset is evenly spaced in log or linear space. If
-        `log` is True then `delta` is assumed to be the delta in log space.
-        `minwave` and `maxwave` should be given in normal space regardless
-        of the value of `log`.
+        Determines whether the wavelength set is evenly spaced in log or linear
+        space.
 
     """
     global _default_waveset
@@ -85,6 +100,7 @@ def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
 
 
 def _set_default_refdata():
+    """Default refdata set on import."""
     global GRAPHTABLE, COMPTABLE, THERMTABLE, PRIMARY_AREA
     # Component tables are defined here.
 
@@ -114,9 +130,37 @@ _set_default_refdata()
 
 def setref(graphtable=None, comptable=None, thermtable=None,
            area=None, waveset=None):
-    """provide user access to global reference data.
-    Graph/comp/therm table names must be fully specified."""
+    """Set default graph and component tables, primary area, and
+    wavelength set.
 
+    This is similar to setting ``refdata`` in IRAF STSDAS SYNPHOT.
+    If all parameters set to `None`, they are reverted to software default.
+    If any of the parameters are not `None`, they are set to desired
+    values while the rest (if any) remain at current setting.
+
+    Parameters
+    ----------
+    graphtable, comptable, thermtable : str or `None`
+        Graph, component, and thermal table names, respectively,
+        for `~pysynphot.observationmode` throughput look-up.
+        Do not use "*" wildcard.
+
+    area : float or `None`
+        Telescope collecting area, i.e., the primary
+        mirror, in :math:`\\textnormal{cm}^{2}`.
+
+    waveset : tuple or `None`
+        Parameters for :func:`set_default_waveset` as follow:
+            * ``(minwave, maxwave, num)`` - This assumes log scale.
+            * ``(minwave, maxwave, num, 'log')``
+            * ``(minwave, maxwave, num, 'linear')``
+
+    Raises
+    ------
+    ValueError
+        Invalid ``waveset`` parameters.
+
+    """
     global GRAPHTABLE, COMPTABLE, THERMTABLE, PRIMARY_AREA, GRAPHDICT, COMPDICT, THERMDICT
 
     GRAPHDICT = {}
@@ -169,8 +213,19 @@ def setref(graphtable=None, comptable=None, thermtable=None,
 
 
 def getref():
-    """Collects & returns the current refdata as a dictionary"""
+    """Current default values for graph and component tables, primary area,
+    and wavelength set.
 
+    .. note::
+
+        Also see  :func:`setref`.
+
+    Returns
+    -------
+    ans : dict
+        Mapping of parameter names to their current values.
+
+    """
     ans=dict(graphtable=GRAPHTABLE,
              comptable=COMPTABLE,
              thermtable=THERMTABLE,
@@ -180,7 +235,10 @@ def getref():
 
 
 def showref():
-    """Prints the values settable by setref"""
+    """Like :func:`getref` but print results to screen instead of returning
+    a dictionary.
+
+    """
     refdata = getref()
     for k, v in refdata.items():
         print("%10s: %s" % (k,v))

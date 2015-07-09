@@ -1,8 +1,8 @@
+# It defines a new Observation class, subclassed from CompositeSourceSpectrum,
+# that has some special methods and attributes and explicitly removes
+# certain other methods.
+"""This module handles an observation and related calculations."""
 from __future__ import division
-"""This will ultimately replace the observation.py module. It defines
-a new Observation class, subclassed from CompositeSourceSpectrum,
-that has some special methods and attributes and explicitly removes
-certain other methods."""
 
 import numpy as np
 import math
@@ -17,30 +17,35 @@ from .spectrum import ArraySourceSpectrum
 
 
 try:
-  import pysynphot_utils
-  utils_imported = True
+    import pysynphot_utils
+    utils_imported = True
 except ImportError:
-  utils_imported = False
+    utils_imported = False
+
 
 def check_overlap(a, b):
-    """ Check for wavelength overlap between two psyn instances.
+    """Check for wavelength overlap between two spectra.
 
-    Generalized from psyn.SpectralElement.check_overlap().
+    .. note::
+
+        Generalized from
+        :meth:`pysynphot.spectrum.SpectralElement.check_overlap`.
 
     Parameters
     ----------
-    a : :py:class:`~pysynphot.spectrum.Integrator` instance
-    b : :py:class:`~pysynphot.spectrum.Integrator` instance
-       Typically a psyn.SourceSpectrum, psyn.SpectralElement,
-       psyn.Observation, or psyn.ObsBandpass
+    a, b : `~pysynphot.spectrum.SourceSpectrum` or `~pysynphot.spectrum.SpectralElement`
+       Typically a source spectrum, spectral element, observation,
+       or bandpass from observation mode.
 
     Returns
     -------
-    result : {'full','partial','none'}
+    result : {'full', 'partial', 'none'}
+        Full, partial, or no overlap.
 
-    See Also
-    --------
-    pysynphot.spectrum.Integrator, pysynphot.spectrum.SpectralElement
+    Raises
+    ------
+    AttributeError
+        Given spectrum does not have flux or throughput.
 
     """
     if a.isAnalytic or b.isAnalytic:
@@ -74,52 +79,136 @@ def check_overlap(a, b):
 
 
 def validate_overlap(comp1, comp2, force):
+    """Validate the overlap between the wavelength sets
+    of the two given components.
 
-  """Validate the overlap between the wavesets of the two components.
-  If force is not None, the components may be adjusted.
-  """
-  warnings = dict()
-  if force is None:
-      stat = comp2.check_overlap(comp1)
-      if stat=='full':
-          pass
-      elif stat == 'partial':
-          raise(exceptions.PartialOverlap('Spectrum and bandpass do not fully overlap. You may use force=[extrap|taper] to force this Observation anyway.'))
-      elif stat == 'none':
-          raise(exceptions.DisjointError('Spectrum and bandpass are disjoint'))
+    Parameters
+    ----------
+    comp1, comp2 : `~pysynphot.spectrum.SourceSpectrum` or `~pysynphot.spectrum.SpectralElement`
+        Source spectrum and bandpass of an observation.
 
-  elif force.lower() == 'taper':
-      try:
-          comp1=comp1.taper()
-      except AttributeError:
-          comp1=comp1.tabulate().taper()
-          warnings['PartialOverlap']=force
+    force : {'extrap', 'taper', `None`}
+        If not `None`, the components may be adjusted by
+        extrapolation or tapering.
 
-  elif force.lower().startswith('extrap'):
-      #default behavior works, but check the overlap so we can set the warning
-      stat=comp2.check_overlap(comp1)
-      if stat == 'partial':
-          warnings['PartialOverlap']=force
+    Returns
+    -------
+    comp1, comp2
+        Same as inputs. However, ``comp1`` might be tapered
+        if that option is selected.
 
-  else:
-      raise(KeyError("Illegal value force=%s; legal values=('taper','extrap')"%force))
-  return comp1, comp2, warnings
+    warnings : dict
+        Maps warning keyword to its description.
+
+    Raises
+    ------
+    KeyError
+        Invalid ``force``.
+
+    pysynphot.exceptions.DisjointError
+        No overlap detected when ``force`` is `None`.
+
+    pysynphot.exceptions.PartialOverlap
+        Partial overlap detected when ``force`` is `None`.
+
+    """
+    warnings = dict()
+    if force is None:
+        stat = comp2.check_overlap(comp1)
+        if stat=='full':
+            pass
+        elif stat == 'partial':
+            raise(exceptions.PartialOverlap('Spectrum and bandpass do not fully overlap. You may use force=[extrap|taper] to force this Observation anyway.'))
+        elif stat == 'none':
+            raise(exceptions.DisjointError('Spectrum and bandpass are disjoint'))
+
+    elif force.lower() == 'taper':
+        try:
+            comp1=comp1.taper()
+        except AttributeError:
+            comp1=comp1.tabulate().taper()
+            warnings['PartialOverlap']=force
+
+    elif force.lower().startswith('extrap'):
+        #default behavior works, but check the overlap so we can set the warning
+        stat=comp2.check_overlap(comp1)
+        if stat == 'partial':
+            warnings['PartialOverlap']=force
+
+    else:
+        raise(KeyError("Illegal value force=%s; legal values=('taper','extrap')"%force))
+    return comp1, comp2, warnings
+
 
 class Observation(spectrum.CompositeSourceSpectrum):
-    """ obs = Observation(Spectrum object, Bandpass object,
-    binset=numpy array to be used for binning when converting to counts.)
+    """Class to handle an :ref:`observation <pysynphot-observation>`.
+    An observation is the end point of a chain of spectral manipulation.
 
-    Most ObsBandpass objects have a built-in binset that is optimized
-    for use with the specified observing mode; specifying the binset
-    in the Observation constructor would overrirde that binset.
+    Most `~pysynphot.obsbandpass.ObsBandpass` objects have a built-in
+    ``binset`` that is optimized for use with the specified observing
+    mode (also see :ref:`pysynphot-wavelength-table`).
+    Specifying the ``binset`` here would override the built-in one.
 
-    An Observation is the end point of a chain of spectral manipulation."""
+    Parameters
+    ----------
+    spec : `~pysynphot.spectrum.SourceSpectrum`
+        Source spectrum.
 
+    band : `~pysynphot.spectrum.SpectralElement`
+        Bandpass.
 
+    binset : array_like or `None`
+        Wavelength values to be used for binning when converting to counts.
+        See :meth:`initbinset`.
+
+    force
+        See :meth:`~pysynphot.observation.Observation.validate_overlap`.
+
+    Attributes
+    ----------
+    spectrum
+        Same as input ``spec``.
+
+    bandpass
+        Same as input ``band``.
+
+    binset
+        Same as input ``binset``.
+
+    component1, component2 : `~pysynphot.spectrum.SourceSpectrum` or `~pysynphot.spectrum.SpectralElement`
+        Components and sub-components that belong to the observation.
+
+    operation : str
+        This is always "multiply".
+
+    name : str
+        Short description of the observation.
+
+    warnings : dict
+        To store warnings, which are inherited from all inputs. If they have the same warning keyword, the one from most recently read component is used.
+
+    isAnalytic : bool
+        Flag to indicate whether this is an analytic spectrum. This is only `True` if both inputs are analytic.
+
+    primary_area : number or `None`
+        :ref:`pysynphot-area` of the telescope. This is inherited from either of the inputs, if available (not `None`). If inputs have different values, an exception is raised.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units inherited from source spectrum.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units. This is the native dataset.
+
+    binwave, binflux : array_like
+        Binned dataset.
+
+    Raises
+    ------
+    pysynphot.exceptions.IncompatibleSources
+        Input spectra have different telescope areas defined.
+
+    """
     def __init__(self,spec,band,binset=None,force=None):
-        """The normal means of producing an Observation is by means of the
-        .observe() method on the spectral element."""
-
         self.spectrum = spec
         self.bandpass = band
         self.warnings={}
@@ -144,19 +233,38 @@ class Observation(spectrum.CompositeSourceSpectrum):
         self.initbinset(binset)
         #self.initbinflux()
 
-
     def validate_overlap(self,force):
-        """By default, it is required that the spectrum and bandpass fully
-        overlap. Partial overlap will raise an error in the absence of the
-        force keyword, which may be set to "taper" or "extrap". """
+        """Validate that spectrum and bandpass overlap.
+        Warnings are stored in ``self.warnings``.
+
+        Parameters
+        ----------
+        force : {'extrap', 'taper', `None`}
+            If `None`, it is required that the spectrum and bandpass fully
+            overlap. Partial overlap is allowed if this is set to
+            ``'extrap'`` or ``'taper'``. See :func:`validate_overlap`.
+
+        """
 
         #Wrap the function for convenience
         self.spectrum, self.bandpass, warn = validate_overlap(self.spectrum,
                                                               self.bandpass, force)
         self.warnings.update(warn)
 
-
     def initbinset(self,binset=None):
+        """Set ``self.binwave``.
+
+        By default, wavelength values for binning are inherited
+        from bandpass. If the bandpass has no binning information,
+        then source spectrum wavelengths are used. However, if
+        user provides values, then those are used without question.
+
+        Parameters
+        ----------
+        binset : array_like or `None`
+            Wavelength values to be used for binning when converting to counts.
+
+        """
         if binset is None:
             msg="(%s) does not have a defined binset in the wavecat table. The waveset of the spectrum will be used instead."%str(self.bandpass)
 
@@ -173,20 +281,24 @@ class Observation(spectrum.CompositeSourceSpectrum):
             self.binwave=binset
 
     def initbinflux(self):
-        """This routine performs the integration of the spectrum
-        on the specified binned waveset. It uses the natural waveset
-        of the spectrum in performing this integration.
+        """Calculate binned flux and edges.
+
+        Flux is computed by integrating the spectrum
+        on the specified binned wavelength set, using
+        information from the natural wavelength set.
+
+        Native wave/flux arrays should be considered samples
+        of a continuous function, but not their binned counterparts.
+        Thus, it makes sense to interpolate ``(wave, flux)`` but not
+        ``(binwave, binflux)``.
 
         .. note::
 
-            This method is implemented under the assumption that the
-            wavelength values in the binned waveset are the *centers* of the bins.
+            Assumes that the wavelength values in the binned
+            wavelength set are the *centers* of the bins.
 
-        By contrast, the native wave/flux arrays should be considered
-        samples of a continuous function.
-
-        Thus, it makes sense to interpolate .wave/.flux; it does not
-        make sense to interpolate .binwave/.binflux.
+            Uses ``pysynphot.pysynphot_utils.calcbinflux()`` C-extension,
+            if available, for binned flux calculation.
 
         """
         endpoints = binning.calculate_bin_edges(self.binwave)
@@ -247,7 +359,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
             self.initbinset(self.binset)
         return self._binwave
 
-    binflux = property(_getBinfluxProp,doc='Flux on binned wavelength set property')
+    binflux = property(_getBinfluxProp,doc='Flux of binned wavelength set.')
 #    binwave = property(_getBinwaveProp,doc='Waveset for binned flux')
 
 
@@ -288,14 +400,15 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
 
     def redshift(self,z):
+        """Observations cannot be redshifted."""
         raise NotImplementedError('Observations cannot be redshifted')
 
     def writefits(self,fname,clobber=True, trimzero=True, binned=True,
                   hkeys=None):
-        """All we really want to do here is flip the default value of
-        'binned' from the vanilla spectrum case.
-        """
+        """Like :meth:`pysynphot.spectrum.SourceSpectrum.writefits`
+        but with ``binned=True`` as default.
 
+        """
         spectrum.CompositeSourceSpectrum.writefits(self,fname,
                                                    clobber=clobber,
                                                    trimzero=trimzero,
@@ -303,37 +416,55 @@ class Observation(spectrum.CompositeSourceSpectrum):
                                                    hkeys=hkeys)
 
     def countrate(self,binned=True,range=None,force=False):
-        """This is the calculation performed when the ETC invokes countrate.
-        Essentially it wants the effstim in counts.
+        """Calculate effective stimulus in count/s.
+        Also see :ref:`pysynphot-formula-countrate` and
+        :ref:`pysynphot-formula-effstim`.
+
+        .. note::
+
+            This is the calculation performed when the ETC invokes
+            ``countrate``.
 
         Parameters
         -----------
-        binned : bool [Default: True]
-            if True, operations will be performed on (binwave,binflux);
-                otherwise on (wave,flux)
+        binned : bool
+            If `True` (default), use binned data.
+            Otherwise, use native data.
 
-        range : {'low','high', None}
-            if range is not None, it is expected to be a
-            sequence with two floating-point elements specifying the low
-            and high wavelength range (specified in self.waveunits) over
-            which the integration will be performed.
-
-            This is an _inclusive_ range.
-
-            Disjoint or partially-overlapping ranges will raise an
-            exception by default. If force=True is set, then a partial
-            overlap will return the calculated value rather than raise
-            an exception.
-
+        range : tuple or `None`
+            If not `None`, it must be a sequence with two floating-point
+            elements specifying the wavelength range (*inclusive*) in the
+            unit of ``self.waveunits`` in the form of ``(low, high)``;
+            This is the range over which the integration will be performed.
             If the specified range does not exactly match a value in the
-            waveset::
+            wavelength set:
 
-               - if binned=True, the bin containing the range value will
-                 be used. (Recall values of binwave specify bin centers.)
-               - if binned=False, the wave and flux arrays will be
-                 interpolated to the specified values.
+                * If ``binned=True``, the bin containing the range value will
+                  be used. This assumes ``self.binwave`` contains bin centers.
+                * If ``binned=False``, native dataset will be interpolated to
+                  the specified values. (*Not Implemented.*)
 
-        force : bool [Default: False]
+        force : bool
+            If `False` (default), partially overlapping ranges
+            will raise an exception. If `True`, a partial overlap will
+            return the calculated value instead. Disjoint ranges raise
+            an exception regardless.
+
+        Returns
+        -------
+        ans : float
+            Count rate.
+
+        Raises
+        ------
+        NotImplementedError
+            Wavelength range is defined for unbinned data.
+
+        pysynphot.exceptions.DisjointError
+            Wavelength range does not overlap with observation.
+
+        pysynphot.exceptions.PartialOverlap
+            Wavelength range only partially overlaps with observation.
 
         """
 
@@ -381,8 +512,27 @@ class Observation(spectrum.CompositeSourceSpectrum):
         return ans
 
     def effstim(self,fluxunits='photlam'):
-        """Compute effective stimulation in specified units"""
+        """Compute :ref:`effective stimulus <pysynphot-formula-effstim>`.
 
+        Calculations are done in given flux unit, and wavelengths
+        in Angstrom. Native dataset is used.
+
+        Parameters
+        ----------
+        fluxunits : str
+            Flux unit.
+
+        Returns
+        -------
+        ans : float
+            Effective stimulus.
+
+        Raises
+        ------
+        ValueError
+            Invalid integrated flux.
+
+        """
         oldunits=self.fluxunits
         self.convert(fluxunits)
         x=units.Units(fluxunits)
@@ -420,9 +570,24 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
 
     def pivot(self,binned=True):
-        """This is the calculation performed when the ETC invokes calcphot.
-        Does this need to be calculated on binned waveset, or may
-        it be calculated on native waveset?"""
+        """Calculate :ref:`pivot wavelength <pysynphot-formula-pivwv>`
+        of the observation.
+
+        .. note::
+
+            This is the calculation performed when ETC invokes ``calcphot``.
+
+        Parameters
+        ----------
+        binned : bool
+            Use binned dataset for calculations. Otherwise, use native dataset.
+
+        Returns
+        -------
+        ans : float
+            Pivot wavelength.
+
+        """
         if binned:
             wave = self.binwave
         else:
@@ -439,11 +604,26 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         return math.sqrt(num/den)
 
-
     def efflam(self,binned=True):
-        """Calculation performed based on observation.py
-        _EfflamCalculator, which produces EFFLPHOT results!."""
+        """Calculate :ref:`effective wavelength <pysynphot-formula-efflam>`
+        of the observation.
+        Calculation is done in the flux unit of ``flam``.
 
+        .. note::
+
+            Similar to IRAF STSDAS SYNPHOT ``efflphot`` task.
+
+        Parameters
+        ----------
+        binned : bool
+            Use binned dataset for calculations. Otherwise, use native dataset.
+
+        Returns
+        -------
+        ans : float
+            Effective wavelength.
+
+        """
         myfluxunits=self.fluxunits.name
         self.convert('flam')
         if binned:
@@ -463,13 +643,35 @@ class Observation(spectrum.CompositeSourceSpectrum):
         return num/den
 
     def sample(self, swave, binned=True, fluxunits='counts'):
-        """Samples the observation at the wavelength(s) swave, specified in
-        waveunits. The binned keyword determines whether the sampling is
-        performed on binwave/binflux, in which case no interpolation is
-        performed, or on the native wave/flux, in which case interpolation
-        is performed.
-        """
+        """Sample the observation at the given wavelength.
+        Also see :ref:`pysynphot-command-sample`.
 
+        Parameters
+        ----------
+        swave : float
+            Wavelength to sample.
+
+        binned : bool
+            Sample binned dataset (no interpolation).
+            Otherwise, native (perform interpolation).
+
+        fluxunits : {'counts'}
+            Only the unit of counts is supported for now.
+
+        Returns
+        -------
+        ans : float
+            Sampled flux in given unit.
+
+        Raises
+        ------
+        NotImplementedError
+            Flux unit is not supported or non-scalar wavelength is given.
+
+        ValueError
+            Given wavelength out of range.
+
+        """
         if self._binflux is None:
           self.initbinflux()
 
@@ -514,6 +716,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
                 wv = np.array([swave - delta, swave, swave + delta])
                 ans = np.interp(wv, self.wave, self.flux)[1]
             else:
+                # This raises UnboundLocalError -- needs to be fixed!
                 ans = np.interp(wv, self.wave, self.flux)
 
 
@@ -523,30 +726,33 @@ class Observation(spectrum.CompositeSourceSpectrum):
         return ans
 
     def pixel_range(self, waverange, waveunits=None, round='round'):
-        """
-        Returns the number of wavelength bins within `waverange`.
+        """Calculate the number of wavelength bins within given
+        wavelength range.
 
         .. note::
 
-            This calls the :py:func:`~pysynphot.obsbandpass.pixel_range` function with
-            `self.binwave` as the first argument. See
-            :py:func:`~pysynphot.obsbandpass.pixel_range` for full documentation.
+            This calls :func:`pysynphot.obsbandpass.pixel_range` with
+            ``self.binwave`` as the first argument.
 
         Parameters
         ----------
+        waverange, round
+            See :func:`pysynphot.obsbandpass.pixel_range`.
+
         waveunits : str, optional
-            The units of the wavelengths given in `waverange`. Defaults to None.
-            If None, the wavelengths are assumed to be in the units of the
-            `waveunits` attribute.
+            The unit of the wavelength range.
+            If `None` (default), the wavelengths are assumed to be
+            in the units of ``self.waveunits``.
+
+        Returns
+        -------
+        num : int or float
+            Number of wavelength bins within ``waverange``.
 
         Raises
         ------
         pysynphot.exceptions.UndefinedBinset
-            If the `binwave` attribute is None.
-
-        See Also
-        --------
-        pysynphot.obsbandpass.pixel_range
+            No binned dataset.
 
         """
         # make sure we have a binset to work with
@@ -567,31 +773,35 @@ class Observation(spectrum.CompositeSourceSpectrum):
 
         return pixel_range(self.binwave, waverange, round=round)
 
-
     def wave_range(self, cenwave, npix, waveunits=None, round='round'):
-        """
-        Get the wavelength range covered by a number of pixels, `npix`, centered
-        on wavelength `cenwave`.
+        """Calculate the wavelength range covered by the given
+        number of pixels, centered on the given wavelength.
 
-        .. note:: This calls the `obsbandpass.wave_range` function with
-           `self.binwave` as the first argument. See
-           `obsbandpass.wave_range` for full documentation.
+        .. note::
+
+            This calls :func:`pysynphot.obsbandpass.wave_range` with
+            ``self.binwave`` as the first argument.
 
         Parameters
         ----------
+        cenwave, npix, round
+            See :func:`pysynphot.obsbandpass.wave_range`.
+
         waveunits : str, optional
-            Wavelength units of `cenwave` and the returned wavelength range.
-            Defaults to None. If None, the wavelengths are assumed to be in
-            the units of the `waveunits` attribute.
+            Wavelength unit of the given and the returned wavelength values.
+            If `None` (default), the wavelengths are assumed to be in
+            the unit of ``self.waveunits``.
+
+        Returns
+        -------
+        waverange : tuple of floats
+            The range of wavelengths spanned by ``npix`` centered on
+            ``cenwave``.
 
         Raises
         ------
         pysynphot.exceptions.UndefinedBinset
-            If the `binwave` attribute is None.
-
-        See Also
-        --------
-        obsbandpass.wave_range
+            No binned dataset.
 
         """
         # make sure we have a binset to work with
@@ -621,23 +831,22 @@ class Observation(spectrum.CompositeSourceSpectrum):
         return wave1, wave2
 
     def as_spectrum(self, binned=True):
-        """ Reduce the Observation to a TabularSourceSpectrum.
+        """Reduce the observation to a simple spectrum object.
 
-        An Observation is a complex object with some restrictions on its
-        capabilities. At times it would be useful to work with the
-        simulated Observation as a simpler object that is easier to
-        manipulate and takes up less memory. This method returns a
-        TabularSourceSpectrum made from either the (wave, flux) or
-        the (binwave, binflux) properties of the Observation.
+        An observation is a complex object with some restrictions on its
+        capabilities. At times, it would be useful to work with the
+        simulated observation as a simple object that is easier to
+        manipulate and takes up less memory.
 
         Parameters
         ----------
-        binned: bool
-          If True, use (binwave, binflux); otherwise use (wave, flux).
+        binned : bool
+            If `True` (default), export binned dataset. Otherwise, native.
 
         Returns
         -------
-        result: TabularSourceSpectrum
+        result : `~pysynphot.spectrum.ArraySourceSpectrum`
+            Observation dataset as a simple spectrum object.
 
         """
         if binned:

@@ -1,19 +1,11 @@
+"""This module contains the basis for all spectra classes,
+including source spectra and bandpasses.
+
+It also pre-loads the built-in :ref:`pysynphot-vega-spec` spectrum to
+``pysynphot.spectrum.Vega``.
+
+"""
 from __future__ import absolute_import, division, print_function
-
-"""
-Module: spectrum.py
-
-Contains SourceSpectrum and SpectralElement class defnitions and
-their subclasses.
-
-Also contains the Vega object, which is an instance of a FileSourceSpectrum
-that can be imported from this file and used for Vega-related calculations.
-
-:Dependencies:
-pyfits, numpy
-
-
-"""
 
 import re
 import os
@@ -52,8 +44,29 @@ syn_epsilon=0.00032
 
 
 def MergeWaveSets(waveset1, waveset2):
-    """Return the union of the two wavesets, unless one or
-    both of them is None."""
+    """Return the union of the two wavelength sets.
+
+    The union is computed using `numpy.union1d`, unless one or
+    both of them is `None`.
+
+    The merged result may sometimes contain numbers which are nearly
+    equal but differ at levels as small as 1E-14. Having values this
+    close together can cause problems due to effectively duplicate
+    wavelength values. Therefore, wavelength values having differences
+    smaller than or equal to ``pysynphot.spectrum.MERGETHRESH``
+    (defaults to 1E-12) are considered as the same.
+
+    Parameters
+    ----------
+    waveset1, waveset2 : array_like or `None`
+        Wavelength sets to combine.
+
+    Returns
+    -------
+    MergedWaveSet : array_like or `None`
+        Merged wavelength set. It is `None` if both inputs are such.
+
+    """
     if waveset1 is None and waveset2 is not None:
         MergedWaveSet = waveset2
     elif waveset2 is None and waveset1 is not None:
@@ -85,8 +98,23 @@ def MergeWaveSets(waveset1, waveset2):
 
 
 def trimSpectrum(sp, minw, maxw):
-    ''' Creates a new spectrum with trimmed upper and lower ranges.
-    '''
+    """Create a new spectrum with trimmed upper and lower ranges.
+
+    Parameters
+    ----------
+    sp : `SourceSpectrum`
+        Spectrum to trim.
+
+    minw, maxw : number
+        Lower and upper limits (inclusive) for the wavelength set
+        in the trimmed spectrum.
+
+    Returns
+    -------
+    result : `TabularSourceSpectrum`
+        Trimmed spectrum.
+
+    """
     wave = sp.GetWaveSet()
     flux = sp(wave)
 
@@ -108,9 +136,28 @@ def trimSpectrum(sp, minw, maxw):
 
 
 class Integrator(object):
-    ''' Integrator engine.
-    '''
+    """Integrator engine, which is the base class for
+    `SourceSpectrum` and `SpectralElement`.
+
+    """
     def trapezoidIntegration(self,x,y):
+        """Perform trapezoid integration.
+
+        Parameters
+        ----------
+        x : array_like
+            Wavelength set.
+
+        y : array_like
+            Integrand. For example, throughput or throughput
+            multiplied by wavelength.
+
+        Returns
+        -------
+        sum : float
+            Integrated sum.
+
+        """
         npoints = x.size
         if npoints > 0:
             indices = N.arange(npoints)[:-1]
@@ -124,7 +171,7 @@ class Integrator(object):
             return 0.0
 
     def _columnsFromASCII(self, filename):
-        """ Following synphot/TABLES, ASCII files may contain blank lines,
+        """Following synphot/TABLES, ASCII files may contain blank lines,
         comment lines (beginning with '#'), or terminal comments. This routine
         may be called by both Spectrum and SpectralElement objects to extract
         the first two columns from a file."""
@@ -150,14 +197,26 @@ class Integrator(object):
         return wlist, flist
 
     def validate_wavetable(self):
-        "Enforce monotonic, ascending wavelengths with no zero values"
+        """Enforce monotonic, ascending wavelength array with no zero or
+        negative values.
+
+        Raises
+        ------
+        pysynphot.exceptions.DuplicateWavelength
+            Wavelength array contains duplicate entries.
+
+        pysynphot.exceptions.UnsortedWavelength
+            Wavelength array is not monotonic ascending or descending.
+
+        pysynphot.exceptions.ZeroWavelength
+            Wavelength array has zero or negative value(s).
+
+        """
         #First check for invalid values
         wave=self._wavetable
         if N.any(wave <= 0):
             wrong=N.where(wave <= 0)[0]
             raise exceptions.ZeroWavelength('Negative or Zero wavelength occurs in wavelength array', rows=wrong)
-
-
 
         #Now check for monotonicity & enforce ascending
         sorted=N.sort(wave)
@@ -176,7 +235,13 @@ class Integrator(object):
             raise exceptions.DuplicateWavelength("Wavelength array contains duplicate entries",rows=wrong)
 
     def validate_fluxtable(self):
-        "Enforce non-negative fluxes"
+        """Check for non-negative fluxes.
+        If found, the negative flux values are set to zero, and
+        a warning is printed to screen. This check is not done
+        if flux unit is a magnitude because negative magnitude
+        values are legal.
+
+        """
         if ((not self.fluxunits.isMag) #neg. magnitudes are legal
             and (self._fluxtable.min() < 0)):
             idx=N.where(self._fluxtable < 0)
@@ -185,28 +250,29 @@ class Integrator(object):
 
 
 class SourceSpectrum(Integrator):
-    '''Base class for the Source Spectrum object.
-    '''
+    """This is the base class for all
+    :ref:`source spectra <pysynphot-spectrum>`.
 
+    """
     def __add__(self, other):
-        '''Source Spectra can be added.  Delegate the work to the
+        """Source Spectra can be added.  Delegate the work to the
         CompositeSourceSpectrum class.
-        '''
+        """
         if not isinstance(other, SourceSpectrum):
             raise TypeError("Can only add two SourceSpectrum objects")
 
         return CompositeSourceSpectrum(self, other, 'add')
 
     def __sub__(self, other):
-        """ Source Spectra can be subtracted, which is just another way
-        of adding."""
-
+        """Source Spectra can be subtracted, which is just another way
+        of adding.
+        """
         return self.__add__(-1.0*other)
 
     def __mul__(self, other):
-        '''Source Spectra can be multiplied, by constants or by
+        """Source Spectra can be multiplied, by constants or by
         SpectralElement objects.
-        '''
+        """
         #Multiplying by numeric constants is allowed
         if isinstance(other, (int, float) ):
             other = UniformTransmission(other)
@@ -223,8 +289,28 @@ class SourceSpectrum(Integrator):
         return self.__mul__(other)
 
     def addmag(self,magval):
-        """Adding a magnitude is like multiplying a flux. Only works for
-        numbers -- not arrays, spectrum objects, etc"""
+        """Add a scalar magnitude to existing flux values.
+
+        .. math::
+
+            \\textnormal{flux}_{\\textnormal{new}} = 10^{-0.4 \\; \\textnormal{magval}} \\; \\textnormal{flux}
+
+        Parameters
+        ----------
+        magval : number
+            Magnitude value.
+
+        Returns
+        -------
+        sp : `CompositeSourceSpectrum`
+            New source spectrum with adjusted flux values.
+
+        Raises
+        ------
+        TypeError
+            Magnitude value is not a scalar number.
+
+        """
         if N.isscalar(magval):
             factor = 10**(-0.4*magval)
             return self*factor
@@ -232,9 +318,18 @@ class SourceSpectrum(Integrator):
             raise TypeError(".addmag() only takes a constant scalar argument")
 
     def getArrays(self):
-        '''Returns wavelength and flux arrays as a tuple, performing
-           units conversion.
-        '''
+        """Return wavelength and flux arrays in user units.
+
+        Returns
+        -------
+        wave : array_like
+            Wavelength array in ``self.waveunits``.
+
+        flux : array_like
+            Flux array in ``self.fluxunits``.
+            When necessary, ``self.primary_area`` is used for unit conversion.
+
+        """
         if hasattr(self, 'primary_area'):
             area = self.primary_area
         else:
@@ -258,11 +353,20 @@ class SourceSpectrum(Integrator):
         wave,flux=self.getArrays()
         return flux
 
-    wave=property(_getWaveProp, doc="Wavelength property")
-    flux=property(_getFluxProp, doc="Flux property")
+    wave=property(_getWaveProp, doc="Wavelength property.")
+    flux=property(_getFluxProp, doc="Flux property.")
 
     def validate_units(self):
-        "Ensure that waveunits are WaveUnits and fluxunits are FluxUnits"
+        """Ensure that wavelenth and flux units belong to the
+        correct classes.
+
+        Raises
+        ------
+        TypeError
+            Wavelength unit is not `~pysynphot.units.WaveUnits` or
+            flux unit is not `~pysynphot.units.FluxUnits`.
+
+        """
         if (not isinstance(self.waveunits,units.WaveUnits)):
             raise TypeError("%s is not a valid WaveUnit"%self.waveunits)
         if (not isinstance(self.fluxunits,units.FluxUnits)):
@@ -270,25 +374,65 @@ class SourceSpectrum(Integrator):
 
     def writefits(self, filename, clobber=True, trimzero=True,
                   binned=False,precision=None,hkeys=None):
-        """Write the spectrum to a FITS file.
+        """Write the spectrum to a FITS table.
+
+        Primary header in EXT 0. ``FILENAME``,  ``ORIGIN``, and any
+        extra keyword(s) from ``hkeys`` will also be added.
+
+        Table header and data are in EXT 1. The table has 2 columns,
+        i.e., ``WAVELENGTH`` and ``FLUX``. Data are stored in user units.
+        Its header also will have these additional keywords:
+
+        * ``EXPR`` - Description of the spectrum.
+        * ``TDISP1`` and ``TDISP2`` - Columns display format,
+          always "G15.7".
+        * ``GRFTABLE`` and ``CMPTABLE`` - Graph and component
+          table names to use with associated observation mode.
+          These are only added if applicable.
+
+        If data is already double-precision but user explicitly
+        set output precision to single, ``pysynphot.spectrum.syn_epsilon``
+        defines the allowed minimum wavelength separation.
+        This limit (:math:`3.2 \\times 10^{-4}`) was taken from
+        IRAF STSDAS SYNPHOT FAQ.
+        Values equal or smaller than this limit are considered as the
+        same, and duplicates are ignored, resulting in data loss.
+        In the way that this comparison is coded, when such precision clash
+        happens, even when no duplicates are detected, the last row is
+        always omitted (also data loss). Therefore, it is *not* recommended
+        for user to force single-precision when the data is in
+        double-precision.
 
         Parameters
         ----------
-        filename : string
-            name of file to write to
-        clobber : bool [Default: True]
-            Will clobber existing file by default
-        trimzero : bool [Default:True]
-            Will trim zero-flux elements from both ends by default
-        binned : bool [Default: False]
-            Will write in native waveset by default
-        precision : {'single','double', None}
-            Will write in native precision by default
-        hkeys :  dict
-            Optional dictionary of {keyword:(value,comment)} to be added to primary FITS header
+        filename : str
+            Output filename.
+
+        clobber : bool
+            Overwrite existing file. Default is `True`.
+
+        trimzero : bool
+            Trim off duplicate rows with flux values of zero from both ends
+            of the spectrum. This keeps one row of zero-flux at each end,
+            if it exists; However, it does not add a zero-flux row if it
+            does not. Default is `True`.
+
+        binned : bool
+            Write ``self.binwave`` and ``self.binflux`` (binned) dataset,
+            instead of ``self.wave`` and ``self.flux`` (native). Using
+            this option when object does not have binned data will cause
+            an exception to be raised. Default is `False`.
+
+        precision : {'s', 'd', `None`}
+            Write data out in single (``'s'``) or double (``'d'``)
+            precision. Default is `None`, which will enforce native
+            precision from ``self.flux``.
+
+        hkeys : dict
+            Additional keyword(s) to be added to primary FITS header,
+            in the format of ``{keyword:(value,comment)}``.
 
         """
-
         pcodes={'d':'D','s':'E'}
         if precision is None:
             precision=self.flux.dtype.char
@@ -360,7 +504,6 @@ class SourceSpectrum(Integrator):
         for key,val in bkeys.items():
             hdu.header.update(key, *val)
 
-
         #Make the extension HDU
         cols = pyfits.ColDefs([cw, cf])
         hdu = pyfits.new_table(cols)
@@ -371,7 +514,6 @@ class SourceSpectrum(Integrator):
                    tdisp1  =('G15.7',),
                    tdisp2  =('G15.7',)
                    )
-
 
         try:
             bkeys['grftable']=(self.bandpass.obsmode.gtname,)
@@ -386,8 +528,28 @@ class SourceSpectrum(Integrator):
         hdulist.append(hdu)
         hdulist.writeto(filename)
 
-
     def integrate(self,fluxunits='photlam'):
+        """Integrate the flux in given unit.
+
+        Integration is done using :meth:`~Integrator.trapezoidIntegration`
+        with ``x=wave`` and ``y=flux``, where flux has been
+        convert to given unit first.
+
+        .. math::
+
+            \\textnormal{result} = \\int F_{\\lambda} d\\lambda
+
+        Parameters
+        ----------
+        fluxunits : str
+            Flux unit to integrate in.
+
+        Returns
+        -------
+        result : float
+            Integrated sum.
+
+        """
         #Extract the flux in the desired units
         u=self.fluxunits
         self.convert(fluxunits)
@@ -396,11 +558,39 @@ class SourceSpectrum(Integrator):
         #then do the integration
         return self.trapezoidIntegration(wave,flux)
 
-
     def sample(self,wave, interp=True):
-        """Return a flux array, in self.fluxunits, on the provided
-        wavetable"""
+        """Sample the spectrum at given wavelength(s).
 
+        This method has two behaviors:
+
+        * When ``interp=True``, wavelength(s) must be provided
+          as a Numpy array. Interpolation is done in internal units
+          (Angstrom and ``photlam``).
+        * When ``interp=False``, wavelength must be a scalar number.
+          The flux that corresponds to the closest matching wavelength
+          value is returned. This option should only be used for sampling
+          binned data in `~pysynphot.observation.Observation`.
+
+        Parameters
+        ----------
+        wave : number or array_like
+            Wavelength(s) to sample, given in user unit.
+
+        interp : bool
+            Allow flux interpolation. Default is `True`.
+
+        Returns
+        -------
+        ans : number or array_like
+            Sampled flux in user unit.
+
+        Raises
+        ------
+        NotImplementedError
+            Non-scalar wavelength set provided when interpolation
+            is not allowed.
+
+        """
         if interp:
             # convert input wavelengths to Angstroms since the __call__ method
             # will be expecting that
@@ -434,11 +624,20 @@ class SourceSpectrum(Integrator):
         return ans
 
     def convert(self, targetunits):
-        '''Convert to other units. This method actually just changes the
-        wavelength and flux units objects, it does not recompute the
-        internally kept wave and flux data; these are kept always in internal
-        units. Method getArrays does the actual computation.
-        '''
+        """Set new user unit, for either wavelength or flux.
+
+        This effectively converts the spectrum wavelength or flux
+        to given unit. Note that actual data are always kept in
+        internal units (Angstrom and ``photlam``), and only converted
+        to user units by :meth:`getArrays` during actual computation.
+        User units are stored in ``self.waveunits`` and ``self.fluxunits``.
+
+        Parameters
+        ----------
+        targetunits : str
+            New unit name, as accepted by `~pysynphot.units.Units`.
+
+        """
         nunits = units.Units(targetunits)
 
         if nunits.isFlux:
@@ -447,8 +646,22 @@ class SourceSpectrum(Integrator):
             self.waveunits = nunits
 
     def redshift(self, z):
-        ''' Returns a new redshifted spectrum.
-        '''
+        """Apply :ref:`redshift <pysynphot-redshift>` to the spectrum.
+
+        Redshifted spectrum is never analytic even if the input
+        spectrum is.
+
+        Parameters
+        ----------
+        z : number
+            Redshift value.
+
+        Returns
+        -------
+        copy : `ArraySourceSpectrum`
+            Redshifted spectrum.
+
+        """
         #By default, apply only the doppler shift.
 
         waveunits=self.waveunits
@@ -465,37 +678,123 @@ class SourceSpectrum(Integrator):
         return copy
 
     def setMagnitude(self, band, value):
-        '''Makes the magnitude of the source in the band equal to value.
+        """Makes the magnitude of the source in the band equal to value.
         band is a SpectralElement.
         This method is marked for deletion once the .renorm method is
         well tested.
-        '''
+
+        Object returned is a CompositeSourceSpectrum.
+
+        .. warning:: DO NOT USED
+
+        """
         objectFlux = band.calcTotalFlux(self)
         vegaFlux = band.calcVegaFlux()
         magDiff = -2.5*math.log10(objectFlux/vegaFlux)
         factor = 10**(-0.4*(value - magDiff))
-
-        '''Object returned is a CompositeSourceSpectrum'''
-
         return self * factor
 
+    # Calls a function in another module to alleviate circular import
+    # issues.
     def renorm(self, RNval, RNUnits, band, force=False):
-        """Renormalize the spectrum to the specified value (in the specified
-        flux units) in the specified band.
-        Calls a function in another module to alleviate circular import
-        issues."""
+        """:ref:`Renormalize <pysynphot-renorm>` the spectrum to the
+        specified value, unit, and bandpass.
 
+        This wraps :func:`~pysynphot.renorm.StdRenorm` for convenience.
+        Basically, the spectrum is multiplied by a numeric factor so that
+        the total integrated flux will be the given value in the given
+        unit in the given bandpass.
+
+        When ``force=False``, if spectrum is not fully defined within the
+        given bandpass, but the overlap is at least 99%, a warning is
+        printed to screen and ``self.warnings['PartialRenorm']`` is set
+        to `True`.
+
+        Parameters
+        ----------
+        RNval : number
+            Flux value for renormalization.
+
+        RNUnits : str
+            Unit name, as accepted by `~pysynphot.units.Units`, for ``RNval``.
+
+        band : `SpectralElement`
+            Bandpass that ``RNval`` is based on.
+
+        force : bool
+            Force renormalization regardless of overlap status with given
+            bandpass. If `True`, overlap check is skipped. Default is `False`.
+
+        Returns
+        -------
+        newsp : `~pysynphot.spectrum.CompositeSourceSpectrum`
+            Renormalized spectrum.
+
+        Raises
+        ------
+        ValueError
+            Integrated flux is zero, negative, NaN, or infinite.
+
+        pysynphot.exceptions.DisjointError
+            Spectrum and bandpass are disjoint.
+
+        pysynphot.exceptions.OverlapError
+            Spectrum and bandpass do not fully overlap.
+
+        """
         from .renorm import StdRenorm
         return StdRenorm(self,band,RNval,RNUnits,force=force)
 
     def effstim(self,fluxunits='photlam'):
+        """Not implemented."""
         print("?? %s"%fluxunits)
         raise NotImplementedError("Ticket #140: calcphot.effstim functionality")
 
+
 class CompositeSourceSpectrum(SourceSpectrum):
-    '''Composite Source Spectrum object, handles addition, multiplication
-    and keeping track of the wavelength set.
-    '''
+    """Class to handle :ref:`composite spectrum <pysynphot-composite-spectrum>`
+    involving source spectra.
+
+    Parameters
+    ----------
+    source1, source2 : `SourceSpectrum` or `SpectralElement`
+        One or both of the inputs must be source spectrum.
+
+    operation : {'add', 'multiply'}
+        Math operation to perform.
+
+    Attributes
+    ----------
+    component1, component2
+        Same as input ``source1`` and ``source2``.
+
+    operation
+        Same as input.
+
+    name : str
+        Short description of the spectrum.
+
+    warnings : dict
+        To store warnings, which are inherited from both input sources. If inputs have the same warning keyword, the one from ``source2`` is used.
+
+    isAnalytic : bool
+        Flag to indicate whether this is an analytic spectrum. This is only `True` if both inputs are analytic.
+
+    primary_area : number or `None`
+        :ref:`pysynphot-area` of the telescope. This is inherited from either of the inputs, if available (not `None`). If inputs have different values, an exception is raised.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units inherited from ``source1`` (if available) or ``source2`` (if not).
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
+
+    Raises
+    ------
+    pysynphot.exceptions.IncompatibleSources
+        Input spectra have different telescope areas defined.
+
+    """
     def __init__(self, source1, source2, operation):
         self.component1 = source1
         self.component2 = source2
@@ -555,9 +854,9 @@ class CompositeSourceSpectrum(SourceSpectrum):
         return "%s %s %s" % (str(self.component1),opdict[self.operation],str(self.component2))
 
     def __call__(self, wavelength):
-        '''Add or multiply components, delegating the function calculation
+        """Add or multiply components, delegating the function calculation
         to the individual objects.
-        '''
+        """
         if self.operation == 'add':
             return self.component1(wavelength) + self.component2(wavelength)
 
@@ -565,12 +864,15 @@ class CompositeSourceSpectrum(SourceSpectrum):
             return self.component1(wavelength) * self.component2(wavelength)
 
     def __iter__(self):
-        """ Allow iteration over each component. """
-
+        """Allow iteration over each component."""
         complist = self.complist()
         return complist.__iter__()
 
     def complist(self):
+        """Return a list of all components and sub-components.
+        This is for use with :py:meth:`~object.__iter__`.
+
+        """
         ans=[]
         for comp in (self.component1, self.component2):
             try:
@@ -580,17 +882,37 @@ class CompositeSourceSpectrum(SourceSpectrum):
         return ans
 
     def GetWaveSet(self):
-        '''Obtain the wavelength set for the composite source by forming
-        the union of wavelengths from each component.
-        '''
+        """Obtain the wavelength set for the composite spectrum.
+        This is done by using :func:`MergeWaveSets` to form a union of
+        wavelength sets from its components.
+
+        Returns
+        -------
+        waveset : array_like
+            Composite wavelength set.
+
+        """
         waveset1 = self.component1.GetWaveSet()
         waveset2 = self.component2.GetWaveSet()
-
         return MergeWaveSets(waveset1, waveset2)
 
     def tabulate(self):
-        """Evaluate the spectrum in order to return a tabular source
-        spectrum"""
+        """Return a simplified version of the spectrum.
+
+        Composite spectrum can be overly complicated when it
+        has too many components and sub-components. This method
+        copies the following into a simple (tabulated) source spectrum:
+
+        * Name
+        * Wavelength array and unit
+        * Flux array and unit
+
+        Returns
+        -------
+        sp : `ArraySourceSpectrum`
+            Tabulated source spectrum.
+
+        """
         sp=ArraySourceSpectrum(wave=self.wave,
                                flux=self.flux,
                                waveunits=self.waveunits,
@@ -598,9 +920,42 @@ class CompositeSourceSpectrum(SourceSpectrum):
                                name='%s (tabulated)'%self.name)
         return sp
 
+
 class TabularSourceSpectrum(SourceSpectrum):
-    '''Class for a source spectrum that is read in from a table.
-    '''
+    """Base class for `ArraySourceSpectrum` and `FileSourceSpectrum`.
+
+    Parameters
+    ----------
+    filename : str or `None`
+        File with spectral data (can be ASCII or FITS). If not `None`,
+        data will be loaded from file at initialization.
+
+    fluxname : str or `None`
+        Column name containing flux data. This is only used if filename
+        is given and is of FITS format.
+
+    keepneg : bool
+        Keep negative flux values instead of setting them to zero with
+        a warning. Default is `False`.
+
+    Attributes
+    ----------
+    filename, name
+        Same as input.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
+
+    """
     def __init__(self, filename=None, fluxname=None, keepneg=False):
         self.isAnalytic=False
         self.warnings={}
@@ -624,7 +979,6 @@ class TabularSourceSpectrum(SourceSpectrum):
 
     def _reverse_wave(self):
         self._wavetable = self._wavetable[::-1]
-
 
     def __str__(self):
         return str(self.name)
@@ -651,22 +1005,23 @@ class TabularSourceSpectrum(SourceSpectrum):
         fs.close()
 
     def _readASCII(self, filename):
-        """ Ascii files have no headers. Following synphot, this
+        """ASCII files have no headers. Following synphot, this
         routine will assume the first column is wavelength in Angstroms,
-        and the second column is flux in Flam."""
+        and the second column is flux in Flam.
 
+        """
         self.waveunits = units.Units('angstrom')
         self.fluxunits = units.Units('flam')
         wlist,flist = self._columnsFromASCII(filename)
         self._wavetable=N.array(wlist,dtype=N.float64)
         self._fluxtable=N.array(flist,dtype=N.float64)
 
-
     def __call__(self, wavelengths):
-        '''This is where the flux array is actually calculated given a
+        """This is where the flux array is actually calculated given a
         wavelength array. Returns an array of flux values calculated at
         the wavelength values input.
-        '''
+
+        """
         if N.isscalar(wavelengths):
             delta=0.0001
             ww=N.array([wavelengths-delta,wavelengths,wavelengths+delta])
@@ -675,13 +1030,24 @@ class TabularSourceSpectrum(SourceSpectrum):
         else:
             return self.resample(wavelengths)._fluxtable
 
-
-
-
-
     def taper(self):
-        '''Taper the spectrum by adding zeros to each end.
-        '''
+        """Taper the spectrum by adding zero flux to each end.
+        This is similar to :meth:`SpectralElement.taper`.
+
+        There is no check to see if the spectrum is already tapered.
+        Hence, calling this on a tapered spectrum will result in
+        multiple zero-flux entries at both ends.
+
+        The wavelengths to use for the new first and last points are
+        calculated by using the same ratio as for the two interior points
+        used at each end.
+
+        Returns
+        -------
+        OutSpec : `TabularSourceSpectrum`
+            Tapered spectrum.
+
+        """
         OutSpec = TabularSourceSpectrum()
         wcopy = N.zeros(self._wavetable.size+2,dtype=N.float64)
         fcopy = N.zeros(self._fluxtable.size+2,dtype=N.float64)
@@ -703,16 +1069,22 @@ class TabularSourceSpectrum(SourceSpectrum):
         return OutSpec
 
     def resample(self, resampledWaveTab):
-        '''Interpolate flux given a wavelength array that is monotonically
-        increasing and the TabularSourceSpectrum object.
+        """Resample the spectrum for the given wavelength set.
+
+        Given wavelength array must be monotonically increasing
+        or decreasing. Flux interpolation is done using :func:`numpy.interp`.
 
         Parameters
         ----------
-        resampledWaveTab : ndarray
-            new wavelength table IN ANGSTROMS
+        resampledWaveTab : array_like
+            Wavelength set for resampling.
 
-        '''
+        Returns
+        -------
+        resampled : `ArraySourceSpectrum`
+            Resampled spectrum.
 
+        """
         ##Check whether the input wavetab is in descending order
         if resampledWaveTab[0]<resampledWaveTab[-1]:
             newwave=resampledWaveTab
@@ -731,7 +1103,6 @@ class TabularSourceSpectrum(SourceSpectrum):
             rev = N.interp(newwave,self._wavetable[::-1],
                            self._fluxtable[::-1])
             ans = rev[::-1]
-
 
         ## If the new and old waveset don't have the same parity,
         ## the answer has to be flipped again
@@ -755,15 +1126,24 @@ class TabularSourceSpectrum(SourceSpectrum):
         return resampled
 
     def GetWaveSet(self):
-        '''For a TabularSource Spectrum, the WaveSet is just the _wavetable
-        member.  Return a copy so that there is no reference to the original
-        object.
-        '''
+        """Return the wavelength set for the spectrum.
+
+        Returns
+        -------
+        waveset : array_like
+            Wavelength set (a copy of the internal wavelength table).
+
+        """
+        # For a TabularSource Spectrum, the WaveSet is just the _wavetable
+        # member.  Return a copy so that there is no reference to the original
+        # object.
         return self._wavetable.copy()
 
     def ToInternal(self):
-        '''Convert to the internal representation of (angstroms, photlam).
-        '''
+        """Convert to the internal representation of (angstroms, photlam).
+        This is for internal use only.
+
+        """
         self.validate_units()
 
         savewunits = self.waveunits
@@ -784,36 +1164,54 @@ class TabularSourceSpectrum(SourceSpectrum):
         self.waveunits = savewunits
         self.fluxunits = savefunits
 
-class ArraySourceSpectrum(TabularSourceSpectrum):
-    """Create a spectrum from arrays.
 
-    spec = ArraySpectrum(numpy array containing wavelength table,
-    numpy array containing flux table, waveunits, fluxunits,
-    name=human-readable nickname for spectrum, keepneg=True to
-    override the default behavior of setting negative flux values to zero)
+class ArraySourceSpectrum(TabularSourceSpectrum):
+    """Class to handle
+    :ref:`source spectrum from arrays <pysynphot-empirical-source>`.
+
+    Parameters
+    ----------
+    wave, flux : array_like
+        Wavelength and flux arrays.
+
+    waveunits, fluxunits : str
+        Wavelength and flux units, as accepted by `~pysynphot.units.Units`.
+        Defaults are Angstrom and ``photlam``.
+
+    name : str
+        Description of the spectrum. Default is "UnnamedArraySpectrum".
+
+    keepneg : bool
+        Keep negative flux values instead of setting them to zero with
+        a warning. Default is `False`.
+
+    Attributes
+    ----------
+    name
+        Same as input.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
+
+    Raises
+    ------
+    ValueError
+        Mismatched wavelength and flux arrays.
+
     """
     def __init__(self, wave=None, flux=None,
                  waveunits='angstrom', fluxunits='photlam',
                  name='UnnamedArraySpectrum',
                  keepneg=False):
-        """
-
-        Parameters
-        -----------
-        wave : ndarray
-            Wavelength array
-        flux : ndarray
-            Flux array
-        waveunits : :py:class:`~pysynphot.units.WaveUnits` object or subclass
-            Units of wave
-        fluxunits : :py:class:`~pysynphot.units.FluxUnits` object or subclass
-            Units of flux
-        name : string
-            Description of this array
-        keepneg :  bool [Default: False]
-            If true, negative flux values will be retained; by default, they are forced to zero
-
-        """
         if len(wave)!=len(flux):
             raise ValueError("wave and flux arrays must be of equal length")
 
@@ -834,27 +1232,45 @@ class ArraySourceSpectrum(TabularSourceSpectrum):
 
 
 class FileSourceSpectrum(TabularSourceSpectrum):
-    """ Create a spectrum from a file.
+    """Class to handle
+    :ref:`source spectrum loaded from ASCII or FITS table <pysynphot-source-from-file>`.
+    Also see :ref:`pysynphot-io`.
 
-    spec = FileSpectrum(filename (FITS or ASCII),
-    fluxname=column name containing flux (for FITS tables only),
-    keepneg=True to override thedefault behavior of setting negative
-    flux values to zero)"""
+    Parameters
+    ----------
+    filename : str
+        File with spectral data (can be ASCII or FITS).
 
+    fluxname : str or `None`
+        Column name containing flux data. This is only used if the given
+        file is in FITS format.
+
+    keepneg : bool
+        Keep negative flux values instead of setting them to zero with
+        a warning. Default is `False`.
+
+    Attributes
+    ----------
+    name : str
+        Resolved filename; i.e., IRAF-style directory name is expanded to actual path name.
+
+    fheader : dict
+        For FITS file, this contains headers from both extensions 0 and 1. If the extensions have the same keyword, the one from the latter is used.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
+
+    """
     def __init__(self, filename, fluxname=None, keepneg=False):
-        """
-        Parameters
-        -----------
-        filename : string
-            FITS or ASCII file containing the spectrum
-
-        fluxname : string
-            Column name specifying the flux (FITS only)
-
-        keepneg : bool [Default: False]
-            If true, negative flux values will be retained; by default, they are forced to zero
-
-        """
         self.name = locations.irafconvert(filename)
         self._readSpectrumFile(self.name, fluxname)
         self.validate_units()
@@ -892,7 +1308,7 @@ class FileSourceSpectrum(TabularSourceSpectrum):
         fs.close()
 
     def _readASCII(self, filename):
-        """ Ascii files have no headers. Following synphot, this
+        """ASCII files have no headers. Following synphot, this
         routine will assume the first column is wavelength in Angstroms,
         and the second column is flux in Flam."""
 
@@ -907,13 +1323,32 @@ class FileSourceSpectrum(TabularSourceSpectrum):
 
 
 class AnalyticSpectrum(SourceSpectrum):
-    ''' Base class for analytic functions. These are spectral forms
-    which are defined, by default, on top of the default synphot
-    waveset.
-    '''
+    """Base class for analytic source spectrum.
+    This includes `BlackBody`, `FlatSpectrum`, `GaussianSource`, and `Powerlaw`.
 
+    Parameters
+    ----------
+    waveunits, fluxunits : str
+        Wavelength and flux units, as accepted by `~pysynphot.units.Units`.
+        Defaults are Angstrom and ``photlam``.
+
+    Attributes
+    ----------
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `True`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
+
+    """
     def __init__(self,waveunits='angstrom',fluxunits='photlam'):
-        "All AnalyticSpectra must set wave & flux units; do it here."
+        # All AnalyticSpectra must set wave & flux units; do it here
         self.waveunits = units.Units(waveunits)
         self.fluxunits = units.Units(fluxunits)
         self.validate_units()
@@ -921,35 +1356,64 @@ class AnalyticSpectrum(SourceSpectrum):
         self.warnings={}
 
     def GetWaveSet(self):
+        """Return the wavelength set for the spectrum.
+
+        Returns
+        -------
+        waveset : array_like
+            Wavelength set (a copy of the default wavelength table).
+
+        """
         return refs._default_waveset.copy()
 
 
 class GaussianSource(AnalyticSpectrum):
-    """ Defines a gaussian source
+    """Class to handle a :ref:`Gaussian source <pysynphot-gaussian>`.
 
+    Parameters
+    ----------
+    flux : float
+        Total flux under the Gaussian curve, in given flux unit.
 
-    spec = GaussianSource(TotalFlux under Gaussian,
-                             central wavelength of Gaussian,
-                             FWHM of Gaussian,
-                             waveunits, fluxunits)
+    center : float
+        Central wavelength of the Gaussian curve, in given wavelength unit.
+
+    fwhm : float
+        FWHM of the Gaussian curve, in given wavelength unit.
+
+    waveunits, fluxunits : str
+        Wavelength and flux units, as accepted by `~pysynphot.units.Units`.
+        Defaults are Angstrom and ``flam``.
+
+    Attributes
+    ----------
+    total_flux
+        Same as input ``flux``.
+
+    center, fwhm
+        Same as inputs.
+
+    sigma, factor : float
+        These are :math:`\\sigma` and :math:`A` as defined in :ref:`pysynphot-gaussian`.
+
+    name : str
+        Description of the spectrum.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `True`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
 
     """
     def __init__(self, flux, center, fwhm, waveunits='angstrom',
                  fluxunits='flam'):
-        """
-        Parameters
-        ----------
-        flux : float
-            TotalFlux under gaussian
-        center : float
-            central wavelength of gaussian
-        fwhm : float
-            full-width half-maximum (FWHM) of gaussian
-        waveunits : string [Default: 'angstrom']
-            units of input wavelengths
-        fluxunits : string [Default: 'flam']
-            units of input fluxes
-        """
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
 
         self.center = center
@@ -993,22 +1457,56 @@ class GaussianSource(AnalyticSpectrum):
         return self._input_flux_units.ToPhotlam(wave, flux, area=area)
 
     def GetWaveSet(self):
-        '''Return a wavelength set that describes the Gaussian.
-        Overrides the base class to compute 101 values, from
-        center - 5*sigma to center + 5*sigma, in units of
-        0.1*sigma
-        '''
+        """Return the wavelength set that optimally samples the Gaussian curve.
+        It has 101 values, as defined below:
+
+        .. math::
+
+            x_{\\textnormal{first,last}} = x_{0} \\; \\pm \\; 5 \\; \\sigma
+
+            \\delta x = 0.1 \\; \\sigma
+
+        Returns
+        -------
+        waveset : array_like
+            Wavelength set.
+
+        """
         increment = 0.1*self.sigma
         first = self.center - 50.0*increment
         last = self.center + 50.0*increment
-
         return N.arange(first, last, increment)
 
 
 class FlatSpectrum(AnalyticSpectrum):
-    """ Defines a flat spectrum in units of fluxunits.
+    """Class to handle a :ref:`flat source spectrum <pysynphot-flat-spec>`.
 
-    spec = FlatSpectrum(Flux density, waveunits, fluxunits).
+    Parameters
+    ----------
+    fluxdensity : float
+        The constant flux value in the given flux unit.
+
+    waveunits, fluxunits : str
+        Wavelength and flux units, as accepted by `~pysynphot.units.Units`.
+        Defaults are Angstrom and ``photlam``.
+
+    Attributes
+    ----------
+    name : str
+        Description of the spectrum.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `True`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
+
     """
     def __init__(self, fluxdensity, waveunits='angstrom', fluxunits='photlam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
@@ -1038,12 +1536,22 @@ class FlatSpectrum(AnalyticSpectrum):
 
         return self._input_flux_units.ToPhotlam(wave, flux, area=area)
 
-
     def redshift(self, z):
-        """Call the parent's method, which returns a TabularSourceSpectrum,
-        then use its results to create a new FlatSpectrum with the correct
-        value. """
+        """Apply redshift to the flat spectrum.
 
+        Unlike :meth:`SourceSpectrum.redshift`, the redshifted spectrum
+        remains an analytic flat source.
+
+        Parameters
+        ----------
+        z : number
+            Redshift value.
+
+        Returns
+        -------
+        ans : `FlatSpectrum`
+
+        """
         tmp=SourceSpectrum.redshift(self,z)
         ans=FlatSpectrum(tmp.flux.max(),
                          fluxunits=tmp.fluxunits)
@@ -1055,13 +1563,37 @@ class FlatSpectrum(AnalyticSpectrum):
 
 
 class Powerlaw(AnalyticSpectrum):
-    """ Defines a power law spectrum
+    """Class to handle a :ref:`power-law source spectrum <pysynphot-powerlaw>`.
 
-    spec=PowerLaw(refwave, exponent, waveunits, fluxunits).
+    Parameters
+    ----------
+    refwave : number
+        Reference wavelength in the given unit.
 
-    Power law spectrum of the form (lambda/refval)**exponent,
-    where refval is in Angstroms.
-    The spectrum is normalized to a flux of 1 in "fluxunits" at "refval".
+    index : number
+        Power-law index.
+
+    waveunits, fluxunits : str
+        Wavelength and flux units, as accepted by `~pysynphot.units.Units`.
+        Defaults are Angstrom and ``photlam``.
+
+    Attributes
+    ----------
+    name : str
+        Description of the spectrum.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `True`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
+
     """
     def __init__(self, refwave, index, waveunits='angstrom', fluxunits='photlam'):
         AnalyticSpectrum.__init__(self,waveunits,fluxunits)
@@ -1099,12 +1631,40 @@ class Powerlaw(AnalyticSpectrum):
 
 
 class BlackBody(AnalyticSpectrum):
-    """     Blackbody spectrum with specified temperature, in Kelvin.
+    """Class to handle a :ref:`blackbody source <pysynphot-planck-law>`.
 
-    spec = BlackBody(T in Kelvin)
+    Flux is evaluated with :func:`~pysynphot.planck.bbfunc` and
+    normalized with ``pysynphot.spectrum.RENORM``, which is:
 
-    The flux of the spectrum is normalized to a star of solar radius
-    at a distance of 1 kpc.L
+    .. math::
+
+      \\textnormal{RENORM} = \\pi \\; (\\frac{R_{\\odot}}{1 \\; \\textnormal{kpc}})^{2}
+
+    Parameters
+    ----------
+    temperature : number
+        Blackbody temperature in Kelvin.
+
+    Attributes
+    ----------
+    temperature
+        Same as input.
+
+    name : str
+        Description of the spectrum.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `True`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        User units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in user units.
+
     """
     def __init__(self, temperature):
         waveunits=units.Units('angstrom')
@@ -1122,22 +1682,37 @@ class BlackBody(AnalyticSpectrum):
 
 
 class SpectralElement(Integrator):
-    '''Base class for a Spectral Element (e.g. Filter, Detector...).
-    '''
+    """This is the base class for all :ref:`bandpasses <pysynphot-bandpass>`
+    and spectral elements (e.g., filter and detector response curves).
+
+    Attributes
+    ----------
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    """
     def __init__(self):
         self.binset = None
 
     def validate_units(self):
-        "Ensure that waveunits are WaveUnits"
+        """Ensure that wavelenth unit belongs to the correct class.
+        There is no check for throughput because it is unitless.
+
+        Raises
+        ------
+        TypeError
+            Wavelength unit is not `~pysynphot.units.WaveUnits`.
+
+        """
         if (not isinstance(self.waveunits,units.WaveUnits)):
             raise TypeError("%s is not a valid WaveUnit"%self.waveunits)
 
     def __mul__(self, other):
-        '''Permitted to multiply a SpectralElement by another
+        """Permitted to multiply a SpectralElement by another
         SpectralElement, or by a SourceSpectrum.  In the former
         case we return a CompositeSpectralElement, while in the
         latter case a CompositeSourceSpectrum.
-        '''
+        """
         if isinstance(other, SpectralElement):
             return CompositeSpectralElement(self, other)
 
@@ -1150,16 +1725,32 @@ class SpectralElement(Integrator):
             return CompositeSpectralElement(self, UniformTransmission(other))
 
         else:
-            print("SpectralElements can only be multiplied by other " + 
+            print("SpectralElements can only be multiplied by other " +
                   "SpectralElements or SourceSpectrum objects")
 
     def __rmul__(self, other):
         return self.__mul__(other)
 
-
     def integrate(self,wave=None):
-        """Integrate the throughput over the specified waveset,
-        if None, integrate over the full waveset."""
+        """Integrate the throughput over the specified wavelength set.
+        If no wavelength set is specified, the built-in one is used.
+
+        Integration is done using :meth:`~Integrator.trapezoidIntegration`
+        with ``x=wave`` and ``y=throughput``.
+        Also see :ref:`pysynphot-formula-equvw`.
+
+        Parameters
+        ----------
+        wave : array_like or `None`
+            Wavelength set for integration.
+
+        Returns
+        -------
+        ans : float
+            Integrated sum.
+
+        """
+
         if  wave is None:
             wave=self.wave
         ans=self.trapezoidIntegration(wave,self(wave))
@@ -1169,10 +1760,14 @@ class SpectralElement(Integrator):
 # Methods to implement bandpar functionality go here
 #..................................................................
     def avgwave(self):
-        """Implement the equation for lambda nought as defined
-        in Koornneef et al 1987, p 836.
-        Should be equivalent to bandpar.avglam = bandpar.avgwv"""
+        """Calculate :ref:`pysynphot-formula-avgwv`.
 
+        Returns
+        -------
+        ans : float
+            Average wavelength.
+
+        """
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
 
@@ -1189,10 +1784,29 @@ class SpectralElement(Integrator):
         else:
             return num/den
 
+    # This is the calculation performed when the ETC invokes calcphot.
+    # Does this need to be calculated on binned waveset, or may
+    # it be calculated on native waveset?
     def pivot(self,binned=False):
-        """This is the calculation performed when the ETC invokes calcphot.
-        Does this need to be calculated on binned waveset, or may
-        it be calculated on native waveset?"""
+        """Calculate :ref:`pysynphot-formula-pivwv`.
+
+        Parameters
+        ----------
+        binned : bool
+            This is reserved for use by `~pysynphot.observation.Observation`.
+            If `True`, binned wavelength set is used. Default is `False`.
+
+        Returns
+        -------
+        ans : float
+            Pivot wavelength.
+
+        Raises
+        ------
+        AttributeError
+            Binned wavelength set requested but not found.
+
+        """
         if binned:
             try:
               wave = self.binwave
@@ -1213,23 +1827,21 @@ class SpectralElement(Integrator):
         return math.sqrt(num/den)
 
     def rmswidth(self, floor=0):
-        """
-        Calculate the RMS width as in Koornneef et al 1987, p 836.
+        """Calculate :ref:`pysynphot-formula-rmswidth`.
 
         Parameters
         ----------
-        floor : float, optional
-            Points with throughputs below this threshold are not
-            included in the calculation. By default all points
+        floor : float
+            Throughput values equal or below this threshold are not
+            included in the calculation. By default (0), all points
             are included.
 
         Returns
         -------
-        rmswidth : float
-            RMS width of the bandpass.
+        ans : float
+            RMS band width.
 
         """
-
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
 
@@ -1253,27 +1865,19 @@ class SpectralElement(Integrator):
             return ans
 
     def photbw(self, floor=0):
-        """
-        This is a compatibility function allowing pysynphot to calculate
-        the bandpass RMS width in the same way as Synphot (documented
-        in the Synphot Manual section 5.1). This is the value returned
-        in the BANDW keyword by Synphot's bandpar function.
+        """Calculate :ref:`pysynphot-formula-bandw`.
 
-        This function is designed only for use to get the same results
-        as Synphot. To calculate the bandpass RMS width use the
-        `rmswidth` method.
+        .. note:: For backward-compatibility with IRAF STSDAS SYNPHOT only.
 
         Parameters
         ----------
-        floor : float, optional
-            Points with throughputs below this threshold are not
-            included in the calculation. By default all points
-            are included.
+        floor : float
+            Same as :meth:`rmswidth`.
 
         Returns
         -------
-        photbw : float
-            RMS width of the bandpass.
+        ans : float
+            RMS band width (deprecated).
 
         """
         mywaveunits = self.waveunits.name
@@ -1307,7 +1911,14 @@ class SpectralElement(Integrator):
         return avg_wave * N.sqrt(num/den)
 
     def rectwidth(self):
-        """RECTW = INT(THRU) / MAX(THRU)"""
+        """Calculate :ref:`pysynphot-formula-rectw`.
+
+        Returns
+        -------
+        ans : float
+            Bandpass rectangular width.
+
+        """
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
 
@@ -1324,13 +1935,25 @@ class SpectralElement(Integrator):
             return num/den
 
     def equivwidth(self):
-        """ EQUVW = INT(THRU)        """
+        """Calculate :ref:`pysynphot-formula-equvw`.
+        This basically just calls :meth:`integrate`.
 
+        Returns
+        -------
+        ans : float
+            Bandpass equivalent width.
+
+        """
         return self.integrate()
 
     def efficiency(self):
-        """QTLAM = dimensionless efficience
-                 = INT(THRU / LAM)
+        """Calculate :ref:`pysynphot-formula-qtlam`.
+
+        Returns
+        -------
+        ans : float
+            Bandpass dimensionless efficiency.
+
         """
         mywaveunits = self.waveunits.name
         self.convert('angstroms')
@@ -1344,10 +1967,25 @@ class SpectralElement(Integrator):
 
 #..................................................................
     def check_sig(self, other):
-        """Only call this if check_overlap returns 'partial'.
-        Returns True if the LACK of overlap is INsignificant:
-        i.e., it is ok to go ahead and do whatever we are doing."""
+        """Check overlap insignificance with another spectrum.
+        Also see :ref:`pysynphot-command-checko`.
 
+        .. note::
+
+            Only use when :meth:`check_overlap` returns "partial".
+
+        Parameters
+        ----------
+        other : `SourceSpectrum` or `SpectralElement`
+            The other spectrum.
+
+        Returns
+        -------
+        ans : bool
+            `True` means the *lack* of overlap is *insignificant*
+            (i.e., okay to proceed).
+
+        """
         swave=self.wave[N.where(self.throughput != 0)]
         s1,s2=swave.min(),swave.max()
 
@@ -1380,16 +2018,52 @@ class SpectralElement(Integrator):
             return False
 
     def check_overlap(self, other):
-        """Check whether the wavelength range of other is defined everywhere
-        that the wavelength range of self is defined.
-        Returns "full", "partial", "none".
-        Normally used for checking whether a spectrum is fully defined over
-        the range of a bandpass.
-        Note that the full overlap case is asymmetric: if the range of 'self'
-        extends past the limits of 'other', this will return a partial
-        overlap.
-        """
+        """Check overlap with another spectrum.
+        Also see :ref:`pysynphot-command-checko`.
 
+        This checks whether the wavelength set of the given spectrum
+        is defined everywhere within ``self``.
+        Wavelength values where throughput is zero are excluded from the check.
+        Typical use case is for checking whether a source spectrum
+        is fully defined over the range of a bandpass.
+        This check is asymmetric in the sense that if ``self`` is fully
+        defined within the given spectrum, but not the other way around,
+        it will still only return "partial".
+        If the given spectrum is analytic, the result is always "full".
+
+        Example of full overlap::
+
+            |---------- other ----------|
+               |------ self ------|
+
+        Examples of partial overlap::
+
+            |---------- self ----------|
+               |------ other ------|
+
+            |---- other ----|
+               |---- self ----|
+
+            |---- self ----|
+               |---- other ----|
+
+        Examples of no overlap::
+
+            |---- self ----|  |---- other ----|
+
+            |---- other ----|  |---- self ----|
+
+        Parameters
+        ----------
+        other : `SourceSpectrum` or `SpectralElement`
+            The other spectrum.
+
+        Returns
+        -------
+        ans : {'full', 'partial', 'none'}
+            Overlap status.
+
+        """
         if other.isAnalytic:
             #then it's defined everywhere
             return 'full'
@@ -1412,34 +2086,50 @@ class SpectralElement(Integrator):
         return ans
 
     def convert(self, targetunits):
-        '''Convert to other units. This method actually just changes the
-        wavelength unit objects, it does not recompute the
-        internally kept wave data; these are kept always in internal
-        units. Method getWaveSet does the actual computation.'''
+        """Set new user unit, for wavelength only.
+
+        This effectively converts the spectrum wavelength
+        to given unit. Note that actual data are always kept in
+        internal unit (Angstrom), and only converted
+        to user unit by :meth:`GetWaveSet` during actual computation.
+        User unit is stored in ``self.waveunits``.
+        Throughput is unitless and cannot be converted.
+
+        Parameters
+        ----------
+        targetunits : str
+            New unit name, as accepted by `~pysynphot.units.Units`.
+
+        """
         nunits = units.Units(targetunits)
         self.waveunits = nunits
 
-
     def ToInternal(self):
-        '''Convert wavelengths to the internal representation of angstroms..
+        """Convert wavelengths to the internal representation of angstroms.
         Note: This is not yet used, but should be for safety when creating
         TabularSpectralElements from files. It will also be necessary for the
         ArraySpectralElement class that we want to create RSN.
-        '''
+
+        .. note:: For internal use only.
+
+        """
         self.validate_units()
         savewunits = self.waveunits
         angwave = self.waveunits.Convert(self.GetWaveSet(), 'angstrom')
         self._wavetable = angwave.copy()
         self.waveunits = savewunits
 
-
     def __call__(self, wavelengths):
-        '''This is where the throughput array is calculated for a given
+        """This is where the throughput array is calculated for a given
         input wavelength table.
+
+        Parameters
+        ----------
         wavelengths : ndarray
-            an array of wavelengths in Angstroms at which the
-                             throughput should be sampled
-        '''
+            An array of wavelengths in Angstroms at which the
+            throughput should be sampled.
+
+        """
         if N.isscalar(wavelengths):
             delta=0.0001
             ww=N.array([wavelengths-delta,wavelengths,wavelengths+delta])
@@ -1449,15 +2139,42 @@ class SpectralElement(Integrator):
             return self.resample(wavelengths)._throughputtable
 
     def sample(self, wave):
-        """Provide a more normal user interface to the __call__"""
-        angwave = self.waveunits.ToAngstrom(wave)
+        """Sample the spectrum.
 
+        This uses :meth:`resample` to do the actual computation.
+
+        Parameters
+        ----------
+        wave : number or array_like
+            Wavelength set for sampling, given in user unit.
+
+        Returns
+        -------
+        throughput : number or array_like
+            Sampled throughput.
+
+        """
+        angwave = self.waveunits.ToAngstrom(wave)
         return self.__call__(angwave)
 
-
     def taper(self):
-        '''Taper the spectrum by adding zeros to each end.
-        '''
+        """Taper the spectrum by adding zero throughput to each end.
+        This is similar to :meth:`TabularSourceSpectrum.taper`.
+
+        There is no check to see if the spectrum is already tapered.
+        Hence, calling this on a tapered spectrum will result in
+        multiple zero-throughput entries at both ends.
+
+        The wavelengths to use for the new first and last points are
+        calculated by using the same ratio as for the two interior points
+        used at each end.
+
+        Returns
+        -------
+        OutElement : `TabularSpectralElement`
+            Tapered spectrum.
+
+        """
         OutElement = TabularSpectralElement()
 
         wcopy = N.zeros(self._wavetable.size+2,dtype=N.float64)
@@ -1481,21 +2198,58 @@ class SpectralElement(Integrator):
 
     def writefits(self, filename, clobber=True, trimzero=True,
                   precision=None, hkeys=None):
-        """Write the bandpass to a FITS file.
+        """Write the spectrum to a FITS table.
+
+        Primary header in EXT 0. ``FILENAME``,  ``ORIGIN``, and any
+        extra keyword(s) from ``hkeys`` will also be added.
+
+        Table header and data are in EXT 1. The table has 2 columns,
+        i.e., ``WAVELENGTH`` and ``THROUGHPUT``.
+        Wavelength data are stored in user unit.
+        Its header also will have these additional keywords:
+
+        * ``EXPR`` - Description of the spectrum.
+        * ``TDISP1`` and ``TDISP2`` - Columns display format,
+          always "G15.7".
+        * ``GRFTABLE`` and ``CMPTABLE`` - Graph and component
+          table names to use with associated observation mode.
+          These are only added if applicable.
+
+        If data is already double-precision but user explicitly
+        set output precision to single, ``pysynphot.spectrum.syn_epsilon``
+        defines the allowed minimum wavelength separation.
+        This limit (:math:`3.2 \\times 10^{-4}`) was taken from
+        IRAF STSDAS SYNPHOT FAQ.
+        Values equal or smaller than this limit are considered as the
+        same, and duplicates are ignored, resulting in data loss.
+        In the way that this comparison is coded, when such precision clash
+        happens, even when no duplicates are detected, the last row is
+        always omitted (also data loss). Therefore, it is *not* recommended
+        for user to force single-precision when the data is in
+        double-precision.
 
         Parameters
-        -----------
-        filename : string
-            name of file to write to
-        clobber : bool [Default: True]
-            Will clobber existing file by default
-        trimzero : bool [Default: True]
-            Will trim zero-flux elements from both ends by default
-        precision : {'single','double',None}
-            Will write in native precision by default
-        hkeys : dict, optional
-            Optional dictionary of {keyword:(value,comment)}
-                   to be added to primary FITS header
+        ----------
+        filename : str
+            Output filename.
+
+        clobber : bool
+            Overwrite existing file. Default is `True`.
+
+        trimzero : bool
+            Trim off duplicate rows with flux values of zero from both ends
+            of the spectrum. This keeps one row of zero-flux at each end,
+            if it exists; However, it does not add a zero-flux row if it
+            does not. Default is `True`.
+
+        precision : {'s', 'd', `None`}
+            Write data out in single (``'s'``) or double (``'d'``)
+            precision. Default is `None`, which will enforce native
+            precision from ``self.throughput``.
+
+        hkeys : dict
+            Additional keyword(s) to be added to primary FITS header,
+            in the format of ``{keyword:(value,comment)}``.
 
         """
         if precision is None:
@@ -1592,13 +2346,24 @@ class SpectralElement(Integrator):
         hdulist.append(hdu)
         hdulist.writeto(filename)
 
-
-
     def resample(self, resampledWaveTab):
-        '''Interpolate throughput given a wavelength array that is
-        monotonically increasing and the TabularSpectralElement object.'''
-        ##Check whether the input wavetab is in descending order
+        """Resample the spectrum for the given wavelength set.
 
+        Given wavelength array must be monotonically increasing or decreasing.
+        Throughput interpolation is done using :func:`numpy.interp`.
+
+        Parameters
+        ----------
+        resampledWaveTab : array_like
+            Wavelength set for resampling.
+
+        Returns
+        -------
+        resampled : `ArraySpectralElement`
+            Resampled spectrum.
+
+        """
+        ##Check whether the input wavetab is in descending order
         if resampledWaveTab[0]<resampledWaveTab[-1]:
             newwave=resampledWaveTab
             newasc = True
@@ -1635,11 +2400,16 @@ class SpectralElement(Integrator):
         return resampled
 
     def unit_response(self):
-        """
-        Returns flux, in flam, of a star that produces a response of
-        one photon per second in this passband.
+        """Calculate :ref:`pysynphot-formula-uresp`.
 
-        Only correct if waveunits are Angstrom.
+        .. warning::
+
+            Result is correct only if ``self.waveunits`` is in Angstrom.
+
+        Returns
+        -------
+        ans : float
+            Bandpass unit response.
 
         """
         hc = units.HC
@@ -1654,33 +2424,92 @@ class SpectralElement(Integrator):
 
         return hc / (area * self.trapezoidIntegration(wave, thru*wave))
 
-
     def GetWaveSet(self):
-        "Return the waveset in the requested units."
+        """Obtain the wavelength set for the spectrum.
+
+        Returns
+        -------
+        wave : array_like
+            Wavelength set in user unit.
+
+        """
         wave = units.Angstrom().Convert(self._wavetable, self.waveunits.name)
         return wave
 
+    ## NB: Throughput never changes units no matter what the
+    ## wavelength does. There is an implicit assumption here that
+    ## the units of the input waveset to the __call__ are always
+    ## Angstroms.
     def GetThroughput(self):
-        """Return the throughput for the internal wavetable."""
-        ## NB: Throughput never changes units no matter what the
-        ## wavelength does. There is an implicit assumption here that
-        ## the units of the input waveset to the __call__ are always
-        ## Angstroms.
+        """Obtain throughput for the spectrum.
+
+        Returns
+        -------
+        throughput : array_like
+            Throughput values.
+
+        """
         self.convert('angstroms')
         return self.__call__(self.wave)
 
-    wave = property(GetWaveSet, doc='Waveset for bandpass')
-    throughput = property(GetThroughput, doc='Throughput for bandpass')
+    wave = property(GetWaveSet, doc='Wavelength property.')
+    throughput = property(GetThroughput, doc='Throughput property.')
 
     def fwhm(self):
+        """Not implemented."""
         raise NotImplementedError("#139: Implement calcband functionality")
 
 
 class CompositeSpectralElement(SpectralElement):
-    '''CompositeSpectralElement Class, which knows how to calculate
-    its throughput by delegating the calculating the calculating to
-    its components.
-    '''
+    """Class to handle :ref:`composite spectrum <pysynphot-composite-spectrum>`
+    involving bandpasses.
+
+    Parameters
+    ----------
+    component1, component2 : `SpectralElement`
+        Input bandpass.
+
+    Attributes
+    ----------
+    component1, component2
+        Same as inputs.
+
+    name : str
+        Short description of the spectrum.
+
+    isAnalytic : bool
+        Flag to indicate whether this is an analytic spectrum. This is only `True` if both inputs are analytic.
+
+    warnings : dict
+        To store warnings, which are inherited from both input sources. If inputs have the same warning keyword, the one from ``component2`` is used.
+
+    primary_area : number or `None`
+        :ref:`pysynphot-area` of the telescope. This is inherited from either of the inputs, if available (not `None`). If inputs have different values, an exception is raised.
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit inherited from inputs, where both inputs are required to have the same unit or an exception will be raised.
+
+    throughputunits : `None`
+        This is only to inform user that throughput is unitless.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless throughput.
+
+    Raises
+    ------
+    NotImplementedError
+        Inputs have different wavelength units.
+
+    TypeError
+        Both input spectra must be bandpasses.
+
+    pysynphot.exceptions.IncompatibleSources
+        Input spectra have different telescope areas defined.
+
+    """
     def __init__(self, component1, component2):
         SpectralElement.__init__(self)
 
@@ -1738,14 +2567,14 @@ class CompositeSpectralElement(SpectralElement):
                 raise exceptions.IncompatibleSources(err)
 
     def __call__(self, wavelength):
-        '''This is where the throughput calculation is delegated.
-        '''
+        """This is where the throughput calculation is delegated."""
         return self.component1(wavelength) * self.component2(wavelength)
 
     def __str__(self):
         return self.name
 
     def complist(self):
+        """Return a list of all components and sub-components."""
         ans=[]
         for comp in (self.component1, self.component2):
             try:
@@ -1755,25 +2584,59 @@ class CompositeSpectralElement(SpectralElement):
         return ans
 
     def GetWaveSet(self):
-        '''This method returns a wavelength set appropriate for a composite
-        object by forming the union of the wavelengths of the components.
-        '''
+        """Obtain the wavelength set for the composite spectrum.
+        This is done by using :func:`MergeWaveSets` to form a union of
+        wavelength sets from its components.
+
+        Returns
+        -------
+        waveset : array_like
+            Composite wavelength set.
+
+        """
         wave1 = self.component1.GetWaveSet()
         wave2 = self.component2.GetWaveSet()
-
         return MergeWaveSets(wave1, wave2)
 
-    wave = property(GetWaveSet,doc="wave for CompositeSpectralElement")
+    wave = property(GetWaveSet,doc='Wavelength property.')
 
 
 class UniformTransmission(SpectralElement):
-    '''bandpass=UniformTransmission(dimensionless throughput)
+    """Class to handle a :ref:`uniform bandpass <pysynphot-bandpass-uniform>`.
 
-    .. todo::
+    Parameters
+    ----------
+    value : number
+        Constant throughput value for the bandpass.
 
-        Need to add a GetWaveSet method (or just return None).
+    waveunits : str
+        Wavelength unit, as accepted by `~pysynphot.units.Units`.
+        Default is Angstrom.
 
-    '''
+    Attributes
+    ----------
+    value
+        Same as input.
+
+    name : str
+        Short description of the spectrum.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `True`.
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit for wavelength.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless throughput.
+
+    """
     def __init__(self, value, waveunits='angstrom'):
         SpectralElement.__init__(self)
 
@@ -1789,11 +2652,25 @@ class UniformTransmission(SpectralElement):
     def __str__(self):
         return "%g"%self.value
 
+## This produced 15 test failures in cos_etc_test.
+##     def GetWaveSet(self):
+##         return N.array([_default_waveset[0],_default_waveset[-1]])
+##
+##     wave = property(GetWaveSet,doc="wave for UniformTransmission")
+
     def GetWaveSet(self):
+        """Obtain wavelength set for the spectrum.
+
+        Returns
+        -------
+        waveset : `None`
+            Due to the nature of uniform transmission, this is always undefined.
+
+        """
         return None
 
     def check_overlap(self, spectrum):
-        """ Apply special overlap logic for UniformTransmission.
+        """Apply special overlap logic for UniformTransmission.
 
         By definition, a UniformTransmission is defined everywhere.
         Therefore, this is a special case for which the overlap check
@@ -1804,28 +2681,52 @@ class UniformTransmission(SpectralElement):
         """
         pass
 
-
-## This produced 15 test failures in cos_etc_test.
-##     def GetWaveSet(self):
-##         return N.array([_default_waveset[0],_default_waveset[-1]])
-##
-##     wave = property(GetWaveSet,doc="wave for UniformTransmission")
-
     def __call__(self, wavelength):
-        '''__call__ returns the constant value as an array, given a
+        """__call__ returns the constant value as an array, given a
         wavelength array as argument.
-        '''
+        """
         return 0.0 * wavelength + self.value
 
 
 class TabularSpectralElement(SpectralElement):
-    """bandpass = FileBandpass(FITS or ASCII filename, thrucol= name of
-    column containing throughput values (for FITS tables only)
+    """Base class for `ArraySpectralElement` and `FileSpectralElement`.
+
+    Parameters
+    ----------
+    fileName : str or `None`
+        File with spectral data (can be ASCII or FITS). If not `None`,
+        data will be loaded from file at initialization.
+
+    thrucol : str
+        Column name containing throughput data.
+        Default is "throughput" (case-insensitive).
+        This is only used if filename is given and is of FITS format.
+
+    Attributes
+    ----------
+    name
+        Same as input ``fileName``.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit for wavelength.
+
+    throughputunits : {'none', `None`}
+        This is only to inform user that throughput is unitless.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless throughput.
+
     """
     def __init__(self, fileName=None, thrucol='throughput'):
-        '''__init__ takes a character string argument that contains the name
-        of the file with the spectral element table.
-        '''
         SpectralElement.__init__(self)
 
         self.isAnalytic=False
@@ -1851,17 +2752,16 @@ class TabularSpectralElement(SpectralElement):
         return str(self.name)
 
     def ToInternal(self):
-        '''Convert wavelengths to the internal representation of angstroms..
-        '''
+        """Convert wavelengths to the internal representation of angstroms.
+        For internal use only."""
         self.validate_units()
         savewunits = self.waveunits
         angwave = self.waveunits.Convert(self._wavetable, 'angstrom')
         self._wavetable = angwave.copy()
         self.waveunits = savewunits
 
-
     def _readASCII(self,filename):
-        """ Ascii files have no headers. Following synphot, this
+        """ASCII files have no headers. Following synphot, this
         routine will assume the first column is wavelength in Angstroms,
         and the second column is throughput (dimensionless)."""
         self.waveunits = units.Units('angstrom')
@@ -1869,7 +2769,6 @@ class TabularSpectralElement(SpectralElement):
         wlist,tlist = self._columnsFromASCII(filename)
         self._wavetable=N.array(wlist,dtype=N.float64)
         self._throughputtable=N.array(tlist,dtype=N.float64)
-
 
     def _readFITS(self,filename,thrucol='throughput'):
         fs = pyfits.open(filename)
@@ -1886,37 +2785,56 @@ class TabularSpectralElement(SpectralElement):
 
         fs.close()
 
-
     def getHeaderKeywords(self, header):
-        ''' This is a placeholder for subclasses to get header keywords without
-        having to reopen the file again.
-        '''
+        """This is a placeholder for subclasses to get header keywords without
+        having to reopen the file again."""
         pass
 
 
 class ArraySpectralElement(TabularSpectralElement):
-    """ spec = ArraySpectrum(numpy array containing wavelength table,
-    numpy array containing throughput table, waveunits,
-    name=human-readable nickname for bandpass.
+    """Class to handle :ref:`bandpass from arrays <pysynphot-bandpass-arrays>`.
+
+    Parameters
+    ----------
+    wave, throughput : array_like
+        Wavelength and throughput arrays.
+
+    waveunits : str
+        Wavelength unit, as accepted by `~pysynphot.units.Units`.
+        Default is Angstrom.
+
+    name : str
+        Description of the spectrum. Default is "UnnamedArrayBandpass".
+
+    Attributes
+    ----------
+    name
+        Same as input.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit for wavelength.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless throughput.
+
+    Raises
+    ------
+    ValueError
+        Mismatched wavelength and throughput arrays.
+
     """
     def __init__(self, wave=None, throughput=None,
                  waveunits='angstrom',
                  name='UnnamedArrayBandpass'):
-
-        """Create a spectrum from arrays.
-
-        Parameters
-        ----------
-        wave : ndarray
-            Wavelength array
-        throughput : ndarray
-            Throughput array
-        waveunits : :py:class:`~pysynphot.units.WaveUnits` object or subclass
-            Units of wave
-        name : string
-            Description of this spectral element
-
-        """
         if len(wave) != len(throughput):
             raise ValueError("wave and throughput arrays must be of equal length")
 
@@ -1934,24 +2852,44 @@ class ArraySpectralElement(TabularSpectralElement):
 
 
 class FileSpectralElement(TabularSpectralElement):
-    """ Create a bandpass from a file.
+    """Class to handle
+    :ref:`bandpass loaded from ASCII or FITS table <pysynphot-bandpass-from-file>`.
+    Also see :ref:`pysynphot-io`.
 
-    spec = FileSpectrum(filename (FITS or ASCII),
-    throughputname=column name containing throughput (for FITS tables only),
-    keepneg=True to override the default behavior of setting negative
-    throughput values to zero)"""
+    Parameters
+    -----------
+    filename : str
+        File with spectral data (can be ASCII or FITS).
 
+    thrucol : str or `None`
+        Column name containing throughput data. This is only used if the given
+        file is in FITS format.
+
+    Attributes
+    ----------
+    name : str
+        Resolved filename; i.e., IRAF-style directory name is expanded to actual path name.
+
+    fheader : dict
+        For FITS file, this contains headers from both extensions 0 and 1. If the extensions have the same keyword, the one from the latter is used.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit for wavelength.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless throughput.
+
+    """
     def __init__(self, filename, thrucol=None):
-        """
-
-        Parameters
-        -----------
-        filename : string
-            FITS or ASCII file containing the bandpass
-        thrucol : string
-            Column name specifying the throughput (FITS only)
-
-        """
         self.name = locations.irafconvert(filename)
         self._readThroughputFile(self.name, thrucol)
 
@@ -1999,16 +2937,59 @@ class FileSpectralElement(TabularSpectralElement):
         #We don't support headers from asii files
         self.fheader = dict()
 
+
 class InterpolatedSpectralElement(SpectralElement):
-    '''The InterpolatedSpectralElement class handles spectral elements
-    that are interpolated from columns stored in FITS tables
-    '''
+    """Class to handle :ref:`parameterized keyword <pysynphot-parameterized>`
+    in an observation mode.
+
+    Parameters
+    ----------
+    fileName : str
+        Filename followed by a column name specification between square
+        brackets. For example: "mythru_syn.fits[fr388n#]"
+
+    wavelength : number
+        Desired value to interpolate to. This is not restricted to wavelength,
+        but rather whatever parameter the file is parameterized for.
+
+    Attributes
+    ----------
+    name : str
+        Expanded filename.
+
+    interpval
+        Same as input ``wavelength``.
+
+    warnings : dict
+        To store warnings. When extrapolation is not allowed but a default
+        throughput column is present and used, ``warnings['DefaultThroughput']``
+        is set to `True`.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit for wavelength.
+
+    throughputunits : 'none'
+        This is only to inform user that throughput is unitless.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless throughput.
+
+    Raises
+    ------
+    Exception
+        File does not have columns needed for interpolation.
+
+    pysynphot.exceptions.ExtrapolationNotAllowed
+        Extrapolation is not allowed and no default throughput column found.
+
+    """
     def __init__(self, fileName, wavelength):
-        ''' The file name contains a suffix with a column name specification
-        in between square brackets, such as [fr388n#]. The wavelength
-        parameter (poorly named -- it is not always a wavelength) is used to
-        interpolate between two columns in the file.
-        '''
         SpectralElement.__init__(self)
 
         xre=re.search('\[(?P<col>.*?)\]',fileName)
@@ -2134,34 +3115,97 @@ class InterpolatedSpectralElement(SpectralElement):
 
 
 class ThermalSpectralElement(TabularSpectralElement):
-    '''The ThermalSpectralElement class handles spectral elements
-    that have associated thermal properties read from a FITS table.
+    """Class to handle
+    :ref:`spectral element with thermal properties <pysynphot_thermal_em>`
+    read from a FITS table.
 
-    ThermalSpectralElements differ from regular SpectralElements in
-    that they carry thermal parameters such as temperature and beam
-    filling factor, but otherwise they operate just as regular
-    SpectralElements. They dont know how to apply themselves to an
-    existing beam, in the sense that their emissivities should be
-    handled explictly, outside the objects themselves.
-    '''
+    .. note::
+
+        This class does not know how to apply itself to an existing beam.
+        Its emissivity is handled by
+        :meth:`~pysynphot.observationmode.ObservationMode.ThermalSpectrum`.
+
+    Parameters
+    ----------
+    fileName : str
+        Filename of the thermal emissivity table.
+
+    Attributes
+    ----------
+    name
+        Same as input ``fileName``.
+
+    temperature : number
+        Default temperature in Kelvin from header.
+
+    beamFillFactor : number
+        Beam filling factor from header.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit for wavelength.
+
+    throughputunits : 'none'
+        This is only to inform user that throughput is unitless.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless emissivity.
+
+    """
     def __init__(self, fileName):
 
         TabularSpectralElement.__init__(self, fileName=fileName, thrucol='emissivity')
         self.warnings={}
 
     def getHeaderKeywords(self, header):
-        ''' Overrides base class in order to get thermal keywords.
-        '''
+        """Overrides base class in order to get thermal keywords.
+        For internal use only."""
         self.temperature = header['DEFT']
         self.beamFillFactor = header['BEAMFILL']
 
 
 class Box(SpectralElement):
-    """bandpass = Box(central wavelength, width) - both in Angstroms"""
+    """Class to handle a :ref:`box-shaped bandpass <pysynphot-box-bandpass>`.
+
+    Parameters
+    ----------
+    center, width : number
+        Center and width of the box in the given wavelength unit.
+
+    waveunits : str or `None`
+        Wavelength unit, as accepted by `~pysynphot.units.Units`.
+        If not given, assumed to be in Angstrom.
+
+    Attributes
+    ----------
+    name : str
+        Description of the spectrum.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit for wavelength.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless throughput.
+
+    """
     def __init__(self, center, width, waveunits=None):
-        ''' Both center and width are assumed to be in Angstrom
-            units, according to the synphot definition.
-        '''
         SpectralElement.__init__(self)
 
         if waveunits is None:
@@ -2192,5 +3236,6 @@ class Box(SpectralElement):
 
         self.isAnalytic=False
         self.warnings={}
+
 
 Vega = FileSourceSpectrum(locations.VegaFile)

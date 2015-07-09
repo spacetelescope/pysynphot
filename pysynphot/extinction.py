@@ -1,3 +1,7 @@
+"""This module handles deprecated extinction models for backward compatibility
+with IRAF STSDAS SYNPHOT.
+
+"""
 from __future__ import division
 
 import numpy as N
@@ -110,36 +114,78 @@ _xgal    = _computeXgal(_waveset)
 
 
 class _ExtinctionLaw(object):
-
     def _computeTransparency(self, extval, curve):
         return 10.0 ** (-0.4 * extval * curve)
 
 
 class Gal1(_ExtinctionLaw):
+    """Deprecated Milky Way extinction curve
+    (:ref:`Seaton 1979 <synphot-ref-seaton1979>`).
+
+    Parameters
+    ----------
+    extval : float
+        Value of :math:`E(B-V)` in magnitudes.
+
+    Attributes
+    ----------
+    name : str
+        Name of the extinction law.
+
+    citation : str
+        The publication where this curve was obtained from.
+
+    transparencytable : array_like
+        This is the same as :math:`\\textnormal{THRU}` defined in
+        :meth:`~pysynphot.reddening.CustomRedLaw.reddening`.
+
+    """
     citation = 'Seaton 1979 (MNRAS 187:75)'
     name = 'gal1'
     def __init__(self, extval):
-
         global _seaton
         self._wavetable = _waveset.copy()
         self.transparencytable = self._computeTransparency(extval, _seaton)
 
 
 class Gal2(_ExtinctionLaw):
+    """Not used."""
     citation = 'Savage & Mathis 1979 (ARA&A 17:73)'
     name = 'gal2'
     def __init__(self, extval):
         raise NotImplementedError("Sorry, %s is not yet implemented" % self.name)
-    
+
+
 class Gal3(_ExtinctionLaw):
+    """Not used."""
     citation='Cardelli, Clayton & Mathis 1989 (ApJ 345:245)'
     name='gal3'
-
     def __init__(self, extval):
         raise NotImplementedError("Sorry, %s is not yet implemented" % self.name)
 
 
 class Smc(_ExtinctionLaw):
+    """Deprecated SMC extinction curve
+    (:ref:`Prevot et al. 1984 <synphot-ref-prevot1984>`).
+
+    Parameters
+    ----------
+    extval : float
+        Value of :math:`E(B-V)` in magnitudes.
+
+    Attributes
+    ----------
+    name : str
+        Name of the extinction law.
+
+    citation : str
+        The publication where this curve was obtained from.
+
+    transparencytable : array_like
+        This is the same as :math:`\\textnormal{THRU}` defined in
+        :meth:`~pysynphot.reddening.CustomRedLaw.reddening`.
+
+    """
     citation='Prevot et al.1984 (A&A 132:389)'
     name='SMC'
     def __init__(self, extval):
@@ -149,6 +195,27 @@ class Smc(_ExtinctionLaw):
 
 
 class Lmc(_ExtinctionLaw):
+    """Deprecated LMC extinction curve
+    (:ref:`Howarth 1983 <synphot-ref-howarth1983>`).
+
+    Parameters
+    ----------
+    extval : float
+        Value of :math:`E(B-V)` in magnitudes.
+
+    Attributes
+    ----------
+    name : str
+        Name of the extinction law.
+
+    citation : str
+        The publication where this curve was obtained from.
+
+    transparencytable : array_like
+        This is the same as :math:`\\textnormal{THRU}` defined in
+        :meth:`~pysynphot.reddening.CustomRedLaw.reddening`.
+
+    """
     citation='Howarth 1983 (MNRAS 203:301)'
     name='LMC'
     def __init__(self, extval):
@@ -159,6 +226,27 @@ class Lmc(_ExtinctionLaw):
 
 
 class Xgal(_ExtinctionLaw):
+    """Deprecated Extra-galactic extinction curve
+    (:ref:`Calzetti et al. 1994 <synphot-ref-calzetti1994>`).
+
+    Parameters
+    ----------
+    extval : float
+        Value of :math:`E(B-V)` in magnitudes.
+
+    Attributes
+    ----------
+    name : str
+        Name of the extinction law.
+
+    citation : str
+        The publication where this curve was obtained from.
+
+    transparencytable : array_like
+        This is the same as :math:`\\textnormal{THRU}` defined in
+        :meth:`~pysynphot.reddening.CustomRedLaw.reddening`.
+
+    """
     citation = 'Calzetti, Kinney and Storchi-Bergmann, 1994 (ApJ 429:582)'
     name='XGAL'
     def __init__(self, extval):
@@ -174,6 +262,7 @@ reddeningClasses = {'gal1': Gal1,
                     'lmc':  Lmc,
                     'xgal': Xgal}
 
+
 def factory(redlaw, *args, **kwargs):
     import sys
     if sys.version_info[0] < 3:
@@ -182,12 +271,48 @@ def factory(redlaw, *args, **kwargs):
         reddening = reddeningClasses[redlaw.lower()]
         return reddening(*args, **kwargs)
 
+
 class DeprecatedExtinction(spectrum.SpectralElement):
-    """extinction = Extinction(extinction in magnitudes,
-    'gal1|smc|lmc reddening laws)"""
+    """This class handles deprecated extinction models from
+    IRAF STSDAS SYNPHOT like a spectral element.
+
+    Parameters
+    ----------
+    extval : float
+        Extinction in magnitude.
+
+    redlaw : {'gal1', 'smc', 'lmc', 'xgal'}
+        Reddening law (`Gal1`, `Smc`, `Lmc`, or `Xgal`).
+
+    Attributes
+    ----------
+    name : str
+        Name of the extinction law.
+
+    citation : str
+        The publication where this curve was obtained from.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    warnings : dict
+        To store warnings
+
+    binset : `None`
+        This is reserved to be used by `~pysynphot.obsbandpass.ObsModeBandpass`.
+
+    waveunits : `~pysynphot.units.Units`
+        This is set to Angstrom at initialization.
+
+    wave, throughput : array_like
+        Wavelength set in ``waveunits`` and associated unitless extinction.
+
+    Examples
+    --------
+    >>> extinction = S.Extinction(0.3, 'gal1')
+
+    """
     def __init__(self, extval, redlaw):
-        ''' Extinction mimics as a spectral element.
-        '''
         law = factory(redlaw, extval)
         self._wavetable = 10000.0 / law._wavetable
         self._throughputtable = law.transparencytable
@@ -196,4 +321,3 @@ class DeprecatedExtinction(spectrum.SpectralElement):
         self.waveunits=units.Units('angstrom')
         self.isAnalytic=False
         self.warnings={}
-

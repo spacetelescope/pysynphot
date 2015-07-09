@@ -1,9 +1,13 @@
-from __future__ import division
 """This module is a container for IO-intensive items that should be
 read in only once, and then re-used from memory.
 
-This is planned to include the reddening laws and some indexes for the
-Kurucz and Castelli-Kurucz model atlases."""
+This includes the :ref:`reddening laws <pysynphot-extinction>`
+(``pysynphot.locations.RedLaws``)
+and some indices for the `~pysynphot.catalog` model atlases
+(``pysynphot.Cache.CATALOG_CACHE``).
+
+"""
+from __future__ import division
 
 from .locations import RedLaws
 
@@ -15,10 +19,11 @@ if 'mwavg' in RedLaws:
 
 CATALOG_CACHE = {}
 
+
 def reset_catalog_cache():
     """
-    Empty the CATALOG_CACHE global variable.
+    Empty the ``CATALOG_CACHE`` global variable.
     """
     global CATALOG_CACHE
-    
+
     CATALOG_CACHE.clear()

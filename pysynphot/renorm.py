@@ -1,6 +1,6 @@
-from __future__ import division
-"""Segregate all the renormalization functions here. Once we have
-one that works, turn it into a method on the spectrum class."""
+"""This module handles normalization of source spectrum flux."""
+from __future__ import division, print_function
+
 import math
 import numpy as np
 from . import units
@@ -8,10 +8,30 @@ from .spectrum import FlatSpectrum, Vega
 from .refs import _default_waveset
 from .exceptions import DisjointError, OverlapError
 
+# This is done here to avoid circular imports.
 def DefineStdSpectraForUnits():
-    """Adorn the units with the appropriate kind of spectrum for
-    renormalizing. This is done here to avoid circular imports."""
+    """Define ``StdSpectrum`` attribute for all the supported
+    :ref:`pysynphot-flux-units`.
 
+    This is automatically done on module import. The attribute
+    stores the source spectrum necessary for normalization in
+    the corresponding flux unit.
+
+    For ``photlam``, ``photnu``, ``flam``, ``fnu``, Jy, and mJy,
+    the spectrum is flat in the respective units with flux value of 1.
+
+    For counts and ``obmag``, it is flat in the unit of counts
+    with flux value of :math:`1 / N`, where :math:`N` is the
+    size of default wavelength set (see `~pysynphot.refs`).
+
+    For ``abmag`` and ``stmag``, it is flat in the respective units
+    with flux value of 0 mag. That is equivalent to
+    :math:`3.63 \\times 10^{-20}` ``fnu`` and
+    :math:`3.63 \\times 10^{-9}` ``flam``, respectively.
+
+    For ``vegamag``, it is simply :ref:`pysynphot-vega-spec`.
+
+    """
     # Linear flux-density units
     units.Flam.StdSpectrum = FlatSpectrum(1, fluxunits='flam')
     units.Fnu.StdSpectrum = FlatSpectrum(1, fluxunits='fnu')
@@ -36,8 +56,23 @@ DefineStdSpectraForUnits()
 
 
 def StdRenorm(spectrum, band, RNval, RNunitstring, force=False):
-    """Another approach to renormalization"""
+    """This is used by `~pysynphot.spectrum.SourceSpectrum` for
+    renormalization.
 
+    Parameters
+    ----------
+    spectrum : `~pysynphot.spectrum.SourceSpectrum`
+        Spectrum to renormalize.
+
+    band, RNval, RNunitstring, force
+        See :meth:`~pysynphot.spectrum.SourceSpectrum.renorm`.
+
+    Returns
+    -------
+    newsp : `~pysynphot.spectrum.CompositeSourceSpectrum`
+        Renormalized spectrum.
+
+    """
     # Validate the overlap
     if not force:
         stat = band.check_overlap(spectrum)

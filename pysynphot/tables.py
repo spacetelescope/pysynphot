@@ -1,34 +1,39 @@
-from __future__ import division, print_function
-"""
-Objects that represent comp tables and graph tables.
+"""This module handles graph and component tables.
+They are discussed in detail in :ref:`pysynphot-appendixc`.
 
 """
+from __future__ import division, print_function
 
 import numpy as N
-
 import pyfits
 
 #Flag to control verbosity
 DEBUG = False
 
+
 class CompTable(object):
-    '''CompTable class; opens the specified comptable and populates 1-d
-    arrays of component names and file names in the members compnames
-    and filenames'''
+    """Class to handle a :ref:`component table <pysynphot-master-comp>`.
 
+    Parameters
+    ----------
+    CFile : str
+        Component table filename.
+
+    Attributes
+    ----------
+    name
+        Same as input ``CFile``.
+
+    compnames, filenames : array_like
+        Values from ``COMPNAME`` and ``FILENAME`` columns in EXT 1.
+
+    Raises
+    ------
+    TypeError
+        No filename given.
+
+    """
     def __init__(self, CFile=None):
-        '''__init__ instantiates the CompTable object, given the comptable
-        file name as an input string.
-
-        Parameters
-        -----------
-        Input :  ndarray of chars
-            string CFile containing comptable name
-        Effect : ndarray of chars
-            populates two data members: compnames and filenames
-
-        '''
-
         # None is common for various errors.
         # the default value of None is not useful; pyfits.open(None) does not work.
         if CFile is None :
@@ -38,6 +43,8 @@ class CompTable(object):
 
         self.compnames = cp[1].data.field('compname')
         self.filenames = cp[1].data.field('filename')
+
+        # Is this necessary?
         compdict = {}
         for i in range(len(self.compnames)):
             compdict[self.compnames[i]] = self.filenames[i]
@@ -45,29 +52,33 @@ class CompTable(object):
         cp.close()
         self.name=CFile
 
+
 class GraphTable(object):
-    '''GraphTable class; opens the specified graph table and populates
-    1-d arrays of keyword names, innodes, outnodes and component names
-    in the members keywords, innodes, outnodes and compnames'''
+    """Class to handle a :ref:`graph table <pysynphot-graph>`.
 
+    Parameters
+    ----------
+    GFile : str
+        Graph table filename.
+
+    Attributes
+    ----------
+    keywords : array_like
+        Values from ``KEYWORD`` column in EXT 1, converted to lowercase.
+
+    innodes, outnodes, compnames, thcompnames : array_like
+        Values from ``INNODE``, ``OUTNODE``, ``COMPNAME``, and ``THCOMPNAME`` columns in EXT 1.
+
+    primary_area : number
+        Value from ``PRIMAREA`` in EXT 0 header, if exists.
+
+    Raises
+    ------
+    TypeError
+        No filename given.
+
+    """
     def __init__(self, GFile=None):
-        ''' __init__ instantiates the GraphTable object, given the graph
-        table name as an input string.
-
-        Parameters
-        ----------
-        Input :  string
-            GFile containing graph table name
-        Effect : dict
-            populates four data members::
-
-                keywords: CharArray of keyword names
-                innodes:  Int32 array of innodes
-                outnodes: Int32 array of outnodes
-                compnames:CharArray of components names
-        '''
-
-
         # None is common for various errors.
         # the default value of None is not useful; pyfits.open(None) does not work.
         if GFile is None :
@@ -107,10 +118,12 @@ class GraphTable(object):
         gp.close()
 
     def GetNextNode(self, modes, innode):
-        '''GetNextNode returns the outnode that matches an element from
+        """GetNextNode returns the outnode that matches an element from
         the modes list, starting at the given innode.
         This method isnt actually used, its just a helper method for
-        debugging purposes'''
+        debugging purposes.
+
+        """
         nodes = N.where(self.innodes == innode)
 
         ## If there's no entry for the given innode, return -1
@@ -139,10 +152,36 @@ class GraphTable(object):
         return outnode
 
     def GetComponentsFromGT(self, modes, innode):
-        '''GetComponentsFromGT returns two lists of component names
-        corresponding to those obtained by waling down the graph
-        table starting at innode. The first list contains the optical
-        components, the second list, the thermal components.'''
+        """Obtain components from graph table for the given
+        observation mode keywords and starting node.
+
+        .. note::
+
+            This prints extra information to screen if
+            ``pysynphot.tables.DEBUG`` is set to `True`.
+
+        Parameters
+        ----------
+        modes : list of str
+            List of individual keywords within the observation mode.
+
+        innode : int
+            Starting node, usually 1.
+
+        Returns
+        -------
+        components, thcomponents : list of str
+            List of optical and thermal component names.
+
+        Raises
+        ------
+        KeyError
+            No matches found for one of the keywords.
+
+        ValueError
+            Incomplete observation mode or unused keyword(s) detected.
+
+        """
         components = []
         thcomponents = []
         outnode = 0

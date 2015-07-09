@@ -1,9 +1,4 @@
-"""The ObsBandpass user interface needs to support either the usual
-(acs,hrc,f555w) obsmode style that produce a set of chained throughput
-files; or something like (johnson,v) that has a single throughput file.
-Thus ObsBandpass must be a factory function, returning either an
-ObsModeBandpass (ack, terrible name) or a TabularSpectralElement."""
-
+"""This module handle bandpass of observation modes."""
 from __future__ import division, print_function
 import numpy as np
 
@@ -12,14 +7,37 @@ from .spectrum import CompositeSpectralElement, TabularSpectralElement
 from . import units
 from . import exceptions
 
+
 def ObsBandpass(obstring, graphtable=None, comptable=None, component_dict={}):
-    """ Generate an ObsModeBandPass or TabularSpectralElement instance
+    """Generate a bandpass object from observation mode.
 
-    obsband = ObsBandpass(string specifying obsmode; for details
-    see the Synphot Data User's Guide at
-    http://www.stsci.edu/hst/HST_overview/documents/synphot/hst_synphotTOC.html
+    If the bandpass consists of multiple throughput files
+    (e.g., "acs,hrc,f555w"), then `ObsModeBandpass` is returned.
+    Otherwise, if it consists of a single throughput file
+    (e.g., "johnson,v"), then `~pysynphot.spectrum.TabularSpectralElement`
+    is returned.
+
+    See :ref:`pysynphot-obsmode-bandpass` and :ref:`pysynphot-appendixb`
+    for more details.
+
+    Parameters
+    ----------
+    obstring : str
+        Observation mode.
+
+    graphtable, comptable, component_dict
+        See `~pysynphot.observationmode.ObservationMode`.
+
+    Returns
+    -------
+    bp : `~pysynphot.spectrum.TabularSpectralElement` or `ObsModeBandpass`
+
+    Examples
+    --------
+    >>> bp1 = S.ObsBandpass('acs,hrc,f555w')
+    >>> bp2 = S.ObsBandpass('johnson,v')
+
     """
-
     ##Temporarily create an Obsmode to determine whether an
     ##ObsModeBandpass or a TabularSpectralElement will be returned.
     ob=ObservationMode(obstring,graphtable=graphtable,
@@ -29,14 +47,62 @@ def ObsBandpass(obstring, graphtable=None, comptable=None, component_dict={}):
     else:
         return TabularSpectralElement(ob.components[0].throughput_name)
 
+
 class ObsModeBandpass(CompositeSpectralElement):
-    """Bandpass instantiated from an obsmode string"""
+    """Bandpass instantiated from an ``obsmode`` string.
+    Also see :ref:`pysynphot-obsmode-bandpass`, :ref:`pysynphot-appendixb`,
+    and :ref:`pysynphot-appendixc`.
 
+    Parameters
+    ----------
+    ob : str
+        Observation mode.
+
+    Attributes
+    ----------
+    obsmode, name
+        Same as input ``ob``.
+
+    component1, component2 : `CompositeSpectralElement` or `SpectralElement`
+        Components and sub-components that belong to the observation mode.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    warnings : dict
+        To store warnings, which are inherited from all inputs. If they have the same warning keyword, the one from most recently read component is used.
+
+    primary_area : float
+        See :ref:`pysynphot-area` for how this is set.
+
+    binset : array_like
+        This is set with :meth:`~pysynphot.observationmode.BaseObservationMode.bandWave`, as described in :ref:`pysynphot-refdata`.
+
+    waveunits : `~pysynphot.units.Units`
+        User unit inherited from inputs, where all inputs are required to have the same unit or an exception will be raised.
+
+    throughputunits : `None`
+        This is only to inform user that throughput is unitless.
+
+    wave, throughput : array_like
+        Wavelength set in user unit and associated unitless throughput.
+
+    Raises
+    ------
+    NotImplementedError
+        Inputs have different wavelength units.
+
+    TypeError
+        Both input spectra must be bandpasses.
+
+    pysynphot.exceptions.IncompatibleSources
+        Input spectra have different telescope areas defined.
+
+    """
+    # Instantiate a COmpositeSpectralElement by means of an
+    # ObservationMode (which the caller must have already created from
+    # an  obstring
     def __init__(self,ob):
-        """Instantiate a COmpositeSpectralElement by means of an
-        ObservationMode (which the caller must have already created from
-        an  obstring"""
-
         #Chain the individual components
         chain=ob.components[0].throughput*ob.components[1].throughput
 
@@ -71,9 +137,11 @@ class ObsModeBandpass(CompositeSpectralElement):
         return len(self.obsmode)
 
     def showfiles(self):
-        """Defer to ObservationMode component """
-        return self.obsmode.showfiles()
+        """Same as
+        :meth:`pysynphot.observationmode.BaseObservationMode.showfiles`.
 
+        """
+        return self.obsmode.showfiles()
 
     def _checkbounds(self):
         thru=self.throughput
@@ -81,12 +149,32 @@ class ObsModeBandpass(CompositeSpectralElement):
             print("Warning: throughput for this obsmode is not bounded by zeros. Endpoints: thru[0]=%g, thru[-1]=%g"%(thru[0],thru[-1]))
 
     def thermback(self):
-        """Expose the thermal background calculation presently hidden
-        in the obsmode class.
-        Only bandpasses for which thermal information has been supplied in the graph
-        table supports this method; all others will raise a NotImplementedError.
-        """
+        """Calculate thermal background count rate for ``self.obsmode``.
 
+        Calculation uses
+        :func:`~pysynphot.observationmode.ObservationMode.ThermalSpectrum`
+        to extract thermal component source spectrum in
+        ``photlam`` per square arcsec. Then this spectrum is
+        integrated and multiplied by detector pixel scale
+        and telescope collecting area to produce a count rate
+        in count/s/pix. This unit is non-standard but used widely
+        by STScI Exposure Time Calculator.
+
+        .. note::
+
+            Similar to IRAF STSDAS SYNPHOT ``thermback`` task.
+
+        Returns
+        -------
+        ans : float
+            Thermal background count rate.
+
+        Raises
+        ------
+        NotImplementedError
+            Bandpass has no thermal information in graph table.
+
+        """
         #The obsmode.ThermalSpectrum method will raise an exception if there is
         #no thermal information, and that will just propagate up.
         sp=self.obsmode.ThermalSpectrum()
@@ -98,30 +186,32 @@ class ObsModeBandpass(CompositeSpectralElement):
         return ans
 
     def pixel_range(self, waverange, waveunits=None, round='round'):
-        """
-        Returns the number of wavelength bins within `waverange`.
+        """Returns the number of wavelength bins within ``waverange``.
 
         .. note::
 
-           This calls the `pixel_range` function with
-           `self.binset` as the first argument. See
-           `pixel_range` for full documentation.
+            This calls :func:`pixel_range` with ``self.binset`` as
+            the first argument.
 
         Parameters
         ----------
+        waverange, round
+            See :func:`pixel_range`.
+
         waveunits : str, optional
-            The units of the wavelengths given in `waverange`. Defaults to None.
-            If None, the wavelengths are assumed to be in the units of the
-            `waveunits` attribute.
+            The units of the wavelengths given in ``waverange``.
+            If `None` (default), the wavelengths are assumed to be
+            in the units of ``self.waveunits``.
+
+        Returns
+        -------
+        num : int or float
+            Number of wavelength bins within ``waverange``.
 
         Raises
         ------
         pysynphot.exceptions.UndefinedBinset
-            If the `binset` attribute is None.
-
-        See Also
-        --------
-        pixel_range, pysynphot.exceptions.UndefinedBinset
+            If ``self.binset`` is `None`.
 
         """
         # make sure we have a binset to work with
@@ -143,31 +233,34 @@ class ObsModeBandpass(CompositeSpectralElement):
         return pixel_range(self.binset, waverange, round=round)
 
     def wave_range(self, cenwave, npix, waveunits=None, round='round'):
-        """
-        Get the wavelength range covered by a number of pixels, `npix`, centered
-        on wavelength `cenwave`.
+        """Get the wavelength range covered by the given number of pixels
+        centered on the given wavelength.
 
         .. note::
 
-           This calls the `wave_range` function with
-           `self.binset` as the first argument. See
-           `wave_range` for full documentation.
+           This calls :func:`wave_range` with ``self.binset``
+           as the first argument.
 
         Parameters
         ----------
+        cenwave, npix, round
+            See :func:`wave_range`.
+
         waveunits : str, optional
-            Wavelength units of `cenwave` and the returned wavelength range.
-            Defaults to None. If None, the wavelengths are assumed to be in
-            the units of the `waveunits` attribute.
+            Wavelength units of ``cenwave`` and the returned wavelength range.
+            If `None` (default), the wavelengths are assumed to be in
+            the units of ``self.waveunits``.
+
+        Returns
+        -------
+        waverange : tuple of floats
+            The range of wavelengths spanned by ``npix`` centered on
+            ``cenwave``.
 
         Raises
         ------
-        exceptions.UndefinedBinset
-            If the `binset` attribute is None.
-
-        See Also
-        --------
-        wave_range, pysynphot.exceptions.UndefinedBinset
+        pysynphot.exceptions.UndefinedBinset
+            If ``self.binset`` is None.
 
         """
         # make sure we have a binset to work with
@@ -196,50 +289,48 @@ class ObsModeBandpass(CompositeSpectralElement):
 
         return wave1, wave2
 
+
 def pixel_range(bins, waverange, round='round'):
-    """
-    Returns the number of wavelength bins within `waverange`.
+    """Returns the number of wavelength bins within ``waverange``.
 
     Parameters
     ----------
     bins : ndarray
-        Wavelengths of pixel centers. Must be in the same units as `waverange`.
+        Wavelengths of pixel centers.
+        Must be in the same units as ``waverange``.
 
     waverange : array_like
         A sequence containing the wavelength range of interest. Only the
         first and last elements are used. Assumed to be in increasing order.
-        Must be in the same units as `bins`.
+        Must be in the same units as ``bins``.
 
-    round : {'round','min','max',None}, optional
+    round : {'round', 'min', 'max', `None`}, optional
         How to deal with pixels at the edges of the wavelength range. All
-        of the options, except None, will return an integer number of pixels.
-        Defaults to 'round'.
+        of the options, except `None`, will return an integer number of pixels.
+        Defaults to ``'round'``.
 
-        When set to 'round' wavelength ends that fall in the middle of a
-        pixel are counted if more than half of the pixel is within `waverange`.
-        Ends that fall in the center of a pixel are rounded up to the
-        nearest pixel edge.
-
-        When set to 'min' only pixels wholly within `waverange` are counted.
-
-        When set to 'max' end pixels that are within `waverange` by any
-        margin are counted.
-
-        When set to None the exact number of encompassed pixels, including
-        fractional pixels, is returned.
+            * ``'round'`` - Wavelength ends that fall in the middle of a
+              pixel are counted if more than half of the pixel is within
+              ``waverange``. Ends that fall in the center of a pixel are
+              rounded up to the nearest pixel edge.
+            * ``'min'`` - Only pixels wholly within ``waverange`` are counted.
+            * ``'max'`` - End pixels that are within ``waverange`` by any
+              margin are counted.
+            * `None` - The exact number of encompassed pixels, including
+              fractional pixels, is returned.
 
     Returns
     -------
     num : int or float
-        Number of wavelength bins within `waverange`.
+        Number of wavelength bins within ``waverange``.
 
     Raises
     ------
     ValueError
-        If `round` is not an allowed value.
+        If ``round`` is not an allowed value.
 
     pysynphot.exceptions.OverlapError
-        If `waverange` exceeds the bounds of `bins`.
+        If ``waverange`` exceeds the bounds of ``bins``.
 
     """
     # make sure that the round keyword is valid
@@ -324,59 +415,55 @@ def pixel_range(bins, waverange, round='round'):
 
     return num
 
+
 def wave_range(bins, cenwave, npix, round='round'):
-    """
-    Get the wavelength range covered by a number of pixels, `npix`, centered
-    on wavelength `cenwave`.
+    """Get the wavelength range covered by the given number of pixels
+    centered on the given wavelength.
 
     Parameters
     ----------
     bins : ndarray
         Wavelengths of pixel centers. Must be in the same units as
-        `cenwave`.
+        ``cenwave``.
 
     cenwave : float
-        Central wavelength of range. Must be in the same units as `bins`.
+        Central wavelength of range. Must be in the same units as ``bins``.
 
     npix : int
-        Number of pixels in range, centered on `cenwave`.
+        Number of pixels in range, centered on ``cenwave``.
 
-    round : {'round','min','max',None}, optional
+    round : {'round', 'min', 'max', `None`}, optional
         How to deal with pixels at the edges of the wavelength range. All
-        of the options, except None, will return wavelength ends that
-        correpsonds to pixel edges.
-        Defaults to 'round'.
+        of the options, except `None`, will return wavelength ends that
+        correpsonds to pixel edges. Defaults to ``'round'``.
 
-        When set to None an exact wavelength range is returned. The
-        wavelength ends returned may not correspond to pixel edges, but
-        will cover exactly `npix` pixels.
-
-        When set to 'round' a wavelength range is returned such that the
-        ends are pixel edges and the range spans exactly `npix` pixels.
-        Ends that fall in the center of bins are rounded up to the nearest
-        pixel edge.
-
-        When set to 'min' the returned wavelength range is shrunk so that
-        it includes an integer number of pixels and the ends fall on pixel
-        edges. May not span exactly `npix` pixels.
-
-        When set to 'max' the returned wavelength range is expanded so that
-        it includes an integer number of pixels and the ends fall on pixel
-        edges. May not span exactly `npix` pixels.
+            * ``'round'`` - A wavelength range is returned such that the
+              ends are pixel edges and the range spans exactly ``npix`` pixels.
+              Ends that fall in the center of bins are rounded up to the nearest
+              pixel edge.
+            * ``'min'`` - The returned wavelength range is shrunk so that
+              it includes an integer number of pixels and the ends fall on pixel
+              edges. May not span exactly ``npix`` pixels.
+            * ``'max'`` - The returned wavelength range is expanded so that
+              it includes an integer number of pixels and the ends fall on pixel
+              edges. May not span exactly ``npix`` pixels.
+            * `None` - An exact wavelength range is returned.
+              The wavelength ends returned may not correspond to pixel edges,
+              but will cover exactly ``npix`` pixels.
 
     Returns
     -------
     waverange : tuple of floats
-        The range of wavelengths spanned by `npix` centered on `cenwave`.
+        The range of wavelengths spanned by ``npix`` centered on ``cenwave``.
 
     Raises
     ------
     ValueError
-        If `round` is not an allowed value.
+        If ``round`` is not an allowed value.
 
     pysynphot.exceptions.OverlapError
-        If `cenwave` is not within the `binset` attribute, or the returned `waverange` would
-        exceed the limits of the `binset` attribute.
+        If ``cenwave`` is not within ``bins``, or the returned ``waverange``
+        would exceed the limits of ``bins``.
 
     """
     # make sure that the round keyword is valid

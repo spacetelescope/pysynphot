@@ -1,21 +1,23 @@
-"""
-This module is useful for working with catalog spectra such as Castelli & Kurucz.
+"""This module is useful for working with catalog spectra such as
+:ref:`pysynphot-appendixa-ck04`, :ref:`pysynphot-appendixa-kurucz1993`, and
+:ref:`pysynphot-appendixa-phoenix`.
 
 Spectra are constructed from basis spectra which are indexed for various
-combinations of effective temperature (Teff), metallicity,
-and log gravity (log G). The user may specify any combination of Teff,
-metallicity, and log G so long as each parameter is within the range
+combinations of effective temperature (:math:`T_{\\textnormal{eff}}`),
+metallicity (:math:`Z`), and log surface gravity (:math:`\\log g`).
+The user may specify any combination of :math:`T_{\\textnormal{eff}}`,
+:math:`Z`, and :math:`\\log g` so long as each parameter is within the range
 for that parameter defined by the catalog.
 
-For example, the Castelli & Kurucz 2004 catalog contains spectra for effective
-temperatures between 3500 - 50000 K. In this case no spectrum can be
-constructed for Teff=50001 K or Teff=3499 K. The range of parameters available
-may vary from catalog to catalog.
+For example, the :ref:`pysynphot-appendixa-ck04` catalog contains spectra for
+effective temperatures between 3500 and 50000 K. In this case, no spectrum can
+be constructed for :math:`T_{\\textnormal{eff}}` of 50001 K or 3499 K.
+The range of parameters available may vary from catalog to catalog.
 
-More information on catalogs can be found at
-http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs.html#57
+More information on catalogs can be found in :ref:`pysynphot-appendixa`.
 
 """
+from __future__ import division
 
 import os
 import numpy as N
@@ -28,30 +30,65 @@ from .Cache import CATALOG_CACHE
 
 import pysynphot.exceptions as exceptions
 
-class Icat(spectrum.TabularSourceSpectrum):
-    """
-    This class constructs a model from the grid available in catalogs such
-    as the Castelli & Kurucz. See the Synphot User's Data Manual, Appendix A,
-    for more information at
-    http://www.stsci.edu/hst/HST_overview/documents/synphot/AppA_Catalogs4.html#48115
 
-    spec = Icat(CDBS directory name,Teff,metallicity,logG).
+class Icat(spectrum.TabularSourceSpectrum):
+    """This class constructs a model from the grid available in
+    :ref:`catalogs <pysynphot-spec-atlas>`.
+    Specifically, they are :ref:`pysynphot-appendixa-ck04`,
+    :ref:`pysynphot-appendixa-kurucz1993`, and
+    :ref:`pysynphot-appendixa-phoenix`.
+
+    Each grid contains a master file named "catalog.fits", as
+    defined by ``pysynphot.locations.CAT_TEMPLATE``.
+    The basis spectra are located at ``pysynphot.locations.KUR_TEMPLATE``.
+    You may inspect the data files in CRDS to see how they
+    are formatted.
+
+    Parameters
+    ----------
+    catdir : {'ck04models', 'k93models', 'phoenix'}
+        Name of directory holding the catalogs.
+
+    Teff : float
+        Effective temperature of model, in Kelvin.
+
+    metallicity : float
+        Metallicity of model.
+
+    log_g : float
+        Log surface gravity of model.
+
+    Attributes
+    ----------
+    name : str
+        Short description of the spectrum.
+
+    parameter_names : list of str
+        Names for model parameters. This is used for error reporting.
+
+    warnings : dict
+        To store warnings.
+
+    isAnalytic : bool
+        This is always `False`.
+
+    waveunits, fluxunits : `~pysynphot.units.Units`
+        Catalog units for wavelength and flux.
+
+    wave, flux : array_like
+        Wavelength set and associated flux in catalog units.
+
+    Raises
+    ------
+    pysynphot.exceptions.ParameterOutOfBounds
+        Given parameter value is out of bounds.
+
+    Examples
+    --------
+    >>> spec = S.Icat('k93models', 6440, 0, 4.3)
 
     """
     def __init__(self,catdir,Teff,metallicity,log_g):
-        """
-        Parameters
-        ----------
-        catdir : str
-            name of directory holding the catalogs
-        Teff : float
-            effective temperature of model
-        metallicity : float
-            metallicity of model
-        log_g : float
-            log of gravity term for model
-
-        """
         self.isAnalytic=False
 
         # this is useful for reporting in exceptions which parameter is

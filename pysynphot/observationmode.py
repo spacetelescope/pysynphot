@@ -1,5 +1,18 @@
+"""This module handles observation modes that are defined in graph tables.
+
+**Global Variables**
+
+* ``pysynphot.observationmode.rootdir`` - Same as
+  ``pysynphot.locations.rootdir``.
+* ``pysynphot.observationmode.datadir`` - Same as
+  ``pysynphot.locations.specdir``.
+* ``pysynphot.observationmode.wavecat`` - Same as
+  ``pysynphot.locations.wavecat``.
+* ``pysynphot.observationmode.CLEAR`` - String to represent a clear filter in an
+  observation mode, i.e., 'clear'.
+
+"""
 from __future__ import absolute_import, division, print_function
-## Automatically adapted for numpy.numarray Mar 05, 2007 by
 
 import string
 import glob
@@ -31,9 +44,44 @@ CLEAR = 'clear'
 
 
 class BaseObservationMode(object):
-    ''' Class that handles the graph table, common to both optical and
-    thermal obsmodes.
-    '''
+    """Class that handles the graph table, common to both optical and
+    thermal observation modes. Also see :ref:`pysynphot-appendixc`.
+
+    Parameters
+    ----------
+    obsmode : str
+        Observation mode.
+
+    method : {'HSTGraphTable'}
+        Not used.
+
+    graphtable : str or `None`
+        Graph table name. If `None`, it is taken from `~pysynphot.refs`.
+
+    Attributes
+    ----------
+    pardict : dict
+        Stores parameterized keywords and their values. For example, ``aper#0.1`` would result in ``{'aper':0.1}``.
+
+    modes : list of str
+        Individual keywords that make up the observation mode. This includes parameterized ones.
+
+    gtname : str
+        Graph table name.
+
+    compnames, thcompnames : list of str
+        Optical and thermal component names based on keyword look-ups. The look-up is done using :meth:`~pysynphot.tables.GraphTable.GetComponentsFromGT`.
+
+    primary_area : float
+        See :ref:`pysynphot-area` for how this is set.
+
+    components, pixscale : `None`
+        Reserved to be used by sub-classes.
+
+    binset : str
+        Filename containing the optimal wavelength set, or a string defining it.
+
+    """
     def __init__(self, obsmode, method='HSTGraphTable', graphtable=None):
         #Strip "band()" syntax if present
         tmatch=re.search(r'band\((.*?)\)',obsmode,re.IGNORECASE)
@@ -69,12 +117,12 @@ class BaseObservationMode(object):
         self.gtname = graphtable
 
         self.compnames, self.thcompnames = gt.GetComponentsFromGT(self.modes,1)
-        
+
         if hasattr(gt, 'primary_area'):
             self.primary_area = gt.primary_area
         else:
             self.primary_area = refs.PRIMARY_AREA
-        
+
         # For sensitivity calculations: 5.03411762e7 is hc in
         # the appropriate units
         self._constant = 5.03411762e7 * self.primary_area
@@ -93,10 +141,8 @@ class BaseObservationMode(object):
             #wavetable will raise a ValueError if the key was ambiguous
             print("Warning, %s"%str(e))
 
-
     def __str__(self):
         return self._obsmode
-
 
     def __len__(self):
         return len(self.components)
@@ -118,18 +164,38 @@ class BaseObservationMode(object):
         return files
 
     def GetFileNames(self):
+        """Return throughput files of this observation mode.
+
+        Returns
+        -------
+        throughput_filenames : list
+
+        """
         return self._throughput_filenames
 
     def showfiles(self):
-        """ Duplicate synphot showfiles behavior"""
+        """Like :meth:`GetFileNames` but print the filenames instead.
+        ``'clear'`` components are not printed.
+
+        .. note::
+
+            Similar to IRAF STSDAS SYNPHOT ``showfiles`` task.
+
+        """
         for name in self._throughput_filenames:
             if name != 'clear':
                 print(name)
 
     def bandWave(self):
-        """ Return the binned waveset most appropriate for the obsmode,
-        as defined by the wavecat.dat file. """
+        """Return the binned wavelength set most appropriate for the
+        observation mode, as defined by ``pysynphot.locations.wavecat``.
+        Also see :ref:`pysynphot-refdata`.
 
+        Returns
+        -------
+        bandwave : array_like
+
+        """
         if self.binset.startswith('('):
             return self._computeBandwave(self.binset)
         else:
@@ -186,7 +252,51 @@ class BaseObservationMode(object):
 
 
 class ObservationMode(BaseObservationMode):
+    """Class to handle optical observation mode.
 
+    Parameters
+    ----------
+    obsmode, method, graphtable
+        See `BaseObservationMode`.
+
+    comptable : str or `None`
+        Component table name. If `None`, it is taken from `~pysynphot.refs`.
+
+    component_dict : dict
+        Maps component filename to corresponding component object.
+
+    Attributes
+    ----------
+    pardict : dict
+        Stores parameterized keywords and their values. For example, ``aper#0.1`` would result in ``{'aper':0.1}``.
+
+    modes : list of str
+        Individual keywords that make up the observation mode. This includes parameterized ones.
+
+    gtname, ctname : str
+        Graph and component table names.
+
+    compnames, thcompnames : list of str
+        Optical and thermal component names based on keyword look-ups. The look-up is done using :meth:`~pysynphot.tables.GraphTable.GetComponentsFromGT`.
+
+    primary_area : float
+        See :ref:`pysynphot-area` for how this is set.
+
+    components : list
+        List of component objects. Each object has ``throughput_name`` (str), ``throughput`` (`~pysynphot.spectrum.SpectralElement`), and ``waveunits`` (`~pysynphot.units.Units`) attributes.
+
+    pixscale : number or `None`
+        Detector pixel scale, if applicable.
+
+    binset : str
+        Filename containing the optimal wavelength set, or a string defining it.
+
+    Raises
+    ------
+    IndexError
+        Component look-up failed.
+
+    """
     def __init__(self, obsmode, method='HSTGraphTable',graphtable=None,
                  comptable=None, component_dict = {}):
 
@@ -232,11 +342,20 @@ class ObservationMode(BaseObservationMode):
 
         return components
 
+    # Excluded from API doc for now until bug is fixed.
+    # https://aeon.stsci.edu/ssb/trac/astrolib/ticket/257
     def Sensitivity(self):
-        '''Calculate the sensitivity by combining the throughput curves
-        with hc/lambda to convert erg/cm^2/sec/Angstrom to counts/sec.
-        Multiplying this by the flux in erg/cm^2/sec/Angstrom will give
-        counts/sec/Angstrom'''
+        """Sensitivity spectrum to convert flux in
+        :math:`erg \\; cm^{-2} \\; s^{-1} \\; \\AA^{-1}` to
+        :math:`count s^{-1} \\AA^{-1}`. Calculation is done by
+        combining the throughput curves with
+        :math:`\\frac{h \\; c}{\\lambda}` .
+
+        Returns
+        -------
+        sensitivity : `~pysynphot.spectrum.TabularSpectralElement`
+
+        """
         sensitivity = spectrum.TabularSpectralElement()
 
         product = self._multiplyThroughputs()
@@ -248,8 +367,14 @@ class ObservationMode(BaseObservationMode):
         return sensitivity
 
     def Throughput(self):
-        '''Throughput returns the TabularSpectralElement obtained by
-        multiplying the SpectralElement components together.  Unitless'''
+        """Combined throughput from multiplying all the components together.
+
+        Returns
+        -------
+        throughput : `~pysynphot.spectrum.TabularSpectralElement` or `None`
+            Combined throughput.
+
+        """
         try:
             throughput = spectrum.TabularSpectralElement()
 
@@ -278,6 +403,19 @@ class ObservationMode(BaseObservationMode):
 
 
     def ThermalSpectrum(self):
+        """Calculate thermal spectrum.
+
+        Returns
+        -------
+        sp : `~pysynphot.spectrum.CompositeSourceSpectrum`
+            Thermal spectrum in ``photlam``.
+
+        Raises
+        ------
+        IndexError
+            Calculation failed.
+
+        """
         try:
             # delegate to subclass.
             thom = _ThermalObservationMode(self._obsmode)
@@ -288,6 +426,7 @@ class ObservationMode(BaseObservationMode):
 
 
 class _ThermalObservationMode(BaseObservationMode):
+    """Class to handle thermal observation mode."""
 
     def __init__(self, obsmode, method='HSTGraphTable',graphtable=None,
                  comptable=None, thermtable=None):

@@ -1,3 +1,33 @@
+"""This module handles locations of data files.
+
+**Global Variables**
+
+* ``pysynphot.locations.rootdir`` - Root directory for CDBS/CRDS
+  data files. By default, it is extracted from your ``PYSYN_CDBS``
+  environment variable.
+
+* ``pysynphot.locations.specdir`` - Data directory for
+  data files distributed with this software.
+
+* ``pysynphot.locations.CAT_TEMPLATE`` and
+  ``pysynphot.locations.KUR_TEMPLATE`` - String templates used for
+  `~pysynphot.catalog.Icat` to select spectra from catalogs.
+
+* ``pysynphot.locations.VegaFile`` - Vega spectrum to use for
+  ``vegamag`` calculations.
+
+* ``pysynphot.locations.EXTDIR`` - Directory containing extinction
+  curves.
+
+* ``pysynphot.locations.RedLaws`` - Dictionary mapping reddening laws
+  to data files or cached instances (see `~pysynphot.Cache`).
+
+* ``pysynphot.locations.wavecat`` - Data file for `~pysynphot.wavetable`.
+
+* ``pysynphot.locations.CONVERTDICT`` - Dictionary mapping IRAF-style
+  directory shortcuts to actual paths.
+
+"""
 from __future__ import division
 import glob
 import os
@@ -42,6 +72,19 @@ specdir = os.path.abspath(specdir) + os.sep
 # Map of filenames to their actual path
 _data_map = None
 def get_data_filename(filename):
+    """Map filename to its actual path.
+
+    Parameters
+    ----------
+    filename : str
+        Filename to search.
+
+    Returns
+    -------
+    path : str
+        Full path to the file in data directory.
+
+    """
     global _data_map
 
     if _data_map is None:
@@ -188,20 +231,27 @@ CONVERTDICT = {'crrefer':rootdir,
 
 
 def irafconvert(iraffilename):
-    '''Convert the IRAF file name (in directory$file format) to its
-    unix equivalent
+    """Convert the IRAF file name to its Unix equivalent.
+
+    Input can be in ``directory$file`` or ``$directory/file`` format.
+    If ``'$'`` is not found in the input string, it is returned as-is.
 
     Parameters
     ----------
-    Input:    string iraffilename
+    iraffilename : str
+        Filename in IRAF format.
 
     Returns
-    --------
-    Output:   string unixfilename
-          If '$' not found in the input string, just return
-          the input string
-          Non-string input raises an AttributeError'''
+    -------
+    unixfilename : str
+        Filename in Unix format.
 
+    Raises
+    ------
+    AttributeError
+        Input is not a string.
+
+    """
     convertdict = CONVERTDICT
 
     # remove duplicate separators and extraneous relative paths

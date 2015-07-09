@@ -1,8 +1,5 @@
+"""Utilities related to wavelength bin calculations."""
 from __future__ import division
-"""
-Utilities related to wavelength bin calculations.
-
-"""
 
 import numpy as np
 
@@ -23,7 +20,7 @@ def calculate_bin_edges(centers):
     -------
     edges : ndarray
         Array of bin edges. Will be 1D and have one more value
-        than `centers`.
+        than ``centers``.
 
     """
     centers = np.asanyarray(centers)
@@ -57,7 +54,7 @@ def calculate_bin_widths(edges):
     Returns
     -------
     widths : ndarray
-        Array of bin widths. Will be 1D and have one less value than `edges`.
+        Array of bin widths. Will be 1D and have one less value than ``edges``.
 
     """
     edges = np.asanyarray(edges)
@@ -83,7 +80,7 @@ def calculate_bin_centers(edges):
     Returns
     -------
     centers : ndarray
-        Array of bin centers. Will be 1D and have one less value than `edges`.
+        Array of bin centers. Will be 1D and have one less value than ``edges``.
 
     """
     edges = np.asanyarray(edges, dtype=np.float)
