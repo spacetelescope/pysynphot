@@ -2449,8 +2449,9 @@ class SpectralElement(Integrator):
             Throughput values.
 
         """
-        self.convert('angstroms')
-        return self.__call__(self.wave)
+        # See https://aeon.stsci.edu/ssb/trac/astrolib/ticket/169
+        wave = self.waveunits.Convert(self.wave, 'angstrom')
+        return self.__call__(wave)
 
     wave = property(GetWaveSet, doc='Wavelength property.')
     throughput = property(GetThroughput, doc='Throughput property.')
