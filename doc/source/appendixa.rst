@@ -16,39 +16,47 @@ The data files are available at STScI on all science computing clusters in the
 ``$PYSYN_CDBS`` directory. Off-site users can obtain these data via
 anonymous FTP (see :ref:`pysynphot-installation-setup`).
 
-+-------------------------------------+-------------------------------+-------+--------------+
-|Atlas/Catalog                        |Installation Path              |Stellar|Interpolatable|
-+=====================================+===============================+=======+==============+
-|:ref:`pysynphot-appendixa-ck04`      |$PYSYN_CDBS/grid/ck04models    |Yes    |Yes           |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-kurucz1993`|$PYSYN_CDBS/grid/k93models     |       |              |
-+-------------------------------------+-------------------------------+       +--------------+
-|:ref:`pysynphot-appendixa-calspec`   |$PYSYN_CDBS/calspec            |       |No            |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-pickles`   |$PYSYN_CDBS/grid/pickles       |       |              |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-bkmodels`  |$PYSYN_CDBS/grid/bkmodels      |       |              |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-bz77`      |$PYSYN_CDBS/grid/bz77          |       |              |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-gs`        |$PYSYN_CDBS/grid/gunnstryker   |       |              |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-bpgs`      |$PYSYN_CDBS/grid/bpgs          |       |              |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-jacobi`    |$PYSYN_CDBS/grid/jacobi        |       |              |
-+-------------------------------------+-------------------------------+-------+--------------+
-|:ref:`pysynphot-appendixa-phoenix`   |$PYSYN_CDBS/grid/phoenix       |No     |Yes           |
-+-------------------------------------+-------------------------------+       +--------------+
-|:ref:`pysynphot-appendixa-bc95`      |$PYSYN_CDBS/grid/bc95/templates|       |No            |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-kc96`      |$PYSYN_CDBS/grid/kc96          |       |              |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-agn`       |$PYSYN_CDBS/grid/agn           |       |              |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-galactic`  |$PYSYN_CDBS/grid/galactic      |       |              |
-+-------------------------------------+-------------------------------+       |              |
-|:ref:`pysynphot-appendixa-etcsource` |$PYSYN_CDBS/etc/source         |       |              |
-+-------------------------------------+-------------------------------+-------+--------------+
+Stellar models:
+
++-------------------------------------+-------------------------------+--------------+
+|Atlas/Catalog                        |Installation Path              |Interpolatable|
++=====================================+===============================+==============+
+|:ref:`pysynphot-appendixa-ck04`      |$PYSYN_CDBS/grid/ck04models    |Yes           |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-kurucz1993`|$PYSYN_CDBS/grid/k93models     |              |
++-------------------------------------+-------------------------------+--------------+
+|:ref:`pysynphot-appendixa-calspec`   |$PYSYN_CDBS/calspec            |No            |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-pickles`   |$PYSYN_CDBS/grid/pickles       |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-bkmodels`  |$PYSYN_CDBS/grid/bkmodels      |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-bz77`      |$PYSYN_CDBS/grid/bz77          |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-gs`        |$PYSYN_CDBS/grid/gunnstryker   |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-bpgs`      |$PYSYN_CDBS/grid/bpgs          |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-jacobi`    |$PYSYN_CDBS/grid/jacobi        |              |
++-------------------------------------+-------------------------------+--------------+
+
+Non-stellar models:
+
++-------------------------------------+-------------------------------+--------------+
+|Atlas/Catalog                        |Installation Path              |Interpolatable|
++=====================================+===============================+==============+
+|:ref:`pysynphot-appendixa-phoenix`   |$PYSYN_CDBS/grid/phoenix       |Yes           |
++-------------------------------------+-------------------------------+--------------+
+|:ref:`pysynphot-appendixa-bc95`      |$PYSYN_CDBS/grid/bc95/templates|No            |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-kc96`      |$PYSYN_CDBS/grid/kc96          |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-agn`       |$PYSYN_CDBS/grid/agn           |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-galactic`  |$PYSYN_CDBS/grid/galactic      |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-etcsource` |$PYSYN_CDBS/etc/source         |              |
++-------------------------------------+-------------------------------+--------------+
 
 
 .. _pysynphot-appendixa-ck04:

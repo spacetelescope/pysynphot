@@ -419,21 +419,16 @@ binary tree).
 
 The following table summarizes available operations in **pysynphot**:
 
-+---------+--------------+-------------+---------+-----------+
-|Operand 1|Operation     |Operand 2    |Result   |Commutative|
-+=========+==============+=============+=========+===========+
-|Source   |:math:`-`     |Source       |Composite|No         |
-|Spectrum +--------------+Spectrum     |Source   +-----------+
-|         |:math:`+`     |             |Spectrum |Yes        |
-|         +--------------+-------------+         |           |
-|         |:math:`\times`|Bandpass     |         |           |
-|         |              +-------------+         |           |
-|         |              |Scalar number|         |           |
-+---------+--------------+-------------+---------+-----------+
-|Bandpass |:math:`\times`|Bandpass     |Composite|Yes        |
-|         |              +-------------+Spectral |           |
-|         |              |Scalar number|Element  |           |
-+---------+--------------+-------------+---------+-----------+
+=============== ============== =============== ========================== ===========
+Operand 1       Operation      Operand 2       Result                     Commutative
+=============== ============== =============== ========================== ===========
+Source Spectrum :math:`-`      Source Spectrum Composite Source Spectrum  No
+Source Spectrum :math:`+`      Source Spectrum Composite Source Spectrum  Yes
+Source Spectrum :math:`\times` Bandpass        Composite Source Spectrum  Yes
+Source Spectrum :math:`\times` Scalar number   Composite Source Spectrum  Yes
+Bandpass        :math:`\times` Bandpass        Composite Spectral Element Yes
+Bandpass        :math:`\times` Scalar number   Composite Spectral Element Yes
+=============== ============== =============== ========================== ===========
 
 The example below creates a :ref:`pysynphot-powerlaw` source with reference
 wavelength of 10000 Angstroms and index of -2, and a :ref:`pysynphot-gaussian`
@@ -488,9 +483,9 @@ available in **pysynphot** and will raise an exception if used.
 |Name    |Description                |Reference                                               |
 +========+===========================+========================================================+
 |gal3    |Milky Way Diffuse, R(V)=3.1|:ref:`Cardelli et al. (1989) <synphot-ref-cardelli1989>`|
-+--------+**(Default)**              |                                                        |
+|        |**(Default)**              |                                                        |
 |mwavg   |                           |                                                        |
-+--------+                           |                                                        |
+|        |                           |                                                        |
 |`None`  |                           |                                                        |
 +--------+---------------------------+                                                        |
 |mwdense |Milky Way Dense, R(V)=5.0  |                                                        |

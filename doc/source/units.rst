@@ -79,7 +79,7 @@ flux units should be self-evident.
 |vegamag|`~pysynphot.units.VegaMag`||vegamag_math||
 +-------+--------------------------+--------------+
 |count  |`~pysynphot.units.Counts` ||counts_math| |
-+-------+                          |              |
+|       |                          |              |
 |counts |                          |              |
 +-------+--------------------------+--------------+
 |jy     |`~pysynphot.units.Jy`     ||jy_math|     |
@@ -87,13 +87,13 @@ flux units should be self-evident.
 |mjy    |`~pysynphot.units.mJy`    ||mjy_math|    |
 +-------+--------------------------+--------------+
 |ujy    |`~pysynphot.units.muJy`   ||mujy_math|   |
-+-------+                          |              |
+|       |                          |              |
 |mujy   |                          |              |
-+-------+                          |              |
+|       |                          |              |
 |microjy|                          |              |
 +-------+--------------------------+--------------+
 |njy    |`~pysynphot.units.nJy`    ||njy_math|    |
-+-------+                          |              |
+|       |                          |              |
 |nanojy |                          |              |
 +-------+--------------------------+--------------+
 
@@ -202,7 +202,7 @@ These are the recognized wavelength units for all spectrum objects:
 |Name          |Class Object                    |Unit            |
 +==============+================================+================+
 |m             |`~pysynphot.units.Meter`        |SI base unit for|
-+--------------+                                |length          |
+|              |                                |length          |
 |meter         |                                |                |
 +--------------+--------------------------------+----------------+
 |cm            |`~pysynphot.units.Cm`           ||cm_math|       |
@@ -210,21 +210,21 @@ These are the recognized wavelength units for all spectrum objects:
 |mm            |`~pysynphot.units.Mm`           ||mm_math|       |
 +--------------+--------------------------------+----------------+
 |um            |`~pysynphot.units.Micron`       ||micron_math|   |
-+--------------+                                |                |
+|              |                                |                |
 |micron        |                                |                |
-+--------------+                                |                |
+|              |                                |                |
 |microns       |                                |                |
 +--------------+--------------------------------+----------------+
 |nm            |`~pysynphot.units.Nm`           ||nm_math|       |
 +--------------+--------------------------------+----------------+
 |angstrom      |`~pysynphot.units.Angstrom`     ||angstrom_math| |
-+--------------+                                |                |
+|              |                                |                |
 |angstroms     |                                |                |
 +--------------+--------------------------------+----------------+
 |1/um          |`~pysynphot.units.InverseMicron`||invmicron_math||
-+--------------+                                |                |
+|              |                                |                |
 |inversemicron |                                |                |
-+--------------+                                |                |
+|              |                                |                |
 |inversemicrons|                                |                |
 +--------------+--------------------------------+----------------+
 |hertz         |`~pysynphot.units.Hz`           ||hz_math|       |
