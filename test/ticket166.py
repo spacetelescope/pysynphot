@@ -77,7 +77,7 @@ class Handmade(testutil.FPTestCase):
         self.ref=140
         try:
             self.tst=self.obs.countrate(range=[1016,1026])
-            self.assert_("No exception raised")
+            self.assertTrue("No exception raised")
         except PartialOverlap as e:
             print("Exception: ",str(e))
             self.failUnless(str(self.ref) in str(e))
@@ -87,7 +87,7 @@ class Handmade(testutil.FPTestCase):
         self.ref=172.75
         try:
             self.tst=self.obs.countrate(range=[1000,1016])
-            self.assert_(False, "No exception raised")
+            self.assertTrue(False, "No exception raised")
         except PartialOverlap as e:
             print("Exception: ",str(e))
             self.failUnless(str(self.ref) in str(e))

@@ -14,7 +14,6 @@
 """
 from __future__ import absolute_import, division, print_function
 
-import string
 import glob
 import re
 import os

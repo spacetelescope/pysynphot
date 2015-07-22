@@ -25,7 +25,7 @@ class FitsHdrCase(testutil.FPTestCase):
                                )
 
     def testheader(self):
-        self.assert_(len(self.sp.fheader) > 0)
+        self.assertTrue(len(self.sp.fheader) > 0)
 
     def testhval(self):
         self.assertEqual(self.sp.fheader['TARGETID'],
@@ -39,28 +39,28 @@ class SpecTestCase(testutil.FPTestCase):
 
     def testwave(self):
         wave=self.sp.wave
-        self.assert_(isinstance(wave,N.ndarray))
+        self.assertTrue(isinstance(wave,N.ndarray))
 
     def testflux(self):
         flux=self.sp.flux
-        self.assert_(isinstance(flux,N.ndarray))
+        self.assertTrue(isinstance(flux,N.ndarray))
 
     def testwaveunits(self):
-        self.assert_(isinstance(self.sp.waveunits,WaveUnits))
+        self.assertTrue(isinstance(self.sp.waveunits,WaveUnits))
 
     def testfluxunits(self):
-        self.assert_(isinstance(self.sp.fluxunits,FluxUnits))
+        self.assertTrue(isinstance(self.sp.fluxunits,FluxUnits))
 
     def testcalltype(self):
         callval=self.sp(N.arange(3000,10000))
-        self.assert_(isinstance(callval,N.ndarray))
+        self.assertTrue(isinstance(callval,N.ndarray))
 
     def testcallval(self):
         self.sp.convert('fnu')
         flux=self.sp.flux
         callval=self.sp(self.sp.wave)
-        point=len(flux)/2
-        self.assert_(flux[point] != callval[point])
+        point=len(flux)//2
+        self.assertTrue(flux[point] != callval[point])
 
     def testcallunits(self):
         self.sp.convert('flam')
@@ -68,7 +68,7 @@ class SpecTestCase(testutil.FPTestCase):
         self.sp.convert('photlam')
         callval=self.sp(self.sp.wave)
         flux=self.sp.flux
-        self.assert_(N.all(flux == callval))
+        self.assertTrue(N.all(flux == callval))
 
 class ZeroFluxTest(SpecTestCase):
     def setUp(self):
@@ -83,7 +83,7 @@ class ZeroFluxTest(SpecTestCase):
         callval=self.sp(self.sp.wave)
         point=len(flux)/2
         #becuase 0 flam does indeed equal 0 fnu
-        self.assert_(flux[point] == callval[point])
+        self.assertTrue(flux[point] == callval[point])
 
                                                 
 class NegFluxTest(SpecTestCase):

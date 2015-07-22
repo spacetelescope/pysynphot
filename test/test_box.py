@@ -25,7 +25,7 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(ref,tst)
 
     def testunits(self):
-        self.assert_(isinstance(self.bp.waveunits, Angstrom))
+        self.assertTrue(isinstance(self.bp.waveunits, Angstrom))
 
 class Ticket114(unittest.TestCase):
     def setUp(self):

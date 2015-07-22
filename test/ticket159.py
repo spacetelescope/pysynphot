@@ -23,7 +23,7 @@ class SuccessCase(testutil.FPTestCase):
 
     def testok(self):
         obs=S.Observation(self.sp,self.bp)
-        self.assert_('PartialOverlap' not in obs.warnings)
+        self.assertTrue('PartialOverlap' not in obs.warnings)
 
 
 class RenormCase(testutil.FPTestCase):
@@ -76,7 +76,7 @@ class ParserRenormCase(testutil.FPTestCase):
         self.sp = spparser.parse_spec(self.syncmd)
         self.tra = dict(spwarn=str(self.sp.warnings),
                         name=str(self.sp))
-        self.failIf('PartialRenorm' not in self.sp.warnings)
+        self.assertFalse('PartialRenorm' not in self.sp.warnings)
 
 
 class ETCTestCase(testutil.FPTestCase):
@@ -114,7 +114,7 @@ class ETCTestCase(testutil.FPTestCase):
     def testwarn(self):
         obs = S.Observation(self.sp, self.bp, force='taper')
         self.tra = dict(warnings=obs.warnings)
-        self.assert_('PartialOverlap' in obs.warnings)
+        self.assertTrue('PartialOverlap' in obs.warnings)
 
 
 
@@ -125,8 +125,8 @@ class TestComposite(testutil.FPTestCase):
 
     def testmult(self):
         sp2=self.sp*45
-        self.assert_('FakeWarn' in sp2.warnings)
+        self.assertTrue('FakeWarn' in sp2.warnings)
 
     def testsum(self):
         sp2=self.sp + S.FlatSpectrum(1)
-        self.assert_('FakeWarn' in sp2.warnings)
+        self.assertTrue('FakeWarn' in sp2.warnings)

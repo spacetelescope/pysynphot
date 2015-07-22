@@ -125,21 +125,21 @@ acs_wfc_ccd1_mjd  mjd#  10310  10320  clear"""
     #Included in validate: not separately available.
     #it -could- be, but that would be very inefficient
     #def testloopcheck(self):
-    #    self.assert_(not self.G._loopcheck())
+    #    self.assertTrue(not self.G._loopcheck())
 
     #I think this test is no longer necessary. The new
     #structure is built of links and not dependent on order
     #of traversal? But better test that that's true using
     #a test file
     def testascending(self):
-        self.assert_(self.G._ordercheck())
+        self.assertTrue(self.G._ordercheck())
 
     #also included in validate but not separately
     #def testreachable(self):
-    #    self.assert_(self.G._orphancheck())
+    #    self.assertTrue(self.G._orphancheck())
     def testvalidate(self):
         #Performs all the earlier checks
-        self.assert_(self.G.validate())
+        self.assertTrue(self.G.validate())
 
     def testallmodes(self):
         #Purpose: to generate all legal obsmodes.
@@ -162,7 +162,7 @@ class ThermalCase(GraphCase):
         self.G=GraphTable(self.fname)
 
     def test_consistent(self):
-        self.assert_(self.G._thermback())
+        self.assertTrue(self.G._thermback())
 
     def test_opt_therm(self):
         self.instring='nicmos,3,f222m'
@@ -172,7 +172,7 @@ class ThermalCase(GraphCase):
         #thm=self.G.traverse(self.instring,thermal=True)
         #The thermal path must be a superset of the optical path,
         #though it need not be a strict superset.
-        self.assert_(set(path.thermal)>=set(path.optical))
+        self.assertTrue(set(path.thermal)>=set(path.optical))
 
     def test_therm(self):
         self.instring='nicmos,2,f187n'
@@ -208,11 +208,11 @@ clear cos 40 20 clear
 
     def testorphan(self):
         msg = self.G.validate()
-        self.assert_('unreachable' in ''.join(msg))
+        self.assertTrue('unreachable' in ''.join(msg))
 
     def testloop(self):
         msg = self.G.validate()
-        self.assert_('Loop' in ''.join(msg))
+        self.assertTrue('Loop' in ''.join(msg))
 
 class MissingGraph(TestCase):
     #remove the last column of the simple graph case

@@ -16,20 +16,20 @@ class aticket123(testutil.FPTestCase):
 
     def test1(self):
         self.xt=S.Extinction(0.3,'mwdense')
-        self.assert_(isinstance(self.xt,spectrum.SpectralElement))
+        self.assertTrue(isinstance(self.xt,spectrum.SpectralElement))
 
     def test2(self):
         #test sideeffect of t1
         self.xt=S.Cache.RedLaws['mwdense']
-        self.assert_(isinstance(self.xt,reddening.RedLaw))
+        self.assertTrue(isinstance(self.xt,reddening.RedLaw))
 
     def test3(self):
         foo=S.Cache.RedLaws['smcbar']
-        self.assert_(os.path.isfile(foo))
+        self.assertTrue(os.path.isfile(foo))
 
     def test4(self):
         self.xt=S.Extinction(0.2,S.Cache.RedLaws['smcbar'])
-        self.assert_(isinstance(self.xt,spectrum.SpectralElement))
+        self.assertTrue(isinstance(self.xt,spectrum.SpectralElement))
 
     def test5(self):
         self.assertRaises(ValueError,
@@ -39,8 +39,8 @@ class aticket123(testutil.FPTestCase):
 
     def test6(self):
         self.xt=S.Extinction(0.3)
-        self.assert_(isinstance(self.xt,spectrum.SpectralElement))
-        self.assert_('mwavg' in self.xt.name.lower())
+        self.assertTrue(isinstance(self.xt,spectrum.SpectralElement))
+        self.assertTrue('mwavg' in self.xt.name.lower())
 
 
 class multi(testutil.FPTestCase):
@@ -54,7 +54,7 @@ class multi(testutil.FPTestCase):
     def testpoints(self):
         self.tw=N.array([5500,5550,5600])
         self.tst=self.newsmc(self.tw)
-        self.assert_(self.tst[-1]>self.tst[0])
+        self.assertTrue(self.tst[-1]>self.tst[0])
 
     def testproperty(self):
         self.assertEqualNumpy(self.newsmc.throughput,
@@ -87,14 +87,14 @@ class ticket135_desc(testutil.FPTestCase):
         self.T=self.bp(self.ascending)
 
     def test1(self):
-        self.assert_(N.alltrue(self.bp.throughput == self.bp._throughputtable))
+        self.assertTrue(N.alltrue(self.bp.throughput == self.bp._throughputtable))
 
     def test2(self):
-        self.assert_(N.alltrue(self.T == self.bp._throughputtable[::-1]),
+        self.assertTrue(N.alltrue(self.T == self.bp._throughputtable[::-1]),
                      str(self.T))
 
     def test3(self):
-         self.assert_(N.alltrue(self.bp.throughput == self.bp(self.bp.wave)))
+         self.assertTrue(N.alltrue(self.bp.throughput == self.bp(self.bp.wave)))
 
 
 class ticket135_asc(ticket135_desc):

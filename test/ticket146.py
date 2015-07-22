@@ -19,19 +19,19 @@ class Precision(testutil.FPTestCase):
         self.fname='/tmp/spsingle.fits'
         self.sp.writefits(self.fname,precision='single')
         f=pyfits.open(self.fname)
-        self.assert_(f[1].header['tform2'].lower() == 'e')
+        self.assertTrue(f[1].header['tform2'].lower() == 'e')
 
     def testdouble(self):
         self.fname='/tmp/spdouble.fits'
         self.sp.writefits(self.fname,precision='double')
         f=pyfits.open(self.fname)
-        self.assert_(f[1].header['tform2'].lower() == 'd')
+        self.assertTrue(f[1].header['tform2'].lower() == 'd')
 
     def testdefault(self):
         self.fname='/tmp/spdefault.fits'
         self.sp.writefits(self.fname)
         f=pyfits.open(self.fname)
-        self.assert_(f[1].header['tform2'].lower() == 'd')
+        self.assertTrue(f[1].header['tform2'].lower() == 'd')
 
 class PrecisionBP(Precision):
     def setUp(self):
@@ -56,7 +56,7 @@ class Sorted(testutil.FPTestCase):
         sp=S.FileSpectrum(self.fname)
         idx=N.where(sp.wave == 500)
         num=len(idx[0])
-        self.failIf(num != 1, "%d occurrences found"%num)
+        self.assertFalse(num != 1, "%d occurrences found"%num)
 
     def testinputfix(self):
         self.assertRaises(exceptions.DuplicateWavelength,
@@ -78,7 +78,7 @@ class SortedBP(Sorted):
         bp=S.FileBandpass(self.fname)
         idx=N.where(bp.wave == 4)
         num=len(idx[0])
-        self.failIf(num != 1, "%d occurrences found"%num)
+        self.assertFalse(num != 1, "%d occurrences found"%num)
 
     def testinputfix(self):
         self.assertRaises(exceptions.DuplicateWavelength,

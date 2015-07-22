@@ -14,4 +14,4 @@ class ErrcolCase(testutil.FPTestCase):
         #It passes if the above statement does not raise an exception,
         #but let's make sure it got some values
         tst=N.all(obs.throughput == 0)
-        self.failIf(tst)
+        self.assertFalse(tst)

@@ -93,7 +93,7 @@ class CornerCase(testutil.FPTestCase):
         self.sp=S.ArraySpectrum(wave=w,flux=f,fluxunits='flam')
 
     def testpartial(self):
-        self.assert_('partial',
+        self.assertTrue('partial',
                      self.bp.check_overlap(self.sp))
 
     def testsmart(self):
@@ -117,7 +117,7 @@ class BPIntegrate(testutil.FPTestCase):
         w=self.bp.wave
         tst=self.bp.integrate(w[0:len(w)/2])
         #epsilon due to the nature of trapezoid integration
-        self.assert_(abs(self.ref/2.0-tst)<=0.025)
+        self.assertTrue(abs(self.ref/2.0-tst)<=0.025)
 
 
 class OVBase(object):
@@ -256,4 +256,4 @@ class SpPartialNz2(OVBase,testutil.FPTestCase):
 
 ##     def testconstructed(self):
 ##         thru=self.bp.throughput
-##         self.assert_(N.all(N.array([.001,.001,0.0]) == thru[-3:]))
+##         self.assertTrue(N.all(N.array([.001,.001,0.0]) == thru[-3:]))

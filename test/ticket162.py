@@ -40,5 +40,5 @@ class ETCTestCase(testutil.FPTestCase):
 
     def testwarn(self):
         obs=S.Observation(self.sp,self.bp,force='taper')
-        self.assert_('PartialOverlap' in obs.warnings)
+        self.assertTrue('PartialOverlap' in obs.warnings)
 

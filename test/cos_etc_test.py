@@ -15,6 +15,7 @@ from pysynphot import spparser
 from pysynphot.observation import Observation
 from pysynphot import renorm
 import pysynphot as S
+import pysynphot as S
 
 import testutil
 
@@ -837,7 +838,7 @@ class Ticket87(testutil.FPTestCase):
 
     def testminwave(self):
         tst=self.sp.redshift(self.z)
-        self.assert_(self.sp.wave.min() == tst.wave.min(),"wave.min=%f"%tst.wave.min())
+        self.assertTrue(self.sp.wave.min() == tst.wave.min(),"wave.min=%f"%tst.wave.min())
 
 
 

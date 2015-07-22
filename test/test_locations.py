@@ -1,8 +1,9 @@
-import os
+import os, sys
 import warnings
 
 from nose import tools
 
+PY3K = sys.version_info[0] >= 3
 PYSYN_CDBS = os.environ['PYSYN_CDBS']
 
 @tools.nottest
@@ -14,12 +15,14 @@ def set_test_cdbs():
     warnings.simplefilter('ignore')
 
     import pysynphot.locations as locations
+    if PY3K: from importlib import reload
     reload(locations)
 
 
 def restore_cdbs():
     os.environ['PYSYN_CDBS'] = PYSYN_CDBS
     import pysynphot.locations as locations
+    if PY3K: from importlib import reload
     reload(locations)
 
 

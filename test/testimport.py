@@ -3,6 +3,7 @@ import os
 import sys
 import warnings
 import unittest
+PY3K = sys.version_info[0] >= 3
 
 class ticket136(unittest.TestCase):
     def setUp(self):
@@ -18,6 +19,7 @@ class ticket136(unittest.TestCase):
         #that results in a successful import...!
         warnings.simplefilter("error", UserWarning)
         if 'pysynphot.locations' in sys.modules:
+            if PY3K: from importlib import reload
             func = reload
             mod = sys.modules['pysynphot.locations']
         else:
@@ -27,6 +29,6 @@ class ticket136(unittest.TestCase):
 
     def testimport(self):
         import pysynphot as S
-        self.assert_(True)
+        self.assertTrue(True)
 
 

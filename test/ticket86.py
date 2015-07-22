@@ -30,18 +30,18 @@ class Keepneg(testutil.FPTestCase):
         self.obs=Observation(self.sp,self.bp)
         rate=self.obs.countrate()
 
-        self.assert_(abs(rate-self.refrate)<1.0, msg="tst %f ref %f"%(rate,self.refrate))
+        self.assertTrue(abs(rate-self.refrate)<1.0, msg="tst %f ref %f"%(rate,self.refrate))
 
     def testkeeprate(self):
         self.sp=S.FileSpectrum(self.fname,keepneg=True)
         self.obs=Observation(self.sp,self.bp)
         rate=self.obs.countrate()
-        self.assert_(rate < self.refrate)
+        self.assertTrue(rate < self.refrate)
 
     def testkeepmin(self):
         self.sp=S.FileSpectrum(self.fname,keepneg=True)
         self.obs=Observation(self.sp,self.bp)
-        self.assert_(self.obs.flux.min() < 0)
+        self.assertTrue(self.obs.flux.min() < 0)
 
     def testarray(self):
         waves=N.arange(1000,6000,1000)

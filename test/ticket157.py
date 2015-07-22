@@ -59,7 +59,7 @@ class OverlapBug(testutil.FPTestCase):
         self.obs=S.Observation(self.sp,self.bp,force='taper')
         idx=N.where(self.obs.wave==self.refwave)
         test=self.obs.flux.item(idx[0])
-        self.assert_(test==0,'Expected 0, got %f'%test)
+        self.assertTrue(test==0,'Expected 0, got %f'%test)
 
     def testextrap(self):
         self.obs=S.Observation(self.sp,self.bp,force='extrap')
@@ -151,25 +151,25 @@ class AnalyticCase(testutil.FPTestCase):
         os.unlink('ac_pl.fits')
 
     def testbb(self):
-        self.assert_(self.bb.isAnalytic)
+        self.assertTrue(self.bb.isAnalytic)
 
     def testfile(self):
-        self.failIf(self.fspec.isAnalytic)
+        self.assertFalse(self.fspec.isAnalytic)
 
     def testtab(self):
-        self.failIf(self.tspec.isAnalytic)
+        self.assertFalse(self.tspec.isAnalytic)
 
     def testcomp1(self):
         x=self.bb+self.em
-        self.assert_(x.isAnalytic)
+        self.assertTrue(x.isAnalytic)
 
     def testcomp2(self):
         x=self.bb+self.tspec
-        self.failIf(x.isAnalytic)
+        self.assertFalse(x.isAnalytic)
 
     def testcomp3(self):
         x=self.flat*2.6
-        self.assert_(x.isAnalytic)
+        self.assertTrue(x.isAnalytic)
 
 #These tests were part of the original nightly pysynphot test suite
 #that began failing when #157 was implemented because they really

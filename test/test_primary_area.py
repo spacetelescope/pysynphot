@@ -1,9 +1,11 @@
 # test various aspects of having an area keyword in graphtable headers and
 # propogating that area back to places where it's used
 
-import os
+import os, sys
 
 import numpy as np
+
+PY3K = sys.version_info[0] >= 3
 
 from pysynphot import locations
 from pysynphot import refs
@@ -33,6 +35,7 @@ def setUpModule():
 
 def tearDownModule():
     # Reset refs
+    if PY3K: from importlib import reload
     reload(refs)
 
 

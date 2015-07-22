@@ -137,6 +137,6 @@ class TestAreaChanges(unittest.TestCase):
         ref=p.ToCounts(w,w)
         setref(area=10)
         tst=p.ToCounts(w,w)
-        self.assert_(N.all(ref != tst))
+        self.assertTrue(N.all(ref != tst))
 
 

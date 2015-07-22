@@ -63,30 +63,48 @@ syredlaws = [
     'xgal'
     ]
 
-class Token(object):
+class OrderedByType(object):
+    def __init__(self, type):
+        self.type = type
+    def _compare(self, o):
+        return (self.type > str(o)) - (self.type < str(o)) 
+    def __cmp__(self, o):
+        return self._compare(o)
+    def __lt__(self, o):
+        return self._compare(o) < 0
+    def __le__(self, o):
+        return self._compare(o) <= 0
+    def __eq__(self, o):
+        return self._compare(o) == 0
+    def __ge__(self, o):
+        return self._compare(o) >= 0
+    def __gt__(self, o):
+        return self._compare(o) > 0
+    def __ne__(self, o):
+        return self._compare(o) != 0
+    
+class Token(OrderedByType):
     def __init__(self, type=None, attr=None):
         self.type = type
         self.attr = attr
-    def __cmp__(self, o):
-        return cmp(self.type, o)
     def __repr__(self):
         if self.attr is not None:
             return str(self.attr)
         else:
             return self.type
 
-class AST(object):
+class AST(OrderedByType):
     def __init__(self, type):
         self.type = type
         self._kids = []
     def __getitem__(self, i):
-        return self._kids[i]
+        return self._kids.__getitem__(i)
     def __len__(self):
         return len(self._kids)
+    def __setitem__(self, i, v):
+        return self._kids.__setitem__(i, v)
     def __setslice__(self, low, high, seq):
         self._kids[low:high] = seq
-    def __cmp__(self, o):
-        return cmp(self.type, o)
 
 class BaseScanner(GenericScanner):
     def __init__(self):

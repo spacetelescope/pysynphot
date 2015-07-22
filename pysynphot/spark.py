@@ -199,7 +199,7 @@ class GenericParser(object):
 
                         self.buildState(tokens[i], states, i, tree)
 
-                #_dump(tokens, states)
+                # _dump(tokens, states)
 
                 if i < len(tokens)-1 or states[i+1] != [(self.startRule, 2, 0)]:
                         del tokens[-1]
@@ -217,7 +217,6 @@ class GenericParser(object):
                 for item in state:
                         rule, pos, parent = item
                         lhs, rhs = rule
-
                         #
                         #  A -> a . (completer)
                         #
@@ -324,6 +323,7 @@ class GenericParser(object):
                         elif token == nextSym:
                                 #assert new not in states[i+1]
                                 states[i+1].append((rule, pos+1, parent))
+
                 
         def buildTree(self, tokens, tree, root):
                 stack = []
@@ -556,13 +556,14 @@ class GenericASTMatcher(GenericParser):
 
 def _dump(tokens, states):
         for i in range(len(states)):
-                print('state', i)
+                # print('state', i)
                 for (lhs, rhs), pos, parent in states[i]:
                         print('\t', lhs, '::=', end=' ')
                         print(' '.join(rhs[:pos]), end=' ')
                         print('.', end=' ')
                         print(' '.join(rhs[pos:]), end=' ')
                         print(',', parent)
+                        
                 if i < len(tokens):
                         print()
                         print('token', str(tokens[i]))

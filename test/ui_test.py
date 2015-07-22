@@ -43,13 +43,13 @@ class FileTestCase(testutil.FPTestCase):
 
     def testname(self):
         "ui_test.FileTestCase('testname'): Tests r163"
-        self.assert_(str(self.sp) == self.fname)
-        self.assert_(self.sp.name == self.fname)
+        self.assertTrue(str(self.sp) == self.fname)
+        self.assertTrue(self.sp.name == self.fname)
 
     def testresample(self):
         "ui_test.FileTestCase('testresample'): Tests #24"
         sp2=self.sp.resample(N.arange(10000,18000,2))
-        self.failIf(sp2.fluxunits is None)
+        self.assertFalse(sp2.fluxunits is None)
         #self.assertEqualNumpy(sp2.wave, N.arange(10000,18000,2))
 
     def testadd(self):
@@ -91,11 +91,11 @@ class TabTestCase(testutil.FPTestCase):
 
     def testwaveunits(self):
         "ui_test.TabTestCase('testwaveunits'): waveunits equal"
-        self.assert_(type(self.new_sp.waveunits) == type(self.old_sp.waveunits))
+        self.assertTrue(type(self.new_sp.waveunits) == type(self.old_sp.waveunits))
 
     def testfluxunits(self):
         "ui_test.TabTestCase('testfluxunits'): fluxunits equal"
-        self.assert_(type(self.new_sp.fluxunits) == type(self.old_sp.fluxunits))
+        self.assertTrue(type(self.new_sp.fluxunits) == type(self.old_sp.fluxunits))
 
     def testinternalwave(self):
         "ui_test.TabTetstCase('testinternalwave'): wavetabs equal"
@@ -133,11 +133,11 @@ class FSSTestCase(testutil.FPTestCase):
 
     def testwaveunits(self):
         "ui_test.FSSTestCase('testwaveunits'): waveunits equal"
-        self.assert_(type(self.new_sp.waveunits) == type(self.old_sp.waveunits))
+        self.assertTrue(type(self.new_sp.waveunits) == type(self.old_sp.waveunits))
 
     def testfluxunits(self):
         "ui_test.FSSTestCase('testfluxunits'): fluxunits equal"
-        self.assert_(type(self.new_sp.fluxunits) == type(self.old_sp.fluxunits))
+        self.assertTrue(type(self.new_sp.fluxunits) == type(self.old_sp.fluxunits))
 
     def testinternalwave(self):
         "ui_test.FSSTestCase('testinternalwave'): waveteable equal"
@@ -173,7 +173,7 @@ class BandTestCase(testutil.FPTestCase):
     def testompass(self):
         "ui_test.BandTestCase('testompass'): Tests r172"
         bp1=ObsBandpass('acs,hrc,f555w')
-        self.assert_(len(bp1) == 6)
+        self.assertTrue(len(bp1) == 6)
 
 class UnitTestCase(testutil.FPTestCase):
     def setUp(self):
@@ -184,7 +184,7 @@ class UnitTestCase(testutil.FPTestCase):
         Can't test against 1.0 because there's computations & some
         numerical issues."""
         self.uspec.convert('fnu')
-        self.failIf(self.uspec.flux.mean() == 1.0)
+        self.assertFalse(self.uspec.flux.mean() == 1.0)
 
 class EnforceUnitsCase(testutil.FPTestCase):
     def setUp(self):
@@ -220,12 +220,12 @@ class TabularCase(testutil.FPTestCase):
         self.assertApproxNumpy(self.influx,self.sp.flux)
 
     def testunits(self):
-        self.assert_(isinstance(self.sp.waveunits,units.Angstrom))
-        self.assert_(isinstance(self.sp.fluxunits, units.ABMag))
+        self.assertTrue(isinstance(self.sp.waveunits,units.Angstrom))
+        self.assertTrue(isinstance(self.sp.fluxunits, units.ABMag))
 
     def testconvert(self):
         self.sp.convert('flam')
-        self.failIf(N.any(self.influx == self.sp.flux))
+        self.assertFalse(N.any(self.influx == self.sp.flux))
 
     def teststring(self):
         foo=str(self.sp)
@@ -239,11 +239,11 @@ class Tab2(TabularCase):
                                 name='Tab2 spectrum')
 
     def testunits(self):
-        self.assert_(isinstance(self.sp.waveunits,units.Nm))
-        self.assert_(isinstance(self.sp.fluxunits, units.Fnu))
+        self.assertTrue(isinstance(self.sp.waveunits,units.Nm))
+        self.assertTrue(isinstance(self.sp.fluxunits, units.Fnu))
 
     def teststring(self):
-        self.assert_(str(self.sp) == 'Tab2 spectrum')
+        self.assertTrue(str(self.sp) == 'Tab2 spectrum')
 
 if __name__ == '__main__':
     if 'debug' in sys.argv:

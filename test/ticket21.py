@@ -48,21 +48,21 @@ class ParmCase(testutil.FPTestCase):
 
     def test1(self):
         "parm# in modes"
-        self.assert_(self.parkey+'#' in self.om.modes)
+        self.assertTrue(self.parkey+'#' in self.om.modes)
 
 
     def test2(self):
         "filename has a #"
-        self.assert_(self.reffile in self.om._throughput_filenames)
+        self.assertTrue(self.reffile in self.om._throughput_filenames)
 
     def test3(self):
         "dict entry"
-        self.assert_(self.om.pardict[self.parkey]==self.parval)
+        self.assertTrue(self.om.pardict[self.parkey]==self.parval)
 
     def test4(self):
         "interpolated type"
         try:
-            self.assert_(isinstance(self.om.components[self.idx].throughput,
+            self.assertTrue(isinstance(self.om.components[self.idx].throughput,
                                 spectrum.InterpolatedSpectralElement))
         except IndexError:
             print(len(self.om.components))
@@ -78,14 +78,14 @@ class TwoParms(testutil.FPTestCase):
     def test1(self):
         "parm# in modes"
         for k in self.pardict:
-            self.assert_(k + '#' in self.om.modes)
+            self.assertTrue(k + '#' in self.om.modes)
 
 
 
     def test3(self):
         "dict vals"
         for k in self.pardict:
-            self.assert_(self.om.pardict[k] == self.pardict[k])
+            self.assertTrue(self.om.pardict[k] == self.pardict[k])
 
 
 if __name__ == '__main__':

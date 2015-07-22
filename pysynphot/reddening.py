@@ -2,12 +2,12 @@
 :ref:`reddening laws and extinction <pysynphot-extinction>` calculations.
 
 """
-from __future__ import division, print_function
+from __future__ import absolute_import, division, print_function
 
 import pyfits
-from spectrum import ArraySpectralElement
-import Cache
-import extinction #temporary(?) backwards compatibility
+from .spectrum import ArraySpectralElement
+from . import Cache
+from . import extinction #temporary(?) backwards compatibility
 
 
 class CustomRedLaw(object):

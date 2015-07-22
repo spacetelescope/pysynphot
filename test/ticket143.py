@@ -45,7 +45,7 @@ class TestDefault(unittest.TestCase):
         self.tda['test']=tst
         #Since we're getting the ref out of the same array, the
         #numbers really should be exactly the same
-        self.assert_(abs(self.tra['discrep']) == 0,
+        self.assertTrue(abs(self.tra['discrep']) == 0,
                      'expected %f, got %f'%(ref,tst))
 
     def testp3(self):
@@ -57,7 +57,7 @@ class TestDefault(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tda['test']=tst
-        self.assert_(abs(self.tra['discrep']) == 0.0,
+        self.assertTrue(abs(self.tra['discrep']) == 0.0,
                      'expected %f, got %f'%(ref,tst))
 
     def testp8(self):
@@ -69,7 +69,7 @@ class TestDefault(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tda['test']=tst
-        self.assert_(abs(self.tra['discrep']) ==0.0,
+        self.assertTrue(abs(self.tra['discrep']) ==0.0,
                      'expected %f, got %f'%(ref,tst))
 
 class TestStisDef(unittest.TestCase):
@@ -109,7 +109,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tra['test']=tst
-        self.assert_(self.tra['discrep']<=self.tda['thresh'],
+        self.assertTrue(self.tra['discrep']<=self.tda['thresh'],
                      'expected %f, got %f'%(ref,tst))
 
     def testp3(self):
@@ -118,7 +118,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tra['test']=tst
-        self.assert_(self.tra['discrep']<=self.tda['thresh'],
+        self.assertTrue(self.tra['discrep']<=self.tda['thresh'],
                      'expected %f, got %f'%(ref,tst))
 
     def testp8(self):
@@ -127,7 +127,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tra['test']=tst
-        self.assert_(self.tra['discrep']<=self.tda['thresh'],
+        self.assertTrue(self.tra['discrep']<=self.tda['thresh'],
                      'expected %f, got %f'%(ref,tst))
 
     def testnativeref(self):
@@ -145,7 +145,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['test']=tst
         #This one may not be an exact match. Although refwave is
         #an exact match in the lookup,
-        self.assert_(ref == tst,
+        self.assertTrue(ref == tst,
                      'expected %f, got %f'%(ref,tst))
 
 ## >>> N.where(obs.wave == 1450)
@@ -170,7 +170,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tra['test']=tst
-        self.assert_(self.tra['discrep']<=self.tda['thresh'])
+        self.assertTrue(self.tra['discrep']<=self.tda['thresh'])
 
     def testnp1(self):
         self.refwave=1450.1
@@ -181,7 +181,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tra['test']=tst
-        self.assert_(self.tra['discrep']<=self.tda['thresh'])
+        self.assertTrue(self.tra['discrep']<=self.tda['thresh'])
 
     def testnp2(self):
         self.refwave=1450.2
@@ -192,7 +192,7 @@ class TestStisDef(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tra['test']=tst
-        self.assert_(self.tra['discrep']<=self.tda['thresh'])
+        self.assertTrue(self.tra['discrep']<=self.tda['thresh'])
 
     def testnlast(self):
         self.refwave=self.obs.binwave[-1]
@@ -203,4 +203,4 @@ class TestStisDef(unittest.TestCase):
         self.tra['discrep']=(ref-tst)/ref
         self.tda['ref']=ref
         self.tra['test']=tst
-        self.assert_(self.tra['discrep']<=self.tda['thresh'])
+        self.assertTrue(self.tra['discrep']<=self.tda['thresh'])

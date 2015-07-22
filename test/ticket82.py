@@ -39,11 +39,11 @@ class goodcase(testutil.FPTestCase):
         os.remove(self.fname)
 
     def testlength(self):
-        self.assert_(self.len == len(self.sp.wave))
+        self.assertTrue(self.len == len(self.sp.wave))
 
     def testgarbage(self):
         idx=N.isfinite(self.sp.flux)
-        self.assert_(N.all(idx))
+        self.assertTrue(N.all(idx))
 
 
 class header1(goodcase):

@@ -94,7 +94,7 @@ class TestArithmetic(unittest.TestCase):
     self.obs.convert('counts')
 
   def test_class(self):
-    self.assert_(isinstance(self.obs, Observation))
+    self.assertTrue(isinstance(self.obs, Observation))
 
   def test_mult_scalar(self):
     tst = self.obs*3

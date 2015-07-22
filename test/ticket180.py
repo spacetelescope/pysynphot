@@ -15,7 +15,7 @@ class AnalyticSP(testutil.FPTestCase):
 
     def testsp(self):
         tst=self.sp(5000)
-        self.assert_(tst == 10)
+        self.assertTrue(tst == 10)
 
     def testcompspec(self):
         self.sp=S.BlackBody(5500)+S.FlatSpectrum(1)
