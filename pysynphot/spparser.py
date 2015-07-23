@@ -63,25 +63,30 @@ syredlaws = [
     'xgal'
     ]
 
+def mytype(o):
+    if hasattr(o, 'type'):
+        t = o.type
+    else:
+        t = str(o)
+    return t
+
 class OrderedByType(object):
     def __init__(self, type):
         self.type = type
-    def _compare(self, o):
-        return (self.type > str(o)) - (self.type < str(o)) 
     def __cmp__(self, o):
-        return self._compare(o)
+        return cmp(mytype(self), mytype(o))
     def __lt__(self, o):
-        return self._compare(o) < 0
+        return mytype(self) < mytype(o)
     def __le__(self, o):
-        return self._compare(o) <= 0
+        return mytype(self) <= mytype(o)
     def __eq__(self, o):
-        return self._compare(o) == 0
+        return mytype(self) == mytype(o)
     def __ge__(self, o):
-        return self._compare(o) >= 0
+        return mytype(self) >= mytype(o)
     def __gt__(self, o):
-        return self._compare(o) > 0
+        return mytype(self) > mytype(o)
     def __ne__(self, o):
-        return self._compare(o) != 0
+        return mytype(self) != mytype(o)
     
 class Token(OrderedByType):
     def __init__(self, type=None, attr=None):
