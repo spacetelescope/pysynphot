@@ -1,9 +1,12 @@
+from __future__ import print_function
 import os, sys
 import warnings
 
 from nose import tools
 
 PY3K = sys.version_info[0] >= 3
+if PY3K: from importlib import reload
+
 PYSYN_CDBS = os.environ['PYSYN_CDBS']
 
 @tools.nottest
@@ -13,16 +16,12 @@ def set_test_cdbs():
     # the fake cdbs is incomplete and pysynphot prints some warnings,
     # this will suppress them.
     warnings.simplefilter('ignore')
-
     import pysynphot.locations as locations
-    if PY3K: from importlib import reload
     reload(locations)
-
 
 def restore_cdbs():
     os.environ['PYSYN_CDBS'] = PYSYN_CDBS
     import pysynphot.locations as locations
-    if PY3K: from importlib import reload
     reload(locations)
 
 
