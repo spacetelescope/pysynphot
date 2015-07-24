@@ -15,6 +15,7 @@ Basic idea:
         print something to stdout
 
 """
+from __future__ import print_function
 import sqlite3
 import time, sys
 
@@ -57,7 +58,7 @@ def run(test_run,maxoutliers=50,maxdev=0.015):
                     if ( (abs(discrepmean) <= maxdev) and
                          (n_outliers < maxoutliers) ):
                         idlist.append(key)
-                        print name, discrepmean, n_outliers
+                        print(name, discrepmean, n_outliers)
                         #If it passes the test, update the attention flag
                         db.execute("""UPDATE result_scalar SET attn = 'N'
                                       WHERE key_id = ?""",(key,))
@@ -69,7 +70,7 @@ def run(test_run,maxoutliers=50,maxdev=0.015):
 
     db.commit()
     db.close()
-    print len(idlist), " acceptable failures found and marked"
+    print(len(idlist), " acceptable failures found and marked")
 
     #Make a qid so we can find these later if we want to
     if len(idlist) > 0:

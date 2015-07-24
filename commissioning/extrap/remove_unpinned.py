@@ -1,6 +1,7 @@
 """ Use this script to remove the pinned versions from the allpinned
 directory created by extrap.py."""
 
+from __future__ import print_function
 from extrap import fincre
 import os, sys
 
@@ -12,11 +13,11 @@ def run(flist,dirname):
         #delete the file
         try:
             os.unlink(os.path.join(dirname,newname))
-        except (OSError,IOError), e:
-            print "Error removing %s"%newname
-            print "...%s"%str(e)
+        except (OSError,IOError) as e:
+            print("Error removing %s"%newname)
+            print("...%s"%str(e))
     f.close()
 
 if __name__ == '__main__':
-    print ' '.join(sys.argv)
+    print(' '.join(sys.argv))
     run(*sys.argv[1:])

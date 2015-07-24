@@ -11,6 +11,7 @@ with zeros. There are three kinds of files to be considered:
   - update the history or comment records accordingly
 """
 
+from __future__ import print_function
 import re, time, os, sys
 import pyfits
 import numpy as N
@@ -215,7 +216,7 @@ def fincre(oldname):
 if __name__ == '__main__':
     for fname in sys.argv[1:]:
         retval=run(fname)
-        print retval
+        print(retval)
 
 def buildtmc(tmcname):
     from pyraf import iraf
