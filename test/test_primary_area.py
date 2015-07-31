@@ -6,6 +6,7 @@ import os, sys
 import numpy as np
 
 PY3K = sys.version_info[0] >= 3
+if PY3K: from importlib import reload
 
 from pysynphot import locations
 from pysynphot import refs
@@ -35,7 +36,6 @@ def setUpModule():
 
 def tearDownModule():
     # Reset refs
-    if PY3K: from importlib import reload
     reload(refs)
 
 

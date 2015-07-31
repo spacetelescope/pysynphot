@@ -17,7 +17,7 @@ class AddInverseMicron(testutil.FPTestCase):
         self.awave=(refs._default_waveset.copy()[::10])[0:10]
         
     def teststr(self):
-        self.failUnless(str(self.x)=='1/um')
+        self.assertTrue(str(self.x)=='1/um')
 
     def testunittoang(self):
         test=self.x.Convert(self.mwave,'angstrom')
@@ -45,7 +45,7 @@ class AddInverseMicron(testutil.FPTestCase):
                              waveunits='angstrom',
                              fluxunits='flam')
         test.convert('1/um')
-        self.failUnless(isinstance(test.waveunits,units.InverseMicron))
+        self.assertTrue(isinstance(test.waveunits,units.InverseMicron))
         self.assertApproxNumpy(test.wave,self.mwave)
 
     def testcreate(self):
@@ -53,7 +53,7 @@ class AddInverseMicron(testutil.FPTestCase):
                              flux=N.ones(self.mwave.shape),
                              waveunits='1/um',
                              fluxunits='flam')
-        self.failUnless(isinstance(test.waveunits,units.InverseMicron))
+        self.assertTrue(isinstance(test.waveunits,units.InverseMicron))
         self.assertEqualNumpy(test.wave,self.mwave)
                         
     def testtoang(self):
@@ -63,7 +63,7 @@ class AddInverseMicron(testutil.FPTestCase):
                             fluxunits='flam')
         
         test.convert('angstrom')
-        self.failUnless(isinstance(test.waveunits,units.Angstrom))
+        self.assertTrue(isinstance(test.waveunits,units.Angstrom))
         self.assertApproxNumpy(test.wave,self.awave)
                                                 
 
@@ -93,7 +93,7 @@ class TestmuJy(testutil.FPTestCase):
 
     def teststr(self):
         # Verify that units entered are correct
-        self.failUnless(str(self.x)=='mujy')
+        self.assertTrue(str(self.x)=='mujy')
 
     def testunittophotlam(self):
         # Verify that the conversion from muJy to photlam is correct
@@ -150,7 +150,7 @@ class TestnJy(testutil.FPTestCase):
 
     def teststr(self):
         # Verify that units entered are correct
-        self.failUnless(str(self.x)=='njy')
+        self.assertTrue(str(self.x)=='njy')
 
     def testunittophotlam(self):
         # Verify that the conversion from muJy to photlam is correct
@@ -214,31 +214,31 @@ class TestXJanskyTypicalUse(testutil.FPTestCase):
         self.bb.convert('mujy')
         test_units=str(self.bb.fluxunits)
         ref_units='mujy'
-        self.failUnless(ref_units == test_units)
+        self.assertTrue(ref_units == test_units)
 
     def testunitstring2(self):
         self.bb.convert('microjy')
         test_units=str(self.bb.fluxunits)
         ref_units='mujy'
-        self.failUnless(ref_units == test_units)
+        self.assertTrue(ref_units == test_units)
 
     def testunitstring3(self):
         self.bb.convert('ujy')
         test_units=str(self.bb.fluxunits)
         ref_units='mujy'
-        self.failUnless(ref_units == test_units)
+        self.assertTrue(ref_units == test_units)
 
     def testunitstring4(self):
         self.bb.convert('njy')
         test_units=str(self.bb.fluxunits)
         ref_units='njy'
-        self.failUnless(ref_units == test_units)
+        self.assertTrue(ref_units == test_units)
 
     def testunitstring5(self):
         self.bb.convert('nanojy')
         test_units=str(self.bb.fluxunits)
         ref_units='njy'
-        self.failUnless(ref_units == test_units)
+        self.assertTrue(ref_units == test_units)
 
     def testfluxattribute(self):
         self.bb.convert('mujy')

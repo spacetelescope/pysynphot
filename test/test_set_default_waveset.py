@@ -4,6 +4,7 @@ from pysynphot import refs
 
 import sys
 PY3K = sys.version_info[0] >= 3
+if PY3K: from importlib import reload
 
 def setUpModule():
     pass
@@ -11,7 +12,6 @@ def setUpModule():
 
 def tearDownModule():
     # Reset refs; specifically the default waveset
-    if PY3K: from importlib import reload
     reload(refs)
 
 

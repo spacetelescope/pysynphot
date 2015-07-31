@@ -89,16 +89,16 @@ class FPTestCase(unittest.TestCase):
     def assertApproxFP(self, testvalue, expected, accuracy=1.0e-5):
         ''' Floating point comparison  '''
         result = math.fabs((testvalue - expected) / expected)
-        self.failUnless(result <= accuracy,"test: %g, ref: %g"%(testvalue,expected))
+        self.assertTrue(result <= accuracy,"test: %g, ref: %g"%(testvalue,expected))
 
     def assertApproxNumpy(self, testarray, expected, accuracy=1.0e-5):
         ''' Floating point array comparison '''
         result=N.abs(testarray-expected)/expected
-        self.failUnless(N.alltrue(result <= accuracy))
+        self.assertTrue(N.alltrue(result <= accuracy))
 
     def assertEqualNumpy(self, testarray, expected):
         ''' Identical FP array comparison '''
-        self.failUnless(N.alltrue(testarray == expected))
+        self.assertTruesv(N.alltrue(testarray == expected))
 
 def buildsuite(module):
     """Builds a test suite containing all tests found in the module.

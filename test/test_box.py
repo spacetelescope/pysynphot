@@ -32,12 +32,12 @@ class Ticket114(unittest.TestCase):
         self.bp = Box(500,10,waveunits='nm')
 
     def testunits(self):
-        self.assertEquals(str(self.bp.waveunits), 'nm')
+        self.assertEqual(str(self.bp.waveunits), 'nm')
 
     def testinside(self):
         ref = 1.0
         tst = self.bp.sample(500)
-        self.assertEquals(ref,tst)
+        self.assertEqual(ref,tst)
         
 
         

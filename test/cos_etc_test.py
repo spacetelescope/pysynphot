@@ -713,7 +713,7 @@ class IcatTestCase(testutil.FPTestCase):
                 failed.append("%30s   %10.9g   %10.9g\n"%(expr,ref,flux[i]))
 
         msg="%15s   %10s   %10s\n"%('expr','ref','test')+ "".join(failed)+ "Summary: %d/%d failed"%(len(failed),len(self.testValues))
-        self.failUnless(len(failed) == 0,msg)
+        self.assertTrue(len(failed) == 0,msg)
 
 class WritefitsTestCase(testutil.FPTestCase):
     def setUp(self):
