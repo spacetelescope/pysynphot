@@ -98,7 +98,7 @@ class FPTestCase(unittest.TestCase):
 
     def assertEqualNumpy(self, testarray, expected):
         ''' Identical FP array comparison '''
-        self.assertTruesv(N.alltrue(testarray == expected))
+        self.assertTrue(N.alltrue(testarray == expected))
 
 def buildsuite(module):
     """Builds a test suite containing all tests found in the module.
