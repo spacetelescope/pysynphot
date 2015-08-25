@@ -488,6 +488,26 @@ values at rest frame (i.e., the original blackbody spectrum):
 >>> np.testing.assert_allclose(sp_rest.flux, bb.flux)
 
 
+.. _pysynphot_tutorial_9:
+
+Tutorial 9: Bandpass ``stmag`` Zeropoint
+========================================
+
+HST bandpasses store their :ref:`pysynphot-formula-uresp` values under the
+``PHOTFLAM`` keyword in image headers. This keyword is then used to compute
+``stmag`` zeropoint for the respective bandpass (e.g.,
+`ACS <http://www.stsci.edu/hst/acs/analysis/zeropoints>`_ and
+`WFC3 <http://www.stsci.edu/hst/wfc3/phot_zp_lbn>`_).
+
+In this tutorial, you will learn how to calculate the ``stmag`` zeropoint for
+the F555W filter in HST/ACS WFC1 detector:
+
+>>> bp = S.ObsBandpass('acs,wfc1,f555w')
+>>> st_zpt = -2.5 * np.log10(bp.unit_response()) - 21.1
+>>> print('STmag zeropoint for {0} is {1:.5f}'.format(bp.name, st_zpt))
+STmag zeropoint for acs,wfc1,f555w is 25.65880
+
+
 .. _pysynphot_tutorial_exercises:
 
 Exercises
