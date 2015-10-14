@@ -53,7 +53,7 @@ Unless you are using Ureka, the following dependencies must be installed first:
 **pysynphot** is currently incompatible with Python 3. Please use Python 2.7.
 
 Data files for **pysynphot** are distributed separately by
-`Calibration Reference Data System <http://www.stsci.edu/hst/observatory/crds/cdbs_throughput.html>`_.
+`Calibration Reference Data System <http://www.stsci.edu/hst/observatory/crds/throughput.html>`_.
 They are expected to follow a certain directory structure under the root
 directory, identified by the ``PYSYN_CDBS`` environment variable that *must* be
 set prior to using this package. In the example below, the root directory is
