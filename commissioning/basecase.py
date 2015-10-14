@@ -1,7 +1,7 @@
 from pytools import testutil
 import pysynphot as S
 import numpy as N
-import pyfits
+from astropy.io import fits as pyfits
 from pysynphot import etc
 from pyraf import iraf
 from iraf import stsdas,hst_calib,synphot

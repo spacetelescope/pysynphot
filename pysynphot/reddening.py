@@ -4,7 +4,7 @@
 """
 from __future__ import absolute_import, division, print_function
 
-import pyfits
+from astropy.io import fits as pyfits
 from .spectrum import ArraySpectralElement
 from . import Cache
 from . import extinction #temporary(?) backwards compatibility

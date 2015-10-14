@@ -21,7 +21,7 @@ from __future__ import division
 
 import os
 import numpy as N
-import pyfits
+from astropy.io import fits as pyfits
 
 from . import spectrum
 from . import locations

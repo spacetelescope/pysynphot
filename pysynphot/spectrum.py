@@ -12,7 +12,7 @@ import os
 import math
 import warnings
 
-import pyfits
+from astropy.io import fits as pyfits
 import numpy as N
 
 from . import refs

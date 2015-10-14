@@ -2,7 +2,7 @@ from __future__ import division
 from __future__ import division
 from __future__ import division
 import pysynphot as S
-import pyfits
+from astropy.io import fits as pyfits
 import unittest, os
 
 class TestSpecCase(object):

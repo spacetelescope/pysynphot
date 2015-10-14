@@ -5,7 +5,7 @@ They are discussed in detail in :ref:`pysynphot-appendixc`.
 from __future__ import division, print_function
 
 import numpy as N
-import pyfits
+from astropy.io import fits as pyfits
 
 #Flag to control verbosity
 DEBUG = False

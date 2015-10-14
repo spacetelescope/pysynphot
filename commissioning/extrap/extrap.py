@@ -13,7 +13,7 @@ with zeros. There are three kinds of files to be considered:
 
 from __future__ import print_function
 import re, time, os, sys
-import pyfits
+from astropy.io import fits as pyfits
 import numpy as N
 
 __version__='1.1d'

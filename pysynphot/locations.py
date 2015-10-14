@@ -34,7 +34,7 @@ import os
 import re
 import warnings
 
-import pyfits
+from astropy.io import fits as pyfits
 
 
 # Replace cdbs_roots lookup with an environment variable

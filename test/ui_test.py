@@ -4,7 +4,7 @@ import os
 import math
 
 import numpy as N
-import pyfits
+from astropy.io import fits as pyfits
 import testutil
 from pysynphot import units, locations, spectrum, refs
 from pysynphot.obsbandpass import ObsBandpass

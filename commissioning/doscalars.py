@@ -2,7 +2,7 @@ from __future__ import print_function
 import kwfile_dict
 import glob, os, sys
 import numpy as N
-import pyfits
+from astropy.io import fits as pyfits
 import pylab as P
 import matplotlib
 

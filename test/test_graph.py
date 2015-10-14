@@ -12,7 +12,7 @@ except ImportError:
 
 def make_tmg(strdata,tmgname):
     """Helper function"""
-    import pyfits
+    from astropy.io import fits as pyfits
     out=open(tmgname,'w')
     out.write(strdata)
     out.flush()

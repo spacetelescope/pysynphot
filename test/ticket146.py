@@ -3,7 +3,7 @@ import sys
 import os
 import testutil
 import pysynphot as S
-import pyfits
+from astropy.io import fits as pyfits
 import numpy as N
 from pysynphot import spparser, exceptions
 

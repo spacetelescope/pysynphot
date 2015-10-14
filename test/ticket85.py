@@ -3,7 +3,7 @@ import os, sys
 import math
 
 import numpy as N
-import pyfits
+from astropy.io import fits as pyfits
 import testutil
 import pysynphot as S
 from pysynphot import units, locations
