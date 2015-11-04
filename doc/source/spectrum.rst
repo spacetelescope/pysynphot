@@ -318,6 +318,9 @@ be one of the :ref:`pysynphot-appendixa-calspec`:
 array([  6.83127903e-12,   6.83185409e-12,   6.83168973e-12, ...,
          3.47564168e-21,   3.47547205e-21,   3.47530241e-21])
 
+See :ref:`Tutorial 10 <pysynphot_tutorial_10>` for example on how to load a
+source spectrum from an ASCII table of any format.
+
 
 .. _pysynphot-empirical-source:
 

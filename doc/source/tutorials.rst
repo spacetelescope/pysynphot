@@ -508,6 +508,43 @@ the F555W filter in HST/ACS WFC1 detector:
 STmag zeropoint for acs,wfc1,f555w is 25.65880
 
 
+.. _pysynphot_tutorial_10:
+
+Tutorial 10: Spectrum from Custom Text File
+===========================================
+
+In this tutorial, you will learn how to load a source spectrum from an ASCII
+table that does not conform to the expected format stated in
+:ref:`pysynphot-io`. Since `~pysynphot.spectrum.FileSourceSpectrum` does not
+allow explicit setting of units, if your table data have non-default wavelength
+or flux units, you have to first load them into Numpy arrays and then use
+`~pysynphot.spectrum.ArraySourceSpectrum` to obtain the spectrum object
+correctly. Similar workflow applies to bandpass for non-default
+wavelength units, using `~pysynphot.spectrum.ArraySpectralElement` (not shown).
+
+Let's say your ASCII table looks like this::
+
+    # My source spectrum
+    # ROW    WAVELENGTH(NM)    FLUX(PHOTLAM)
+    1        400.0             0.1
+    2        401.0             0.1234
+    3        405.0             0.4556
+    ...      ...               ...
+
+There are many ways you can read the ASCII table into Numpy arrays. The example
+below uses Astropy:
+
+>>> from astropy.io import ascii
+>>> tab = ascii.read('myfile.txt', names=['row', 'wave', 'flux'])
+>>> wave = tab['wave']  # Second column
+>>> flux = tab['flux']  # Third column
+
+Construct the source spectrum from the arrays above:
+
+>>> sp = S.ArraySpectrum(
+...     wave=wave, flux=flux, waveunits='nm', fluxunits='photlam')
+
+
 .. _pysynphot_tutorial_exercises:
 
 Exercises

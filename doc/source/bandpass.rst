@@ -216,6 +216,9 @@ array([  0.00000000e+00,   0.00000000e+00,   1.87380003e-27, ...,
 >>> bp.sample(2100)
 0.0
 
+:ref:`pysynphot_tutorial_10` offers hints on how to load a bandpass from an ASCII table
+of any format.
+
 
 .. _pysynphot-bandpass-arrays:
 
