@@ -12,7 +12,7 @@ object-oriented replacement for STSDAS SYNPHOT synthetic photometry package in
 IRAF. It is distributed as part of
 `stsci_python <http://www.stsci.edu/institute/software_hardware/pyraf/stsci_python/>`_,
 `Ureka <http://ssb.stsci.edu/ureka/>`_, and also as
-`standalone <https://pypi.python.org/pypi/pysynphot/>`_.
+`standalone <https://pypi.python.org/pypi/pysynphot/>`_ (not recommended).
 Although this package was developed for HST, it can be utilized with other
 observatories.
 
@@ -38,6 +38,13 @@ control and data structures available in Python to easily perform repetitive
 operations such as simulate the observation of multiple type of sources through
 multiple observing modes.
 
+If you use **pysynphot** in your work, please cite it as,
+"*Lim, P. L., Diaz, R. I., & Laidler, V. 2015, PySynphot User's Guide
+(Baltimore, MD: STScI), http://ssb.stsci.edu/pysynphot/docs/*"
+
+If you have questions or concerns regarding the software, please contact
+STScI Help Desk via ``help[at]stsci.edu``.
+
 
 .. _pysynphot-installation-setup:
 
@@ -46,11 +53,11 @@ Installation and Setup
 
 Unless you are using Ureka, the following dependencies must be installed first:
 
+* `astropy <https://pypi.python.org/pypi/astropy>`_ 1.0 or greater
 * `numpy <https://pypi.python.org/pypi/numpy>`_ 1.7 or greater
-* `pyfits <https://pypi.python.org/pypi/pyfits>`_ 3.2 or greater
 * `matplotlib <http://matplotlib.org/>`_ (optional)
 
-**pysynphot** is currently incompatible with Python 3. Please use Python 2.7.
+**pysynphot** is not fully tested under Python 3. Please use Python 2.7.
 
 Data files for **pysynphot** are distributed separately by
 `Calibration Reference Data System <http://www.stsci.edu/hst/observatory/crds/throughput.html>`_.
