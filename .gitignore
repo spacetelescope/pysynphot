@@ -1,3 +1,8 @@
+#RELIC files
+RELIC-INFO
+relic/
+*/version.py
+
 # Compiled files
 *.py[co]
 *.a

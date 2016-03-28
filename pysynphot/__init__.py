@@ -4,13 +4,15 @@ interface for interactive use.
 
 """
 from __future__ import absolute_import
-
-from pysynphot.version import (__version__, __svn_revision__,
-                               __svn_full_info__, __setup_datetime__)
+from .version import *
 
 # For backwards compatibility
-__svn_version__ = __svn_revision__
-__full_svn_info__ = __svn_full_info__
+__svn_version__ = __version_commit__
+__full_svn_info__ = '-'.join([__version__,
+    __version_post__,
+    __version_commit__,]) + ' ({0})'.format(__version_date__)
+__svn_revision__ = __svn_version__
+__svn_full_info__ = __full_svn_info__
 
 
 #UI:
