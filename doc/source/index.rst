@@ -12,7 +12,9 @@ object-oriented replacement for STSDAS SYNPHOT synthetic photometry package in
 IRAF. It is distributed as part of
 `stsci_python <http://www.stsci.edu/institute/software_hardware/pyraf/stsci_python/>`_,
 `Ureka <http://ssb.stsci.edu/ureka/>`_, and also as
-`standalone <https://pypi.python.org/pypi/pysynphot/>`_ (not recommended).
+`standalone <https://github.com/spacetelescope/pysynphot/releases>`_
+(`its PyPI distribution <https://pypi.python.org/pypi/pysynphot/>`_ is no
+longer supported).
 Although this package was developed for HST, it can be utilized with other
 observatories.
 
@@ -56,6 +58,11 @@ Unless you are using Ureka, the following dependencies must be installed first:
 * `astropy <https://pypi.python.org/pypi/astropy>`_ 1.0 or greater
 * `numpy <https://pypi.python.org/pypi/numpy>`_ 1.7 or greater
 * `matplotlib <http://matplotlib.org/>`_ (optional)
+
+To install the
+`standalone <https://github.com/spacetelescope/pysynphot/releases>`_ release::
+
+    pip install https://github.com/spacetelescope/pysynphot/archive/0.9.8.2.zip
 
 **pysynphot** is not fully tested under Python 3. Please use Python 2.7.
 
