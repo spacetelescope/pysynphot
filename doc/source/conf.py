@@ -12,7 +12,6 @@
 # serve to show the default.
 
 import sys, os
-from stsci.sphinxext.conf import *
 
 # work around that annoying warning that pysynphot always prints
 import warnings
@@ -30,11 +29,9 @@ with warnings.catch_warnings() :
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions += [
+extensions = [
     'sphinx.ext.autodoc',
-    'numpydoc',
-    'sphinx.ext.doctest',
-    'sphinx.ext.todo',
+    'sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinx.ext.pngmath']
 
@@ -81,7 +78,7 @@ release = version.replace('.dev', '')
 exclude_trees = []
 
 # The reST default role (used for this markup: `text`) to use for all documents.
-#default_role = None
+default_role = py:obj
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 #add_function_parentheses = True
@@ -105,7 +102,7 @@ modindex_common_prefix = ['pysynphot.']
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-#html_theme = 'default'
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
