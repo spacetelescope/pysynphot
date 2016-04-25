@@ -3,6 +3,24 @@ This __init__ file is used to expose the desired elements of the user
 interface for interactive use.
 
 """
+user_path = None
+def use(path):
+    import pysynphot
+    pysynphot.user_path = path
+    pysynphot.locations._init()
+    return None
+
+def _root():
+    import pysynphot
+    import os
+    import warnings
+    if pysynphot.user_path == None:
+        try: pysynphot.user_path = os.environ['PYSYN_CDBS']
+        except KeyError:
+            warnings.warn("PYSYN_CDBS is undefined; functionality will be SEVERELY "
+                          "crippled.")
+    return pysynphot.user_path
+
 from __future__ import absolute_import
 
 from pysynphot.version import (__version__, __svn_revision__,
