@@ -135,95 +135,92 @@ def _get_RedLaws():
 
         RedLaws[key.lower()] = lawf
 
-def _init():
-    import pysynphot
-    import pysynphot.locations
-    print('INITING OR WHATEVER: ',str(pysynphot._root()))
-    #Eliminate use of temporary directory; use python tmpfile utilities instead
-    pysynphot.locations.CAT_TEMPLATE = os.path.join(pysynphot._root(), 'grid', '*', 'catalog.fits')
-    pysynphot.locations.KUR_TEMPLATE = os.path.join(pysynphot._root(), 'grid', '*')
+rootdir = pysynphot._root()
 
-    #Vega
-    pysynphot.locations.VegaFile = get_data_filename('alpha_lyr_stis_008.fits')
+#Eliminate use of temporary directory; use python tmpfile utilities instead
+CAT_TEMPLATE = os.path.join(pysynphot._root(), 'grid', '*', 'catalog.fits')
+KUR_TEMPLATE = os.path.join(pysynphot._root(), 'grid', '*')
+
+#Vega
+VegaFile = get_data_filename('alpha_lyr_stis_008.fits')
 
 
-    # CDBS is moving extinction files to $PYSYN_CDBS/extinction so here we
-    # test whether that location exists and use it if it does.
-    # If it doesn't exist we use the old location $PYSYN_CDBS/grid/extinction
-    # and print a warning.
-    if (os.path.exists(os.path.join(pysynphot._root(), 'extinction')) and
-        os.path.isdir(os.path.join(pysynphot._root(), 'extinction'))):
-        pysynphot.locations.EXTDIR = 'extinction'
-    else:
-        pysynphot.locations.EXTDIR = os.path.join('grid', 'extinction')
+# CDBS is moving extinction files to $PYSYN_CDBS/extinction so here we
+# test whether that location exists and use it if it does.
+# If it doesn't exist we use the old location $PYSYN_CDBS/grid/extinction
+# and print a warning.
+if (os.path.exists(os.path.join(pysynphot._root(), 'extinction')) and
+    os.path.isdir(os.path.join(pysynphot._root(), 'extinction'))):
+    EXTDIR = 'extinction'
+else:
+    EXTDIR = os.path.join('grid', 'extinction')
 
-        warnings.warn('Extinction files should be moved to '
-                      '$PYSYN_CDBS/extinction for compatibility with '
-                      'future versions of pysynphot.')
+    warnings.warn('Extinction files should be moved to '
+                  '$PYSYN_CDBS/extinction for compatibility with '
+                  'future versions of pysynphot.')
 
 
-    #Define wavecat file explicitly
-    pysynphot.locations.wavecat = get_data_filename('wavecat.dat')
+#Define wavecat file explicitly
+wavecat = get_data_filename('wavecat.dat')
 
-    # load the extintion law file names
-    _get_RedLaws()
+# load the extintion law file names
+_get_RedLaws()
 
-    ## This dictionary maps IRAF-specific directory names for synphot
-    ## directories into their Unix equivalents.
-    #BUG: supports only a single variable in a string
-    #............basically this is a weak routine that should be made
-    #............more robust
-    #BUG: this dictionary should be in a data file
-    pysynphot.locations.CONVERTDICT = {'crrefer':pysynphot._root(),
-                  'crotacomp':os.path.join(pysynphot._root(),'comp','ota'),
-                  'cracscomp':os.path.join(pysynphot._root(),'comp','acs'),
-                  'crcalobs':os.path.join(pysynphot._root(),'calobs'),
-                  'crcalspec':os.path.join(pysynphot._root(),'calspec'),
-                  'croldcalspec':os.path.join(pysynphot._root(),'oldcalspec'),
-                  'crcomp':os.path.join(pysynphot._root(),'comp'),
-                  'crfgs':os.path.join(pysynphot._root(),'fgs'),
-                  'crfields':os.path.join(pysynphot._root(),'fields'),
-                  'crmodewave':os.path.join(pysynphot._root(),'modewave'),
-                  'crcostarcomp':os.path.join(pysynphot._root(),'comp','costar'),
-                  'cracscomp':os.path.join(pysynphot._root(),'comp','acs'),
-                  'crfoccomp':os.path.join(pysynphot._root(),'comp','foc'),
-                  'crfoscomp':os.path.join(pysynphot._root(),'comp','fos'),
-                  'crfgscomp':os.path.join(pysynphot._root(),'comp','fgs'),
-                  'crhrscomp':os.path.join(pysynphot._root(),'comp','hrs'),
-                  'crhspcomp':os.path.join(pysynphot._root(),'comp','hsp'),
-                  'crotacomp':os.path.join(pysynphot._root(),'comp','ota'),
-                  'crnicmoscomp':os.path.join(pysynphot._root(),'comp','nicmos'),
-                  'crnonhstcomp':os.path.join(pysynphot._root(),'comp','nonhst'),
-                  'crstiscomp':os.path.join(pysynphot._root(),'comp','stis'),
-                  'crstiscomp':os.path.join(pysynphot._root(),'comp','stis'),
-                  'crwfc3comp':os.path.join(pysynphot._root(),'comp','wfc3'),
-                  'crcoscomp':os.path.join(pysynphot._root(),'comp','cos'),
-                  'coscomp':os.path.join(pysynphot._root(),'comp','cos'),
-                  'crwave':os.path.join(pysynphot._root(),'crwave'),
-                  'crwfpccomp':os.path.join(pysynphot._root(),'comp','wfpc'),
-                  'crwfpc2comp':os.path.join(pysynphot._root(),'comp','wfpc2'),
-                  'crgrid':os.path.join(pysynphot._root(),'grid'),
-                  'crgridbz77':os.path.join(pysynphot._root(),'grid','bz77'),
-                  'crgridgs':os.path.join(pysynphot._root(),'grid','gunnstryker'),
-                  'crgridjac':os.path.join(pysynphot._root(),'grid','jacobi'),
-                  'crgridbpgs':os.path.join(pysynphot._root(),'grid','bpgs'),
-                  'crgridbk':os.path.join(pysynphot._root(),'grid','bkmodels'),
-                  'crgridk93':os.path.join(pysynphot._root(),'grid','k93models'),
-                  'crgridagn':os.path.join(pysynphot._root(),'grid','agn'),
-                  'crgridgalactic':os.path.join(pysynphot._root(),'grid','galactic'),
-                  'crgridkc96':os.path.join(pysynphot._root(),'grid','kc96'),
-                  'mtab':os.path.join(pysynphot._root(),'mtab'),
-                  'synphot': os.path.dirname(__file__) + os.path.sep,
-                  # PATH for JWST instrument files
-                  'crjwstotecomp':os.path.join(pysynphot._root(),'comp','jwstote'),
-                  # PATH for JWST MIRI instrument files
-                  'crmiricomp':os.path.join(pysynphot._root(),'comp','miri'),
-                  # PATH for JWST NIRCam instrument files
-                  'crnircamcomp':os.path.join(pysynphot._root(),'comp','nircam'),
-                  # PATH for JWST NIRSpec instrument files
-                  'crnirspeccomp':os.path.join(pysynphot._root(),'comp','nirspec'),
-                  }
-    return
+## This dictionary maps IRAF-specific directory names for synphot
+## directories into their Unix equivalents.
+#BUG: supports only a single variable in a string
+#............basically this is a weak routine that should be made
+#............more robust
+#BUG: this dictionary should be in a data file
+CONVERTDICT = {'crrefer':pysynphot._root(),
+              'crotacomp':os.path.join(pysynphot._root(),'comp','ota'),
+              'cracscomp':os.path.join(pysynphot._root(),'comp','acs'),
+              'crcalobs':os.path.join(pysynphot._root(),'calobs'),
+              'crcalspec':os.path.join(pysynphot._root(),'calspec'),
+              'croldcalspec':os.path.join(pysynphot._root(),'oldcalspec'),
+              'crcomp':os.path.join(pysynphot._root(),'comp'),
+              'crfgs':os.path.join(pysynphot._root(),'fgs'),
+              'crfields':os.path.join(pysynphot._root(),'fields'),
+              'crmodewave':os.path.join(pysynphot._root(),'modewave'),
+              'crcostarcomp':os.path.join(pysynphot._root(),'comp','costar'),
+              'cracscomp':os.path.join(pysynphot._root(),'comp','acs'),
+              'crfoccomp':os.path.join(pysynphot._root(),'comp','foc'),
+              'crfoscomp':os.path.join(pysynphot._root(),'comp','fos'),
+              'crfgscomp':os.path.join(pysynphot._root(),'comp','fgs'),
+              'crhrscomp':os.path.join(pysynphot._root(),'comp','hrs'),
+              'crhspcomp':os.path.join(pysynphot._root(),'comp','hsp'),
+              'crotacomp':os.path.join(pysynphot._root(),'comp','ota'),
+              'crnicmoscomp':os.path.join(pysynphot._root(),'comp','nicmos'),
+              'crnonhstcomp':os.path.join(pysynphot._root(),'comp','nonhst'),
+              'crstiscomp':os.path.join(pysynphot._root(),'comp','stis'),
+              'crstiscomp':os.path.join(pysynphot._root(),'comp','stis'),
+              'crwfc3comp':os.path.join(pysynphot._root(),'comp','wfc3'),
+              'crcoscomp':os.path.join(pysynphot._root(),'comp','cos'),
+              'coscomp':os.path.join(pysynphot._root(),'comp','cos'),
+              'crwave':os.path.join(pysynphot._root(),'crwave'),
+              'crwfpccomp':os.path.join(pysynphot._root(),'comp','wfpc'),
+              'crwfpc2comp':os.path.join(pysynphot._root(),'comp','wfpc2'),
+              'crgrid':os.path.join(pysynphot._root(),'grid'),
+              'crgridbz77':os.path.join(pysynphot._root(),'grid','bz77'),
+              'crgridgs':os.path.join(pysynphot._root(),'grid','gunnstryker'),
+              'crgridjac':os.path.join(pysynphot._root(),'grid','jacobi'),
+              'crgridbpgs':os.path.join(pysynphot._root(),'grid','bpgs'),
+              'crgridbk':os.path.join(pysynphot._root(),'grid','bkmodels'),
+              'crgridk93':os.path.join(pysynphot._root(),'grid','k93models'),
+              'crgridagn':os.path.join(pysynphot._root(),'grid','agn'),
+              'crgridgalactic':os.path.join(pysynphot._root(),'grid','galactic'),
+              'crgridkc96':os.path.join(pysynphot._root(),'grid','kc96'),
+              'mtab':os.path.join(pysynphot._root(),'mtab'),
+              'synphot': os.path.dirname(__file__) + os.path.sep,
+              # PATH for JWST instrument files
+              'crjwstotecomp':os.path.join(pysynphot._root(),'comp','jwstote'),
+              # PATH for JWST MIRI instrument files
+              'crmiricomp':os.path.join(pysynphot._root(),'comp','miri'),
+              # PATH for JWST NIRCam instrument files
+              'crnircamcomp':os.path.join(pysynphot._root(),'comp','nircam'),
+              # PATH for JWST NIRSpec instrument files
+              'crnirspeccomp':os.path.join(pysynphot._root(),'comp','nirspec'),
+              }
 
 
 def irafconvert(iraffilename):
@@ -276,5 +273,3 @@ def irafconvert(iraffilename):
     else:
         #If no $ sign found, just return the filename unchanged
         return iraffilename
-
-if pysynphot._root() is not None: _init()
