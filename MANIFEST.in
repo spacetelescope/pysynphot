@@ -1,6 +1,6 @@
 include distribute_setup.py ETCSERVER.BAT README.rst
 include setup.cfg
-graft data
+graft pysynphot/data
 graft doc
-include test/pdk* test/*.doctest test/auto_test test/*.disable test/*.py
-graft test/data
+include pysynphot/test/pdk* pysynphot/test/*.doctest pysynphot/test/auto_test pysynphot/test/*.disable pysynphot/test/*.py
+graft pysynphot/test/data
