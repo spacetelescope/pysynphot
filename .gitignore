@@ -16,7 +16,7 @@ test/from_commissioning/*/*.okfile
 _build
 
 # Packages/installer info
-*.egg
+*.egg*
 *.egg-info
 dist
 build
