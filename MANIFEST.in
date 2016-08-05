@@ -1,6 +1,8 @@
-include distribute_setup.py ETCSERVER.BAT README.rst
-include setup.cfg
-graft pysynphot/data
-graft doc
+include RELIC-INFO
+include ETCSERVER.BAT README
+include pysynphot/data/generic/*
+include pysynphot/data/wavecat/*
 include pysynphot/test/pdk* pysynphot/test/*.doctest pysynphot/test/auto_test pysynphot/test/*.disable pysynphot/test/*.py
+graft pysynphot/data
 graft pysynphot/test/data
+graft doc
