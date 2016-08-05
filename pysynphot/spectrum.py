@@ -1479,13 +1479,14 @@ class GaussianSource(AnalyticSpectrum):
         Returns
         -------
         waveset : array_like
-            Wavelength set.
+            Wavelength set in internal unit.
 
         """
         increment = 0.1*self.sigma
         first = self.center - 50.0*increment
         last = self.center + 50.0*increment
-        return N.arange(first, last, increment)
+        waveset = N.arange(first, last, increment)
+        return self._input_wave_units.Convert(waveset, 'angstrom')
 
 
 class FlatSpectrum(AnalyticSpectrum):
@@ -2140,7 +2141,7 @@ class SpectralElement(Integrator):
         Parameters
         ----------
         wavelengths : ndarray
-            An array of wavelengths in Angstroms at which the
+            An array of wavelengths in Angstrom at which the
             throughput should be sampled.
 
         """
@@ -2270,7 +2271,7 @@ class SpectralElement(Integrator):
         if precision is None:
             precision = self.throughput.dtype.char
         _precision = precision.lower()[0]
-        pcodes={'d':'D', 's':'E', 'f':'E'}
+        pcodes = {'d':'D', 's':'E', 'f':'E'}
 
         if clobber:
             try:
@@ -2293,7 +2294,6 @@ class SpectralElement(Integrator):
 
         wave = wave[idx]
         thru = thru[idx]
-
 
         first, last = 0, len(thru)
         if trimzero:
@@ -2439,11 +2439,19 @@ class SpectralElement(Integrator):
         Returns
         -------
         wave : array_like
-            Wavelength set in user unit.
+            Wavelength set in internal unit.
 
         """
-        wave = units.Angstrom().Convert(self._wavetable, self.waveunits.name)
+        return self._wavetable
+
+    # Define properties for consistent UI
+    def _getWaveProp(self):
+        """Return wavelength in user units."""
+        wave = self.GetWaveSet()
+        wave = units.Angstrom().Convert(wave, self.waveunits.name)
         return wave
+
+    wave = property(_getWaveProp, doc="Wavelength property.")
 
     # NB: Throughput never changes units no matter what the
     # wavelength does. There is an implicit assumption here that
@@ -2459,10 +2467,8 @@ class SpectralElement(Integrator):
 
         """
         # See https://aeon.stsci.edu/ssb/trac/astrolib/ticket/169
-        wave = self.waveunits.Convert(self.wave, 'angstrom')
-        return self.__call__(wave)
+        return self.__call__(self._wavetable)
 
-    wave = property(GetWaveSet, doc='Wavelength property.')
     throughput = property(GetThroughput, doc='Throughput property.')
 
     def fwhm(self):
