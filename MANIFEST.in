@@ -1,8 +1,18 @@
+include README.rst
+
 include RELIC-INFO
-include ETCSERVER.BAT README
-include pysynphot/data/generic/*
-include pysynphot/data/wavecat/*
-include pysynphot/test/pdk* pysynphot/test/*.doctest pysynphot/test/auto_test pysynphot/test/*.disable pysynphot/test/*.py
-graft pysynphot/data
-graft pysynphot/test/data
-graft doc
+
+recursive-include doc *
+
+prune build
+prune doc/build
+
+global-exclude *.pyc *.o
+
+include pysynphot/test/*.disable
+include pysynphot/test/*.doctest
+include pysynphot/test/auto_test
+include pysynphot/test/pdk*
+
+include pysynphot/test/from_commissioning/pdk*
+include pysynphot/test/from_commissioning/*/*.disable
