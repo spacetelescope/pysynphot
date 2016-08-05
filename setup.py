@@ -53,7 +53,7 @@ setup(
     include_package_data=True,
     ext_modules=[
         Extension('pysynphot.pysynphot_utils',
-            glob('src/*.c'),
+            glob('pysynphot/src/*.c'),
             include_dirs=[np_include()],
             optional=True)
     ],
