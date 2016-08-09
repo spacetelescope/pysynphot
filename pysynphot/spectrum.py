@@ -2467,7 +2467,7 @@ class SpectralElement(Integrator):
 
         """
         # See https://aeon.stsci.edu/ssb/trac/astrolib/ticket/169
-        return self.__call__(self._wavetable)
+        return self.__call__(self.GetWaveSet())
 
     throughput = property(GetThroughput, doc='Throughput property.')
 
