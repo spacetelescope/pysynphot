@@ -2705,7 +2705,12 @@ class UniformTransmission(SpectralElement):
         """__call__ returns the constant value as an array, given a
         wavelength array as argument.
         """
-        return 0.0 * wavelength + self.value
+        if wavelength is None:
+            thru = self.value
+        else:
+            thru = N.zeros_like(wavelength, dtype=N.float) + self.value
+
+        return thru
 
 
 class TabularSpectralElement(SpectralElement):
