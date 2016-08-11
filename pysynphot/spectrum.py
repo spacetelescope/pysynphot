@@ -2706,7 +2706,7 @@ class UniformTransmission(SpectralElement):
         wavelength array as argument.
         """
         if wavelength is None:
-            thru = self.value
+            thru = N.array([self.value], dtype=N.float)
         else:
             thru = N.zeros_like(wavelength, dtype=N.float) + self.value
 
