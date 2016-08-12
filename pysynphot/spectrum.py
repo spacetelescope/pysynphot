@@ -508,11 +508,11 @@ class SourceSpectrum(Integrator):
 
         # Now update the primary header
         for key, val in bkeys.items():
-            hdu.header.update(key, *val)
+            hdu.header[key] = val
 
         # Make the extension HDU
         cols = pyfits.ColDefs([cw, cf])
-        hdu = pyfits.new_table(cols)
+        hdu = pyfits.BinTableHDU.from_columns(cols)
 
         # There are some standard keywords that should be added
         # to the extension header.
@@ -527,7 +527,7 @@ class SourceSpectrum(Integrator):
             pass  # Not all spectra have these
 
         for key, val in bkeys.items():
-            hdu.header.update(key, *val)
+            hdu.header[key] = val
 
         # Add the header to the list, and write the file
         hdulist.append(hdu)
@@ -2280,7 +2280,7 @@ class SpectralElement(Integrator):
                 pass
 
         wave = self.wave
-        thru = self.throughput
+        thru = self(wave)
 
         # Add a check for single/double precision clash, so
         # that if written out in single precision, the wavelength table
@@ -2330,11 +2330,11 @@ class SpectralElement(Integrator):
 
         # Now update the primary header
         for key, val in bkeys.items():
-            hdu.header.update(key, *val)
+            hdu.header[key] = val
 
         # Make the extension HDU
         cols = pyfits.ColDefs([cw, cf])
-        hdu = pyfits.new_table(cols)
+        hdu = pyfits.BinTableHDU.from_columns(cols)
 
         # There are also some keys to be written to the extension header
         bkeys = dict(expr=(str(self), 'pysyn expression'),
@@ -2350,7 +2350,7 @@ class SpectralElement(Integrator):
             pass  # Not all bandpasses have these
 
         for key, val in bkeys.items():
-            hdu.header.update(key, *val)
+            hdu.header[key] = val
 
         # Add the extension to the list, and write to file.
         hdulist.append(hdu)
@@ -2667,15 +2667,27 @@ class UniformTransmission(SpectralElement):
         # It is not for general use.
         self._wavetable = N.array([refs._default_waveset[0],
                                    refs._default_waveset[-1]])
+        self._wave = self.GetWaveSet()
 
-    def __str__(self):
-        return "%g" % self.value
+    # TODO: Find a less hacky way to do this?
+    def writefits(self, *args, **kwargs):
+        """Write to file using default waveset."""
+        old_wave = self.wave
+        self.wave = self._wavetable
 
-# This produced 15 test failures in cos_etc_test.
-#     def GetWaveSet(self):
-#         return N.array([_default_waveset[0],_default_waveset[-1]])
-#
-#     wave = property(GetWaveSet,doc="wave for UniformTransmission")
+        try:
+            super(UniformTransmission, self).writefits(*args, **kwargs)
+        finally:
+            self.wave = old_wave
+
+    @property
+    def wave(self):
+        """``waveset`` for uniform transmission."""
+        return self._wave
+
+    @wave.setter
+    def wave(self, val):
+        self._wave = val
 
     def GetWaveSet(self):
         """Obtain wavelength set for the spectrum.
@@ -2688,6 +2700,13 @@ class UniformTransmission(SpectralElement):
 
         """
         return None
+
+# This produced 15 test failures in cos_etc_test.
+#     def GetWaveSet(self):
+#         return N.array([_default_waveset[0],_default_waveset[-1]])
+
+    def __str__(self):
+        return "%g" % self.value
 
     def check_overlap(self, spectrum):
         """Apply special overlap logic for UniformTransmission.
