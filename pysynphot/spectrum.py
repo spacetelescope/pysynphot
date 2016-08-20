@@ -655,7 +655,8 @@ class SourceSpectrum(Integrator):
         """Apply :ref:`redshift <pysynphot-redshift>` to the spectrum.
 
         Redshifted spectrum is never analytic even if the input
-        spectrum is.
+        spectrum is. Output units are always Angstrom and PHOTLAM
+        regardless of user units.
 
         Parameters
         ----------
@@ -671,7 +672,9 @@ class SourceSpectrum(Integrator):
         # By default, apply only the doppler shift.
 
         waveunits = self.waveunits
+        fluxunits = self.fluxunits
         self.convert('angstrom')
+        self.convert('photlam')
         newwave = self.wave*(1.0+z)
         copy = ArraySourceSpectrum(wave=newwave,
                                    flux=self.flux,
@@ -680,6 +683,7 @@ class SourceSpectrum(Integrator):
                                    name="%s at z=%g" % (self.name, z))
 
         self.convert(waveunits)
+        self.convert(fluxunits)
         return copy
 
     def setMagnitude(self, band, value):
