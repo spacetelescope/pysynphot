@@ -3270,32 +3270,61 @@ class Box(SpectralElement):
 
         if waveunits is None:
             self.waveunits = units.Units('angstrom')  # per docstring: for now
+            self.center = center
+            self.width = width
         else:
             self.waveunits = units.Units(waveunits)
-            center = self.waveunits.Convert(center, 'angstrom')
-            width = self.waveunits.Convert(width, 'angstrom')
+            self.center = self.waveunits.Convert(center, 'angstrom')
+            self.width = self.waveunits.Convert(width, 'angstrom')
 
-        lower = center - width / 2.0
-        upper = center + width / 2.0
-        step = 0.05                     # fixed step for now (in A)
-
-        self.name = 'Box at %g (%g wide)' % (center, width)
-        nwaves = int(((upper - lower) / step)) + 2
-        self._wavetable = N.zeros(shape=[nwaves, ], dtype=N.float64)
-
-        for i in range(nwaves):
-            self._wavetable[i] = lower + step * i
-
-        self._wavetable[0] = self._wavetable[1] - step
-        self._wavetable[-1] = self._wavetable[-2] + step
-
-        self._throughputtable = N.ones(shape=self._wavetable.shape,
-                                       dtype=N.float64)
-        self._throughputtable[0] = 0.0
-        self._throughputtable[-1] = 0.0
-
-        self.isAnalytic = False
+        self.name = 'Box at %g (%g wide)' % (self.center, self.width)
+        self.isAnalytic = True
         self.warnings = {}
+
+        # Construct some default lookup table
+        lower = self.center - self.width / 2.0
+        upper = self.center + self.width / 2.0
+        step = 0.01  # fixed step for now (in A)
+        self._wavetable = N.arange(lower - step, upper + step + step, step)
+        self._throughputtable = self(self._wavetable)
+
+    def __call__(self, wavelength):
+        """Input wavelengths assumed in user unit."""
+        wave = self.waveunits.Convert(wavelength, 'angstrom')
+        lower = self._wavetable[1]
+        upper = self._wavetable[-2]
+
+        if N.isscalar(wave):
+            if (wave >= lower) & (wave <= upper):
+                thru = 1.0
+            else:
+                thru = 0.0
+        else:
+            wave = N.asarray(wave)
+            thru = N.zeros(wave.shape, dtype=N.float64)
+            thru[(wave >= lower) & (wave <= upper)] = 1
+
+        return thru
+
+    def resample(self, resampledWaveTab):
+        """Resample the spectrum for the given wavelength set.
+
+        Given wavelength array must be monotonically increasing or decreasing.
+
+        Parameters
+        ----------
+        resampledWaveTab : array_like
+            Wavelength set for resampling.
+
+        Returns
+        -------
+        resampled : `ArraySpectralElement`
+            Resampled spectrum. This is no longer a real `Box` spectrum.
+
+        """
+        return ArraySpectralElement(wave=resampledWaveTab.copy(),
+                                    waveunits=self.waveunits,
+                                    throughput=self(resampledWaveTab).copy())
 
 
 Vega = FileSourceSpectrum(locations.VegaFile)
