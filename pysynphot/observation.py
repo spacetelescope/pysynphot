@@ -389,7 +389,7 @@ class Observation(spectrum.CompositeSourceSpectrum):
         return result
 
     def __rmul__(self, other):
-        return self.__mul__(self, other)
+        return self.__mul__(other)
 
     #Disable methods that should not be supported by this class
     def __add__(self, other):
