@@ -3282,29 +3282,32 @@ class Box(SpectralElement):
         self.warnings = {}
 
         # Construct some default lookup table
-        lower = self.center - self.width / 2.0
-        upper = self.center + self.width / 2.0
+        self.lower = self.center - self.width / 2.0
+        self.upper = self.center + self.width / 2.0
         step = 0.01  # fixed step for now (in A)
-        self._wavetable = N.arange(lower - step, upper + step + step, step)
+        self._wavetable = N.arange(
+            self.lower - step, self.upper + step + step, step)
         self._throughputtable = self(self._wavetable)
 
-    def __call__(self, wavelength):
-        """Input wavelengths assumed in user unit."""
-        wave = self.waveunits.Convert(wavelength, 'angstrom')
-        lower = self._wavetable[1]
-        upper = self._wavetable[-2]
+    def __call__(self, wave):
+        """Input wavelengths assumed to be in Angstrom."""
 
         if N.isscalar(wave):
-            if (wave >= lower) & (wave <= upper):
+            if (wave >= self.lower) & (wave <= self.upper):
                 thru = 1.0
             else:
                 thru = 0.0
         else:
             wave = N.asarray(wave)
             thru = N.zeros(wave.shape, dtype=N.float64)
-            thru[(wave >= lower) & (wave <= upper)] = 1
+            thru[(wave >= self.lower) & (wave <= self.upper)] = 1.0
 
         return thru
+
+    def sample(self, wavelength):
+        """Input wavelengths assumed to be in user unit."""
+        wave = self.waveunits.Convert(wavelength, 'angstrom')
+        return self(wave)
 
     def resample(self, resampledWaveTab):
         """Resample the spectrum for the given wavelength set.
@@ -3322,9 +3325,9 @@ class Box(SpectralElement):
             Resampled spectrum. This is no longer a real `Box` spectrum.
 
         """
-        return ArraySpectralElement(wave=resampledWaveTab.copy(),
-                                    waveunits=self.waveunits,
-                                    throughput=self(resampledWaveTab).copy())
+        return ArraySpectralElement(
+            wave=resampledWaveTab.copy(), waveunits='angstrom',
+            throughput=self(resampledWaveTab).copy())
 
 
 Vega = FileSourceSpectrum(locations.VegaFile)
