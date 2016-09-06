@@ -2083,8 +2083,8 @@ class SpectralElement(Integrator):
             Overlap status.
 
         """
-        if other.isAnalytic:
-            # then it's defined everywhere
+        if other.isAnalytic and not isinstance(other, Box):
+            # then it's defined everywhere, except for Box
             return 'full'
 
         swave = self.wave[N.where(self.throughput != 0)]
