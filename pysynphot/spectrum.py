@@ -675,7 +675,7 @@ class SourceSpectrum(Integrator):
         fluxunits = self.fluxunits
         self.convert('angstrom')
         self.convert('photlam')
-        newwave = self.wave*(1.0+z)
+        newwave = self.wave.astype(N.float64) * (1.0 + z)
         copy = ArraySourceSpectrum(wave=newwave,
                                    flux=self.flux,
                                    waveunits=self.waveunits,
