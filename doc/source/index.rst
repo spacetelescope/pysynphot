@@ -10,8 +10,8 @@ Introduction
 Astrolib PySynphot (hereafter referred to only as **pysynphot**) is an
 object-oriented replacement for STSDAS SYNPHOT synthetic photometry package in
 IRAF. It is distributed as part of
-`stsci_python <http://www.stsci.edu/institute/software_hardware/pyraf/stsci_python/>`_,
-`Ureka <http://ssb.stsci.edu/ureka/>`_, and also as
+`AstroConda <http://astroconda.readthedocs.io/en/latest/>`_ (preferred),
+`stsci_python <http://www.stsci.edu/institute/software_hardware/pyraf/stsci_python/>`_, and also as
 `standalone <https://github.com/spacetelescope/pysynphot/releases>`_
 (`its PyPI distribution <https://pypi.python.org/pypi/pysynphot/>`_ is no
 longer supported).
