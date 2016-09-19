@@ -42,7 +42,7 @@ multiple observing modes.
 
 If you use **pysynphot** in your work, please cite it as,
 "*Lim, P. L., Diaz, R. I., & Laidler, V. 2015, PySynphot User's Guide
-(Baltimore, MD: STScI), http://ssb.stsci.edu/pysynphot/docs/*"
+(Baltimore, MD: STScI), https://pysynphot.readthedocs.io/en/latest/*"
 
 If you have questions or concerns regarding the software, please contact
 STScI Help Desk via ``help[at]stsci.edu``.
