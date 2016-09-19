@@ -62,9 +62,9 @@ Unless you are using Ureka, the following dependencies must be installed first:
 To install the
 `standalone <https://github.com/spacetelescope/pysynphot/releases>`_ release::
 
-    pip install https://github.com/spacetelescope/pysynphot/archive/0.9.8.2.zip
+    pip install git+https://github.com/spacetelescope/pysynphot.git@0.9.8.5
 
-**pysynphot** is not fully tested under Python 3. Please use Python 2.7.
+**pysynphot** is not fully tested under Python 3, but it should work.
 
 Data files for **pysynphot** are distributed separately by
 `Calibration Reference Data System <http://www.stsci.edu/hst/observatory/crds/throughput.html>`_.
