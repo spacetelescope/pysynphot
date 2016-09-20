@@ -122,19 +122,21 @@ These data files [#f1]_ are needed for calculations involving source spectra:
 +------------------------------------------+----------------------------+-------------------------------------------------+
 | Description                              | Directory name             | Download                                        |
 +==========================================+============================+=================================================+
-|AGN templates                             |$PYSYN_CDBS/grid/agn/       |ftp://ftp.stsci.edu/cdbs/tarfiles/synphot2.tar.gz|
+|Interstellar extinction curves            |$PYSYN_CDBS/extinction/     |ftp://ftp.stsci.edu/cdbs/tarfiles/synphot2.tar.gz|
 +------------------------------------------+----------------------------+                                                 |
-|Bruzual stellar atlas                     |$PYSYN_CDBS/grid/bz77/      |                                                 |
+|AGN templates                             |$PYSYN_CDBS/grid/agn/       |                                                 |
 +------------------------------------------+----------------------------+                                                 |
 |Bruzual-Charlot galaxy spectra            |$PYSYN_CDBS/grid/bc95/      |                                                 |
 +------------------------------------------+----------------------------+                                                 |
+|Buser-Kurucz stellar atlas                |$PYSYN_CDBS/grid/bkmodels/  |                                                 |
++------------------------------------------+----------------------------+                                                 |
 |Bruzual-Persson-Gunn-Stryker stellar atlas|$PYSYN_CDBS/grid/bpgs/      |                                                 |
 +------------------------------------------+----------------------------+                                                 |
-|Buser-Kurucz stellar atlas                |$PYSYN_CDBS/grid/bkmodels/  |                                                 |
+|Bruzual stellar atlas                     |$PYSYN_CDBS/grid/bz77/      |                                                 |
 +------------------------------------------+----------------------------+                                                 |
 |Galactic emission line objects            |$PYSYN_CDBS/grid/galactic/  |                                                 |
 +------------------------------------------+----------------------------+                                                 |
-|Interstellar extinction curves            |$PYSYN_CDBS/extinction/     |                                                 |
+|Gunn-Stryker atlas                        |$PYSYN_CDBS/grid/gunnstryker|                                                 |
 +------------------------------------------+----------------------------+                                                 |
 |Jacobi-Hunter-Christian stellar atlas     |$PYSYN_CDBS/grid/jacobi/    |                                                 |
 +------------------------------------------+----------------------------+                                                 |
