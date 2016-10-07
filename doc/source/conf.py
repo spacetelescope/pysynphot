@@ -32,6 +32,7 @@ with warnings.catch_warnings() :
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
+    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.intersphinx',
     'sphinx.ext.pngmath']
 
