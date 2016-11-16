@@ -44,6 +44,7 @@ from . import Cache
 from .refs import setref, showref, getref
 #
 from .locations import get_data_filename
+from .spparser import parse_spec
 from . import tables
 
 def _test():
