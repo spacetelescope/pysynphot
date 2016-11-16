@@ -41,7 +41,7 @@ from .spectrum import Vega
 #Get cache
 from . import Cache
 #Permit resetting refdata
-from .refs import setref, showref
+from .refs import setref, showref, getref
 #
 from .locations import get_data_filename
 from . import tables
