@@ -40,7 +40,7 @@ def run(fname,outdir=None):
 
     if outdir is not None and not os.path.isdir(outdir):
         os.mkdir(outdir)
-        
+
     dwave=0.001
     f=pyfits.open(fname)
     nonparam,error=classify_file(f)
@@ -59,7 +59,7 @@ def run(fname,outdir=None):
     if ok:
         f.close()
         return "%s: no change necessary"%fname
-    
+
 
     #If not ok, we fall through to here.
     #We're going to have to make a new hdu
@@ -93,7 +93,7 @@ def run(fname,outdir=None):
         clist.append(tc)
 
     #Now we have all the columns; put them in an HDU
-    tbhdu=pyfits.new_table(clist)
+    tbhdu=pyfits.BinTableHDU.from_columns(clist)
     #and copy in the header information we need
     h=f[1].header.copy()
     h.update('NAXIS1',tbhdu.header['NAXIS1'])
@@ -125,7 +125,7 @@ def blue(fname,outdir=None):
     """Cut&pasted from run, but to operate only on blue end."""
     if outdir is not None and not os.path.isdir(outdir):
         os.mkdir(outdir)
-        
+
     dwave=0.001
     f=pyfits.open(fname)
     nonparam,error=classify_file(f)
@@ -144,7 +144,7 @@ def blue(fname,outdir=None):
     if ok:
         f.close()
         return "%s: no change necessary"%fname
-    
+
 
     #If not ok, we fall through to here.
     #We're going to have to make a new hdu
@@ -178,7 +178,7 @@ def blue(fname,outdir=None):
         clist.append(tc)
 
     #Now we have all the columns; put them in an HDU
-    tbhdu=pyfits.new_table(clist)
+    tbhdu=pyfits.BinTableHDU.from_columns(clist)
     #and copy in the header information we need
     h=f[1].header.copy()
     h.update('NAXIS1',tbhdu.header['NAXIS1'])
