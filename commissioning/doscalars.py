@@ -13,7 +13,7 @@ def getdata(dirpath,fieldname,instr,save=True):
     nfiles=len(flist)
     if nfiles == 0:
         raise ValueError('No files found')
-    
+
     val=N.zeros((nfiles,),dtype=N.float64)
     obsmode=N.zeros((nfiles,),dtype=N.float64)
     spectrum=N.zeros((nfiles,),dtype=N.float64)
@@ -26,7 +26,7 @@ def getdata(dirpath,fieldname,instr,save=True):
     scount=0
     namedict={}
     i=0
-    
+
     #
     # Start processing
     for fname in flist:
@@ -45,7 +45,7 @@ def getdata(dirpath,fieldname,instr,save=True):
             sdict[sp]=scount
             scount+=1
         spectrum[i]=sdict[sp]
-        
+
         try:
             val[i]=float(d['tra_discrep'])
         except KeyError:
@@ -68,7 +68,7 @@ def getdata(dirpath,fieldname,instr,save=True):
         c5=pyfits.Column(name='discrep',format='D',
                          array=val)
 
-        tbhdu=pyfits.new_table(pyfits.ColDefs([c1,c2,c3,c4,c5]))
+        tbhdu=pyfits.BinTableHDU.from_columns(pyfits.ColDefs([c1,c2,c3,c4,c5]))
         outname=os.path.join(os.path.abspath(os.path.dirname(dirpath)),
                              "%s_%s_table.fits"%(instr,fieldname))
         tbhdu.writeto(outname,clobber=True)
@@ -87,7 +87,7 @@ def plotdata(obsmode,spectrum,val,odict,sdict,
              instr,fieldname,outdir,outname):
     isetting=P.isinteractive()
     P.ioff()
-    
+
     P.clf()
     P.plot(obsmode,val,'.')
     P.ylabel('(pysyn-syn)/syn')
@@ -105,7 +105,7 @@ def plotdata(obsmode,spectrum,val,odict,sdict,
     matplotlib.interactive(isetting)
 
 def run(dirpath, fieldname, instr):
-    
+
     namedict,odict,sdict,obsmode,spectrum,val = getdata(dirpath,
                                                         fieldname,
                                                         instr)

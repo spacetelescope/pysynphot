@@ -24,7 +24,7 @@ class calcspecCase(testutil.LogTestCase):
             return True
         else:
             return False
-        
+
     def setglobal(self,fname=None):
         if fname is None:
             fname=__file__
@@ -37,7 +37,7 @@ class calcspecCase(testutil.LogTestCase):
         dirname=os.path.dirname(self.name)
         if not os.path.isdir(dirname):
             os.makedirs(dirname)
-            
+
         self.file=self.name
         self.thresh=0.01
         self.superthresh=0.20
@@ -64,7 +64,7 @@ class calcspecCase(testutil.LogTestCase):
             self.tda['form']=self.form
         except AttributeError:
             pass
-        
+
         self.tra={}
 
     def run_crbox(self,spstring,form,output="",wavecat="INDEF",
@@ -79,7 +79,7 @@ class calcspecCase(testutil.LogTestCase):
                        form=form,
                        wavecat=wavecat,
                        output=output)
-        
+
 
     def run_countrate(self,form,output=None):
         if output is None:
@@ -97,7 +97,7 @@ class calcspecCase(testutil.LogTestCase):
 
         if count == 10:
             raise(e)
-        
+
     def runpy(self):
         self.sptest=etc.parse_spec(self.spectrum)
         self.csname=self.name+'.fits'
@@ -138,7 +138,7 @@ class calcspecCase(testutil.LogTestCase):
         std=self.adiscrep.std()
         outliers=N.where(abs(self.adiscrep) > mean + Nsigma*std)
         return len(outliers[0])
-    
+
     def arraytest(self,test,ref):
         #Exclude the endpoints where the gradient is very steep
         self.adiscrep=self.arraydiff(test,ref)#[2:-2]
@@ -171,7 +171,7 @@ class calcspecCase(testutil.LogTestCase):
             ytype='flux'
         col1=pyfits.Column(name='wavelength',format='D',array=wave)
         col2=pyfits.Column(name=ytype,format='D',array=flux)
-        tbhdu=pyfits.new_table(pyfits.ColDefs([col1,col2]))
+        tbhdu=pyfits.BinTableHDU.from_columns(pyfits.ColDefs([col1,col2]))
         tbhdu.header.update('tunit1','angstrom')
         tbhdu.header.update('tunit2',units)
         tbhdu.writeto(fname.replace('.fits','_pysyn.fits'))
@@ -203,7 +203,7 @@ class calcspecCase(testutil.LogTestCase):
 
         if count == 10:
             raise e
-        
+
         os.unlink(wname)
 
         #Now do the comparison
@@ -212,7 +212,7 @@ class calcspecCase(testutil.LogTestCase):
         rflux=spref.flux[ridx]
         tflux=self.sptest(spref.wave[ridx])
         self.arraysigtest(tflux,rflux)
-        
+
 class calcphotCase(calcspecCase):
     Extrap=None
     def runpy(self):
@@ -228,10 +228,10 @@ class calcphotCase(calcspecCase):
             except OSError:
                 pass
         self.discrep=-99
-        
 
-     
-                    
+
+
+
     def testthru(self):
         iraf.calcband(obsmode=self.obsmode,output=self.cbname)
         ref=S.FileBandpass(self.cbname)
@@ -241,7 +241,7 @@ class calcphotCase(calcspecCase):
         self.savepysyn(rwave,tthru,self.cbname)
         self.arraysigtest(tthru,rthru)
 
-        
+
     def testefflam(self):
         iraf.calcphot(obsmode=self.obsmode,spectrum=self.spectrum,
                       form='photlam', func='efflerg')
@@ -286,10 +286,10 @@ class effstimCase(calcphotCase):
         __test__ = False
     def testefflam(self):
         __test__ = False
-        
+
 
 class thermbackCase(calcspecCase):
-        
+
     def runpy(self):
 
         #self.sptest=etc.parse_spec(self.spectrum)
@@ -334,7 +334,7 @@ class thermbackCase(calcspecCase):
 ##         if N.any(self.sp.wave != ref.wave):
 ##             raise ValueError('wave arrays not equal')
 ##         self.arraysigtest(self.sp.flux,ref.flux)
-        
+
     def testthermback(self):
         iraf.thermback(obsmode=self.obsmode,form='counts')
         rtherm=iraf.thermback.getParam('thermback.thermflux',native=1)
@@ -378,7 +378,7 @@ class countrateCase(calcphotCase):
         tflux=obs.binflux[tidx]
         self.savepysyn(obs.binwave,obs.binflux,
                        self.crname,units='photlam')
-        
+
         self.arraysigtest(tflux,rflux)
 
     def testcrcounts(self):
@@ -395,7 +395,7 @@ class countrateCase(calcphotCase):
                        units='counts')
         if N.any(obs.binwave != spref.wave):
             raise ValueError('wave arrays not equal')
-        
+
         self.arraysigtest(tflux,rflux)
 
     def testcountrate(self):
