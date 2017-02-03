@@ -5,14 +5,15 @@ import testutil
 from pysynphot import observationmode, locations, refs
 import pysynphot as S
 
+
 class TMCmismatch(unittest.TestCase):
     """Can arise with mismatched graph & component tables"""
 
     def setUp(self):
-        tmcname = os.path.join('mtab','r1j2146sm_tmc.fits')
+        tmcname = os.path.join('mtab', 'OLD_FILES', 'r1j2146sm_tmc.fits')
         self.oldrefs = refs.getref()
         refs.COMPTABLE = locations._refTable(tmcname)
-        tmgname = os.path.join('mtab','rbg2236im_tmg.fits')
+        tmgname = os.path.join('mtab', 'OLD_FILES', 'rbg2236im_tmg.fits')
         refs.GRAPHTABLE = locations._refTable(tmgname)
         self.omstring='acs,hrc,f555w,mjd#54000'
 
@@ -24,6 +25,7 @@ class TMCmismatch(unittest.TestCase):
         "compname not found in tmc"
         self.assertRaises(IndexError, observationmode.ObservationMode,
                           self.omstring)
+
 
 class RenormNonsense(unittest.TestCase):
     """Can arise with zero, negative, or nan spectra"""
@@ -38,11 +40,8 @@ class RenormNonsense(unittest.TestCase):
                           15, 'vegamag', self.bp)
 
 
-
-
 if __name__ == '__main__':
     if 'debug' in sys.argv:
         testutil.debug(__name__)
     else:
         testutil.testall(__name__,2)
-

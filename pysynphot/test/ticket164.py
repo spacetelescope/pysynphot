@@ -4,7 +4,7 @@ import copy
 
 import numpy as N
 
-from pysynphot import observationmode, units, refs
+from pysynphot import locations, observationmode, units, refs
 from pysynphot.obsbandpass import ObsBandpass
 from pysynphot.locations import irafconvert
 
@@ -87,8 +87,10 @@ class TestArea(TestSet):
 class TestMulti(unittest.TestCase):
     def setUp(self):
         setref()
-        self.gref = irafconvert('mtab$t2605492m_tmg.fits')
-        self.cref = irafconvert('mtab$t260548pm_tmc.fits')
+        self.gref = os.path.join(
+            locations.rootdir, 'mtab', 'OLD_FILES', 't2605492m_tmg.fits')
+        self.cref = os.path.join(
+            locations.rootdir, 'mtab', 'OLD_FILES', 't260548pm_tmc.fits')
         setref(graphtable=self.gref,
                comptable=self.cref)
         self.pick = getref()
@@ -138,5 +140,3 @@ class TestAreaChanges(unittest.TestCase):
         setref(area=10)
         tst=p.ToCounts(w,w)
         self.assertTrue(N.all(ref != tst))
-
-

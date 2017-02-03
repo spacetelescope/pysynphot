@@ -7,12 +7,13 @@ import pysynphot as S
 from pysynphot import spparser
 from pysynphot import locations, refs
 
+
 class SuccessCase(testutil.FPTestCase):
     def setUp(self):
         self.sp=S.BlackBody(5000)
         self.bp=S.ObsBandpass('Johnson,V')
         self.oldref = S.refs.getref()
-        S.setref(comptable='$PYSYN_CDBS/mtab/t260548pm_tmc.fits')
+        S.setref(comptable='$PYSYN_CDBS/mtab/OLD_FILES/t260548pm_tmc.fits')
         self.tda=dict(spectrum=str(self.sp),
                       bp=str(self.bp)
                       )
@@ -31,7 +32,7 @@ class RenormCase(testutil.FPTestCase):
         self.oldcwd = os.getcwd()
         os.chdir(os.path.dirname(__file__))
         self.oldref = S.refs.getref()
-        S.setref(comptable='$PYSYN_CDBS/mtab/t260548pm_tmc.fits')
+        S.setref(comptable='$PYSYN_CDBS/mtab/OLD_FILES/t260548pm_tmc.fits')
         self.spectrum="data/qso_template.fits"
         self.obsmode="cos,fuv,g140l,c1230,PSA"
         self.bp=S.ObsBandpass(self.obsmode)
@@ -52,13 +53,14 @@ class RenormCase(testutil.FPTestCase):
         self.failUnless('PartialRenorm' in self.tst.warnings,
                         "Warnings: %s"%self.tst.warnings)
 
+
 class ParserRenormCase(testutil.FPTestCase):
     #The parser always uses force, so generates no warnings
     def setUp(self):
         self.oldcwd = os.getcwd()
         os.chdir(os.path.dirname(__file__))
         self.oldref = S.refs.getref()
-        S.setref(comptable='$PYSYN_CDBS/mtab/t260548pm_tmc.fits')
+        S.setref(comptable='$PYSYN_CDBS/mtab/OLD_FILES/t260548pm_tmc.fits')
         self.spectrum = "data/qso_template.fits"
         self.obsmode = "cos,fuv,g140l,c1230,PSA"
         self.syncmd = "rn(spec(%s),band(%s),17.0,vegamag)" % (self.spectrum,
@@ -88,7 +90,7 @@ class ETCTestCase(testutil.FPTestCase):
         self.obsmode = "acs,sbc,F140LP"
         self.refrate = 0.0877036
         self.oldref = S.refs.getref()
-        S.setref(comptable='$PYSYN_CDBS/mtab/t260548pm_tmc.fits')
+        S.setref(comptable='$PYSYN_CDBS/mtab/OLD_FILES/t260548pm_tmc.fits')
         self.tda = dict(spectrum=str(self.spectrum), bp=str(self.obsmode))
         self.tda.update(refs.getref())
         self.setup2()
@@ -115,7 +117,6 @@ class ETCTestCase(testutil.FPTestCase):
         obs = S.Observation(self.sp, self.bp, force='taper')
         self.tra = dict(warnings=obs.warnings)
         self.assertTrue('PartialOverlap' in obs.warnings)
-
 
 
 class TestComposite(testutil.FPTestCase):

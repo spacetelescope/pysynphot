@@ -23,7 +23,8 @@ from pysynphot.exceptions import IncompatibleSources
 import pysynphot.units as units
 
 # a stock graph table on CDBS
-GT_FILE_NO = locations.irafconvert('mtab$n9i1408hm_tmg.fits')
+GT_FILE_NO =locations._refTable(
+      os.path.join('mtab', 'OLD_FILES', 'n9i1408hm_tmg.fits'))
 
 # this copy of a graph table has been modified to have PRIMAREA = 100.0
 GT_FILE_100 = os.path.join(os.path.dirname(__file__), 'data', 'cdbs', 'mtab',

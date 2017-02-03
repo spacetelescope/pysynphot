@@ -3,6 +3,7 @@ import unittest
 import numpy as N
 import pysynphot as S
 
+
 class TestDefault(unittest.TestCase):
     def setUp(self):
         self.sp=S.BlackBody(4400)
@@ -72,12 +73,13 @@ class TestDefault(unittest.TestCase):
         self.assertTrue(abs(self.tra['discrep']) ==0.0,
                      'expected %f, got %f'%(ref,tst))
 
+
 class TestStisDef(unittest.TestCase):
     #Same tests for an actual disperser
     def setUp(self):
         #Use a defined comptab here: we're examining native arrays
         self.oldref = S.refs.getref()
-        S.setref(comptable='$PYSYN_CDBS/mtab/u4c18498m_tmc.fits')
+        S.setref(comptable='$PYSYN_CDBS/mtab/OLD_FILES/u4c18498m_tmc.fits')
         self.sp=S.BlackBody(4400)
         self.bp=S.ObsBandpass('stis,fuvmama,g140m,c1470,s52x01')
         self.obs=S.Observation(self.sp,self.bp)
@@ -100,8 +102,6 @@ class TestStisDef(unittest.TestCase):
 ## array([ 1450.  ,  1450.05])
 ## >>> obs.binflux[150:152]
 ## array([  4.43311555e-08,   4.43461351e-08])
-
-
 
     def testref(self):
         ref= 4.43311555e-08

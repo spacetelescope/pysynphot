@@ -15,7 +15,7 @@ def setUpModule():
     #Freeze the version of the comptable so tests are not susceptible to
     # updates to CDBS
     global old_comptable
-    cmptb_name = os.path.join('mtab','rcb1833hm_tmc.fits')
+    cmptb_name = os.path.join('mtab', 'OLD_FILES', 'rcb1833hm_tmc.fits')
     old_comptable = refs.COMPTABLE
     refs.COMPTABLE = locations._refTable(cmptb_name)
     print("%s:" % os.path.basename(__file__))

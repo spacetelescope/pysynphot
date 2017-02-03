@@ -13,7 +13,7 @@ class ETCTestCase(testutil.FPTestCase):
         self.obsmode = "cos,fuv,g140l,c1105"
         # These tests were defined using this graph table
         self.oldref = refs.getref()
-        S.setref(comptable='$PYSYN_CDBS/mtab/tad1851am_tmc.fits')
+        S.setref(comptable='$PYSYN_CDBS/mtab/OLD_FILES/tad1851am_tmc.fits')
         self.setup2()
         self.tda = dict(obsmode=self.obsmode,
                         spectrum=self.spectrum)
@@ -41,4 +41,3 @@ class ETCTestCase(testutil.FPTestCase):
     def testwarn(self):
         obs=S.Observation(self.sp,self.bp,force='taper')
         self.assertTrue('PartialOverlap' in obs.warnings)
-

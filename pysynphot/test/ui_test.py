@@ -10,6 +10,7 @@ from pysynphot import units, locations, spectrum, refs
 from pysynphot.obsbandpass import ObsBandpass
 import pysynphot as S
 
+
 ## TO RUN IN A SINGLE TEST IN DEBUG MODE:
 ## import ui_test
 ## ui_test.FileTestCase('testwave').debug()
@@ -156,7 +157,7 @@ class FSSTestCase(testutil.FPTestCase):
 
 class BandTestCase(testutil.FPTestCase):
     def setUp(self):
-        cmptb_name=os.path.join('mtab','r1j2146sm_tmc.fits')
+        cmptb_name=os.path.join('mtab', 'OLD_FILES', 'r1j2146sm_tmc.fits')
         self.old_comptable = refs.COMPTABLE
         refs.COMPTABLE = locations._refTable(cmptb_name)
         print("ui_Test.BandTests:")
@@ -174,6 +175,7 @@ class BandTestCase(testutil.FPTestCase):
         "ui_test.BandTestCase('testompass'): Tests r172"
         bp1=ObsBandpass('acs,hrc,f555w')
         self.assertTrue(len(bp1) == 6)
+
 
 class UnitTestCase(testutil.FPTestCase):
     def setUp(self):

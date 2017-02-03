@@ -24,7 +24,7 @@ def setUpModule():
     global old_vegafile
 
     old_comptable = refs.COMPTABLE
-    cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
+    cmptb_name = os.path.join('mtab', 'OLD_FILES', 'r1j2146sm_tmc.fits')
     refs.COMPTABLE = locations._refTable(cmptb_name)
     print("%s:" % os.path.basename(__file__))
     print("   Tests are being run with %s" % refs.COMPTABLE)
@@ -56,16 +56,17 @@ class OverlapBug(testutil.FPTestCase):
         self.failUnless(ans=='partial')
 
     def testtaper(self):
-        self.obs=S.Observation(self.sp,self.bp,force='taper')
-        idx=N.where(self.obs.wave==self.refwave)
-        test=self.obs.flux.item(idx[0])
-        self.assertTrue(test==0,'Expected 0, got %f'%test)
+        self.obs = S.Observation(self.sp, self.bp, force='taper')
+        idx = N.searchsorted(self.obs.wave, self.refwave)
+        test = self.obs.flux[idx]
+        self.assertTrue(test == 0, 'Expected 0, got %f' % test)
 
     def testextrap(self):
-        self.obs=S.Observation(self.sp,self.bp,force='extrap')
-        idx=N.where(self.obs.wave==self.refwave)
-        test=self.obs.flux.item(idx[0])
-        self.assertAlmostEqual(test,self.refval,msg='Expected %f, got %f'%(self.refval,test))
+        self.obs = S.Observation(self.sp, self.bp, force='extrap')
+        idx = N.searchsorted(self.obs.wave, self.refwave)
+        test = self.obs.flux[idx]
+        self.assertAlmostEqual(
+            test, self.refval, msg='Expected %f, got %f'%(self.refval, test))
 
 ##     def testrange(self):
 ##         self.wt=N.array([3090, 3095, 4000,4005, 4010])
@@ -74,9 +75,7 @@ class OverlapBug(testutil.FPTestCase):
 ##         self.assertEqualNumpy(self.ref,ans)
 
     def testraise(self):
-        self.assertRaises(PartialOverlap,
-                          S.Observation,
-                          self.sp, self.bp)
+        self.assertRaises(PartialOverlap, S.Observation, self.sp, self.bp)
 
 
 class DiscoveryCase(OverlapBug):

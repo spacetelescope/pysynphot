@@ -1,25 +1,25 @@
-from __future__ import division
-
 """Very preliminary tests of some bandpar functionality.
 These answers were computed with pysynphot and eyeballed against
 synphot answers. These tests are only to establish that the
 functionality doesn't *break*. More rigorous tests should be added."""
+from __future__ import division
 
+import os
+import pysynphot as S
 import testutil
 
-import pysynphot as S
-
-
+orig_graphtable = S.refs.getref()['graphtable']
 orig_comptable = S.refs.getref()['comptable']
 
 
 def setUpModule():
-    #Answers computed using specified comptable
-    S.setref(comptable='mtab$t9m1635am_tmc.fits')
+    #Answers computed using specified tables
+    S.setref(graphtable='/grp/hst/cdbs/mtab/OLD_FILES/0661437lm_tmg.fits',
+             comptable='/grp/hst/cdbs/mtab/OLD_FILES/0661429jm_tmc.fits')
 
 
 def tearDownModule():
-    S.setref(comptable=orig_comptable)
+    S.setref(graphtable=orig_graphtable, comptable=orig_comptable)
 
 
 class JohnsonV(testutil.FPTestCase):
@@ -51,12 +51,13 @@ class JohnsonV(testutil.FPTestCase):
         tst=self.bp.rmswidth()
         self.assertApproxFP(self.r_rmswidth, tst)
 
+
 class NarrowWfc3(JohnsonV):
     def setUp(self):
         self.tda=dict(obsmode='wfc3,uvis1,fq672n')
         self.bp=S.ObsBandpass(self.tda['obsmode'])
-        self.r_avgwave=6716.6433955493148
-        self.r_efficiency=0.000612346009503694
-        self.r_equivwidth=4.1126209517010999
-        self.r_rectwidth=19.373844000616632
-        self.r_rmswidth=46.461531650056187
+        self.r_avgwave=6716.6253925114133
+        self.r_efficiency=0.00071479633888800855
+        self.r_equivwidth=4.8006812790841318
+        self.r_rectwidth=19.373016584072371
+        self.r_rmswidth=46.46729888277223

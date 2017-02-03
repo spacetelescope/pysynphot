@@ -19,7 +19,7 @@ def setUpModule():
     global old_comptable
     global old_vegafile
 
-    cmptb_name = os.path.join('mtab', 't260548pm_tmc.fits')
+    cmptb_name = os.path.join('mtab', 'OLD_FILES', 't260548pm_tmc.fits')
     old_comptable = refs.COMPTABLE
     refs.COMPTABLE = locations._refTable(cmptb_name)
     print("%s:" % os.path.basename(__file__))
@@ -111,7 +111,8 @@ class BPIntegrate(testutil.FPTestCase):
 
     def testintegrate(self):
         tst=self.bp.integrate()
-        self.assertEqual(self.ref,tst)
+        r = abs(tst - self.ref) / self.ref
+        self.assertTrue(r < 0.01)
 
     def testsubint(self):
         w=self.bp.wave

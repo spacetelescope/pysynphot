@@ -16,7 +16,7 @@ class TestCompSwitch(TestCase):
     def setUp(self):
         self.cdbs = os.environ['PYSYN_CDBS']
 
-        graphtab = os.path.join('mtab','u921351jm_tmg.fits')
+        graphtab = os.path.join('mtab', 'OLD_FILES', 'u921351jm_tmg.fits')
         self.old_refs = refs.getref()
         refs.GRAPHTABLE = locations._refTable(graphtab)
 
@@ -35,7 +35,7 @@ class TestCompSwitch(TestCase):
         for i, f in enumerate(throughput_list):
             throughput_list[i] = os.path.join(self.cdbs, f)
 
-        cmptb_name = os.path.join('mtab', 'ub31649mm_tmc.fits')
+        cmptb_name = os.path.join('mtab', 'OLD_FILES', 'ub31649mm_tmc.fits')
         refs.COMPTABLE = locations._refTable(cmptb_name)
 
         obs = observationmode.ObservationMode('acs,hrc,f435w')
@@ -57,7 +57,7 @@ class TestCompSwitch(TestCase):
         for i, f in enumerate(throughput_list):
             throughput_list[i] = os.path.join(self.cdbs, f)
 
-        cmptb_name = os.path.join('mtab', 'r1j2146sm_tmc.fits')
+        cmptb_name = os.path.join('mtab', 'OLD_FILES', 'r1j2146sm_tmc.fits')
         refs.COMPTABLE = locations._refTable(cmptb_name)
 
         obs = observationmode.ObservationMode('acs,hrc,f435w')

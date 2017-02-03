@@ -12,7 +12,7 @@ testdir = os.path.join(os.path.dirname(__file__), 'data')
 
 def setUpModule():
     #Specify a TMC file
-    S.setref(comptable='mtab$t921857im_tmc.fits')
+    S.setref(comptable='$PYSYN_CDBS/mtab/OLD_FILES/t921857im_tmc.fits')
 
 
 def tearDownModule():
@@ -69,4 +69,3 @@ if __name__ == '__main__':
         testutil.debug(__name__)
     else:
         testutil.testall(__name__, 2)
-
