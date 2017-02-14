@@ -8,11 +8,3 @@ prune build
 prune doc/build
 
 global-exclude *.pyc *.o
-
-include pysynphot/test/*.disable
-include pysynphot/test/*.doctest
-include pysynphot/test/auto_test
-include pysynphot/test/pdk*
-
-include pysynphot/test/from_commissioning/pdk*
-include pysynphot/test/from_commissioning/*/*.disable

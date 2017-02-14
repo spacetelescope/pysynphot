@@ -1,17 +1,13 @@
-from __future__ import division
-import os
-import testutil
-import pysynphot as S
-import numpy as N
+from __future__ import absolute_import, division, print_function
+
+import numpy as np
+
+from .utils import use_cdbs
+from ..obsbandpass import ObsBandpass
 
 
-class ErrcolCase(testutil.FPTestCase):
-    def setUp(self):
-        self.obsmode='stis,ccd,50ccd,mjd#55000'
-
-    def testfix(self):
-        obs=S.ObsBandpass(self.obsmode)
-        #It passes if the above statement does not raise an exception,
-        #but let's make sure it got some values
-        tst=N.all(obs.throughput == 0)
-        self.assertFalse(tst)
+@use_cdbs
+def test_err_col():
+    """Test that this obsmode does not raise exception."""
+    obs = ObsBandpass('stis,ccd,50ccd,mjd#55000')
+    assert np.any(obs.throughput > 0)

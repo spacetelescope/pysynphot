@@ -1,17 +1,14 @@
-from __future__ import division
+from __future__ import absolute_import, division, print_function
 
-import unittest
+import pytest
 
-#Code under test
-from pysynphot.obsbandpass import ObsBandpass
+from .utils import use_cdbs
+from ..obsbandpass import ObsBandpass
 
 
-class TestDiscoveryCase(unittest.TestCase):
-    def setUp(self):
-        self.bp = ObsBandpass('acs,sbc,f150lp')
+@use_cdbs
+def test_no_thermback():
+    bp = ObsBandpass('acs,sbc,f150lp')
 
-    def testraise(self):
-        self.assertRaises(NotImplementedError,
-                          self.bp.thermback)
-
-        
+    with pytest.raises(NotImplementedError):
+        bp.thermback()

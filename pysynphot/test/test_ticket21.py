@@ -1,97 +1,64 @@
-from __future__ import division, print_function
+from __future__ import absolute_import, division, print_function
 
-import sys
 import os
-import testutil
 
-from pysynphot import spectrum,observationmode
-from pysynphot import locations, refs
-
+from .utils import use_cdbs
+from .. import refs
+from ..observationmode import ObservationMode
+from ..spectrum import InterpolatedSpectralElement
 
 old_comptable = None
 
 
-def setUpModule():
-    #Freeze the version of the comptable so tests are not susceptible to
-    # updates to CDBS
+def setup_module(module):
+    """
+    Freeze the version of the comptable so tests are not susceptible to
+    updates to CDBS.
+    """
     global old_comptable
-    cmptb_name = os.path.join('mtab', 'OLD_FILES', 'rcb1833hm_tmc.fits')
     old_comptable = refs.COMPTABLE
-    refs.COMPTABLE = locations._refTable(cmptb_name)
-    print("%s:" % os.path.basename(__file__))
-    print("   Tests are being run with %s" % refs.COMPTABLE)
+    refs.COMPTABLE = os.path.join(
+        os.environ['PYSYN_CDBS'], 'mtab', 'OLD_FILES', 'rcb1833hm_tmc.fits')
 
 
-def tearDownModule():
+def teardown_module(module):
     refs.COMPTABLE = old_comptable
 
 
-class ParmCase(testutil.FPTestCase):
-    def setUp(self):
-        self.omstring='acs,hrc,f555w,mjd#54000'
-        self.parkey='mjd'
-        self.parval=54000
-        self.reffile=os.path.join(os.environ['PYSYN_CDBS'],'comp','acs',
-                                  'acs_hrc_ccd_mjd_013_syn.fits[mjd#]')
-        self.construct()
+@use_cdbs
+def test_one_param():
+    parkey = 'mjd'
+    parval = 54000
+    om = ObservationMode('acs,hrc,f555w,mjd#54000')
+    rnames = [x for x in om._throughput_filenames if (x != 'clear')]
+    reffile = os.path.join(os.environ['PYSYN_CDBS'], 'comp', 'acs',
+                           'acs_hrc_ccd_mjd_013_syn.fits[mjd#]')
+    idx = rnames.index(reffile)
+
+    # parm# in modes
+    assert (parkey + '#') in om.modes
+
+    # filename has a "#"
+    assert reffile in om._throughput_filenames
+
+    # dict entry
+    assert om.pardict[parkey] == parval
+
+    # interpolated type
+    assert isinstance(om.components[idx].throughput,
+                      InterpolatedSpectralElement), \
+        '{}\n{}'.format(len(om.components), idx)
 
 
-    def construct(self):
-        self.om=observationmode.ObservationMode(self.omstring)
-        self.rnames=[x for x in self.om._throughput_filenames if (x != 'clear')]
-        try:
-            self.idx=self.rnames.index(self.reffile)
-        except ValueError:
-            print("looking for ",self.reffile)
-            for fname in self.rnames:
-                print(fname)
+@use_cdbs
+def test_two_params():
+    pardict = {'fr459m': 4610, 'aper': 0.3}
+    om = ObservationMode('acs,hrc,fr459m#4610,aper#0.3')
 
-    def test1(self):
-        "parm# in modes"
-        self.assertTrue(self.parkey+'#' in self.om.modes)
+    # parm# in modes
+    for k in pardict:
+        assert (k + '#') in om.modes
 
-
-    def test2(self):
-        "filename has a #"
-        self.assertTrue(self.reffile in self.om._throughput_filenames)
-
-    def test3(self):
-        "dict entry"
-        self.assertTrue(self.om.pardict[self.parkey]==self.parval)
-
-    def test4(self):
-        "interpolated type"
-        try:
-            self.assertTrue(isinstance(self.om.components[self.idx].throughput,
-                                spectrum.InterpolatedSpectralElement))
-        except IndexError:
-            print(len(self.om.components))
-            print(self.idx)
-
-
-class TwoParms(testutil.FPTestCase):
-    def setUp(self):
-        self.omstring = 'acs,hrc,fr459m#4610,aper#0.3'
-        self.pardict = {'fr459m': 4610,'aper': 0.3}
-        self.om = observationmode.ObservationMode(self.omstring)
-
-    def test1(self):
-        "parm# in modes"
-        for k in self.pardict:
-            self.assertTrue(k + '#' in self.om.modes)
-
-
-
-    def test3(self):
-        "dict vals"
-        for k in self.pardict:
-            self.assertTrue(self.om.pardict[k] == self.pardict[k])
-
-
-if __name__ == '__main__':
-    if 'debug' in sys.argv:
-        testutil.debug(__name__)
-    else:
-        testutil.testall(__name__,2)
-
-
+    # dict vals
+    for k in pardict:
+        assert om.pardict[k] == pardict[k]

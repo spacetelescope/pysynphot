@@ -1,142 +1,88 @@
-import unittest
+from __future__ import absolute_import, division, print_function
+
 import os
-import copy
 
-import numpy as N
+import numpy as np
+import pytest
 
-from pysynphot import locations, observationmode, units, refs
-from pysynphot.obsbandpass import ObsBandpass
-from pysynphot.locations import irafconvert
+from .utils import use_cdbs
+from .. import refs, units
+from ..locations import irafconvert
+from ..obsbandpass import ObsBandpass
+from ..refs import getref, setref
 
-#Code under test
-from pysynphot.refs import setref, showref, getref, set_default_waveset
-from pysynphot import units  # uses area
-
-
-startup = getref()
+startup = None
 
 
-class TestSet(unittest.TestCase):
+def setup_module(module):
+    global startup
+    setref()
+    startup = getref()
 
-    def setUp(self):
+
+class TestSet(object):
+    @classmethod
+    def teardown_class(cls):
         setref()
-        self.ref='mtab$foobar.fits'
-        self.ttype='graphtable'
-        setref(graphtable=self.ref)
 
-    def tearDown(self):
-        # Workaround for #234; TODO: change this back to setref(**startup) when
-        # that issue is fixed
-        # setref(**startup)
-        setref(graphtable=startup['graphtable'],
-               comptable=startup['comptable'],
-               thermtable=startup['thermtable'],
-               area=startup['area'])
-        set_default_waveset()
+    @pytest.mark.parametrize(
+        ('ttype', 'ref'),
+        [('graphtable', 'mtab$foobar.fits'),
+         ('comptable', 'mtab$foobar.fits'),
+         ('area', 12345.6)])
+    def test_set(self, ttype, ref):
+        kwargs = {ttype: ref}
+        setref(**kwargs)
+        tst = getref()[ttype]
+        msg = '(ref,tst)=({},{})'.format(ref, tst)
 
-    def testset(self):
-        tst=getref()[self.ttype]
-        self.assertEquals(irafconvert(self.ref),
-                          irafconvert(tst),
-                          "(ref,tst)=(%s,%s)"%(self.ref,tst)
-                          )
+        if ttype == 'area':
+            assert ref == tst, msg
+        else:
+            assert irafconvert(ref) == irafconvert(tst), msg
 
-    def testget(self):
+    def test_refs_area(self):
+        setref(area=100)
+        assert refs.PRIMARY_AREA == 100
+
+    def test_counts(self):
+        """
+        Area is used to convert to counts.
+        So, changing the area should change the resulting counts.
+        """
+        w = np.arange(1, 10)
+        p = units.Photlam()
+        ref = p.ToCounts(w, w)
+
+        setref(area=10)
+        tst = p.ToCounts(w, w)
+
+        assert not np.allclose(ref, tst)
+
+    def test_reset(self):
+        setref()
         tst = getref()
-        ref = copy.deepcopy(startup)
-        ref[self.ttype]=irafconvert(self.ref)
-        self.assertEqual(ref,tst,"(ref,test):\n (%s\n%s)"%(ref,tst))
-
-    def testreset(self):
-        setref()
-        tst=getref()
-        self.assertEqual(startup,tst,
-                         "(ref,tst)=(%s,%s)" % (startup, tst)
-                         )
+        assert startup == tst, '(ref,tst)=({},{})'.format(startup, tst)
 
 
-class TestComp(TestSet):
-    def setUp(self):
-        setref()
-        self.ref='mtab$foobar.fits'
-        self.ttype='comptable'
-        setref(comptable=self.ref)
-
-
-class TestArea(TestSet):
-    def setUp(self):
-        setref()
-        self.ttype = 'area'
-        self.ref = 12345.6
-        setref(area=self.ref)
-
-    def testset(self):
-        tst=getref()['area']
-        self.assertEquals(self.ref, tst,
-                          "(ref,tst)=(%s,%s)" % (self.ref,tst)
-                          )
-
-    def testget(self):
-        tst = getref()
-        ref = dict()
-        ref.update(startup)
-        ref[self.ttype] = self.ref
-        self.assertEqual(ref, tst, "(ref,test):\n (%s\n%s)" % (ref, tst))
-
-
-class TestMulti(unittest.TestCase):
-    def setUp(self):
-        setref()
-        self.gref = os.path.join(
-            locations.rootdir, 'mtab', 'OLD_FILES', 't2605492m_tmg.fits')
-        self.cref = os.path.join(
-            locations.rootdir, 'mtab', 'OLD_FILES', 't260548pm_tmc.fits')
-        setref(graphtable=self.gref,
-               comptable=self.cref)
+class TestMulti(object):
+    def setup_class(self):
+        self.gref = os.path.join(os.environ['PYSYN_CDBS'], 'mtab',
+                                 'OLD_FILES', 't2605492m_tmg.fits')
+        self.cref = os.path.join(os.environ['PYSYN_CDBS'], 'mtab',
+                                 'OLD_FILES', 't260548pm_tmc.fits')
+        setref(graphtable=self.gref, comptable=self.cref)
         self.pick = getref()
 
-    def tearDown(self):
-        # Workaround for #234; TODO: change this back to setref(**startup) when
-        # that issue is fixed
-        # setref(**startup)
-        setref(graphtable=startup['graphtable'],
-               comptable=startup['comptable'],
-               thermtable=startup['thermtable'],
-               area=startup['area'])
-        set_default_waveset()
-
-    def testgraph(self):
-        self.assertEqual(self.pick['graphtable'],
-                         self.gref)
-
-    def testcomp(self):
-        self.assertEqual(self.cref,
-                         self.pick['comptable'])
-
-    def testbp(self):
-        bp=ObsBandpass('acs,hrc,f555w')
-        self.assertEqual(self.gref,bp.obsmode.gtname)
-        self.assertEqual(self.cref,bp.obsmode.ctname)
-
-    def testreset(self):
+    def teardown_class(self):
         setref()
-        tst=getref()
-        self.assertEqual(startup, tst)
 
+    def test_ref(self):
+        assert self.pick['graphtable'] == self.gref
+        assert self.pick['comptable'] == self.cref
 
-class TestAreaChanges(unittest.TestCase):
-    def testchange(self):
-        ref=100
-        setref(area=ref)
-        tst=refs.PRIMARY_AREA
-        self.assertEqual(ref,tst)
-
-    def testcounts(self):
-        #Area is used to convert to counts.
-        #So, changing the area should change the resulting counts.
-        w=N.arange(1,10)
-        p=units.Photlam()
-        ref=p.ToCounts(w,w)
-        setref(area=10)
-        tst=p.ToCounts(w,w)
-        self.assertTrue(N.all(ref != tst))
+    @use_cdbs
+    def test_bp(self):
+        bp = ObsBandpass('acs,hrc,f555w')
+        assert bp.obsmode.gtname == self.gref
+        assert bp.obsmode.ctname == self.cref

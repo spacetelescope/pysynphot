@@ -1,136 +1,43 @@
+from __future__ import absolute_import, division, print_function
+
 import numpy as np
+import pytest
+from numpy.testing import assert_allclose
 
-import pysynphot.spectrum as spec
-from pysynphot import ObsBandpass
+from .utils import use_cdbs
+from ..obsbandpass import ObsBandpass
+from ..spectrum import ArraySpectralElement
 
 
-# test that SpectralElement.sample respects internal units
 def test_sample_units():
-  defwave = np.linspace(0.1, 1, 10)
-  defthru = defwave
-
-  s = spec.ArraySpectralElement(defwave, defthru, 'm', 'TestArray')
-
-  angwave = defwave * 1.e10
-
-  np.testing.assert_allclose(s(angwave), s.sample(defwave))
+    """Test that SpectralElement.sample respects internal units."""
+    defwave = np.linspace(0.1, 1, 10)
+    s = ArraySpectralElement(defwave, defwave, 'm', 'TestArray')
+    assert_allclose(s(defwave * 1E10), s.sample(defwave))
 
 
-# test that SpectralElement.photbw returns results similar to Synphot
-# test for similarity to within 0.1%
-def test_photbw_acs_hrc_f555w():
-  mode = 'acs,hrc,f555w'
+@use_cdbs
+@pytest.mark.parametrize(
+  ('obsmode', 'ans'),
+  [('acs,hrc,f555w', 357.17),
+   ('acs,sbc,f122m', 91.063),
+   ('acs,wfc1,f775w,pol_v', 444.05),
+   ('cos,boa,nuv,mirrora', 370.65),
+   ('nicmos,1,f090m,dn', 559.59),
+   ('stis,0.2x29,mirror,fuvmama', 134.51110167140249),
+   ('wfc3,ir,f164n', 700.05),
+   ('wfc3,uvis1,f336w', 158.44),
+   ('wfc3,uvis2,f336w', 158.36)])
+def test_photbw(obsmode, ans):
+    """
+    Test that SpectralElement.photbw returns results similar to
+    Synphot to within 0.1%.
 
-  # from Synphot
-  ref_photbw = 357.17
+    .. note::
 
-  band = ObsBandpass(mode)
+        For stis,0.2x29,mirror,fuvmama, Synphot value was 134.79.
+        New ref value from STIS data update for PySynphot in April 2016.
 
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
-
-
-def test_photbw_acs_sbc_f122m():
-  mode = 'acs,sbc,f122m'
-
-  # from Synphot
-  ref_photbw = 91.063
-
-  band = ObsBandpass(mode)
-
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
-
-
-def test_photbw_acs_wfc1_f775w_pol_v():
-  mode = 'acs,wfc1,f775w,pol_v'
-
-  # from Synphot
-  ref_photbw = 444.05
-
-  band = ObsBandpass(mode)
-
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
-
-
-def test_photbw_cos_boa_nuv_mirrora():
-  mode = 'cos,boa,nuv,mirrora'
-
-  # from Synphot
-  ref_photbw = 370.65
-
-  band = ObsBandpass(mode)
-
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
-
-
-def test_photbw_nicmos_1_f090m_dn():
-  mode = 'nicmos,1,f090m,dn'
-
-  # from Synphot
-  ref_photbw = 559.59
-
-  band = ObsBandpass(mode)
-
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
-
-
-def test_photbw_stis_02x29_mirror_fuvmama():
-  mode = 'stis,0.2x29,mirror,fuvmama'
-
-  # Synphot value was 134.79.
-  # New ref value from STIS data update for PySynphot in April 2016.
-  ref_photbw = 134.51110167140249
-
-  band = ObsBandpass(mode)
-
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
-
-
-def test_photbw_wfc3_ir_f164n():
-  mode = 'wfc3,ir,f164n'
-
-  # from Synphot
-  ref_photbw = 700.05
-
-  band = ObsBandpass(mode)
-
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
-
-
-def test_photbw_wfc3_uvis1_f336w():
-  mode = 'wfc3,uvis1,f336w'
-
-  # from Synphot
-  ref_photbw = 158.44
-
-  band = ObsBandpass(mode)
-
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
-
-
-def test_photbw_wfc3_uvis2_f336w():
-  mode = 'wfc3,uvis2,f336w'
-
-  # from Synphot
-  ref_photbw = 158.36
-
-  band = ObsBandpass(mode)
-
-  test_photbw = band.photbw()
-
-  np.testing.assert_allclose(ref_photbw, test_photbw, rtol=0.001)
+    """
+    band = ObsBandpass(obsmode)
+    assert_allclose(band.photbw(), ans, rtol=1E-3)

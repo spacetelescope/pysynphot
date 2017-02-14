@@ -1,142 +1,114 @@
-from __future__ import division
-import sys
+from __future__ import absolute_import, division, print_function
+
 import os
-import math
 
-import numpy as N
-from astropy.io import fits as pyfits
-import testutil
-from pysynphot import units, locations, spectrum, observationmode
-from pysynphot.obsbandpass import ObsBandpass
-import pysynphot as S
-from pysynphot.units import WaveUnits, FluxUnits
+import numpy as np
+from astropy.utils.data import get_pkg_data_filename
+from numpy.testing import assert_array_equal
 
-## TO RUN IN A SINGLE TEST IN DEBUG MODE:
-## import ui_test
-## ui_test.FileTestCase('testwave').debug()
+from .utils import use_cdbs
+from ..spectrum import (ArraySourceSpectrum, BlackBody, FileSourceSpectrum,
+                        FlatSpectrum, GaussianSource, Powerlaw)
+from ..units import WaveUnits, FluxUnits
 
 
+def test_fits_header():
+    sp = FileSourceSpectrum(get_pkg_data_filename(os.path.join(
+        'data', 'alpha_lyr_stis_002.fits')))
+    # This also naturally tests for len(sp.fheader) > 0
+    assert sp.fheader['TARGETID'] == 'ALPHA_LYR'
 
-class FitsHdrCase(testutil.FPTestCase):
-    def setUp(self):
-        self.sp=S.FileSpectrum(os.path.join(os.path.dirname(__file__),
-                                            'data',
-                                            'alpha_lyr_stis_002.fits')
-                               )
 
-    def testheader(self):
-        self.assertTrue(len(self.sp.fheader) > 0)
+class BaseSpec(object):
+    """Base class for source spectrum tests."""
 
-    def testhval(self):
-        self.assertEqual(self.sp.fheader['TARGETID'],
-                         'ALPHA_LYR')
-        
-class SpecTestCase(testutil.FPTestCase):
-    def setUp(self):
-        self.sp=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
-                                            'calspec',
-                                            'alpha_lyr_stis_003.fits'))
+    def test_attr_cls(self):
+        assert isinstance(self.sp.wave, np.ndarray)
+        assert isinstance(self.sp.flux, np.ndarray)
+        assert isinstance(self.sp.waveunits, WaveUnits)
+        assert isinstance(self.sp.fluxunits, FluxUnits)
+        assert isinstance(self.sp(np.arange(3000, 10000)), np.ndarray)
 
-    def testwave(self):
-        wave=self.sp.wave
-        self.assertTrue(isinstance(wave,N.ndarray))
-
-    def testflux(self):
-        flux=self.sp.flux
-        self.assertTrue(isinstance(flux,N.ndarray))
-
-    def testwaveunits(self):
-        self.assertTrue(isinstance(self.sp.waveunits,WaveUnits))
-
-    def testfluxunits(self):
-        self.assertTrue(isinstance(self.sp.fluxunits,FluxUnits))
-
-    def testcalltype(self):
-        callval=self.sp(N.arange(3000,10000))
-        self.assertTrue(isinstance(callval,N.ndarray))
-
-    def testcallval(self):
+    def test_call(self):
         self.sp.convert('fnu')
-        flux=self.sp.flux
-        callval=self.sp(self.sp.wave)
-        point=len(flux)//2
-        self.assertTrue(flux[point] != callval[point])
+        midpoint = len(self.sp.flux) // 2
+        assert self.sp.flux[midpoint] != self.sp(self.sp.wave)[midpoint]
 
-    def testcallunits(self):
-        self.sp.convert('flam')
-        foo=self.sp.flux
         self.sp.convert('photlam')
-        callval=self.sp(self.sp.wave)
-        flux=self.sp.flux
-        self.assertTrue(N.all(flux == callval))
-
-class ZeroFluxTest(SpecTestCase):
-    def setUp(self):
-        self.sp=S.ArraySpectrum(N.arange(3000,6000,500),
-                                N.array([1.0,0.5,0.2,0.0,0.0,0.0])*1e-14,
-                                fluxunits='flam')
+        assert_array_equal(self.sp.flux, self.sp(self.sp.wave))
 
 
-    def testcallval(self):
+class TestZeroFlux(BaseSpec):
+    def setup_class(self):
+        self.sp = ArraySourceSpectrum(
+            np.arange(3000, 6000, 500),
+            np.array([1.0, 0.5, 0.2, 0.0, 0.0, 0.0]) * 1e-14,
+            fluxunits='flam')
+
+    def test_call(self):
+        """0 flam does indeed equal 0 fnu"""
         self.sp.convert('fnu')
-        flux=self.sp.flux
-        callval=self.sp(self.sp.wave)
-        point=len(flux)/2
-        #becuase 0 flam does indeed equal 0 fnu
-        self.assertTrue(flux[point] == callval[point])
+        midpoint = len(self.sp.flux) // 2
+        assert self.sp.flux[midpoint] == self.sp(self.sp.wave)[midpoint]
 
-                                                
-class NegFluxTest(SpecTestCase):
-    def setUp(self):
-        self.sp=S.ArraySpectrum(N.arange(3000,6000,500),
-                                N.array([1.0,0.5,0.2,0.1,-0.1,-0.3])*1e-14,
-                                fluxunits='flam')
-    
-class NegFlamTest(NegFluxTest):
-    def setUp(self):
-        self.sp=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
-                                            'calspec',
-                                            'vb8_stisnic_001.fits'))
-class NegMagTest(NegFluxTest):
-    def setUp(self):
-        self.sp=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
-                                            'calobs',
-                                            'alpha_lyr_006.fits'))
-                
-class GaussianTest(SpecTestCase):
-    def setUp(self):
-        self.sp=S.GaussianSource(1e-12,5000,30)
 
-class UnitSpecTest(SpecTestCase):
-    def setUp(self):
-        self.sp=S.FlatSpectrum(10)
+class TestNegFlux(BaseSpec):
+    def setup_class(self):
+        self.sp = ArraySourceSpectrum(
+            np.arange(3000, 6000, 500),
+            np.array([1.0, 0.5, 0.2, 0.1, -0.1, -0.3]) * 1e-14,
+            fluxunits='flam')
 
-class PowerLawTest(SpecTestCase):
-    def setUp(self):
-        self.sp=spectrum.Powerlaw(6000,3)
 
-class BlackBodyTest(SpecTestCase):
-    def setUp(self):
-        self.sp=S.BlackBody(60000)
+class TestGaussian(BaseSpec):
+    def setup_class(self):
+        self.sp = GaussianSource(1e-12, 5000, 30)
 
-class CompositeAnalTest(SpecTestCase):
-    def setUp(self):
-        self.sp=S.BlackBody(60000)+S.GaussianSource(1e-12,5000,30)
 
-class CompositeFileTest(SpecTestCase):
-    def setUp(self):
-        self.comp1=S.FileSpectrum(os.path.join(os.environ['PYSYN_CDBS'],
-                                            'calspec',
-                                            'alpha_lyr_stis_003.fits'))
-        self.comp2=S.FlatSpectrum(10)
-        self.sp=self.comp1+self.comp2
+class TestUnitSpec(BaseSpec):
+    def setup_class(self):
+        self.sp = FlatSpectrum(10)
 
-if __name__ == '__main__':
-    if 'debug' in sys.argv:
-        testutil.debug(__name__,2)
-    else:
-        testutil.testall(__name__,2)
 
-                     
-                     
-                    
+class TestPowerLaw(BaseSpec):
+    def setup_class(self):
+        self.sp = Powerlaw(6000, 3)
+
+
+class TestBlackBody(BaseSpec):
+    def setup_class(self):
+        self.sp = BlackBody(60000)
+
+
+class TestCompositeAnalytic(BaseSpec):
+    def setup_class(self):
+        self.sp = BlackBody(60000) + GaussianSource(1e-12, 5000, 30)
+
+
+@use_cdbs
+class TestFileSpec(BaseSpec):
+    def setup_class(self):
+        self.sp = FileSourceSpectrum(os.path.join(
+            os.environ['PYSYN_CDBS'], 'calspec', 'alpha_lyr_stis_003.fits'))
+
+
+@use_cdbs
+class TestNegFlam(BaseSpec):
+    def setup_class(self):
+        self.sp = FileSourceSpectrum(os.path.join(
+            os.environ['PYSYN_CDBS'], 'calspec', 'vb8_stisnic_001.fits'))
+
+
+@use_cdbs
+class TestNegMag(BaseSpec):
+    def setup_class(self):
+        self.sp = FileSourceSpectrum(os.path.join(
+            os.environ['PYSYN_CDBS'], 'calobs', 'alpha_lyr_006.fits'))
+
+
+@use_cdbs
+class TestCompositeFile(BaseSpec):
+    def setup_class(self):
+        comp1 = FileSourceSpectrum(os.path.join(
+            os.environ['PYSYN_CDBS'], 'calspec', 'alpha_lyr_stis_003.fits'))
+        self.sp = comp1 + FlatSpectrum(10)

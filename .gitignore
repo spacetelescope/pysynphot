@@ -7,13 +7,10 @@ RELIC-INFO
 *.o
 *.so
 __pycache__
+.cache
 
 # Other generated files
 pysynphot/version.py
-
-# Test files
-test/from_commissioning/*/*.fits
-test/from_commissioning/*/*.okfile
 
 # Sphinx
 _build

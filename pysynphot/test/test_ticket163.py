@@ -1,95 +1,57 @@
-from __future__ import division
-from __future__ import division
-from __future__ import division
-import pysynphot as S
-from astropy.io import fits as pyfits
-import unittest, os
+from __future__ import absolute_import, division, print_function
+from astropy.extern.six import iteritems
 
-class TestSpecCase(object):
-    @classmethod
-    def setUpClass(cls):
-        #Write the file
-        cls.sp=S.BlackBody(5500)
-        cls.fname='/tmp/t163_spcase.fits'
-        cls.sp.writefits(cls.fname)
-        #Read the header
-        cls.f=pyfits.open(cls.fname)
-        cls.h0 = cls.f[0].header
-        cls.h1 = cls.f[1].header
-        
-    @classmethod
-    def tearDownClass(cls):
-        cls.f.close()
-        os.unlink(cls.fname)
-        
+import os
 
-    def testorigin(self):
-        assert('origin' in self.h0)
+import pytest
+from astropy.io import fits
 
-    def testfname(self):
-        assert(os.path.basename(self.fname) == self.h0['filename'])
+from .utils import use_cdbs
+from ..obsbandpass import ObsBandpass
+from ..spectrum import BlackBody
 
 
-        #test value of origin?
-        #test for FITS-y comments?
+class TestSpecHdr(object):
+    @pytest.fixture(autouse=True)
+    def setup_class(self, tmpdir):
+        # Write the file
+        self.sp = BlackBody(5500)
+        self.fname = str(tmpdir.join('t163_spcase.fits'))
+        self.keys = dict(sptype=('blackbody', 'Type of spectrum'),
+                         bbtemp=(5500, ))
+        self.sp.writefits(self.fname, hkeys=self.keys)
 
-    def testexpr(self):
-        assert((str(self.sp)) == self.h1['expr'])
+        # Read the header
+        with fits.open(self.fname) as f:
+            self.h0 = f[0].header
+            self.h1 = f[1].header
 
-    def testformat(self):
-        assert('G15.7' == self.h1['tdisp1'].strip().upper())
-        #test value of graph, comptables?
+    def test_header(self):
+        assert 'origin' in self.h0
+        assert os.path.basename(self.fname) == self.h0['filename']
 
-class TestBandCase(TestSpecCase):
+        assert str(self.sp) == self.h1['expr']
+        assert 'G15.7' == self.h1['tdisp1'].strip().upper()
 
-    @classmethod
-    def setUpClass(cls):
-        #Write the file
-        #Warning, lying variable names!
-        cls.sp=S.ObsBandpass('acs,hrc,f555w')
-        cls.fname='/tmp/t163_bpcase.fits'
-        cls.sp.writefits(cls.fname)
-        #Read the header
-        cls.f=pyfits.open(cls.fname)
-        cls.h0 = cls.f[0].header
-        cls.h1 = cls.f[1].header
-        
-        
-
-    def testgrf(self):
-        assert('grftable' in self.h1)
-
-    def testcmp(self):
-        assert('cmptable' in self.h1)
+    def test_keys(self):
+        for k, v in iteritems(self.keys):
+            assert self.h0[k] == v[0]
 
 
-class TestKeywords(object):
+@use_cdbs
+class TestBandHdr(TestSpecHdr):
+    @pytest.fixture(autouse=True)
+    def setup_class(self, tmpdir):
+        # Write the file
+        self.sp = ObsBandpass('acs,hrc,f555w')  # Is actually bp
+        self.fname = str(tmpdir.join('t163_bpcase.fits'))
+        self.sp.writefits(self.fname)
 
-    @classmethod
-    def setUpClass(cls):
-        #Write the file
-        cls.sp=S.BlackBody(5500)
-        cls.fname='/tmp/t163_spcase.fits'
-        cls.addkeys = dict(sptype=('blackbody','Type of spectrum'),
-                           bbtemp=(5500,))
-        cls.sp.writefits(cls.fname, hkeys=cls.addkeys)
-        #Read the header
-        cls.f=pyfits.open(cls.fname)
-        cls.h0 = cls.f[0].header
+        # Read the header
+        with fits.open(self.fname) as f:
+            self.h0 = f[0].header
+            self.h1 = f[1].header
 
-        
-    @classmethod
-    def tearDownClass(cls):
-        cls.f.close()
-        os.unlink(cls.fname)
-
-    def testkeys(self):
-        for k,v in self.addkeys.items():
-            def keycheck(k,v):
-                assert self.h0[k] == v[0]
-            keycheck.name = 'testkeys_%s'%k
-            keycheck.description = keycheck.name
-            yield keycheck, k, v
-
-
-        
+    def test_keys(self):
+        assert 'grftable' in self.h1
+        assert 'cmptable' in self.h1

@@ -1,62 +1,49 @@
-import numpy.testing as nptest
+from __future__ import absolute_import, division, print_function
 
-from pysynphot import refs
+import numpy as np
+from numpy.testing import assert_allclose, assert_array_equal
 
-import sys
-PY3K = sys.version_info[0] >= 3
-if PY3K: from importlib import reload
+from .. import refs
 
-def setUpModule():
+
+def setup_module(module):
     pass
 
 
-def tearDownModule():
-    # Reset refs; specifically the default waveset
-    reload(refs)
+def teardown_module(module):
+    """Reset refs; specifically the default waveset."""
+    refs.setref()
 
 
 def test_log_num():
-  refs.set_default_waveset(10, 20, 10)
+    testref = [10, 10.71773463, 11.48698355, 12.31144413, 13.19507911,
+               14.14213562, 15.15716567, 16.24504793, 17.41101127, 18.66065983]
 
-  testref = [ 10.        ,  10.71773463,  11.48698355,  12.31144413,
-              13.19507911,  14.14213562,  15.15716567,  16.24504793,
-              17.41101127,  18.66065983]
+    refs.set_default_waveset(10, 20, 10)
+    assert_allclose(testref, refs._default_waveset)
 
-  nptest.assert_allclose(testref,refs._default_waveset)
+    refs.setref(waveset=(10, 20, 10))
+    assert_allclose(testref, refs._default_waveset)
 
-  refs.setref(waveset=(10, 20, 10))
-
-  nptest.assert_allclose(testref,refs._default_waveset)
-
-  refs.setref(waveset=(10, 20, 10, 'log'))
-
-  nptest.assert_allclose(testref,refs._default_waveset)
+    refs.setref(waveset=(10, 20, 10, 'log'))
+    assert_allclose(testref, refs._default_waveset)
 
 
 def test_log_delta():
-  refs.set_default_waveset(10, 20, delta=0.05)
-
-  testref = [ 10.        ,  11.22018454,  12.58925412,  14.12537545,
-              15.84893192,  17.7827941 ,  19.95262315]
-
-  nptest.assert_allclose(testref,refs._default_waveset)
+    testref = [10, 11.22018454, 12.58925412, 14.12537545, 15.84893192,
+               17.7827941, 19.95262315]
+    refs.set_default_waveset(10, 20, delta=0.05)
+    assert_allclose(testref, refs._default_waveset)
 
 
-def test_linear_num():
-  refs.set_default_waveset(10, 20, 10, log=False)
+def test_linear():
+    testref = np.arange(10, 20)
 
-  testref = [ 10.,  11.,  12.,  13.,  14.,  15.,  16.,  17.,  18.,  19.]
+    refs.set_default_waveset(10, 20, 10, log=False)
+    assert_array_equal(refs._default_waveset, testref)
 
-  nptest.assert_array_equal(refs._default_waveset, testref)
+    refs.setref(waveset=(10, 20, 10, 'linear'))
+    assert_allclose(testref, refs._default_waveset)
 
-  refs.setref(waveset=(10, 20, 10, 'linear'))
-
-  nptest.assert_allclose(testref,refs._default_waveset)
-
-
-def test_linear_delta():
-  refs.set_default_waveset(10, 20, delta=1, log=False)
-
-  testref = [ 10.,  11.,  12.,  13.,  14.,  15.,  16.,  17.,  18.,  19.]
-
-  nptest.assert_array_equal(refs._default_waveset, testref)
+    refs.set_default_waveset(10, 20, delta=1, log=False)
+    assert_array_equal(refs._default_waveset, testref)

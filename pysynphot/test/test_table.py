@@ -1,60 +1,47 @@
-"""Test table format errors. Usually in real life these occur
+"""
+Test table format errors. Usually in real life these occur
 in file access, but many of them apply to ArraySpectrum objects
 as well & can be tested that way.
-
 """
-import os
-import unittest
+from __future__ import absolute_import, division, print_function
+
 import numpy as np
+import pytest
 
-from pysynphot import exceptions, spectrum
-
-
-class WaveProblems(unittest.TestCase):
-    def setUp(self):
-        self.fx = np.array([10, 20, 20, 30, 50, 100])
-
-    def testpass(self):
-        wv = np.array([10, 20, 30, 40, 50, 100])
-        sp = spectrum.ArraySourceSpectrum(wv, self.fx)
-
-    def testduprow(self):
-        wv = np.array([10, 20, 20, 30, 50, 100])
-        try:
-            sp = spectrum.ArraySourceSpectrum(wv, self.fx)
-        except exceptions.DuplicateWavelength as e:
-            self.assertEqual(e.rows, 1)
-
-    def testzero(self):
-        wv = np.array([0, 20, 30, 40, 50, 100])
-        self.assertRaises(exceptions.ZeroWavelength,
-                          spectrum.ArraySourceSpectrum, wv, self.fx)
-
-    def testnosort(self):
-        wv = np.array([10, 20, 40, 30, 50, 100])
-        self.assertRaises(exceptions.UnsortedWavelength,
-                          spectrum.ArraySourceSpectrum, wv, self.fx)
+from ..exceptions import (BadRow, DuplicateWavelength, UnsortedWavelength,
+                          ZeroWavelength)
+from ..spectrum import ArraySourceSpectrum, FileSourceSpectrum
 
 
-class TestFile(unittest.TestCase):
-    def setUp(self):
-        # Write an ascii file to test the reading of
-        self.wv = np.array([10, 20, 'grackle', 30, 50, 100])
-        self.fx = self.wv
+def test_wave_exceptions():
+    fx = np.array([10, 20, 20, 30, 50, 100])
 
-        self.fname = os.path.abspath('grackle.dat')
-        with open(self.fname, 'w') as out:
-            for w, f in zip(self.wv, self.fx):
-                out.write("%s  %s\n" % (w, f))
+    # No error
+    sp = ArraySourceSpectrum(np.array([10, 20, 30, 40, 50, 100]), fx)
+    assert sp(30) == 20
 
-    def tearDown(self):
-        try:
-            os.unlink(self.fname)
-        except Exception as e:
-            pass  # ok, not there
+    with pytest.raises(DuplicateWavelength) as e:
+        ArraySourceSpectrum(np.array([10, 20, 20, 30, 50, 100]), fx)
+        assert e.rows == 1
 
-    def testbadrow(self):
-        try:
-            sp = spectrum.FileSourceSpectrum(self.fname)
-        except exceptions.BadRow as e:
-            self.assertEqual(e.rows, 3)
+    with pytest.raises(ZeroWavelength):
+        ArraySourceSpectrum(np.array([0, 20, 30, 40, 50, 100]), fx)
+
+    with pytest.raises(UnsortedWavelength):
+        ArraySourceSpectrum(np.array([10, 20, 40, 30, 50, 100]), fx)
+
+
+def test_file_badrow(tmpdir):
+    wv = np.array([10, 20, 'grackle', 30, 50, 100])
+    content = ''
+
+    for w in wv:
+        content += "{0}  {0}\n".format(w)
+
+    # pytest will only keep the last few runs and auto delete the rest
+    fname = tmpdir.join('grackle.dat')
+    fname.write(content)
+
+    with pytest.raises(BadRow) as e:
+        FileSourceSpectrum(str(fname))
+        assert e.rows == 3

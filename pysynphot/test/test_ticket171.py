@@ -1,34 +1,22 @@
+from __future__ import absolute_import, division, print_function
+
 import os
-import re
-import unittest
 
-#Code under test
-from pysynphot.locations import irafconvert
+from ..locations import irafconvert
 
 
-class VarString(unittest.TestCase):
-    def setUp(self):
+class TestVarString(object):
+    def setup_class(self):
         self.old_cdbs = os.environ['PYSYN_CDBS']
-        os.environ['PYSYN_CDBS'] = os.path.abspath(os.path.dirname(__file__))
-        self.fstring = '$PYSYN_CDBS/etc/background/Zodi.fits'
-        self.ref = os.path.join(os.environ['PYSYN_CDBS'],
-                                'etc/background/Zodi.fits')
-        self.tda=dict(pysyn_cdbs = os.path.dirname(__file__),
-                      sep = os.path.sep,
-                      fstring=self.fstring,
-                      ref=self.ref)
+        os.environ['PYSYN_CDBS'] = os.path.join('fake', 'path')
 
-    def tearDown(self):
+    def teardown_class(self):
         os.environ['PYSYN_CDBS'] = self.old_cdbs
 
-    def test1(self):
-        ans = irafconvert(self.fstring)
-
-        ans = os.path.normpath(ans)
-        ref = os.path.normpath(self.ref)
-
-        ans = os.path.normcase(ans)
-        ref = os.path.normcase(ref)
-
-        self.tra=dict(ans=ans, ref=ref)
-        self.assertEqual(ref, ans)
+    def test_path(self):
+        fname = os.path.join('etc', 'background', 'Zodi.fits')
+        ref = os.path.normcase(os.path.normpath(os.path.join(
+            os.environ['PYSYN_CDBS'], fname)))
+        ans = os.path.normcase(os.path.normpath(irafconvert(os.path.join(
+            '$PYSYN_CDBS', fname))))
+        assert ref == ans

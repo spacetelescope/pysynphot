@@ -1,82 +1,58 @@
-from __future__ import division
-import sys
-import os
-import unittest
-import testutil
-import pysynphot as S
-import numpy as N
+from __future__ import absolute_import, division, print_function
 
-class AnalyticBP(testutil.FPTestCase):
+import numpy as np
 
-    def setUp(self):
-        self.bp=S.Box(10000,100)
-
-    def testbp1(self):
-        tst=self.bp(10000)
-        self.assertTrue(tst == 1.0)
-
-    def testconstant(self):
-        bp2 = self.bp * 3
-        tst = bp2(10000)
-        self.assertTrue(tst == 3)
-        
-    def testbp2(self):
-        tst=self.bp(3000)
-        self.assertTrue(tst == 0.0)
-        
-    def testbp3(self):
-        tst=self.bp.sample(10000)
-        self.assertTrue(tst == 1.0)
-
-    def testbp4(self):
-        tst=self.bp.sample(3000)
-        self.assertTrue(tst == 0.0)
-
-    def testflat(self):
-        self.bp = S.UniformTransmission(0.5)
-        tst = self.bp.sample(3000)
-        self.assertTrue(tst == 0.5)
+from .utils import use_cdbs
+from ..catalog import Icat
+from ..obsbandpass import ObsBandpass
+from ..spectrum import (ArraySourceSpectrum,  ArraySpectralElement, Box,
+                        UniformTransmission)
 
 
+def test_box():
+    bp = Box(10000, 100)
 
-class Tabular(testutil.FPTestCase):
-    def setUp(self):
-        #Make arrays
-        self.wv = N.arange(1000,2000)
-        self.fl = N.zeros(self.wv.shape)
+    assert bp(10000) == 1
+    assert bp.sample(10000) == 1
+
+    assert bp(3000) == 0
+    assert bp.sample(3000) == 0
+
+    bp2 = bp * 3
+    assert bp2(10000) == 3
+
+
+def test_flat():
+    bp = UniformTransmission(0.5)
+    assert bp.sample(3000) == 0.5
+
+
+class TestTabular(object):
+    def setup_class(self):
+        self.wv = np.arange(1000, 2000)
+        self.fl = np.zeros(self.wv.shape)
         self.fl[100:-100] = 10.0
-        
-    def testsp(self):
-        self.sp=S.ArraySpectrum(self.wv,self.fl,
-                                fluxunits='photlam')
-        tst=self.sp(1500)
-        self.assertTrue(tst == 10)
+        self.sp = ArraySourceSpectrum(self.wv, self.fl, fluxunits='photlam')
 
-    def testcompsp(self):
-        sp1=S.ArraySpectrum(self.wv,self.fl, fluxunits='photlam')
-        sp2=S.ArraySpectrum(self.wv[48:],self.fl[48:]*2.3,
-                            fluxunits='photlam')
-        self.sp=sp1 + sp2
-        tst=self.sp(1500)
-        self.assertTrue(tst == 10+(10*2.3))
+    def test_compsp(self):
+        sp2 = ArraySourceSpectrum(self.wv[48:], self.fl[48:]*2.3,
+                                  fluxunits='photlam')
+        sp = self.sp + sp2
+        assert self.sp(1500) == 10
+        assert sp(1500) == 10 + (10 * 2.3)
 
-        
-    def testbp(self):
-        self.bp=S.ArrayBandpass(self.wv,self.fl)
-        tst=self.bp(1500)
-        self.assertTrue(tst == 10)
+    def test_bp(self):
+        bp = ArraySpectralElement(self.wv, self.fl)
+        assert bp(1500) == 10
 
-class TestDoesntError(unittest.TestCase):
-    #Just test to make sure it doesn't raise an exception;
-    #don't test that the actual value is correct
 
-    def testobsband(self):
-        self.bp=S.ObsBandpass('acs,hrc,f555w')
-        tst=self.bp(3000)
-        assert True
-        
+@use_cdbs
+def test_obsband():
+    bp = ObsBandpass('acs,hrc,f555w')
+    assert bp(3000) == 0
 
-    def testicat(self):
-        self.sp=S.Icat('k93models',4500,1,2)
-        tst=self.sp(3000)
-        assert True
+
+@use_cdbs
+def test_icat():
+    sp = Icat('k93models', 4500, 1, 2)
+    assert sp(3000) > 0

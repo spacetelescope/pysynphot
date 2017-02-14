@@ -21,7 +21,11 @@ from . import locations
 from . import planck
 import pysynphot.exceptions as exceptions  # custom pysyn exceptions
 
-from pysynphot import __version__
+try:
+    from pysynphot import __version__
+except ImportError:
+    __version__ = 'unk'
+
 try:
     from pysynphot import __svn_revision__
 except ImportError:

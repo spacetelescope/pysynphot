@@ -1,34 +1,32 @@
-import unittest
+from __future__ import absolute_import, division, print_function
+
 import os
-from pysynphot.locations import irafconvert
-from pysynphot.spparser import parse_spec
 
-class Ticket52(unittest.TestCase):
+import pytest
 
-    def setUp(self):
-        self.ref = os.path.join(os.environ['PYSYN_CDBS'],
-                                'calspec',
-                                'gd50_004.fits')
+from .utils import use_cdbs
+from ..locations import irafconvert
+from ..spparser import parse_spec
 
-    def testiraf(self):
-        fname = 'crcalspec$gd50_004.fits'
+
+@use_cdbs
+class TestTicket52(object):
+    def setup_class(self):
+        self.ref = os.path.join(
+            os.environ['PYSYN_CDBS'], 'calspec', 'gd50_004.fits')
+
+    @pytest.mark.parametrize(
+        'fname',
+        ['crcalspec$gd50_004.fits',
+         '$PYSYN_CDBS/calspec/gd50_004.fits'])
+    def test_iraf(self, fname):
         tst = irafconvert(fname)
-        self.assertTrue(self.ref == tst, msg="Expected %s, got %s"%(self.ref,tst))
+        assert tst == self.ref, 'Expected {}, got {}'.format(self.ref, tst)
 
-    def testshell(self):
-        fname = '$PYSYN_CDBS/calspec/gd50_004.fits'
-        tst = irafconvert(fname)
-        self.assertTrue(self.ref == tst, msg="Expected %s, got %s"%(self.ref,tst))
+        sp = parse_spec(fname)
+        assert str(sp) == self.ref
 
-    def testplain(self):
-        fname = 'gd50_004.fits'
-        tst = irafconvert(fname)
-        self.assertTrue(fname == tst,  msg="Expected %s, got %s"%(fname,tst))
-
-    def testparse_iraf(self):
-        sp = parse_spec('crcalspec$gd50_004.fits')
-        self.assertTrue(self.ref == str(sp))
-
-    def testparse_shell(self):
-        sp = parse_spec('$PYSYN_CDBS/calspec/gd50_004.fits')
-        self.assertTrue(self.ref == str(sp))
+    @pytest.mark.xfail(reason='invalid test')
+    def test_plain(self):
+        tst = irafconvert('gd50_004.fits')
+        assert tst == self.ref, 'Expected {}, got {}'.format(self.ref, tst)
