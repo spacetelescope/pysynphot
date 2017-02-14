@@ -13,6 +13,7 @@ import math
 import warnings
 
 from astropy.io import fits as pyfits
+from astropy.utils.data import get_file_contents
 import numpy as N
 
 from . import refs
@@ -183,9 +184,11 @@ class Integrator(object):
         wlist = []
         flist = []
         lcount = 0
-        fs = open(filename, mode='r')
-        lines = fs.readlines()
-        fs.close()
+        if filename.lower().startswith('ftp://'):
+            lines = get_file_contents(filename)
+        else:
+            with open(filename) as fs:
+                lines = fs.readlines()
         for line in lines:
             lcount += 1
             cline = line.strip()

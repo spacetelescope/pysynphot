@@ -31,16 +31,46 @@ def test_write(tmpdir, obj):
 
 
 @use_cdbs
-@pytest.mark.parametrize(
-    'obj',
-    [interpret(parse(scan('ebmvx(0.5,gal1)'))),
-     FileSourceSpectrum(os.path.join(root, 'calspec', 'feige66_002.fits')),
-     FileSpectralElement(os.path.join(root, 'comp', 'nonhst',
-                                      'johnson_v_003_syn.fits')),
-     ObsBandpass('acs,hrc,f555w'),
-     ObsBandpass('acs,hrc,f555w,mjd#54000'),
-     BlackBody(10000) * ObsBandpass('acs,hrc,f555w'),
-     Icat('k93models', 3500, 0.0, 4.6)])
-def test_write_cdbs(tmpdir, obj):
-    fname = tmpdir.join(os.path.basename(obj.name) + '.fits')
-    obj.writefits(str(fname))
+class TestWriteParse(object):
+    """
+    pytest.mark.parametrize gives URLError for FTP connection, so we have
+    to do it this way instead.
+    """
+    def setup_class(self):
+        self.obj = interpret(parse(scan('ebmvx(0.5,gal1)')))
+
+    def test_write_obj(self, tmpdir):
+        fname = tmpdir.join(os.path.basename(self.obj.name) + '.fits')
+        self.obj.writefits(str(fname))
+
+
+class TestWriteFeige(TestWriteParse):
+    def setup_class(self):
+        self.obj = FileSourceSpectrum(
+            os.path.join(root, 'calspec', 'feige66_002.fits'))
+
+
+class TestWriteV(TestWriteParse):
+    def setup_class(self):
+        self.obj = FileSpectralElement(
+            os.path.join(root, 'comp', 'nonhst', 'johnson_v_003_syn.fits'))
+
+
+class TestWriteACS(TestWriteParse):
+    def setup_class(self):
+        self.obj = ObsBandpass('acs,hrc,f555w')
+
+
+class TestWriteMJD(TestWriteParse):
+    def setup_class(self):
+        self.obj = ObsBandpass('acs,hrc,f555w,mjd#54000')
+
+
+class TestWriteMult(TestWriteParse):
+    def setup_class(self):
+        self.obj = BlackBody(10000) * ObsBandpass('acs,hrc,f555w')
+
+
+class TestWriteIcat(TestWriteParse):
+    def setup_class(self):
+        self.obj = Icat('k93models', 3500, 0.0, 4.6)

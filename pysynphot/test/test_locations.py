@@ -4,9 +4,11 @@ import os
 
 from astropy.utils.data import get_pkg_data_filename, _find_pkg_data_path
 
+from .utils import use_cdbs
 from .. import locations
 
 
+@use_cdbs
 class TestGetRedLaws(object):
     """
     Test the ability of pysynphot.locations to auto-gather extinction laws

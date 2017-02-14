@@ -14,15 +14,14 @@ env:
         - ASTROPY_VERSION=stable
         - PIP_DEPENDENCIES=''
         - CONDA_DEPENDENCIES=''
-        # If CDBS is down, remove --cdbs option to skip
-        - MAIN_CMD='pytest --cdbs pysynphot'
+        - MAIN_CMD='pytest pysynphot'
 
 matrix:
     include:
 
-        # Also test Astropy dev
+        # Also test Astropy dev with remote data
         - python: 3.5
-          env: ASTROPY_VERSION=development
+          env: ASTROPY_VERSION=development MAIN_CMD='pytest --cdbs pysynphot'
 
 install:
     # We now use the ci-helpers package to set up our testing environment.

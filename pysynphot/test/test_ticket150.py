@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
 import os
+import sys
 
 import numpy as np
 import pytest
@@ -66,16 +67,13 @@ class TestRenormOverlap(object):
         ratio = sp2.flux / self.sp.flux
         assert np.all((1 - abs(ratio / self.ref)) < 0.0001)
 
-    @pytest.mark.parametrize(
-        'bp',
-        [ObsBandpass('johnson,v'),
-         ObsBandpass('acs,hrc,f555w')])
-    def test_renorm(self, bp):
+    @pytest.mark.parametrize('obsmode', ['johnson,v', 'acs,hrc,f555w'])
+    def test_renorm(self, obsmode):
         """
         ACS: If 99% of throughput on spectrum, go ahead but print warning.
         Does not yet test warning.
         """
-        sp2 = self.sp.renorm(17.0, 'abmag', bp)
+        sp2 = self.sp.renorm(17.0, 'abmag', ObsBandpass(obsmode))
         assert isinstance(sp2, SourceSpectrum)
 
 
@@ -118,6 +116,8 @@ class TestBPIntegrate(object):
         assert abs(self.ref / 2.0 - tst) <= 0.025
 
 
+@pytest.mark.xfail(sys.version_info < (3, 0),
+                   reason='defarrays not compatible with Python 2')
 class OVBase(object):
     """
     Base class to test for the variants we can imagine.
@@ -154,7 +154,7 @@ class TestSpBp(OVBase):
         self.spnonzero = self.sprange
         self.bprange = (5000, 6000)
         self.bpnonzero = self.bprange
-        OVBase.defarrays(self)
+        super(TestSpBp, self).defarrays(self)
         self.cref = 'full'
         self.sref = True
 
@@ -166,7 +166,7 @@ class TestBpSp(OVBase):
         self.spnonzero = self.sprange
         self.bprange = (1000, 10000)
         self.bpnonzero = self.bprange
-        OVBase.defarrays(self)
+        super(TestBpSp, self).defarrays(self)
         self.cref = 'partial'
         self.sref = False
 
@@ -178,7 +178,7 @@ class TestSpPartial(OVBase):
         self.bprange = (4000, 10000)
         self.spnonzero = self.sprange
         self.bpnonzero = self.bprange
-        OVBase.defarrays(self)
+        super(TestSpPartial, self).defarrays(self)
         self.cref = 'partial'
         self.sref = False  # assuming they're all ones
 
@@ -192,7 +192,7 @@ class TestSpBpNz(OVBase):
         self.spnonzero = self.sprange
         self.bprange = (5000, 6000)
         self.bpnonzero = (5500, 5550)
-        OVBase.defarrays(self)
+        super(TestSpBpNz, self).defarrays(self)
         self.cref = 'full'
         self.sref = True
 
@@ -204,7 +204,7 @@ class TestBpSpNz(OVBase):
         self.spnonzero = self.sprange
         self.bprange = (1000, 10000)
         self.bpnonzero = (5500, 5700)
-        OVBase.defarrays(self)
+        super(TestBpSpNz, self).defarrays(self)
         self.cref = 'full'
         self.sref = True
 
@@ -216,7 +216,7 @@ class TestSpPartialNz1(OVBase):
         self.spnonzero = self.sprange
         self.bprange = (4000, 10000)
         self.bpnonzero = (5000, 6000)
-        OVBase.defarrays(self)
+        super(TestSpPartialNz1, self).defarrays(self)
         self.cref = 'full'
         self.sref = True
 
@@ -231,6 +231,6 @@ class TestSpPartialNz2(OVBase):
         self.spnonzero = (5000, 6000)
         self.bprange = (4000, 10000)
         self.bpnonzero = self.bprange
-        OVBase.defarrays(self)
+        super(TestSpPartialNz2, self).defarrays(self)
         self.cref = 'partial'
         self.sref = False

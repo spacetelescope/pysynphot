@@ -95,7 +95,10 @@ class TestCatalogCache(object):
         assert len(Cache.CATALOG_CACHE) == 1
 
         k = next(key for key in Cache.CATALOG_CACHE.keys())
-        fixed_k = os.path.normpath(os.path.normcase(k))
+        if k.startswith('ftp'):
+            fixed_k = k
+        else:
+            fixed_k = os.path.normpath(os.path.normcase(k))
         f = os.path.join(
             os.environ['PYSYN_CDBS'], 'grid', 'k93models', 'catalog.fits')
         msg = ('cache_found={}, cache_found_fixed={}, cache_expect={}, '

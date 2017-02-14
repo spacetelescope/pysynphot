@@ -32,8 +32,8 @@ from .locations import irafconvert, _refTable
 _default_waveset = None
 _default_waveset_str = None
 
-#Constants to hold tables.
-GRAPHTABLE= ''
+# Constants to hold tables.
+GRAPHTABLE = ''
 GRAPHDICT = {}
 COMPTABLE = ''
 COMPDICT = {}
@@ -41,6 +41,7 @@ THERMTABLE = ''
 THERMDICT = {}
 
 PRIMARY_AREA = 45238.93416  # cm^2 - default to HST mirror
+
 
 def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
                         delta=None, log=True):

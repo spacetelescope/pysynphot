@@ -29,7 +29,8 @@ def test_0000():
     assert isinstance(xt, RedLaw)
 
     xt = Cache.RedLaws['smcbar']
-    assert os.path.isfile(xt)
+    if not xt.startswith('ftp'):
+        assert os.path.isfile(xt)
 
     xt = Extinction(0.2, Cache.RedLaws['smcbar'])
     assert isinstance(xt, SpectralElement)
