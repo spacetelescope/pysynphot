@@ -11,3 +11,5 @@ PySynphot
 .. |travisci| image:: https://travis-ci.org/spacetelescope/pysynphot.svg?branch=master
     :alt: Travis CI Status
     :target: https://travis-ci.org/spacetelescope/pysynphot
+
+Synthetic photometry package from Astrolib.
