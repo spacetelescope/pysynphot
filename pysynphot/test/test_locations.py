@@ -8,7 +8,6 @@ from .utils import use_cdbs
 from .. import locations
 
 
-@use_cdbs
 class TestGetRedLaws(object):
     """
     Test the ability of pysynphot.locations to auto-gather extinction laws
