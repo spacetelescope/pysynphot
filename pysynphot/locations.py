@@ -322,7 +322,6 @@ def _get_RedLaws():
         files = [os.path.join(extdir, f) for f in files]
     else:
         files = glob.glob(globstr)
-        print(files)
 
     if not files:
         warnings.warn('Extinction files not found in %s' % (extdir, ))
