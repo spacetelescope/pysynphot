@@ -1,75 +1,55 @@
-from __future__ import division
-import sys
-import os
-import testutil
-import pysynphot as S
-import numpy as N
-from pysynphot.units import Units
-from pysynphot import extinction, spectrum, units, spparser, reddening
+from __future__ import absolute_import, division, print_function
 
-class FlipTest(testutil.FPTestCase):
-    def setUp(self):
-        self.waveup=N.arange(10000,10100,10)
-        self.wavedown=self.waveup[::-1]
-        self.T=N.arange(10)+5
-        self.Tflip=self.T.copy()[::-1]
-        self.up=S.ArrayBandpass(wave=self.waveup,
-                                throughput=self.T)
-        self.down=S.ArrayBandpass(wave=self.wavedown,
-                                   throughput=self.T[::-1])
+import numpy as np
+import pytest
+from numpy.testing import assert_array_equal
 
-    def test1(self):
-        "up(waveup)=T)"
-        self.assertEqualNumpy(self.up(self.waveup), self.T)
+from ..spectrum import ArraySpectralElement, ArraySourceSpectrum
 
-    def test2(self):
-        "down(wavedown)=Tflip"
-        self.assertEqualNumpy(self.down(self.wavedown), self.Tflip)
 
-    def test3(self):
-        "up(wavedown)=Tflip"
-        self.assertEqualNumpy(self.up(self.wavedown), self.Tflip)
+class TestFlip(object):
+    def setup_class(self):
+        self.waveup = np.arange(10000, 10100, 10)
+        self.wavedown = self.waveup[::-1]
+        self.t_up = np.arange(10) + 5
+        self.t_flip = self.t_up.copy()[::-1]
 
-    def test4(self):
-        "down(waveup)=T"
-        self.assertEqualNumpy(self.down(self.waveup), self.T)
+    @pytest.mark.parametrize(
+        'cls', [ArraySpectralElement, ArraySourceSpectrum])
+    def test_flip(self, cls):
+        up = cls(self.waveup, self.t_up)
+        down = cls(self.wavedown, self.t_up[::-1])
 
-class FlipSpec(FlipTest):
-    def setUp(self):
-        self.waveup=N.arange(10000,10100,10)
-        self.wavedown=self.waveup[::-1]
-        self.T=N.arange(10)+5
-        self.Tflip=self.T.copy()[::-1]
-        self.up=S.ArraySpectrum(wave=self.waveup,
-                                flux=self.T)
-        self.down=S.ArraySpectrum(wave=self.wavedown,
-                                  flux=self.T[::-1])
+        assert_array_equal(up(self.waveup), self.t_up)
+        assert_array_equal(up(self.wavedown), self.t_flip)
+        assert_array_equal(down(self.waveup), self.t_up)
+        assert_array_equal(down(self.wavedown), self.t_flip)
 
-class InterpTest(testutil.FPTestCase):
-    def setUp(self):
-        self.Y=N.arange(10)+5
+
+class TestNumpyInterp(object):
+    def setup_class(self):
+        self.Y = np.arange(10) + 5
 
     def test1(self):
-        A=N.arange(10)
-        X=N.arange(10)
-        ans=N.interp(A,X,self.Y)
-        self.assertEqualNumpy(ans,self.Y)
+        A = np.arange(10)
+        X = np.arange(10)
+        ans = np.interp(A, X, self.Y)
+        assert_array_equal(ans, self.Y)
 
     def test2(self):
-        A=N.arange(10)[::-1]
-        X=N.arange(10)[::-1]
-        ans=N.interp(A[::-1],X[::-1],self.Y[::-1])
-        self.assertEqualNumpy(ans,self.Y[::-1])
+        A = np.arange(10)[::-1]
+        X = np.arange(10)[::-1]
+        ans = np.interp(A[::-1], X[::-1], self.Y[::-1])
+        assert_array_equal(ans, self.Y[::-1])
 
     def test3(self):
-        A=N.arange(10)
-        X=N.arange(10)[::-1]
-        ans=N.interp(A,X[::-1],self.Y[::-1])
-        self.assertEqualNumpy(ans,self.Y[::-1])
+        A = np.arange(10)
+        X = np.arange(10)[::-1]
+        ans = np.interp(A, X[::-1], self.Y[::-1])
+        assert_array_equal(ans, self.Y[::-1])
 
     def test4(self):
-        A=N.arange(10)[::-1]
-        X=N.arange(10)
-        ans=N.interp(A[::-1],X,self.Y)
-        self.assertEqualNumpy(ans,self.Y)
-
+        A = np.arange(10)[::-1]
+        X = np.arange(10)
+        ans = np.interp(A[::-1], X, self.Y)
+        assert_array_equal(ans, self.Y)

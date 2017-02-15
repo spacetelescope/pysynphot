@@ -1,43 +1,18 @@
-import unittest
+from __future__ import absolute_import, division, print_function
 
-from pysynphot.units import Angstrom
+from ..spectrum import Box
+from ..units import Angstrom
 
-# Code under test
-from pysynphot.spectrum import Box
 
-class TestBasic(unittest.TestCase):
-    def setUp(self):
-        self.bp = Box(5000,100)
+def test_basic_box():
+    bp = Box(5000, 100)
+    assert bp.sample(5000) == 1  # test inside
+    assert bp.sample(4000) == 0  # test outside
+    assert bp.sample(4949) == 0  # test bound
+    assert isinstance(bp.waveunits, Angstrom)  # test units
 
-    def testinside(self):
-        ref = 1.0
-        tst = self.bp.sample(5000)
-        self.assertEqual(ref,tst,msg="expected %g, got %g"%(ref,tst))
 
-    def testoutside(self):
-        ref = 0.0
-        tst = self.bp.sample(4000)
-        self.assertEqual(ref,tst)
-
-    def testbound(self):
-        ref = 0.0
-        tst = self.bp.sample(4949)
-        self.assertEqual(ref,tst)
-
-    def testunits(self):
-        self.assertTrue(isinstance(self.bp.waveunits, Angstrom))
-
-class Ticket114(unittest.TestCase):
-    def setUp(self):
-        self.bp = Box(500,10,waveunits='nm')
-
-    def testunits(self):
-        self.assertEqual(str(self.bp.waveunits), 'nm')
-
-    def testinside(self):
-        ref = 1.0
-        tst = self.bp.sample(500)
-        self.assertEqual(ref,tst)
-        
-
-        
+def test_ticket114():
+    bp = Box(500, 10, waveunits='nm')
+    assert str(bp.waveunits) == 'nm'  # test units
+    assert bp.sample(500) == 1  # test inside

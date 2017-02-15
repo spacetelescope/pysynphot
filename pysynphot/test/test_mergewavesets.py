@@ -1,20 +1,22 @@
-import testutil
+from __future__ import absolute_import, division, print_function
 
-import pysynphot as S
+import numpy as np
+
+from .utils import use_cdbs
+from ..reddening import Extinction
+from ..spectrum import BlackBody, MergeWaveSets, MERGETHRESH
 
 
-# The function S.spectrum.MergeWaveSets is designed so that merged wave sets
-# have no two adjacent values which differ by less than S.spectrum.MERGETHRESH.
-# This tests that.
-class TestMergeWaveSets(testutil.FPTestCase):
-    def test_merge_wave_sets(self):
-        bb = S.BlackBody(20000)
-        ext = S.Extinction(0.04, 'gal1')
-
-        new_wave = S.spectrum.MergeWaveSets(bb.wave, ext.wave)
-
-        delta = new_wave[1:] - new_wave[:-1]
-
-        self.assertTrue((delta > S.spectrum.MERGETHRESH).all(),
-                        msg='Deltas should be < %g, min delta = %f' %
-                            (S.spectrum.MERGETHRESH, delta.min()))
+@use_cdbs
+def test_merge_wave_sets():
+    """
+    The function S.spectrum.MergeWaveSets is designed so that merged wave sets
+    have no two adjacent values which differ by less than
+    S.spectrum.MERGETHRESH. This tests that.
+    """
+    bb = BlackBody(20000)
+    ext = Extinction(0.04, 'gal1')
+    new_wave = MergeWaveSets(bb.wave, ext.wave)
+    delta = new_wave[1:] - new_wave[:-1]
+    assert np.all(delta > MERGETHRESH), \
+        'Deltas should be < {}, min delta = {}'.format(MERGETHRESH, delta.min())  # noqa
