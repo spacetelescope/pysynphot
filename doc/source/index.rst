@@ -42,7 +42,9 @@ multiple observing modes.
 
 If you use **pysynphot** in your work, please cite it as,
 "*Lim, P. L., Diaz, R. I., & Laidler, V. 2015, PySynphot User's Guide
-(Baltimore, MD: STScI), https://pysynphot.readthedocs.io/en/latest/*"
+(Baltimore, MD: STScI), https://pysynphot.readthedocs.io/en/latest/*".
+Alternately, bibcode is available from
+`Astrophysics Source Code Library <http://ascl.net/1303.023>`_.
 
 If you have questions or concerns regarding the software, please contact
 STScI Help Desk via ``help[at]stsci.edu``.
