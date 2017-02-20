@@ -43,7 +43,7 @@ THERMDICT = {}
 PRIMARY_AREA = 45238.93416  # cm^2 - default to HST mirror
 
 
-def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
+def set_default_waveset(minwave=500, maxwave=26000, num=10000,
                         delta=None, log=True):
     """Set the default wavelength set, ``pysynphot.refs._default_waveset``.
 
@@ -68,6 +68,9 @@ def set_default_waveset(minwave=500, maxwave=26000, num=10000.,
     """
     global _default_waveset
     global _default_waveset_str
+
+    # Must be int for numpy>=1.12
+    num = int(num)
 
     s = 'Min: %s, Max: %s, Num: %s, Delta: %s, Log: %s'
 
