@@ -47,6 +47,7 @@ except KeyError:
                   "crippled.")
     rootdir = ''
 
+ftp_rootdir = 'ftp://ftp.stsci.edu/cdbs'
 
 # Data directory is now installed locally
 specdir = os.path.join(os.path.dirname(__file__), 'data')
@@ -301,8 +302,9 @@ def get_latest_file(template, raise_error=False, err_msg=''):
 
 
 def _refTable(template):
-    return get_latest_file(os.path.join(os.environ['PYSYN_CDBS'], template),
-                           raise_error=True)
+    return get_latest_file(
+        os.path.join(os.environ.get('PYSYN_CDBS', ftp_rootdir), template),
+        raise_error=True)
 
 RedLaws = {}
 
