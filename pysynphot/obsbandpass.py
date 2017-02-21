@@ -505,11 +505,11 @@ def wave_range(bins, cenwave, npix, round='round'):
     # translate ends to wavelength
     if round is None:
         # translate ends directly to wavelength without regard to bin edges
-        f, i = frac1, int1
+        f, i = frac1, int(int1)
 
         wave1 = bins[i] + frac1 * (bins[i+1] - bins[i])
 
-        f, i = frac2, int2
+        f, i = frac2, int(int2)
 
         wave2 = bins[i] + frac2 * (bins[i+1] - bins[i])
 

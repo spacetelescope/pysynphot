@@ -110,7 +110,7 @@ class TestBPIntegrate(object):
 
     def test_subint(self):
         w = self.bp.wave
-        tst = self.bp.integrate(w[0:len(w)/2])
+        tst = self.bp.integrate(w[0:int(len(w)/2)])
 
         # epsilon due to the nature of trapezoid integration
         assert abs(self.ref / 2.0 - tst) <= 0.025
