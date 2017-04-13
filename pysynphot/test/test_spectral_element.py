@@ -24,7 +24,7 @@ def test_sample_units():
    ('acs,wfc1,f775w,pol_v', 444.05),
    ('cos,boa,nuv,mirrora', 370.65),
    ('nicmos,1,f090m,dn', 559.59),
-   ('stis,0.2x29,mirror,fuvmama', 134.51110167140249),
+   ('stis,0.2x29,mirror,fuvmama', 135.35817327741896),
    ('wfc3,ir,f164n', 700.05),
    ('wfc3,uvis1,f336w', 158.44),
    ('wfc3,uvis2,f336w', 158.36)])
@@ -36,7 +36,7 @@ def test_photbw(obsmode, ans):
     .. note::
 
         For stis,0.2x29,mirror,fuvmama, Synphot value was 134.79.
-        New ref value from STIS data update for PySynphot in April 2016.
+        New ref value from STIS data update for PySynphot in Apr 2017.
 
     """
     band = ObsBandpass(obsmode)
