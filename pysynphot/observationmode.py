@@ -441,8 +441,9 @@ class _ThermalObservationMode(BaseObservationMode):
         #The constructor of the parent class defines the self.thcompnames
         BaseObservationMode.__init__(self, obsmode, method, graphtable)
 
-        #Check here to see if there are any.
-        if set(self.thcompnames).issubset(set(['clear',''])):
+        # Check here to see if there are any.
+        # "0.0" was added in tae17277m_tmt.fits (Apr 2017).
+        if set(self.thcompnames).issubset(set(['clear', '', '0.0'])):
             raise NotImplementedError("No thermal support provided for %s"%obsmode)
 
 #        ct = CompTable(comptable)
