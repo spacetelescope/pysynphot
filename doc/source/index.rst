@@ -64,7 +64,7 @@ Unless you are using Ureka, the following dependencies must be installed first:
 To install the
 `standalone <https://github.com/spacetelescope/pysynphot/releases>`_ release::
 
-    pip install git+https://github.com/spacetelescope/pysynphot.git@0.9.8.6
+    pip install git+https://github.com/spacetelescope/pysynphot.git@0.9.8.7
 
 **pysynphot** is not fully tested under Python 3, but it should work.
 
