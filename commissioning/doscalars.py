@@ -6,6 +6,9 @@ from astropy.io import fits as pyfits
 import pylab as P
 import matplotlib
 
+from pysynphot.compat import ASTROPY_LT_1_3
+
+
 def getdata(dirpath,fieldname,instr,save=True):
     #get the list of files
     flist=glob.glob("%s/*.log"%dirpath)
@@ -71,7 +74,10 @@ def getdata(dirpath,fieldname,instr,save=True):
         tbhdu=pyfits.BinTableHDU.from_columns(pyfits.ColDefs([c1,c2,c3,c4,c5]))
         outname=os.path.join(os.path.abspath(os.path.dirname(dirpath)),
                              "%s_%s_table.fits"%(instr,fieldname))
-        tbhdu.writeto(outname,clobber=True)
+        if ASTROPY_LT_1_3:
+            tbhdu.writeto(outname, clobber=True)
+        else:
+            tbhdu.writeto(outname, overwrite=True)
 
     #and return the values for immediate use
     return namedict,odict,sdict,obsmode,spectrum,val
