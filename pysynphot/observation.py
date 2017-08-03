@@ -499,13 +499,13 @@ class Observation(spectrum.CompositeSourceSpectrum):
                     ux=np.searchsorted(self._bin_edges,range[1])
 
 
-            ans = self.binflux[lx:ux].sum()
+            ans = math.fsum(self.binflux[lx:ux])
             if warn and not force:
                 raise exceptions.PartialOverlap("%s does not fully overlap binwave range %s. Countrate in overlap area is %f"%(range,[self.binwave[0],self.binwave[-1]],ans))
 
         else:
             if range is None:
-                ans = self.flux.sum()
+                ans = math.fsum(self.flux)
             else:
                 raise NotImplementedError("Sorry, range+binned=False not yet implemented")
         self.convert(myfluxunits)

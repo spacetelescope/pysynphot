@@ -11,6 +11,7 @@ from .utils import use_cdbs
 from ..observation import Observation
 from ..obsbandpass import ObsBandpass
 from ..spectrum import ArraySourceSpectrum, Box, FlatSpectrum
+from ..spparser import parse_spec
 
 
 @use_cdbs
@@ -126,3 +127,18 @@ class TestArithmetic(object):
             waveunits='angstroms', fluxunits='counts')
         with pytest.raises(NotImplementedError):
             self.obs + other
+
+
+@use_cdbs
+def test_no_neg_leak():
+    """
+    Test that negative leak is no longer possible.
+    https://github.com/spacetelescope/pysynphot/issues/43
+    """
+    sp = parse_spec(
+        'rn(icat(k93models,44500,0.0,5.0),box(2000.000000,1.),1e-10,flam)')
+    bp = ObsBandpass('stis,fuvmama,mirror,F25NDQ2,MJD#58300.0822774')
+    obs = Observation(sp, bp)
+    c_all = obs.countrate()
+    c_sub = obs.countrate(range=[1160.22, 12000.0])
+    assert c_sub <= c_all
