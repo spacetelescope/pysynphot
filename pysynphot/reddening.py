@@ -8,6 +8,29 @@ from astropy.io import fits as pyfits
 from .spectrum import ArraySpectralElement
 from . import Cache
 from . import extinction #temporary(?) backwards compatibility
+from . import units
+
+
+# https://github.com/spacetelescope/pysynphot/issues/44
+class ExtinctionSpectralElement(ArraySpectralElement):
+    """Like :class:`~pysynphot.spectrum.ArraySpectralElement` but
+    with special ``waveset`` handling.
+    """
+    def GetWaveSet(self):
+        """Extinction curve ``waveset`` should not be merged."""
+        return None
+
+    def _getWaveProp(self):
+        """Return wavelength in user units."""
+        wave = units.Angstrom().Convert(self._wavetable, self.waveunits.name)
+        return wave
+
+    wave = property(_getWaveProp, doc="Wavelength property.")
+
+    def GetThroughput(self):
+        return self.__call__(self._wavetable)
+
+    throughput = property(GetThroughput, doc='Throughput property.')
 
 
 class CustomRedLaw(object):
@@ -78,11 +101,10 @@ class CustomRedLaw(object):
 
         """
         T = 10.0**(-0.4*extval*self.obscuration)
-        ans=ArraySpectralElement(wave=self.wave,
-                                 waveunits=self.waveunits,
-                                 throughput=T,
-                                 name='%s(Av=%g)'%(self.name,extval)
-                                 )
+        ans = ExtinctionSpectralElement(wave=self.wave,
+                                        waveunits=self.waveunits,
+                                        throughput=T,
+                                        name='%s(Av=%g)'%(self.name, extval))
         ans.citation = self.litref
         return ans
 
