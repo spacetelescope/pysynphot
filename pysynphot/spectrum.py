@@ -3054,7 +3054,7 @@ class InterpolatedSpectralElement(SpectralElement):
         self.name = os.path.expandvars(fileName[0:(xre.start())])
         colSpec = xre.group('col')
 
-        self.analytic = False
+        self.isAnalytic = False
         self.warnings = {}
 
         self.interpval = wavelength
