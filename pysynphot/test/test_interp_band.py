@@ -25,6 +25,10 @@ class TestInterpErrorCol(object):
                                 'stis_nm16_mjd_010_syn.fits[MJD#]')
         self.spec = InterpolatedSpectralElement(filename, interp_val)
 
+    def test_attribute(self):
+        """https://github.com/spacetelescope/pysynphot/issues/48"""
+        assert not self.spec.isAnalytic
+
     def test_throughput(self):
         throughput = np.array([
             0, 0.965065, 0.965065, 0.965065, 0.963328, 0.976245, 0.983497,
