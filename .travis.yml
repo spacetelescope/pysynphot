@@ -3,7 +3,6 @@ language: python
 python:
     - 2.7
     - 3.5
-    - 3.6
 
 env:
     global:
@@ -22,6 +21,10 @@ matrix:
         # Also test Astropy dev with remote data
         - python: 3.6
           env: ASTROPY_VERSION=development MAIN_CMD='pytest --cdbs pysynphot'
+
+        # Coverage
+        - python: 3.6
+          env: PIP_DEPENDENCIES='coveralls' CONDA_DEPENDENCIES='pytest-cov coverage requests' MAIN_CMD='pytest --cov-report= --cov=pysynphot --cdbs pysynphot'
 
 install:
     # We now use the ci-helpers package to set up our testing environment.
@@ -49,3 +52,6 @@ install:
 
 script:
     - $MAIN_CMD
+
+after_success:
+   - if [[ $MAIN_CMD == *cov-report* ]]; then coveralls; fi
