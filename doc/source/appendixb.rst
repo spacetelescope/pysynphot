@@ -405,7 +405,7 @@ The ``qyc`` keyword is used to apply a wavelength-dependent
 quantum yield correction.
 At short wavelengths, the UVIS detector has a finite chance of
 producing two elections for one incoming photon. By default,
-**pysynphot** reports the raw count rate in electrons if the
+**pysynphot** reports the count rate in electrons if the
 ``dn`` keyword is not specified, or data numbers otherwise.
 
 However, the appropriate count rate for SNR calculations should be in
