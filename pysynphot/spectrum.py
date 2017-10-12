@@ -1750,17 +1750,17 @@ class SpectralElement(Integrator):
         if isinstance(other, SpectralElement):
             return CompositeSpectralElement(self, other)
 
-        if isinstance(other, SourceSpectrum):
-            return CompositeSourceSpectrum(self, other, 'multiply')
+        elif isinstance(other, SourceSpectrum):
+            return other.__mul__(self)
 
         # Multiplying by a constant is the same as multiplying by a
         # UniformTransmission object
-        if isinstance(other, (int, float)):
+        elif isinstance(other, (int, float)):
             return CompositeSpectralElement(self, UniformTransmission(other))
 
         else:
-            print("SpectralElements can only be multiplied by other " +
-                  "SpectralElements or SourceSpectrum objects")
+            raise TypeError("SpectralElements can only be multiplied by other "
+                            "SpectralElements or SourceSpectrum objects")
 
     def __rmul__(self, other):
         return self.__mul__(other)
