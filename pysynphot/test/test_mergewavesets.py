@@ -3,13 +3,16 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import numpy as np
+import pytest
 from astropy.utils.data import get_pkg_data_filename
 
 from .utils import use_cdbs
+from ..exceptions import OverlapError
 from ..obsbandpass import ObsBandpass
 from ..observation import Observation
-from ..reddening import Extinction
-from ..spectrum import BlackBody, FileSourceSpectrum, MergeWaveSets, MERGETHRESH
+from ..reddening import Extinction, ExtinctionSpectralElement
+from ..spectrum import (ArraySourceSpectrum, BlackBody, FileSourceSpectrum,
+                        MergeWaveSets, MERGETHRESH)
 
 
 @use_cdbs
@@ -43,3 +46,20 @@ def test_qso_countrate():
     obs = Observation(sp, bp, force='taper')
     c = obs.countrate()
     np.testing.assert_allclose(c, 2.3554364232173565e-05)
+
+
+@pytest.mark.parametrize(['w1', 'w2'], ([900, 999], [900, 1100]))
+def test_overlap_check(w1, w2):
+    """
+    Extinction curve should never be extrapolated. See
+    https://github.com/spacetelescope/pysynphot/issues/53
+    """
+    ext = ExtinctionSpectralElement(np.arange(1000, 6000), np.ones(5000))
+    w = np.arange(w1, w2)
+    sp = ArraySourceSpectrum(w, np.ones_like(w))
+
+    with pytest.raises(OverlapError):
+        sp * ext
+
+    with pytest.raises(OverlapError):
+        ext * sp

@@ -287,14 +287,22 @@ class SourceSpectrum(Integrator):
         """Source Spectra can be multiplied, by constants or by
         SpectralElement objects.
         """
+        from .reddening import ExtinctionSpectralElement
+
         # Multiplying by numeric constants is allowed
         if isinstance(other, (int, float)):
             other = UniformTransmission(other)
         # so is by SpectralElements. Otherwise, raise an exception.
-        if not isinstance(other, SpectralElement):
+        elif not isinstance(other, SpectralElement):
             raise TypeError("SourceSpectrum objects can only be multiplied "
                             "by SpectralElement objects or constants; %s "
                             "type detected" % type(other))
+        elif isinstance(other, ExtinctionSpectralElement):
+            # https://github.com/spacetelescope/pysynphot/issues/53
+            status = other.check_overlap(self)
+            if status != 'full':
+                raise exceptions.OverlapError(
+                    "Extinction must fully overlap source spectrum")
 
         # Delegate the work of multiplying to CompositeSourceSpectrum
         return CompositeSourceSpectrum(self, other, 'multiply')
