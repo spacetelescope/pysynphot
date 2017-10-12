@@ -18,13 +18,9 @@ env:
 matrix:
     include:
 
-        # Also test Astropy dev with remote data
+        # Coverage and also test Astropy dev with remote data
         - python: 3.6
-          env: ASTROPY_VERSION=development MAIN_CMD='pytest --cdbs pysynphot'
-
-        # Coverage
-        - python: 3.6
-          env: PIP_DEPENDENCIES='coveralls' CONDA_DEPENDENCIES='pytest-cov coverage requests' MAIN_CMD='pytest --cov-report= --cov=pysynphot --cdbs pysynphot'
+          env: PIP_DEPENDENCIES='coveralls' ASTROPY_VERSION=development CONDA_DEPENDENCIES='pytest-cov coverage requests' MAIN_CMD='pytest --cov-report= --cov=pysynphot --cdbs pysynphot'
 
 install:
     # We now use the ci-helpers package to set up our testing environment.
