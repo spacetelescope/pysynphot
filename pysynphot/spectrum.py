@@ -167,7 +167,8 @@ class Integrator(object):
         if npoints > 0:
             indices = N.arange(npoints)[:-1]
             deltas = x[indices+1] - x[indices]
-            integrand = 0.5*(y[indices+1] + y[indices])*deltas
+            y_fil = N.nan_to_num(y)
+            integrand = 0.5*(y_fil[indices+1] + y_fil[indices])*deltas
             sum = integrand.sum()
             if x[-1] < x[0]:
                 sum *= -1.0
