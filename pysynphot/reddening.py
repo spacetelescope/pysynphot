@@ -104,7 +104,7 @@ class CustomRedLaw(object):
         ans = ExtinctionSpectralElement(wave=self.wave,
                                         waveunits=self.waveunits,
                                         throughput=T,
-                                        name='%s(Av=%g)'%(self.name, extval))
+                                        name='%s(EBV=%g)'%(self.name, extval))
         ans.citation = self.litref
         return ans
 
