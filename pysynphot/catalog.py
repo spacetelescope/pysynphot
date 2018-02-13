@@ -204,6 +204,11 @@ class Icat(spectrum.TabularSourceSpectrum):
                                                   os.path.join(basename,filename))
         sp = spectrum.TabularSourceSpectrum(filename, fluxname=column)
 
+        totflux = sp.integrate()
+        if not N.isfinite(totflux) or totflux <= 0:
+            raise exceptions.ParameterOutOfBounds(
+                "Parameter '{0}' has no valid data.".format(parlist))
+
         result = []
         for member in parlist:
             result.append(member)
