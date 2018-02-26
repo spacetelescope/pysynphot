@@ -24,6 +24,8 @@ Stellar models:
 |:ref:`pysynphot-appendixa-ck04`      |$PYSYN_CDBS/grid/ck04models    |Yes           |
 +-------------------------------------+-------------------------------+              |
 |:ref:`pysynphot-appendixa-kurucz1993`|$PYSYN_CDBS/grid/k93models     |              |
++-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-phoenix`   |$PYSYN_CDBS/grid/phoenix       |              |
 +-------------------------------------+-------------------------------+--------------+
 |:ref:`pysynphot-appendixa-calspec`   |$PYSYN_CDBS/calspec            |No            |
 +-------------------------------------+-------------------------------+              |
@@ -45,8 +47,6 @@ Non-stellar models:
 +-------------------------------------+-------------------------------+--------------+
 |Atlas/Catalog                        |Installation Path              |Interpolatable|
 +=====================================+===============================+==============+
-|:ref:`pysynphot-appendixa-phoenix`   |$PYSYN_CDBS/grid/phoenix       |Yes           |
-+-------------------------------------+-------------------------------+--------------+
 |:ref:`pysynphot-appendixa-bc95`      |$PYSYN_CDBS/grid/bc95/templates|No            |
 +-------------------------------------+-------------------------------+              |
 |:ref:`pysynphot-appendixa-kc96`      |$PYSYN_CDBS/grid/kc96          |              |
@@ -171,6 +171,36 @@ The easier way to to use `~pysynphot.catalog.Icat` (also see
 :ref:`pysynphot-spec-atlas`). Equivalent to the example above:
 
 >>> sp = S.Icat('k93models', 10000, 0.1, 3.0)
+
+
+.. _pysynphot-appendixa-phoenix:
+
+Phoenix Models
+==============
+
+The ``$PYSYN_CDBS/grid/phoenix`` directory contains models provided by
+`F. Allard et al. <http://perso.ens-lyon.fr/france.allard/>`_
+and can be found in the
+`Star, Brown Dwarf, and Planet Simulator <http://phoenix.ens-lyon.fr/simulator/index.faces>`_. They use static, spherical symmetric, 1D simulations to completely
+describe the atmospheric emission spectrum. The models account for the
+formation of molecular bands, such as those of water vapor, methane, or
+titanium dioxide, solving for the transfer equation over more than 20,000
+wavelength points on average, producing synthetic spectra with 2 Angstroms
+resolution. The line selection is repeated at each iteration of the model
+until it has converged and the thermal structure obtained. The models here
+are calculated with a cloud model, valid across the entire parameter range.
+See
+`Phoenix models README file <http://www.stsci.edu/hst/observatory/crds/SIfileInfo/pysynphottables/index_phoenix_models_html>`_
+for more details.
+The atlas data files are organized in a similar naming convention as
+:ref:`pysynphot-appendixa-kurucz1993`, and are easily accessible using
+`~pysynphot.catalog.Icat` (also see :ref:`pysynphot-spec-atlas`).
+
+The example below generates a spectrum with metallicity :math:`\log Z = +0.1`,
+temperature :math:`T_{\textnormal{eff}} = 10000 \textnormal{K}`, and gravity
+:math:`\log g = 3.0`:
+
+>>> sp = S.Icat('phoenix', 10000, 0.1, 3.0)
 
 
 .. _pysynphot-appendixa-calspec:
@@ -396,36 +426,6 @@ The example below loads a source spectrum of spectral type G0V from the atlas:
 >>> filename = os.path.join(
 ...     os.environ['PYSYN_CDBS'], 'grid', 'jacobi', 'jc_43.fits')
 >>> sp = S.FileSpectrum(filename)
-
-
-.. _pysynphot-appendixa-phoenix:
-
-Phoenix Models
-==============
-
-The ``$PYSYN_CDBS/grid/phoenix`` directory contains models provided by
-`F. Allard et al. <http://perso.ens-lyon.fr/france.allard/>`_
-and can be found in the
-`Star, Brown Dwarf, and Planet Simulator <http://phoenix.ens-lyon.fr/simulator/index.faces>`_. They use static, spherical symmetric, 1D simulations to completely
-describe the atmospheric emission spectrum. The models account for the
-formation of molecular bands, such as those of water vapor, methane, or
-titanium dioxide, solving for the transfer equation over more than 20,000
-wavelength points on average, producing synthetic spectra with 2 Angstroms
-resolution. The line selection is repeated at each iteration of the model
-until it has converged and the thermal structure obtained. The models here
-are calculated with a cloud model, valid across the entire parameter range.
-See
-`Phoenix models README file <http://www.stsci.edu/hst/observatory/crds/SIfileInfo/pysynphottables/index_phoenix_models_html>`_
-for more details.
-The atlas data files are organized in a similar naming convention as
-:ref:`pysynphot-appendixa-kurucz1993`, and are easily accessible using
-`~pysynphot.catalog.Icat` (also see :ref:`pysynphot-spec-atlas`).
-
-The example below generates a spectrum with metallicity :math:`\log Z = +0.1`,
-temperature :math:`T_{\textnormal{eff}} = 10000 \textnormal{K}`, and gravity
-:math:`\log g = 3.0`:
-
->>> sp = S.Icat('phoenix', 10000, 0.1, 3.0)
 
 
 .. _pysynphot-appendixa-bc95:
