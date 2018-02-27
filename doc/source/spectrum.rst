@@ -266,8 +266,8 @@ you want, as shown in the example above.
 However, three of the atlases (:ref:`pysynphot-appendixa-ck04`,
 :ref:`pysynphot-appendixa-kurucz1993`, and :ref:`pysynphot-appendixa-phoenix`)
 have a grid of basis spectra which are indexed for various combinations of
-effective temperature (:math:`T_{\textnormal{eff}}`) in Kelvin, log metallicity
-(:math:`\log Z`), and log surface gravity (:math:`\log g`). They are best
+effective temperature (:math:`T_{\textnormal{eff}}`) in Kelvin, metallicity
+(``[M/H]``), and log surface gravity (:math:`\log g`). They are best
 accessed with a special `~pysynphot.catalog.Icat` class.
 You may specify any combination of the properties, so long as each is
 within the allowed range, which differs from atlas to atlas. For example,
@@ -277,7 +277,7 @@ which means that no spectrum can be constructed for effective temperatures
 below 3499 K or above 50001 K (i.e., an exception will be raised).
 The example below obtains the spectrum for a
 :ref:`pysynphot-appendixa-kurucz1993` model with
-:math:`T_{\textnormal{eff}} = 6000 \; \textnormal{K}`, :math:`\log Z = 0`, and
+:math:`T_{\textnormal{eff}} = 6000 \; \textnormal{K}`, ``[M/H] = 0``, and
 :math:`\log g = 4.3`:
 
 >>> sp = S.Icat('k93models', 6440, 0, 4.3)
