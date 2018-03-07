@@ -9,7 +9,11 @@ from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..observation import Observation
 from ..reddening import Extinction
+from ..refs import getref, setref
 from ..spectrum import BlackBody, FileSourceSpectrum, MergeWaveSets, MERGETHRESH
+
+orig_graphtable = None
+orig_comptable = None
 
 
 @use_cdbs
@@ -28,18 +32,35 @@ def test_merge_wave_sets():
 
 
 @use_cdbs
-def test_qso_countrate():
+class TestQSOCountrate(object):
     """
     Extinction curve waveset should not be merged into composite spectrum
     when applied. See https://github.com/spacetelescope/pysynphot/issues/44 .
     """
-    bp = ObsBandpass('acs,hrc,f850lp')
+    @classmethod
+    def setup_class(cls):
+        global orig_graphtable, orig_comptable
+        cfg = getref()
+        orig_graphtable = cfg['graphtable']
+        orig_comptable = cfg['comptable']
 
-    fname = get_pkg_data_filename(os.path.join('data', 'qso_template.fits'))
-    qso = FileSourceSpectrum(fname)
-    sp_ext = qso * Extinction(1.0, 'mwavg')
-    sp = sp_ext.renorm(20, 'vegamag', ObsBandpass('johnson,v'), force=True)
+        # Answers computed using specified tables
+        mtab = os.path.join(os.environ['PYSYN_CDBS'], 'mtab')
+        setref(graphtable=os.path.join(mtab, '14l1632sm_tmg.fits'),
+               comptable=os.path.join(mtab, 'OLD_FILES', '16n1832tm_tmc.fits'))
 
-    obs = Observation(sp, bp, force='taper')
-    c = obs.countrate()
-    np.testing.assert_allclose(c, 2.3554364232173565e-05)
+    def test_countrate(self):
+        bp = ObsBandpass('acs,hrc,f850lp')
+
+        fname = get_pkg_data_filename(os.path.join('data', 'qso_template.fits'))
+        qso = FileSourceSpectrum(fname)
+        sp_ext = qso * Extinction(1.0, 'mwavg')
+        sp = sp_ext.renorm(20, 'vegamag', ObsBandpass('johnson,v'), force=True)
+
+        obs = Observation(sp, bp, force='taper')
+        c = obs.countrate()
+        np.testing.assert_allclose(c, 2.3554364232173565e-05)
+
+    @classmethod
+    def teardown_class(cls):
+        setref(graphtable=orig_graphtable, comptable=orig_comptable)
