@@ -261,7 +261,7 @@ References
 
 .. _synphot-ref-greenfield2007:
 
-* `Greenfield, P. & Jedrzejewski, R. 2007, Using Python for Interactive Data Analysis (Baltimore, MD: STScI) <http://stsdas.stsci.edu/perry/pydatatut.pdf>`_
+* `Greenfield, P. & Jedrzejewski, R. 2007, Using Python for Interactive Data Analysis (Baltimore, MD: STScI) <http://ssb.stsci.edu/perry/pydatatut.pdf>`_
 
 .. _synphot-ref-gunn2001:
 
@@ -301,7 +301,7 @@ References
 
 .. _synphot-ref-laidler2009:
 
-* `Laidler, V. 2009, TSR 2009-01: Pysynphot Commissioning Report (Baltimore, MD: STScI) <http://stsdas.stsci.edu/tsr/2009_01/>`_
+* `Laidler, V. 2009, TSR 2009-01: Pysynphot Commissioning Report (Baltimore, MD: STScI) <http://ssb.stsci.edu/tsr/2009_01/>`_
 
 .. _synphot-ref-laidler2008:
 

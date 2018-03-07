@@ -3,4 +3,4 @@ numpy
 matplotlib
 astropy-helpers
 astropy
-scipy
+scipy>=0.18

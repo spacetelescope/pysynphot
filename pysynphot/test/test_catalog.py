@@ -66,13 +66,13 @@ class ICatK93Test(object):
 
 @use_cdbs
 @pytest.mark.parametrize(
-  ('teff', 'z', 'logg'),
-  [(6440, 0, 10),
-   (6440, 0, -1),
-   (1.e6, 0, 4.3),
-   (100, 0, 4.3),
-   (6440, 2, 4.3),
-   (6440, -6, 4.3)])
+    ('teff', 'z', 'logg'),
+    [(6440, 0, 10),
+     (6440, 0, -1),
+     (1.e6, 0, 4.3),
+     (100, 0, 4.3),
+     (6440, 2, 4.3),
+     (6440, -6, 4.3)])
 def test_Icat_exceptions(teff, z, logg):
     """
     Tests for changes related to Trac ticket #211.
@@ -80,6 +80,18 @@ def test_Icat_exceptions(teff, z, logg):
     """
     with pytest.raises(ParameterOutOfBounds):
         Icat('k93models', teff, z, logg)
+
+
+@use_cdbs
+def test_phoenix_gap():
+    """
+    https://github.com/spacetelescope/pysynphot/issues/68
+    """
+    Icat('phoenix', 2700, -1, 5.1)  # OK
+    with pytest.raises(ParameterOutOfBounds):
+        Icat('phoenix', 2700, -0.5, 5.1)
+    with pytest.raises(ParameterOutOfBounds):
+        Icat('phoenix', 2700, -0.501, 5.1)
 
 
 @use_cdbs

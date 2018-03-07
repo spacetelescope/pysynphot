@@ -4,9 +4,9 @@
 
 Spectra are constructed from basis spectra which are indexed for various
 combinations of effective temperature (:math:`T_{\\textnormal{eff}}`),
-metallicity (:math:`Z`), and log surface gravity (:math:`\\log g`).
+metallicity (``[M/H]``), and log surface gravity (:math:`\\log g`).
 The user may specify any combination of :math:`T_{\\textnormal{eff}}`,
-:math:`Z`, and :math:`\\log g` so long as each parameter is within the range
+``[M/H]``, and :math:`\\log g` so long as each parameter is within the range
 for that parameter defined by the catalog.
 
 For example, the :ref:`pysynphot-appendixa-ck04` catalog contains spectra for
@@ -96,7 +96,7 @@ class Icat(spectrum.TabularSourceSpectrum):
         self.parameter_names = ['Teff','metallicity','log G']
 
         filename = locations.CAT_TEMPLATE.replace('*',catdir)
-        self.name="%s(Teff=%g,z=%g,logG=%g)"%(catdir,Teff,metallicity,log_g)
+        self.name="%s(Teff=%g,metallicity=%g,logG=%g)"%(catdir,Teff,metallicity,log_g)
 
         if filename in CATALOG_CACHE:
             indices = CATALOG_CACHE[filename]
@@ -203,6 +203,11 @@ class Icat(spectrum.TabularSourceSpectrum):
         filename = locations.KUR_TEMPLATE.replace('*',
                                                   os.path.join(basename,filename))
         sp = spectrum.TabularSourceSpectrum(filename, fluxname=column)
+
+        totflux = sp.integrate()
+        if not N.isfinite(totflux) or totflux <= 0:
+            raise exceptions.ParameterOutOfBounds(
+                "Parameter '{0}' has no valid data.".format(parlist))
 
         result = []
         for member in parlist:
