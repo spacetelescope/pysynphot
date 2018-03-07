@@ -10,11 +10,8 @@ Introduction
 Astrolib PySynphot (hereafter referred to only as **pysynphot**) is an
 object-oriented replacement for STSDAS SYNPHOT synthetic photometry package in
 IRAF. It is distributed as part of
-`AstroConda <http://astroconda.readthedocs.io/en/latest/>`_ (preferred),
-`stsci_python <http://www.stsci.edu/institute/software_hardware/pyraf/stsci_python/>`_, and also as
-`standalone <https://github.com/spacetelescope/pysynphot/releases>`_
-(`its PyPI distribution <https://pypi.python.org/pypi/pysynphot/>`_ is no
-longer supported).
+`AstroConda <http://astroconda.readthedocs.io/en/latest/>`_ (preferred)
+and also as `standalone <https://pypi.python.org/pypi/pysynphot/>`_.
 Although this package was developed for HST, it can be utilized with other
 observatories.
 
@@ -55,18 +52,19 @@ STScI Help Desk via ``help[at]stsci.edu``.
 Installation and Setup
 ======================
 
-Unless you are using Ureka, the following dependencies must be installed first:
+If you have AstroConda, simply install with this command::
 
-* `astropy <https://pypi.python.org/pypi/astropy>`_ 1.0 or greater
-* `numpy <https://pypi.python.org/pypi/numpy>`_ 1.7 or greater
+    conda install pysynphot
+
+To install the PyPI release::
+
+    pip install pysynphot
+
+If missing, the following dependencies must also be installed:
+
+* `astropy <https://pypi.python.org/pypi/astropy>`_ 1.1 or greater
+* `numpy <https://pypi.python.org/pypi/numpy>`_ 1.9 or greater
 * `matplotlib <http://matplotlib.org/>`_ (optional)
-
-To install the
-`standalone <https://github.com/spacetelescope/pysynphot/releases>`_ release::
-
-    pip install git+https://github.com/spacetelescope/pysynphot.git@0.9.8.8
-
-**pysynphot** is not fully tested under Python 3, but it should work.
 
 Data files for **pysynphot** are distributed separately by
 `Calibration Reference Data System <http://www.stsci.edu/hst/observatory/crds/throughput.html>`_.
