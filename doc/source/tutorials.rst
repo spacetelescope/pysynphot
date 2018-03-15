@@ -158,7 +158,8 @@ by the extinction curve:
 Redshift the reddened spectrum above by :math:`z = 0.23`. Then, check that the
 peak wavelength is indeed redder:
 
->>> sp2 = sp1.redshift(0.23)
+>>> sp2 = sp1.redshift(0.23)  # sp2 is in PHOTLAM
+>>> sp2.convert('flam')
 >>> sp1.wave[sp1.flux == max(sp1.flux)][0]
 5026.7534
 >>> sp2.wave[sp2.flux == max(sp2.flux)][0]
