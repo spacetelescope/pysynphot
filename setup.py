@@ -1,11 +1,26 @@
 #!/usr/bin/env python
+import os
+import pkgutil
 import sys
 from glob import glob
 from numpy import get_include as np_include
 from setuptools import setup, Extension
+from subprocess import check_call, CalledProcessError
 
-# Use submodule
-sys.path.insert(1, 'relic')
+
+try:
+    if pkgutil.find_loader('relic'):
+        pass
+    elif os.path.exists('relic') and not os.listdir('relic'):
+        check_call(['git', 'submodule', 'update', '--init', '--recursive'])
+    elif not os.path.exists('relic'):
+        check_call(['git', 'clone', 'https://github.com/jhunkeler/relic.git'])
+
+    sys.path.insert(1, 'relic')
+except CalledProcessError as e:
+    print(e)
+    exit(1)
+
 import relic.release  # noqa
 
 version = relic.release.get_info()
