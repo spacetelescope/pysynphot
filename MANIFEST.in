@@ -2,13 +2,11 @@ include README.rst
 include LICENSE.md
 
 include RELIC-INFO
-include relic/LICENSE.txt
-include relic/README.md
-recursive-include relic/relic *.py
-recursive-include relic/relic.egg-info *
-prune relic/build
 
 recursive-include doc *
+recursive-include relic *
+prune relic/.git
+prune relic/tests
 
 prune build
 prune doc/build
