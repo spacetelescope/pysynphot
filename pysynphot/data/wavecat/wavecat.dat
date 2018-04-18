@@ -265,6 +265,7 @@ cos,fuv,g140l,c800     synphot$data/cos_fuv_g140l_800.txt
 cos,fuv,g140l,c1230    synphot$data/cos_fuv_g140l_1230.txt
 cos,fuv,g140l,c1280     (700.0,2405.1,0.0808507)
 cos,fuv,g140l,c1105    synphot$data/cos_fuv_g140l_1105.txt
+cos,fuv,g160m,c1533    synphot$data/cos_fuv_g160m_1533.txt
 cos,fuv,g160m,c1577    synphot$data/cos_fuv_g160m_1577.txt
 cos,fuv,g160m,c1589    synphot$data/cos_fuv_g160m_1589.txt
 cos,fuv,g160m,c1600    synphot$data/cos_fuv_g160m_1600.txt
