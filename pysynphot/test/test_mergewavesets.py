@@ -45,9 +45,9 @@ class TestQSOCountrate(object):
         orig_comptable = cfg['comptable']
 
         # Answers computed using specified tables
-        mtab = os.path.join(os.environ['PYSYN_CDBS'], 'mtab')
+        mtab = os.path.join(os.environ['PYSYN_CDBS'], 'mtab', 'OLD_FILES')
         setref(graphtable=os.path.join(mtab, '14l1632sm_tmg.fits'),
-               comptable=os.path.join(mtab, 'OLD_FILES', '16n1832tm_tmc.fits'))
+               comptable=os.path.join(mtab, '16n1832tm_tmc.fits'))
 
     def test_countrate(self):
         bp = ObsBandpass('acs,hrc,f850lp')
