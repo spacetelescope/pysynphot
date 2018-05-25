@@ -130,6 +130,9 @@ CONVERTDICT = {'crrefer': rootdir,
                'crnircamcomp': os.path.join(rootdir, 'comp', 'nircam'),
                # PATH for JWST NIRSpec instrument files
                'crnirspeccomp': os.path.join(rootdir, 'comp', 'nirspec'),
+               # PATH for JWST NIRISS instrument files
+               'crnirisscomp': os.path.join(rootdir, 'comp', 'niriss'),
+               
                }
 
 
