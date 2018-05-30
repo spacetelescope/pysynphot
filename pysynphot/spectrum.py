@@ -559,7 +559,10 @@ class SourceSpectrum(Integrator):
         Returns
         -------
         result : float
-            Integrated sum.
+            Integrated sum. Its unit should take account of the
+            integration over wavelength. For example, if
+            ``fluxunits='photlam'`` is given, then its unit
+            is ``photon/s/cm^2``.
 
         """
         # Extract the flux in the desired units
