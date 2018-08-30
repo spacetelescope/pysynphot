@@ -258,9 +258,10 @@ class Integrator(object):
         if ((not self.fluxunits.isMag) and (self._fluxtable.min() < 0)):
             idx = N.where(self._fluxtable < 0)
             self._fluxtable[idx] = 0.0
-            print("Warning, %d of %d bins contained negative fluxes; they "
-                  "have been set to zero." % (
-                      len(idx[0]), len(self._fluxtable)))
+            warnings.warn(
+                "Warning, %d of %d bins contained negative fluxes; they "
+                "have been set to zero." % (
+                    len(idx[0]), len(self._fluxtable)))
 
 
 class SourceSpectrum(Integrator):
