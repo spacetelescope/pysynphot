@@ -1,5 +1,6 @@
 include README.rst
 include LICENSE.md
+include CITATION
 
 include RELIC-INFO
 
