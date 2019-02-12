@@ -47,7 +47,7 @@ except KeyError:
                   "crippled.")
     rootdir = ''
 
-ftp_rootdir = 'ftp://ftp.stsci.edu/cdbs'
+ftp_rootdir = 'http://ssb.stsci.edu/cdbs_open/cdbs'
 
 # Data directory is now installed locally
 specdir = os.path.join(os.path.dirname(__file__), 'data')
@@ -158,7 +158,7 @@ def irafconvert(iraffilename):
     convertdict = CONVERTDICT
 
     # remove duplicate separators and extraneous relative paths
-    if not iraffilename.lower().startswith('ftp'):
+    if not iraffilename.lower().startswith(('http', 'ftp')):
         iraffilename = os.path.normpath(iraffilename)
 
     # BUG: supports environment variables only as the leading element in the
@@ -261,8 +261,8 @@ def get_latest_file(template, raise_error=False, err_msg=''):
     """
     path, pattern = os.path.split(irafconvert(template))
 
-    # Remote FTP directory
-    if path.lower().startswith('ftp:'):
+    # Remote HTTP or FTP directory
+    if path.lower().startswith(('http:', 'ftp:')):
         from six.moves.urllib import request
 
         try:
@@ -306,6 +306,7 @@ def _refTable(template):
         os.path.join(os.environ.get('PYSYN_CDBS', ftp_rootdir), template),
         raise_error=True)
 
+
 RedLaws = {}
 
 
@@ -317,7 +318,7 @@ def _get_RedLaws():
     # get all the fits files in EXTDIR
     globstr = os.path.join(extdir, '*.fits')
 
-    if extdir.lower().startswith('ftp:'):
+    if extdir.lower().startswith(('http:', 'ftp:')):
         from six.moves.urllib import request
         response = request.urlopen(extdir).read().decode('utf-8').splitlines()
         files = list(set([x.split()[-1] for x in response if x.endswith('.fits')]))  # Rid symlink # noqa

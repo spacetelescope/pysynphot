@@ -184,7 +184,7 @@ class Integrator(object):
         wlist = []
         flist = []
         lcount = 0
-        if filename.lower().startswith('ftp://'):
+        if filename.lower().startswith(('http://', 'ftp://')):
             lines = get_file_contents(filename)
         else:
             with open(filename) as fs:

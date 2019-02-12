@@ -29,7 +29,7 @@ def test_0000():
     assert isinstance(xt, RedLaw)
 
     xt = Cache.RedLaws['smcbar']
-    if not xt.startswith('ftp'):
+    if not xt.startswith(('http', 'ftp')):
         assert os.path.isfile(xt)
 
     xt = Extinction(0.2, Cache.RedLaws['smcbar'])
