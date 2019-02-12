@@ -22,7 +22,7 @@ matrix:
 
         - env: PYTHON_VERSION=3.6
 
-        - env: PYTHON_VERSION=2.7
+        - env: PYTHON_VERSION=2.7 ASTROPY_VERSION=lts
 
         # Coverage and also test Astropy dev with remote data
         - env: PIP_DEPENDENCIES='coveralls' ASTROPY_VERSION=development CONDA_DEPENDENCIES='pytest-cov coverage requests' MAIN_CMD='pytest --cov-report= --cov=pysynphot --cdbs pysynphot'
