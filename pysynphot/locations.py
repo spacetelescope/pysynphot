@@ -132,7 +132,7 @@ CONVERTDICT = {'crrefer': rootdir,
                'crnirspeccomp': os.path.join(rootdir, 'comp', 'nirspec'),
                # PATH for JWST NIRISS instrument files
                'crnirisscomp': os.path.join(rootdir, 'comp', 'niriss'),
-               
+
                }
 
 
@@ -169,7 +169,7 @@ def irafconvert(iraffilename):
     if iraffilename.startswith('$'):
         # Then this is an environment variable.
         # Use a regex to pull off the front piece.
-        pat = re.compile('\$(\w*)')
+        pat = re.compile(r'\$(\w*)')
         match = re.match(pat, iraffilename)
         dirname = match.group(1)
         unixdir = os.environ[dirname]

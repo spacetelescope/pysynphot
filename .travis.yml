@@ -1,14 +1,16 @@
-language: python
+language: c
 
-python:
-    - 2.7
-    - 3.6
+compiler: gcc
+
+os:
+    - linux
 
 env:
     global:
         # The following versions are the 'default' for tests, unless
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
+        - PYTHON_VERSION=3.6
         - NUMPY_VERSION=stable
         - ASTROPY_VERSION=stable
         - PIP_DEPENDENCIES=''
@@ -18,9 +20,12 @@ env:
 matrix:
     include:
 
+        - env: PYTHON_VERSION=3.6
+
+        - env: PYTHON_VERSION=2.7
+
         # Coverage and also test Astropy dev with remote data
-        - python: 3.6
-          env: PIP_DEPENDENCIES='coveralls' ASTROPY_VERSION=development CONDA_DEPENDENCIES='pytest-cov coverage requests' MAIN_CMD='pytest --cov-report= --cov=pysynphot --cdbs pysynphot'
+        - env: PIP_DEPENDENCIES='coveralls' ASTROPY_VERSION=development CONDA_DEPENDENCIES='pytest-cov coverage requests' MAIN_CMD='pytest --cov-report= --cov=pysynphot --cdbs pysynphot'
 
 install:
     # We now use the ci-helpers package to set up our testing environment.
