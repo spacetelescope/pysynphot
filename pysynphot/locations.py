@@ -83,8 +83,6 @@ _data_map = None
 # ............more robust
 # BUG: this dictionary should be in a data file
 CONVERTDICT = {'crrefer': rootdir,
-               'crotacomp': os.path.join(rootdir, 'comp', 'ota'),
-               'cracscomp': os.path.join(rootdir, 'comp', 'acs'),
                'crcalobs': os.path.join(rootdir, 'calobs'),
                'crcalspec': os.path.join(rootdir, 'calspec'),
                'croldcalspec': os.path.join(rootdir, 'oldcalspec'),
@@ -102,7 +100,6 @@ CONVERTDICT = {'crrefer': rootdir,
                'crotacomp': os.path.join(rootdir, 'comp', 'ota'),
                'crnicmoscomp': os.path.join(rootdir, 'comp', 'nicmos'),
                'crnonhstcomp': os.path.join(rootdir, 'comp', 'nonhst'),
-               'crstiscomp': os.path.join(rootdir, 'comp', 'stis'),
                'crstiscomp': os.path.join(rootdir, 'comp', 'stis'),
                'crwfc3comp': os.path.join(rootdir, 'comp', 'wfc3'),
                'crcoscomp': os.path.join(rootdir, 'comp', 'cos'),
@@ -132,7 +129,7 @@ CONVERTDICT = {'crrefer': rootdir,
                'crnirspeccomp': os.path.join(rootdir, 'comp', 'nirspec'),
                # PATH for JWST NIRISS instrument files
                'crnirisscomp': os.path.join(rootdir, 'comp', 'niriss'),
-               
+
                }
 
 
@@ -169,7 +166,7 @@ def irafconvert(iraffilename):
     if iraffilename.startswith('$'):
         # Then this is an environment variable.
         # Use a regex to pull off the front piece.
-        pat = re.compile('\$(\w*)')
+        pat = re.compile(r'\$(\w*)')
         match = re.match(pat, iraffilename)
         dirname = match.group(1)
         unixdir = os.environ[dirname]
@@ -266,7 +263,7 @@ def get_latest_file(template, raise_error=False, err_msg=''):
 
     # Remote FTP directory
     if path.lower().startswith('ftp:'):
-        from astropy.extern.six.moves.urllib import request
+        from six.moves.urllib import request
 
         try:
             response = request.urlopen(path).read().decode('utf-8').splitlines()  # noqa
@@ -321,7 +318,7 @@ def _get_RedLaws():
     globstr = os.path.join(extdir, '*.fits')
 
     if extdir.lower().startswith('ftp:'):
-        from astropy.extern.six.moves.urllib import request
+        from six.moves.urllib import request
         response = request.urlopen(extdir).read().decode('utf-8').splitlines()
         files = list(set([x.split()[-1] for x in response if x.endswith('.fits')]))  # Rid symlink # noqa
         files = [os.path.join(extdir, f) for f in files]

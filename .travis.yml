@@ -1,7 +1,6 @@
 language: python
 
 python:
-    - 2.7
     - 3.6
 
 env:
@@ -17,6 +16,9 @@ env:
 
 matrix:
     include:
+
+        - python: 2.7
+          env: ASTROPY_VERSION=lts
 
         # Coverage and also test Astropy dev with remote data
         - python: 3.6

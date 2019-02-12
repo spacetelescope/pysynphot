@@ -1,5 +1,5 @@
 from __future__ import absolute_import, division, print_function
-from astropy.extern.six import iteritems
+from six import iteritems
 
 import os
 

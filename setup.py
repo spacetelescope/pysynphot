@@ -48,7 +48,8 @@ setup(
     ],
     install_requires=[
         'astropy',
-        'numpy'
+        'numpy',
+        'six'
     ],
     tests_require=['pytest'],
     packages=['pysynphot',
