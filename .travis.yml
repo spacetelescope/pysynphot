@@ -3,6 +3,9 @@ language: python
 python:
     - 3.6
 
+os:
+    - linux
+
 env:
     global:
         # The following versions are the 'default' for tests, unless
@@ -16,6 +19,8 @@ env:
 
 matrix:
     include:
+
+        - python: 3.6
 
         - python: 2.7
           env: ASTROPY_VERSION=lts
