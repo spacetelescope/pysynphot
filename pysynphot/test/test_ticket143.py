@@ -5,14 +5,13 @@ import os
 import pytest
 from numpy.testing import assert_array_equal, assert_allclose
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..observation import Observation
 from ..refs import getref, setref
 from ..spectrum import BlackBody
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestDefault(object):
     def setup_class(self):
         self.sp = BlackBody(4400)
@@ -38,7 +37,7 @@ class TestDefault(object):
         assert_array_equal(tst, ref)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestStisDef(object):
     """Same tests as above but for an actual disperser."""
     def setup_class(self):

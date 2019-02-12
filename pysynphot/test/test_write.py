@@ -5,7 +5,6 @@ import os
 import numpy as np
 import pytest
 
-from .utils import use_cdbs
 from ..catalog import Icat
 from ..obsbandpass import ObsBandpass
 from ..spectrum import (ArraySourceSpectrum, BlackBody, Box,
@@ -30,7 +29,7 @@ def test_write(tmpdir, obj):
     obj.writefits(str(fname))
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestWriteParse(object):
     """
     pytest.mark.parametrize gives URLError for FTP connection, so we have

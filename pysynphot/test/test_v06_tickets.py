@@ -1,11 +1,11 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
+import pytest
 
-from .utils import use_cdbs
 from ..catalog import Icat
 from ..obsbandpass import ObsBandpass
-from ..spectrum import (ArraySourceSpectrum,  ArraySpectralElement, Box,
+from ..spectrum import (ArraySourceSpectrum, ArraySpectralElement, Box,
                         UniformTransmission)
 
 
@@ -46,13 +46,13 @@ class TestTabular(object):
         assert bp(1500) == 10
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_obsband():
     bp = ObsBandpass('acs,hrc,f555w')
     assert bp(3000) == 0
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_icat():
     sp = Icat('k93models', 4500, 1, 2)
     assert sp(3000) > 0

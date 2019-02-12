@@ -2,12 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..observationmode import _ThermalObservationMode
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_exceptions():
     """
     Making a ThermalObservationMode for an obsmode that has no support
@@ -23,7 +22,7 @@ def test_exceptions():
         bp.thermback()
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_therm():
     obsmode = 'nicmos,3,f222m'
     bp = ObsBandpass(obsmode)

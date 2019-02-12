@@ -7,7 +7,6 @@ import pytest
 from astropy.io import fits
 from numpy.testing import assert_array_equal, assert_allclose
 
-from .utils import use_cdbs
 from .. import units, refs
 from ..obsbandpass import ObsBandpass
 from ..spectrum import (MergeWaveSets, ArraySourceSpectrum, BlackBody, Box,
@@ -49,7 +48,7 @@ def test_units_exceptions():
         ArraySourceSpectrum(sp.wave, sp.flux, 'angstrom', 'angstrom')
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_band():
     """Comparison results were computed with r1j2146sm_tmc.fits"""
     old_comptable = refs.COMPTABLE
@@ -67,7 +66,7 @@ def test_band():
     refs.COMPTABLE = old_comptable
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestFile(object):
     def setup_class(self):
         self.fname = os.path.join(
@@ -166,7 +165,7 @@ class BaseSpecComp(object):
         assert_array_equal(self.new_sp.flux, self.old_sp.flux)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestTab(BaseSpecComp):
     def setup_class(self):
         self.fname = os.path.join(
@@ -185,7 +184,7 @@ class TestTab(BaseSpecComp):
         self.openfits.close()
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestFSS(BaseSpecComp):
     """Test operations on a FileSource."""
     def setup_class(self):

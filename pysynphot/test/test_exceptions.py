@@ -5,14 +5,13 @@ import os
 
 import pytest
 
-from .utils import use_cdbs
 from .. import refs
 from ..obsbandpass import ObsBandpass
 from ..observationmode import ObservationMode
 from ..spectrum import FlatSpectrum
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestTMCMismatch(object):
     """Can arise with mismatched graph & component tables."""
     def setup_class(self):
@@ -35,7 +34,7 @@ class TestTMCMismatch(object):
             ObservationMode(self.obsmode)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_renorm_exception():
     """Can arise with zero, negative, or NaN spectra."""
     sp = FlatSpectrum(1) * -10

@@ -3,9 +3,9 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import numpy as np
+import pytest
 from astropy.utils.data import get_pkg_data_filename
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..observation import Observation
 from ..reddening import Extinction
@@ -16,7 +16,7 @@ orig_graphtable = None
 orig_comptable = None
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_merge_wave_sets():
     """
     The function S.spectrum.MergeWaveSets is designed so that merged wave sets
@@ -31,7 +31,7 @@ def test_merge_wave_sets():
         'Deltas should be < {}, min delta = {}'.format(MERGETHRESH, delta.min())  # noqa
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestQSOCountrate(object):
     """
     Extinction curve waveset should not be merged into composite spectrum

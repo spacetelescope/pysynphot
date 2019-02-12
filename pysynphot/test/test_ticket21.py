@@ -2,7 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
-from .utils import use_cdbs
+import pytest
+
 from .. import refs
 from ..observationmode import ObservationMode
 from ..spectrum import InterpolatedSpectralElement
@@ -25,7 +26,7 @@ def teardown_module(module):
     refs.COMPTABLE = old_comptable
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_one_param():
     parkey = 'mjd'
     parval = 54000
@@ -50,7 +51,7 @@ def test_one_param():
         '{}\n{}'.format(len(om.components), idx)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_two_params():
     pardict = {'fr459m': 4610, 'aper': 0.3}
     om = ObservationMode('acs,hrc,fr459m#4610,aper#0.3')

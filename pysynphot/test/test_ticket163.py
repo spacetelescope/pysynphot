@@ -6,7 +6,6 @@ import os
 import pytest
 from astropy.io import fits
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..spectrum import BlackBody
 
@@ -38,7 +37,7 @@ class TestSpecHdr(object):
             assert self.h0[k] == v[0]
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestBandHdr(TestSpecHdr):
     @pytest.fixture(autouse=True)
     def setup_class(self, tmpdir):

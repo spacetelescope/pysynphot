@@ -6,7 +6,6 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose
 
-from .utils import use_cdbs
 from ..spectrum import FileSourceSpectrum, FileSpectralElement, FlatSpectrum
 
 
@@ -17,7 +16,7 @@ def test_flat_redshift():
     assert tst.flux.max() == tstpt, 'tstpt={}'.format(tstpt)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_file_feige():
     """Subtract two spectra, Trac Ticket #23"""
     sp = FileSourceSpectrum(os.path.join(
@@ -27,7 +26,7 @@ def test_file_feige():
     assert_allclose(sp3.flux, sp.flux)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.parametrize(
     ('cls', 'fname', 'realpath'),
     [(FileSourceSpectrum, 'crcalspec$hz2_005.fits',

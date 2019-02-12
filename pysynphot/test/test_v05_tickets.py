@@ -6,7 +6,6 @@ import numpy as np
 import pytest
 from numpy.testing import assert_array_equal, assert_allclose
 
-from .utils import use_cdbs
 from .. import Cache, extinction
 from ..obsbandpass import ObsBandpass
 from ..reddening import Extinction, RedLaw
@@ -15,7 +14,7 @@ from ..spectrum import (ArraySourceSpectrum, ArraySpectralElement, BlackBody,
 from ..spparser import parse_spec
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_0000():
     """
     Some of the tests below will fail if this is not the FIRST
@@ -43,7 +42,7 @@ def test_0000():
         Extinction(0.2, '/foo/bar.fits')
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_smcbar():
     newsmc = Extinction(0.2, 'smcbar')
     tst = newsmc(np.array([5500, 5550, 5600]))
@@ -98,7 +97,7 @@ def test_ticket135_flip_sp():
     assert_allclose(ref, tst)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_ticket135_flip_bp():
     bp = ObsBandpass('johnson,v')
     T = bp.throughput
@@ -117,7 +116,7 @@ def test_ticket135_flip_bp():
     assert_allclose(ref[idxr], tst[idxr])
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.parametrize(
     'pstr',
     ['rn(icat(k93models,44500,0.0,5.0),band(nicmos,2,f222m),18,vegamag)',
@@ -159,7 +158,7 @@ def test_sample():
     assert_array_equal(tst, ref.flux)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_ticket104():
     """
     Use the extinction laws to test and make sure the conversion to

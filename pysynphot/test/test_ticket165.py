@@ -2,12 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..spectrum import SpectralElement
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.parametrize(
     'obsmode',
     ['wfc3,uvis1,f218w,aper#0.60',

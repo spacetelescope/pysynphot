@@ -7,14 +7,13 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose, assert_array_equal
 
-from .utils import use_cdbs
 from ..observation import Observation
 from ..obsbandpass import ObsBandpass
 from ..spectrum import ArraySourceSpectrum, Box, FlatSpectrum
 from ..spparser import parse_spec
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestBinFlux(object):
     """Test the Observation.initbinflux method."""
     def setup_class(self):
@@ -66,7 +65,7 @@ class TestBinFlux(object):
         assert_array_equal(self.bp.binset, self.obs.binwave)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestPixelWaveRangeMethods(object):
     """Test the Observation.pixel_range() and .wave_range() methods."""
     def setup_class(self):
@@ -129,7 +128,7 @@ class TestArithmetic(object):
             self.obs + other
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_no_neg_leak():
     """
     Test that negative leak is no longer possible.

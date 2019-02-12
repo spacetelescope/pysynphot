@@ -11,7 +11,6 @@ import os
 import pytest
 from numpy.testing import assert_allclose
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..refs import getref, setref
 from ..spectrum import FileSpectralElement
@@ -36,7 +35,7 @@ def teardown_module(module):
     setref(graphtable=orig_graphtable, comptable=orig_comptable)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.parametrize(
     ('cls', 'om', 'avgw', 'effi', 'equiv', 'rectw', 'rmsw'),
     [(FileSpectralElement, 'crnonhstcomp$johnson_v_004_syn.fits',

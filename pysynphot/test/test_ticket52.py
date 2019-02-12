@@ -4,12 +4,11 @@ import os
 
 import pytest
 
-from .utils import use_cdbs
 from ..locations import irafconvert
 from ..spparser import parse_spec
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestTicket52(object):
     def setup_class(self):
         self.ref = os.path.join(

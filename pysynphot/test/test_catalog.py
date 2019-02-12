@@ -7,13 +7,12 @@ import pytest
 import numpy as np
 from numpy.testing import assert_allclose, assert_array_equal
 
-from .utils import use_cdbs
 from .. import Cache
 from ..exceptions import ParameterOutOfBounds
 from ..catalog import Icat
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class ICatK93Test(object):
     """
     This test passes before changes, and should pass after the changes.
@@ -64,7 +63,7 @@ class ICatK93Test(object):
         assert_allclose(self.sp.flux[-50:], ref_flux2)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.parametrize(
     ('teff', 'z', 'logg'),
     [(6440, 0, 10),
@@ -82,7 +81,7 @@ def test_Icat_exceptions(teff, z, logg):
         Icat('k93models', teff, z, logg)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_phoenix_gap():
     """
     https://github.com/spacetelescope/pysynphot/issues/68
@@ -94,7 +93,7 @@ def test_phoenix_gap():
         Icat('phoenix', 2700, -0.501, 5.1)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestCatalogCache(object):
     """
     Test changes for Trac ticket #131.

@@ -7,7 +7,6 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose
 
-from .utils import use_cdbs
 from .. import locations, refs
 from ..exceptions import OverlapError
 from ..obsbandpass import ObsBandpass
@@ -40,7 +39,7 @@ def teardown_module(module):
     locations.VegaFile = old_vegafile
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestRenormOverlap(object):
     """Tests for strict rejection."""
 
@@ -77,7 +76,7 @@ class TestRenormOverlap(object):
         assert isinstance(sp2, SourceSpectrum)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestCornerCase(object):
     def setup_class(self):
         """

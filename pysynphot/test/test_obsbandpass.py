@@ -5,13 +5,12 @@ import os
 import pytest
 from numpy.testing import assert_allclose, assert_array_equal
 
-from .utils import use_cdbs
 from ..exceptions import OverlapError
 from ..obsbandpass import ObsBandpass, pixel_range, wave_range
 from ..refs import setref
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestObsBandpass(object):
     def setup_class(self):
         self.bp = ObsBandpass('acs,hrc,f555w')
@@ -104,7 +103,7 @@ class TestObsBandpass(object):
         assert_array_equal(w, (499.9, 500.1))
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestUnitResponse(object):
     """
     Test the spectrum.SpectralElement.unit_response method as

@@ -2,9 +2,9 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
+import pytest
 from astropy.utils.data import get_pkg_data_filename
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..observation import Observation
 from ..refs import getref, setref
@@ -19,7 +19,7 @@ def test_composite_warn():
         assert 'FakeWarn' in sp2.warnings
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestOverlapWarning(object):
     def setup_class(self):
         self.oldref = getref()

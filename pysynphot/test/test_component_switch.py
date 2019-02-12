@@ -10,12 +10,11 @@ import os
 
 import pytest
 
-from .utils import use_cdbs
 from .. import refs
 from ..observationmode import ObservationMode
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestCompSwitch(object):
     def setup_class(self):
         self.cdbs = os.environ['PYSYN_CDBS']
