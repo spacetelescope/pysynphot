@@ -49,6 +49,7 @@ setup(
     install_requires=[
         'astropy',
         'numpy',
+        'beautifulsoup4',
         'six'
     ],
     tests_require=['pytest', 'pytest-remotedata'],
