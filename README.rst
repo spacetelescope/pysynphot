@@ -12,7 +12,7 @@ PySynphot
     :alt: Travis CI Status
     :target: https://travis-ci.org/spacetelescope/pysynphot
 
-.. |codecov| https://codecov.io/gh/spacetelescope/pysynphot/branch/master/graph/badge.svg
+.. |codecov| image:: https://codecov.io/gh/spacetelescope/pysynphot/branch/master/graph/badge.svg
     :alt: Coverage results
     :target: https://codecov.io/gh/spacetelescope/pysynphot
 
