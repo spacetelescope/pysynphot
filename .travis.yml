@@ -28,7 +28,7 @@ matrix:
         # Coverage and also test Astropy dev with remote data
         - python: 3.6
           env: ASTROPY_VERSION=development
-               PIP_DEPENDENCIES='coveralls pytest-remotedata beautifulsoup4'
+               PIP_DEPENDENCIES='codecov pytest-remotedata beautifulsoup4'
                CONDA_DEPENDENCIES='pytest-cov coverage requests'
                MAIN_CMD='pytest pysynphot --cov-report= --cov=pysynphot --remote-data'
 
@@ -60,4 +60,4 @@ script:
     - $MAIN_CMD
 
 after_success:
-   - if [[ $MAIN_CMD == *cov-report* ]]; then coveralls; fi
+   - if [[ $MAIN_CMD == *cov-report* ]]; then codecov; fi
