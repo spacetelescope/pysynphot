@@ -81,77 +81,77 @@ In csh shell::
 
     setenv PYSYN_CDBS /my/local/dir/cdbs/
 
-These data files [#f1]_ are needed for calculations involving HST bandpasses:
+These data files are needed for calculations involving HST bandpasses:
 
-+----------------------------+------------------------------+-------------------------------------------------+
-| Description                | Directory name               | Download                                        |
-+============================+==============================+=================================================+
-|Master tables               | $PYSYN_CDBS/mtab/            |ftp://ftp.stsci.edu/cdbs/tarfiles/synphot1.tar.gz|
-+----------------------------+------------------------------+                                                 |
-|HST/ACS throughput tables   | $PYSYN_CDBS/comp/acs/        |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/COS throughput tables   | $PYSYN_CDBS/comp/cos/        |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/FGS throughput tables   | $PYSYN_CDBS/comp/fgs/        |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/FOC throughput tables   | $PYSYN_CDBS/comp/foc/        |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/FOS throughput tables   | $PYSYN_CDBS/comp/fos/        |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/HRS throughput tables   | $PYSYN_CDBS/comp/hrs/        |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/HSP throughput tables   | $PYSYN_CDBS/comp/hsp/        |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/NICMOS throughput tables| $PYSYN_CDBS/comp/nicmos/     |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/OTA throughput tables   | $PYSYN_CDBS/comp/ota/        |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/STIS throughput tables  | $PYSYN_CDBS/comp/stis/       |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/WFC3 throughput tables  | $PYSYN_CDBS/comp/wfc3/       |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/WFPC1 throughput tables | $PYSYN_CDBS/comp/wfpc/       |                                                 |
-+----------------------------+------------------------------+                                                 |
-|HST/WFPC2 throughput tables | $PYSYN_CDBS/comp/wfpc2/      |                                                 |
-+----------------------------+------------------------------+                                                 |
-|Non-HST throughput tables   | $PYSYN_CDBS/comp/nonhst/     |                                                 |
-+----------------------------+------------------------------+-------------------------------------------------+
++----------------------------+------------------------------+--------------------------------------------------+
+| Description                | Directory name               | Download                                         |
++============================+==============================+==================================================+
+|Master tables               | $PYSYN_CDBS/mtab/            |http://ssb.stsci.edu/cdbs/tarfiles/synphot1.tar.gz|
++----------------------------+------------------------------+                                                  |
+|HST/ACS throughput tables   | $PYSYN_CDBS/comp/acs/        |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/COS throughput tables   | $PYSYN_CDBS/comp/cos/        |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/FGS throughput tables   | $PYSYN_CDBS/comp/fgs/        |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/FOC throughput tables   | $PYSYN_CDBS/comp/foc/        |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/FOS throughput tables   | $PYSYN_CDBS/comp/fos/        |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/HRS throughput tables   | $PYSYN_CDBS/comp/hrs/        |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/HSP throughput tables   | $PYSYN_CDBS/comp/hsp/        |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/NICMOS throughput tables| $PYSYN_CDBS/comp/nicmos/     |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/OTA throughput tables   | $PYSYN_CDBS/comp/ota/        |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/STIS throughput tables  | $PYSYN_CDBS/comp/stis/       |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/WFC3 throughput tables  | $PYSYN_CDBS/comp/wfc3/       |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/WFPC1 throughput tables | $PYSYN_CDBS/comp/wfpc/       |                                                  |
++----------------------------+------------------------------+                                                  |
+|HST/WFPC2 throughput tables | $PYSYN_CDBS/comp/wfpc2/      |                                                  |
++----------------------------+------------------------------+                                                  |
+|Non-HST throughput tables   | $PYSYN_CDBS/comp/nonhst/     |                                                  |
++----------------------------+------------------------------+--------------------------------------------------+
 
-These data files [#f1]_ are needed for calculations involving source spectra:
+These data files are needed for calculations involving source spectra:
 
-+------------------------------------------+----------------------------+-------------------------------------------------+
-| Description                              | Directory name             | Download                                        |
-+==========================================+============================+=================================================+
-|Interstellar extinction curves            |$PYSYN_CDBS/extinction/     |ftp://ftp.stsci.edu/cdbs/tarfiles/synphot2.tar.gz|
-+------------------------------------------+----------------------------+                                                 |
-|AGN templates                             |$PYSYN_CDBS/grid/agn/       |                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Bruzual-Charlot galaxy spectra            |$PYSYN_CDBS/grid/bc95/      |                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Buser-Kurucz stellar atlas                |$PYSYN_CDBS/grid/bkmodels/  |                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Bruzual-Persson-Gunn-Stryker stellar atlas|$PYSYN_CDBS/grid/bpgs/      |                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Bruzual stellar atlas                     |$PYSYN_CDBS/grid/bz77/      |                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Galactic emission line objects            |$PYSYN_CDBS/grid/galactic/  |                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Gunn-Stryker atlas                        |$PYSYN_CDBS/grid/gunnstryker|                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Jacobi-Hunter-Christian stellar atlas     |$PYSYN_CDBS/grid/jacobi/    |                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Kinney-Calzetti galaxy spectra            |$PYSYN_CDBS/grid/kc96/      |                                                 |
-+------------------------------------------+----------------------------+                                                 |
-|Pickles stellar atlas                     |$PYSYN_CDBS/grid/pickles/   |                                                 |
-+------------------------------------------+----------------------------+-------------------------------------------------+
-|Castelli & Kurucz (2004) stellar atlas    |$PYSYN_CDBS/grid/ck04models/|ftp://ftp.stsci.edu/cdbs/tarfiles/synphot3.tar.gz|
-+------------------------------------------+----------------------------+-------------------------------------------------+
-|Kurucz (1993) stellar atlas               |$PYSYN_CDBS/grid/k93models/ |ftp://ftp.stsci.edu/cdbs/tarfiles/synphot4.tar.gz|
-+------------------------------------------+----------------------------+-------------------------------------------------+
-|Phoenix stellar atlas                     |$PYSYN_CDBS/grid/phoenix/   |ftp://ftp.stsci.edu/cdbs/tarfiles/synphot5.tar.gz|
-+------------------------------------------+----------------------------+-------------------------------------------------+
-|HST calibration spectra                   |$PYSYN_CDBS/calspec/        |ftp://ftp.stsci.edu/cdbs/tarfiles/synphot6.tar.gz|
-+------------------------------------------+----------------------------+-------------------------------------------------+
++------------------------------------------+----------------------------+--------------------------------------------------+
+| Description                              | Directory name             | Download                                         |
++==========================================+============================+==================================================+
+|Interstellar extinction curves            |$PYSYN_CDBS/extinction/     |http://ssb.stsci.edu/cdbs/tarfiles/synphot2.tar.gz|
++------------------------------------------+----------------------------+                                                  |
+|AGN templates                             |$PYSYN_CDBS/grid/agn/       |                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Bruzual-Charlot galaxy spectra            |$PYSYN_CDBS/grid/bc95/      |                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Buser-Kurucz stellar atlas                |$PYSYN_CDBS/grid/bkmodels/  |                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Bruzual-Persson-Gunn-Stryker stellar atlas|$PYSYN_CDBS/grid/bpgs/      |                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Bruzual stellar atlas                     |$PYSYN_CDBS/grid/bz77/      |                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Galactic emission line objects            |$PYSYN_CDBS/grid/galactic/  |                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Gunn-Stryker atlas                        |$PYSYN_CDBS/grid/gunnstryker|                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Jacobi-Hunter-Christian stellar atlas     |$PYSYN_CDBS/grid/jacobi/    |                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Kinney-Calzetti galaxy spectra            |$PYSYN_CDBS/grid/kc96/      |                                                  |
++------------------------------------------+----------------------------+                                                  |
+|Pickles stellar atlas                     |$PYSYN_CDBS/grid/pickles/   |                                                  |
++------------------------------------------+----------------------------+--------------------------------------------------+
+|Castelli & Kurucz (2004) stellar atlas    |$PYSYN_CDBS/grid/ck04models/|http://ssb.stsci.edu/cdbs/tarfiles/synphot3.tar.gz|
++------------------------------------------+----------------------------+--------------------------------------------------+
+|Kurucz (1993) stellar atlas               |$PYSYN_CDBS/grid/k93models/ |http://ssb.stsci.edu/cdbs/tarfiles/synphot4.tar.gz|
++------------------------------------------+----------------------------+--------------------------------------------------+
+|Phoenix stellar atlas                     |$PYSYN_CDBS/grid/phoenix/   |http://ssb.stsci.edu/cdbs/tarfiles/synphot5.tar.gz|
++------------------------------------------+----------------------------+--------------------------------------------------+
+|HST calibration spectra                   |$PYSYN_CDBS/calspec/        |http://ssb.stsci.edu/cdbs/tarfiles/synphot6.tar.gz|
++------------------------------------------+----------------------------+--------------------------------------------------+
 
 Throughout this document, unless explicitly stated otherwise, the examples
 assume that ``PYSYN_CDBS`` points to the correct location, and that the relevant
@@ -172,14 +172,6 @@ For plotting, make sure you have the optional
 Before drawing a new plot, you must clear the existing plot:
 
 >>> plt.clf()
-
-
-.. rubric:: Footnotes
-
-.. [#f1] There is a known bug with the FTP service from Safari, so we recommend
-   to use Firefox to download these files via FTP. If this does not work, use a
-   standalone application or anonymous FTP; which is more likely to allow you
-   access to these FTP areas.
 
 
 .. _pysynphot-tree:
