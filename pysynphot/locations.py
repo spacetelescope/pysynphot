@@ -266,8 +266,8 @@ def get_latest_file(template, raise_error=False, err_msg=''):
     # Remote HTTP directory
     if path_lowercase.startswith('http:'):
         try:
-            with request.urlopen(path) as fin:
-                soup = BeautifulSoup(fin, 'html.parser')
+            response = request.urlopen(path)  # PY2 has no context manager
+            soup = BeautifulSoup(response, 'html.parser')
             allfiles = list(set([x.text for x in soup.find_all("a")]))  # Rid symlink
         except Exception:
             allfiles = []
@@ -329,8 +329,8 @@ def _get_RedLaws():
     globstr = os.path.join(extdir, '*.fits')
 
     if extdir_lowercase.startswith('http:'):
-        with request.urlopen(extdir) as fin:
-            soup = BeautifulSoup(fin, 'html.parser')
+        response = request.urlopen(extdir)  # PY2 has no context manager
+        soup = BeautifulSoup(response, 'html.parser')
         files = list(set([x.text for x in soup.find_all("a")
                           if x.text.endswith('.fits')]))  # Rid symlink
         files = [os.path.join(extdir, f) for f in files]
