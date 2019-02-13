@@ -10,7 +10,6 @@ import pytest
 from astropy.utils.data import get_pkg_data_filename
 from numpy.testing import assert_allclose
 
-from .utils import use_cdbs
 from .. import refs, units
 from ..exceptions import IncompatibleSources
 from ..obsbandpass import ObsBandpass
@@ -44,13 +43,13 @@ def test_gt100():
     assert gt.primary_area == 100.0
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_gtno():
     gt = GraphTable(GT_FILE_NO)
     assert not hasattr(gt, 'primary_area')
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.parametrize('cls', [ObservationMode, ObsBandpass, Observation])
 def test_obsmode_gt100(cls):
     """Same behavior for obsmode and bandpass."""
@@ -71,7 +70,7 @@ def test_obsmode_gt100(cls):
     assert bp.primary_area == 100.0
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.parametrize('cls', [ObservationMode, ObsBandpass, Observation])
 def test_obsmode_gtno(cls):
     if cls is Observation:
@@ -89,7 +88,7 @@ def test_obsmode_gtno(cls):
     assert bp.primary_area == refs.PRIMARY_AREA
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestObsBandpass(object):
     def setup_class(self):
         self.bp = ObsBandpass('acs,hrc,f555w', graphtable=GT_FILE_100)

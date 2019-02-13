@@ -1,8 +1,10 @@
 language: python
 
 python:
-    - 2.7
     - 3.6
+
+os:
+    - linux
 
 env:
     global:
@@ -11,16 +13,24 @@ env:
         # to repeat them for all configurations.
         - NUMPY_VERSION=stable
         - ASTROPY_VERSION=stable
-        - PIP_DEPENDENCIES=''
+        - PIP_DEPENDENCIES='pytest-remotedata beautifulsoup4'
         - CONDA_DEPENDENCIES=''
         - MAIN_CMD='pytest pysynphot'
 
 matrix:
     include:
 
+        - python: 3.6
+
+        - python: 2.7
+          env: ASTROPY_VERSION=lts
+
         # Coverage and also test Astropy dev with remote data
         - python: 3.6
-          env: PIP_DEPENDENCIES='coveralls' ASTROPY_VERSION=development CONDA_DEPENDENCIES='pytest-cov coverage requests' MAIN_CMD='pytest --cov-report= --cov=pysynphot --cdbs pysynphot'
+          env: ASTROPY_VERSION=development
+               PIP_DEPENDENCIES='codecov pytest-remotedata beautifulsoup4'
+               CONDA_DEPENDENCIES='pytest-cov coverage requests'
+               MAIN_CMD='pytest pysynphot --cov-report= --cov=pysynphot --remote-data'
 
 install:
     # We now use the ci-helpers package to set up our testing environment.
@@ -50,4 +60,4 @@ script:
     - $MAIN_CMD
 
 after_success:
-   - if [[ $MAIN_CMD == *cov-report* ]]; then coveralls; fi
+   - if [[ $MAIN_CMD == *cov-report* ]]; then codecov; fi

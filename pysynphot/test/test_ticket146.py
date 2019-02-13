@@ -7,7 +7,6 @@ import pytest
 from astropy.io import fits
 from astropy.utils.data import get_pkg_data_filename
 
-from .utils import use_cdbs
 from ..exceptions import DuplicateWavelength
 from ..obsbandpass import ObsBandpass
 from ..reddening import Extinction
@@ -33,7 +32,7 @@ def test_sorted_bp(tmpdir):
     assert num == 1, '{} occurrences found'.format(num)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_sorted(tmpdir):
     fname = str(tmpdir.join('epsilon.fits'))
 
@@ -68,7 +67,7 @@ class TestPrecision(object):
         assert hdr['tform2'].lower() == ans
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestPrecisionBP(TestPrecision):
     def setup_class(self):
         self.sp = ObsBandpass('acs,hrc,f555w')

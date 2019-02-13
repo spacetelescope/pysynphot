@@ -3,10 +3,10 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import numpy as np
+import pytest
 from astropy.utils.data import get_pkg_data_filename
 from numpy.testing import assert_allclose
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..observation import Observation
 from ..refs import getref, setref
@@ -47,7 +47,7 @@ class TestArrKeepneg(object):
         assert_allclose(sp.flux[2], -0.5, rtol=1E-4)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestObsKeepneg(object):
     def setup_class(self):
         self.fname = get_pkg_data_filename(os.path.join('data', 'us7.txt'))

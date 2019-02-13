@@ -6,13 +6,12 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose
 
-from .utils import use_cdbs
 from ..exceptions import ExtrapolationNotAllowed
 from ..obsbandpass import ObsBandpass
 from ..spectrum import InterpolatedSpectralElement
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestInterpErrorCol(object):
     """
     Test whether the InterpolatedSpectralElement grabs the correct column
@@ -91,7 +90,7 @@ class TestInterpErrorCol(object):
         assert_allclose(self.spec._wavetable, wavetable)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestInterpNoDefault(object):
     """
     Test whether the InterpolatedSpectralElement grabs the correct column
@@ -116,7 +115,7 @@ class TestInterpNoDefault(object):
         assert_allclose(self.spec._wavetable, wavetable)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestInterpRequired(object):
     """
     Test whether the InterpolatedSpectralElement gets the correct throughput
@@ -199,7 +198,7 @@ class TestInterpRequired(object):
         assert_allclose(self.spec._wavetable, wavetable)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_aper_no_extrap():
     """
     Test that an exception is raised when we can't extrapolate
@@ -213,7 +212,7 @@ def test_aper_no_extrap():
         InterpolatedSpectralElement(filename, interp_val)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestRampFilter(object):
     def setup_class(self):
         interp_val = 6480.
@@ -265,7 +264,7 @@ class TestRampFilter(object):
         assert_allclose(self.spec._wavetable[:100], wavetable)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestRampFilterExtrap(TestRampFilter):
     def setup_class(self):
         interp_val = -5.
@@ -280,7 +279,7 @@ class TestRampFilterExtrap(TestRampFilter):
         assert self.spec.warnings['DefaultThroughput']
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_wfpc2_cont():
     """
     This is here because WFPC2 CONT# tables have both CONT# and ERR# columns

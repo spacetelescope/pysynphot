@@ -7,7 +7,6 @@ import pytest
 from astropy.utils.data import _find_pkg_data_path, get_pkg_data_filename
 from numpy.testing import assert_allclose
 
-from .utils import use_cdbs
 from .. import locations, refs
 from ..exceptions import PartialOverlap
 from ..obsbandpass import ObsBandpass
@@ -71,7 +70,7 @@ class TestOverlapBug(object):
         assert_allclose(tst, self.refval, rtol=self.rtol)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestDiscoveryCase(TestOverlapBug):
     def setup_class(self):
         # rn(z(spec(data/qso_template.fits),0.03),band(johnson,v),18,vegamag)
@@ -150,7 +149,7 @@ class TestAnalyticCase(object):
 # that began failing when #157 was implemented because they really
 # did have partial overlap.
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestCalcphot(object):
     # Loosened accuracy for r618 (no taper)
     def setup_class(self):
@@ -173,7 +172,7 @@ class TestCalcphot(object):
         assert_allclose(tst, 8.30680E+5, rtol=1e-4)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestETC_Imag2(object):
     def setup_class(self):
         # (earthshine.fits * 0.5) +

@@ -3,10 +3,10 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import numpy as np
+import pytest
 from astropy.utils.data import get_pkg_data_filename
 from numpy.testing import assert_array_equal
 
-from .utils import use_cdbs
 from ..spectrum import (ArraySourceSpectrum, BlackBody, FileSourceSpectrum,
                         FlatSpectrum, GaussianSource, Powerlaw)
 from ..units import WaveUnits, FluxUnits
@@ -85,28 +85,28 @@ class TestCompositeAnalytic(BaseSpec):
         self.sp = BlackBody(60000) + GaussianSource(1e-12, 5000, 30)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestFileSpec(BaseSpec):
     def setup_class(self):
         self.sp = FileSourceSpectrum(os.path.join(
             os.environ['PYSYN_CDBS'], 'calspec', 'alpha_lyr_stis_003.fits'))
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestNegFlam(BaseSpec):
     def setup_class(self):
         self.sp = FileSourceSpectrum(os.path.join(
             os.environ['PYSYN_CDBS'], 'calspec', 'vb8_stisnic_001.fits'))
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestNegMag(BaseSpec):
     def setup_class(self):
         self.sp = FileSourceSpectrum(os.path.join(
             os.environ['PYSYN_CDBS'], 'calobs', 'alpha_lyr_006.fits'))
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestCompositeFile(BaseSpec):
     def setup_class(self):
         comp1 = FileSourceSpectrum(os.path.join(

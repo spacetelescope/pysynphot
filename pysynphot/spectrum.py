@@ -184,7 +184,7 @@ class Integrator(object):
         wlist = []
         flist = []
         lcount = 0
-        if filename.lower().startswith('ftp://'):
+        if filename.lower().startswith(('http://', 'ftp://')):
             lines = get_file_contents(filename)
         else:
             with open(filename) as fs:
@@ -3053,7 +3053,7 @@ class InterpolatedSpectralElement(SpectralElement):
     def __init__(self, fileName, wavelength):
         SpectralElement.__init__(self)
 
-        xre = re.search('\[(?P<col>.*?)\]', fileName)
+        xre = re.search(r'\[(?P<col>.*?)\]', fileName)
         self.name = os.path.expandvars(fileName[0:(xre.start())])
         colSpec = xre.group('col')
 

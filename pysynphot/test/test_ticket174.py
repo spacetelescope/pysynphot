@@ -2,14 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
-from .utils import use_cdbs
 from ..exceptions import PartialOverlap
 from ..obsbandpass import ObsBandpass
 from ..observation import Observation
 from ..spparser import parse_spec
 
 
-@use_cdbs
+@pytest.mark.remote_data
 def test_force_partial():
     rband = (1146, 1213)
     bp = ObsBandpass('cos,fuv,g130m,c1318,psa')

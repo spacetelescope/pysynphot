@@ -48,9 +48,11 @@ setup(
     ],
     install_requires=[
         'astropy',
-        'numpy'
+        'numpy',
+        'beautifulsoup4',
+        'six'
     ],
-    tests_require=['pytest'],
+    tests_require=['pytest', 'pytest-remotedata'],
     packages=['pysynphot',
               'pysynphot.test'],
     package_dir={'pysynphot': 'pysynphot'},

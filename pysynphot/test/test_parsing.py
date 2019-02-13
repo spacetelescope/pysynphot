@@ -4,15 +4,14 @@ import os
 
 import pytest
 
-from .utils import use_cdbs
 from ..exceptions import DisjointError
 from ..spectrum import SourceSpectrum
 from ..spparser import parse_spec
 
-is_ftp = os.environ['PYSYN_CDBS'].lower().startswith('ftp')
+is_ftp = os.environ['PYSYN_CDBS'].lower().startswith(('http', 'ftp'))
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.parametrize(
     'sp_str',
     ['spec($PYSYN_CDBS//calspec/gd71_mod_005.fits)',
@@ -22,7 +21,7 @@ def test_parse_source(sp_str):
     assert isinstance(sp, SourceSpectrum)
 
 
-@use_cdbs
+@pytest.mark.remote_data
 @pytest.mark.xfail(reason='Does not work')
 @pytest.mark.parametrize(
     'sp_str',
@@ -33,16 +32,16 @@ def test_x_decimal(sp_str):
     assert isinstance(sp, SourceSpectrum)
 
 
-@use_cdbs
-@pytest.mark.xfail(is_ftp, reason='rn does not work with FTP files')
+@pytest.mark.remote_data
+@pytest.mark.xfail(is_ftp, reason='rn does not work with HTTP or FTP files')
 def test_disjoint():
     with pytest.raises(DisjointError):
         parse_spec('rn($PYSYN_CDBS/etc/source/qso_fos_001.dat,'
                    'band(johnson,v),15,abmag)')
 
 
-@use_cdbs
-@pytest.mark.xfail(is_ftp, reason='rn does not work with FTP files')
+@pytest.mark.remote_data
+@pytest.mark.xfail(is_ftp, reason='rn does not work with HTTP or FTP files')
 def test_partial():
     sp = parse_spec('rn($PYSYN_CDBS/etc/source/qso_fos_001.dat,'
                     'band(johnson,u),15,abmag)')

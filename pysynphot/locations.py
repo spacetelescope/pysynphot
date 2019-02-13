@@ -29,6 +29,7 @@
 
 """
 from __future__ import division, print_function
+from six.moves.urllib import request
 
 import fnmatch
 import glob
@@ -37,7 +38,7 @@ import re
 import warnings
 
 from astropy.io import fits as pyfits
-
+from bs4 import BeautifulSoup
 
 # Replace cdbs_roots lookup with an environment variable
 try:
@@ -47,7 +48,7 @@ except KeyError:
                   "crippled.")
     rootdir = ''
 
-ftp_rootdir = 'ftp://ftp.stsci.edu/cdbs'
+ftp_rootdir = 'http://ssb.stsci.edu/cdbs_open/cdbs'
 
 # Data directory is now installed locally
 specdir = os.path.join(os.path.dirname(__file__), 'data')
@@ -83,8 +84,6 @@ _data_map = None
 # ............more robust
 # BUG: this dictionary should be in a data file
 CONVERTDICT = {'crrefer': rootdir,
-               'crotacomp': os.path.join(rootdir, 'comp', 'ota'),
-               'cracscomp': os.path.join(rootdir, 'comp', 'acs'),
                'crcalobs': os.path.join(rootdir, 'calobs'),
                'crcalspec': os.path.join(rootdir, 'calspec'),
                'croldcalspec': os.path.join(rootdir, 'oldcalspec'),
@@ -102,7 +101,6 @@ CONVERTDICT = {'crrefer': rootdir,
                'crotacomp': os.path.join(rootdir, 'comp', 'ota'),
                'crnicmoscomp': os.path.join(rootdir, 'comp', 'nicmos'),
                'crnonhstcomp': os.path.join(rootdir, 'comp', 'nonhst'),
-               'crstiscomp': os.path.join(rootdir, 'comp', 'stis'),
                'crstiscomp': os.path.join(rootdir, 'comp', 'stis'),
                'crwfc3comp': os.path.join(rootdir, 'comp', 'wfc3'),
                'crcoscomp': os.path.join(rootdir, 'comp', 'cos'),
@@ -132,7 +130,7 @@ CONVERTDICT = {'crrefer': rootdir,
                'crnirspeccomp': os.path.join(rootdir, 'comp', 'nirspec'),
                # PATH for JWST NIRISS instrument files
                'crnirisscomp': os.path.join(rootdir, 'comp', 'niriss'),
-               
+
                }
 
 
@@ -161,7 +159,7 @@ def irafconvert(iraffilename):
     convertdict = CONVERTDICT
 
     # remove duplicate separators and extraneous relative paths
-    if not iraffilename.lower().startswith('ftp'):
+    if not iraffilename.lower().startswith(('http', 'ftp')):
         iraffilename = os.path.normpath(iraffilename)
 
     # BUG: supports environment variables only as the leading element in the
@@ -169,11 +167,11 @@ def irafconvert(iraffilename):
     if iraffilename.startswith('$'):
         # Then this is an environment variable.
         # Use a regex to pull off the front piece.
-        pat = re.compile('\$(\w*)')
+        pat = re.compile(r'\$(\w*)')
         match = re.match(pat, iraffilename)
         dirname = match.group(1)
         unixdir = os.environ[dirname]
-        basename = iraffilename[match.end()+1:]  # 1 to omit leading slash
+        basename = iraffilename[match.end() + 1:]  # 1 to omit leading slash
         unixfilename = os.path.join(unixdir, basename)
         return unixfilename
     elif '$' in iraffilename:
@@ -263,11 +261,19 @@ def get_latest_file(template, raise_error=False, err_msg=''):
 
     """
     path, pattern = os.path.split(irafconvert(template))
+    path_lowercase = path.lower()
+
+    # Remote HTTP directory
+    if path_lowercase.startswith('http:'):
+        try:
+            response = request.urlopen(path)  # PY2 has no context manager
+            soup = BeautifulSoup(response, 'html.parser')
+            allfiles = list(set([x.text for x in soup.find_all("a")]))  # Rid symlink
+        except Exception:
+            allfiles = []
 
     # Remote FTP directory
-    if path.lower().startswith('ftp:'):
-        from astropy.extern.six.moves.urllib import request
-
+    elif path_lowercase.startswith('ftp:'):
         try:
             response = request.urlopen(path).read().decode('utf-8').splitlines()  # noqa
         except Exception:
@@ -309,6 +315,7 @@ def _refTable(template):
         os.path.join(os.environ.get('PYSYN_CDBS', ftp_rootdir), template),
         raise_error=True)
 
+
 RedLaws = {}
 
 
@@ -316,14 +323,21 @@ def _get_RedLaws():
     global RedLaws
 
     extdir = os.path.join(rootdir, EXTDIR)
+    extdir_lowercase = extdir.lower()
 
     # get all the fits files in EXTDIR
     globstr = os.path.join(extdir, '*.fits')
 
-    if extdir.lower().startswith('ftp:'):
-        from astropy.extern.six.moves.urllib import request
+    if extdir_lowercase.startswith('http:'):
+        response = request.urlopen(extdir)  # PY2 has no context manager
+        soup = BeautifulSoup(response, 'html.parser')
+        files = list(set([x.text for x in soup.find_all("a")
+                          if x.text.endswith('.fits')]))  # Rid symlink
+        files = [os.path.join(extdir, f) for f in files]
+    elif extdir_lowercase.startswith('ftp:'):
         response = request.urlopen(extdir).read().decode('utf-8').splitlines()
-        files = list(set([x.split()[-1] for x in response if x.endswith('.fits')]))  # Rid symlink # noqa
+        files = list(set([x.split()[-1] for x in response
+                          if x.endswith('.fits')]))  # Rid symlink
         files = [os.path.join(extdir, f) for f in files]
     else:
         files = glob.glob(globstr)
@@ -344,6 +358,7 @@ def _get_RedLaws():
         key = pyfits.getval(lawf, 'shortnm')
 
         RedLaws[key.lower()] = lawf
+
 
 # load the extintion law file names
 _get_RedLaws()

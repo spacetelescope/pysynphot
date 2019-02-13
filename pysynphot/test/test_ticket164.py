@@ -5,7 +5,6 @@ import os
 import numpy as np
 import pytest
 
-from .utils import use_cdbs
 from .. import refs, units
 from ..locations import irafconvert
 from ..obsbandpass import ObsBandpass
@@ -81,7 +80,7 @@ class TestMulti(object):
         assert self.pick['graphtable'] == self.gref
         assert self.pick['comptable'] == self.cref
 
-    @use_cdbs
+    @pytest.mark.remote_data
     def test_bp(self):
         bp = ObsBandpass('acs,hrc,f555w')
         assert bp.obsmode.gtname == self.gref

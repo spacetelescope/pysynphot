@@ -7,13 +7,12 @@ from __future__ import absolute_import, division, print_function
 
 import pytest
 
-from .utils import use_cdbs
 from ..obsbandpass import ObsBandpass
 from ..observation import Observation
 from ..spectrum import BlackBody
 
 
-@use_cdbs
+@pytest.mark.remote_data
 class TestCOS(object):
     def setup_class(self):
         self.bb = BlackBody(5500)
