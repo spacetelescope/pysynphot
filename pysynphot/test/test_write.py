@@ -32,8 +32,8 @@ def test_write(tmpdir, obj):
 @pytest.mark.remote_data
 class TestWriteParse(object):
     """
-    pytest.mark.parametrize gives URLError for FTP connection, so we have
-    to do it this way instead.
+    pytest.mark.parametrize gives URLError for HTTP or FTP connection,
+    so we have to do it this way instead.
     """
     def setup_class(self):
         self.obj = interpret(parse(scan('ebmvx(0.5,gal1)')))

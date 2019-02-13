@@ -14,7 +14,7 @@ calibration spectra and astronomical catalogs be found at the
 which supersedes this documentation in case of conflicting information.
 The data files are available at STScI on all science computing clusters in the
 ``$PYSYN_CDBS`` directory. Off-site users can obtain these data via
-anonymous FTP (see :ref:`pysynphot-installation-setup`).
+HTTP (see :ref:`pysynphot-installation-setup`).
 
 Stellar models:
 
@@ -103,7 +103,7 @@ Considering that the entire atlas occupies close to 70 MB of disk space,
 many applications could be satisfied by a copy of the solar metallicity
 spectra only (Table 2 of the README file).
 See
-`Kurucz 1993 atlas README file <ftp://ftp.stsci.edu/cdbs/grid/k93models/AA_README>`_
+`Kurucz 1993 atlas README file <http://ssb.stsci.edu/cdbs/grid/k93models/AA_README>`_
 for more details.
 
 The models are in ``flam`` *surface* flux units. If the number of counts or the
