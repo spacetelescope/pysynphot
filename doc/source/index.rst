@@ -44,7 +44,7 @@ Alternately, bibcode is available from
 `Astrophysics Source Code Library <http://ascl.net/1303.023>`_.
 
 If you have questions or concerns regarding the software, please contact
-STScI Help Desk via ``help[at]stsci.edu``.
+STScI Help Desk via ``https://hsthelp.stsci.edu``.
 
 
 .. _pysynphot-installation-setup:
@@ -67,7 +67,7 @@ If missing, the following dependencies must also be installed:
 * `matplotlib <http://matplotlib.org/>`_ (optional)
 
 Data files for **pysynphot** are distributed separately by
-`Calibration Reference Data System <http://www.stsci.edu/hst/observatory/crds/throughput.html>`_.
+`Calibration Reference Data System <http://www.stsci.edu/hst/instrumentation/reference-data-for-calibration-and-tools/synphot-throughput-tables.html>`_.
 They are expected to follow a certain directory structure under the root
 directory, identified by the ``PYSYN_CDBS`` environment variable that *must* be
 set prior to using this package. In the example below, the root directory is
@@ -231,7 +231,7 @@ References
 
 .. _synphot-ref-demarchi2004:
 
-* `De Marchi, G. et al. 2004, ISR ACS 2004-08: Detector Quantum Efficiency and Photometric Zero Points of the ACS (Baltimore, MD: STScI) <http://www.stsci.edu/hst/acs/documents/isrs/isr0408.pdf>`_
+* `De Marchi, G. et al. 2004, ISR ACS 2004-08: Detector Quantum Efficiency and Photometric Zero Points of the ACS (Baltimore, MD: STScI) <http://www.stsci.edu/hst/instrumentation/acs/documentation/instrument-science-reports-isrs/_documents/isr0408.pdf>`_
 
 .. _synphot-ref-diaz2012:
 
@@ -333,11 +333,11 @@ References
 
 .. _synphot-ref-prevot1984:
 
-* Prevot, M. L., Lequeux, J., Prevot, L., Maurice, E., & Rocca-Volmerange, B. 1984, A&A, 132, 389
+* Prevot, M. L., Lequeux, J., Prevot, L., Maurice, E., & Rocca-Volmerange, B. 1984, A&A, 132, 389 
 
-* `pysynphot Code Repository <https://aeon.stsci.edu/ssb/trac/astrolib/browser/trunk/pysynphot>`_
+* `pysynphot Code Repository <https://github.com/spacetelescope/pysynphot/>`_ 
 
-* `pysynphot Open Issues <https://aeon.stsci.edu/ssb/trac/astrolib/query?status=assigned&status=new&status=reopened&component=pysynphot&col=id&col=summary&col=owner&col=type&col=status&col=priority&col=milestone&order=priority>`_
+* `pysynphot Open Issues <https://github.com/spacetelescope/pysynphot/issues>`_ 
 
 .. _synphot-ref-rybicki1979:
 

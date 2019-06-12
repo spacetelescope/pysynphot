@@ -1233,7 +1233,7 @@ large extended sources (larger than about 80 pixels in size)
 because the extended IR scattering wings in these bands,
 which do not affect the photometry of point sources, begin to be
 included. The modified curves are shown in an
-`updated SDSS system response plot <http://www.sdss.org/dr3/instruments/imager/#filters>`_.
+`updated SDSS system response plot <http://classic.sdss.org/dr7/instruments/imager/#filters>`_.
 
 The SDSS photometry is intended to be on the AB system
 (:ref:`Oke & Gunn 1983 <synphot-ref-oke1983>`), by which a 0-magnitude object
@@ -1258,7 +1258,7 @@ See :ref:`Holberg & Bergeron (2006) <synphot-ref-holberg2006>` for a
 calibration of SDSS magnitudes using Vega as a reference spectrum.
 Further information about SDSS photometric calibration and the "asinh"
 magnitude system can be found at
-`SDSS Photometric Flux Calibration webpage <http://www.sdss.org/dr3/algorithms/fluxcal.html>`_.
+`SDSS Photometric Flux Calibration webpage <http://classic.sdss.org/dr7/algorithms/fluxcal.html>`_.
 
 
 .. _pysynphot-nonhst-stromgren:

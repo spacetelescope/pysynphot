@@ -72,13 +72,13 @@ they will be able to use **pysynphot**. This can be done in one of two ways:
   :ref:`pysynphot-installation-setup`. This method offers the convenience of
   automatically creating the necessary directory tree for the data.
 * Individual CRDS files: An alternate method is to transfer the
-  individual tables using HTTP (``ssb.stsci.edu/cdbs``) to STScI
+  individual tables from ``ftp://ftp.stsci.edu/cdbs/`` to STScI
   from the directories given also in :ref:`pysynphot-installation-setup`.
 
 The best method is perhaps a combination of the two: First-time
-installers may wish to use the "snapshot" TAR files to initially
-create and populate the directory structure, and then periodically
-check the CRDS area at STScI for updates to individual tables.
+installers may wish to use the "snapshot" `TAR files <ftp://ftp.stsci.edu/cdbs/tarfiles/>`_
+to initially create and populate the directory structure, and then
+periodically check the CRDS area at STScI for updates to individual tables.
 
 The instrument graph and component lookup tables are contained in
 the ``mtab/`` subdirectory and are named ``*_tmg.fits``, ``*_tmc.fits``,
