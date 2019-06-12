@@ -78,7 +78,7 @@ The atlas data files are organized in a similar naming convention as
 `~pysynphot.catalog.Icat` (also see :ref:`pysynphot-spec-atlas`).
 
 The example below generates a spectrum with metallicity ``[M/H] = +0.1``,
-temperature :math:`T_{\textnormal{eff}} = 10000 \textnormal{K}`, and gravity
+temperature :math:`T_{\mathrm{eff}} = 10000 \mathrm{K}`, and gravity
 :math:`\log g = 3.0`:
 
 >>> sp = S.Icat('ck04models', 10000, 0.1, 3.0)
@@ -113,7 +113,7 @@ absolute flux is needed, the model spectrum must be
 The following example shows the header from one of the atlas data files.
 This file contains all the models for a star of metallicity
 ``[M/H] = 0.0`` (``p00``) and effective temperature
-:math:`T_{\textnormal{eff}} = 8000 \textnormal{K}` (``8000``), which cover a
+:math:`T_{\mathrm{eff}} = 8000 \mathrm{K}` (``8000``), which cover a
 range of gravities from :math:`\log g = +1.0` (``g10``) to
 :math:`\log g = +5.0` (``g50``).
 In this example, :math:`\log g = +0.0` and :math:`\log g = +0.5` are unavailable,
@@ -158,7 +158,7 @@ HISTORY   and effective temperature but different gravity.
 The example below shows you how to manually select the flux for a specific
 model characterized by a given metallicity, effective temperature, and gravity.
 The filename ``kp01_10000`` means ``[M/H] = +0.1`` (``p01``) and
-:math:`T_{\textnormal{eff}} = 10000 \textnormal{K}` (``10000``). The column
+:math:`T_{\mathrm{eff}} = 10000 \mathrm{K}` (``10000``). The column
 name ``g30`` means :math:`\log g = 3.0`:
 
 >>> filename = os.path.join(
@@ -197,7 +197,7 @@ The atlas data files are organized in a similar naming convention as
 `~pysynphot.catalog.Icat` (also see :ref:`pysynphot-spec-atlas`).
 
 The example below generates a spectrum with metallicity ``[M/H] = +0.1``,
-temperature :math:`T_{\textnormal{eff}} = 10000 \textnormal{K}`, and gravity
+temperature :math:`T_{\mathrm{eff}} = 10000 \mathrm{K}`, and gravity
 :math:`\log g = 3.0`:
 
 >>> sp = S.Icat('phoenix', 10000, 0.1, 3.0)
@@ -324,7 +324,7 @@ for more details, in including the mapping of filenames to their respective
 parameter specifications.
 
 The example below loads Block S (models for the Sun and Vega) with
-:math:`T_{\textnormal{eff}} = 5770 \textnormal{K}` and gravity
+:math:`T_{\mathrm{eff}} = 5770 \mathrm{K}` and gravity
 :math:`\log g = 4.44`:
 
 >>> filename = os.path.join(

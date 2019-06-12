@@ -395,7 +395,7 @@ class Angstrom(WaveUnits):
 
         .. math::
 
-            \\textnormal{nm} = 10^{-1} \\; \\AA
+            \\mathrm{nm} = 10^{-1} \\; \\AA
 
         Parameters
         ----------
@@ -415,7 +415,7 @@ class Angstrom(WaveUnits):
 
         .. math::
 
-            \\mu \\textnormal{m} = 10^{-4} \\; \\AA
+            \\mu \\mathrm{m} = 10^{-4} \\; \\AA
 
         Parameters
         ----------
@@ -435,7 +435,7 @@ class Angstrom(WaveUnits):
 
         .. math::
 
-            \\mu \\textnormal{m}^{-1} = 10^{4} \\; \\AA^{-1}
+            \\mu \\mathrm{m}^{-1} = 10^{4} \\; \\AA^{-1}
 
         Parameters
         ----------
@@ -455,7 +455,7 @@ class Angstrom(WaveUnits):
 
         .. math::
 
-            \\textnormal{mm} = 10^{-7} \\; \\AA
+            \\mathrm{mm} = 10^{-7} \\; \\AA
 
         Parameters
         ----------
@@ -475,7 +475,7 @@ class Angstrom(WaveUnits):
 
         .. math::
 
-            \\textnormal{cm} = 10^{-8} \\; \\AA
+            \\mathrm{cm} = 10^{-8} \\; \\AA
 
         Parameters
         ----------
@@ -495,7 +495,7 @@ class Angstrom(WaveUnits):
 
         .. math::
 
-            \\textnormal{m} = 10^{-10} \\; \\AA
+            \\mathrm{m} = 10^{-10} \\; \\AA
 
         Parameters
         ----------
@@ -515,7 +515,7 @@ class Angstrom(WaveUnits):
 
         .. math::
 
-            \\textnormal{Hz} = \\frac{c}{\\AA}
+            \\mathrm{Hz} = \\frac{c}{\\AA}
 
         where :math:`c` is as defined in :ref:`pysynphot-constants`.
 
@@ -543,7 +543,7 @@ class Photlam(FluxUnits):
 
     .. math::
 
-        \\textnormal{photlam} = \\textnormal{photon} \\; \\textnormal{s}^{-1} \\; \\textnormal{cm}^{-2} \\; \\AA^{-1}
+        \\mathrm{photlam} = \\mathrm{photon} \\; \\mathrm{s}^{-1} \\; \\mathrm{cm}^{-2} \\; \\AA^{-1}
 
     Attributes
     ----------
@@ -599,7 +599,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{flam} = \\frac{hc}{\\lambda} \\; \\textnormal{photlam}
+            \\mathrm{flam} = \\frac{hc}{\\lambda} \\; \\mathrm{photlam}
 
         where :math:`h` and :math:`c` are as defined in
         :ref:`pysynphot-constants`.
@@ -625,7 +625,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{fnu} = h \\lambda \\; \\textnormal{photlam}
+            \\mathrm{fnu} = h \\lambda \\; \\mathrm{photlam}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -677,7 +677,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{photnu} = \\frac{\\lambda^{2}}{c} \\; \\textnormal{photlam}
+            \\mathrm{photnu} = \\frac{\\lambda^{2}}{c} \\; \\mathrm{photlam}
 
         where :math:`c` is as defined in :ref:`pysynphot-constants`.
 
@@ -702,7 +702,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{Jy} = 10^{23} h \\lambda \\; \\textnormal{photlam}
+            \\mathrm{Jy} = 10^{23} h \\lambda \\; \\mathrm{photlam}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -727,7 +727,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{mJy} = 10^{26} h \\lambda \\; \\textnormal{photlam}
+            \\mathrm{mJy} = 10^{26} h \\lambda \\; \\mathrm{photlam}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -748,11 +748,11 @@ class Photlam(FluxUnits):
         return 1.0e+26 * H * flux * wave
 
     def TomuJy(self, wave, flux, **kwargs):
-        """Convert to :math:`\\mu \\textnormal{Jy}`.
+        """Convert to :math:`\\mu \\mathrm{Jy}`.
 
         .. math::
 
-            \\mu \\textnormal{Jy} = 10^{29} h \\lambda \\; \\textnormal{photlam}
+            \\mu \\mathrm{Jy} = 10^{29} h \\lambda \\; \\mathrm{photlam}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -777,7 +777,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{nJy} = 10^{32} h \\lambda \\; \\textnormal{photlam}
+            \\mathrm{nJy} = 10^{32} h \\lambda \\; \\mathrm{photlam}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -802,7 +802,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{AB}_{\\nu} = -2.5 \\; \\log(h \\lambda \\; \\textnormal{photlam}) - 48.6
+            \\mathrm{AB}_{\\nu} = -2.5 \\; \\log(h \\lambda \\; \\mathrm{photlam}) - 48.6
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -828,7 +828,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{ST}_{\\lambda} = -2.5 \\; \\log(\\frac{hc}{\\lambda} \\; \\textnormal{photlam}) - 21.1
+            \\mathrm{ST}_{\\lambda} = -2.5 \\; \\log(\\frac{hc}{\\lambda} \\; \\mathrm{photlam}) - 21.1
 
         where :math:`h` and :math:`c` are as defined in
         :ref:`pysynphot-constants`.
@@ -855,7 +855,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{obmag} = -2.5 \\; \\log(\\delta \\lambda \\; \\times \\; \\textnormal{area} \\; \\times  \\; \\textnormal{photlam})
+            \\mathrm{obmag} = -2.5 \\; \\log(\\delta \\lambda \\; \\times \\; \\mathrm{area} \\; \\times  \\; \\mathrm{photlam})
 
         where :math:`\\delta \\lambda` represent bin widths derived from
         :func:`~pysynphot.binning.calculate_bin_edges` and
@@ -888,9 +888,9 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{vegamag} = -2.5 \\; \\log(\\frac{\\textnormal{photlam}}{f_{\\textnormal{Vega}}})
+            \\mathrm{vegamag} = -2.5 \\; \\log(\\frac{\\mathrm{photlam}}{f_{\\mathrm{Vega}}})
 
-        where :math:`f_{\\textnormal{Vega}}` is the flux of
+        where :math:`f_{\\mathrm{Vega}}` is the flux of
         :ref:`pysynphot-vega-spec` resampled at given wavelength values
         and converted to ``photlam``.
 
@@ -918,7 +918,7 @@ class Photlam(FluxUnits):
 
         .. math::
 
-            \\textnormal{counts} = \\delta \\lambda \\; \\times \\; \\textnormal{area} \\; \\times  \\; \\textnormal{photlam}
+            \\mathrm{counts} = \\delta \\lambda \\; \\times \\; \\mathrm{area} \\; \\times  \\; \\mathrm{photlam}
 
         where :math:`\\delta \\lambda` represent bin widths derived from
         :func:`~pysynphot.binning.calculate_bin_edges` and
@@ -973,7 +973,7 @@ class Hz(WaveUnits):
 
         .. math::
 
-            \\AA = \\frac{c}{\\textnormal{Hz}}
+            \\AA = \\frac{c}{\\mathrm{Hz}}
 
         where :math:`c` is as defined in :ref:`pysynphot-constants`.
 
@@ -1015,7 +1015,7 @@ class InverseMicron(WaveUnits):
 
         .. math::
 
-            \\AA = \\frac{10^{4}}{\\mu \\textnormal{m}^{-1}}
+            \\AA = \\frac{10^{4}}{\\mu \\mathrm{m}^{-1}}
 
         Parameters
         ----------
@@ -1202,7 +1202,7 @@ class Flam(FluxUnits):
 
     .. math::
 
-        \\textnormal{flam} = \\textnormal{erg} \\; \\textnormal{s}^{-1} \\; \\textnormal{cm}^{-2} \\; \\AA^{-1}
+        \\mathrm{flam} = \\mathrm{erg} \\; \\mathrm{s}^{-1} \\; \\mathrm{cm}^{-2} \\; \\AA^{-1}
 
     Attributes
     ----------
@@ -1232,7 +1232,7 @@ class Flam(FluxUnits):
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{\\lambda}{hc} \\; \\textnormal{flam}
+            \\mathrm{photlam} = \\frac{\\lambda}{hc} \\; \\mathrm{flam}
 
         where :math:`h` and :math:`c` are as defined in
         :ref:`pysynphot-constants`.
@@ -1269,7 +1269,7 @@ class Photnu(FluxUnits):
 
     .. math::
 
-        \\textnormal{photnu} = \\textnormal{photon} \\; \\textnormal{s}^{-1} \\; \\textnormal{cm}^{-2} \\; \\textnormal{Hz}^{-1}
+        \\mathrm{photnu} = \\mathrm{photon} \\; \\mathrm{s}^{-1} \\; \\mathrm{cm}^{-2} \\; \\mathrm{Hz}^{-1}
 
     Attributes
     ----------
@@ -1299,7 +1299,7 @@ class Photnu(FluxUnits):
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{c}{\\lambda^{2}} \\; \\textnormal{photnu}
+            \\mathrm{photlam} = \\frac{c}{\\lambda^{2}} \\; \\mathrm{photnu}
 
         where :math:`c` is as defined in :ref:`pysynphot-constants`.
 
@@ -1335,7 +1335,7 @@ class Fnu(FluxUnits):
 
     .. math::
 
-        \\textnormal{fnu} = \\textnormal{erg} \\; \\textnormal{s}^{-1} \\textnormal{cm}^{-2} \\textnormal{Hz}^{-1}
+        \\mathrm{fnu} = \\mathrm{erg} \\; \\mathrm{s}^{-1} \\mathrm{cm}^{-2} \\mathrm{Hz}^{-1}
 
     Attributes
     ----------
@@ -1365,7 +1365,7 @@ class Fnu(FluxUnits):
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{1}{h \\lambda} \\; \\textnormal{fnu}
+            \\mathrm{photlam} = \\frac{1}{h \\lambda} \\; \\mathrm{fnu}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -1401,7 +1401,7 @@ class Jy(FluxUnits):
 
     .. math::
 
-        \\textnormal{Jy} = 10^{-23} \\; \\textnormal{erg} \\; \\textnormal{s}^{-1} \\; \\textnormal{cm}^{-2} \\textnormal{Hz}^{-1}
+        \\mathrm{Jy} = 10^{-23} \\; \\mathrm{erg} \\; \\mathrm{s}^{-1} \\; \\mathrm{cm}^{-2} \\mathrm{Hz}^{-1}
 
     Attributes
     ----------
@@ -1431,7 +1431,7 @@ class Jy(FluxUnits):
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{10^{-23}}{h \\lambda} \\; \\textnormal{Jy}
+            \\mathrm{photlam} = \\frac{10^{-23}}{h \\lambda} \\; \\mathrm{Jy}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -1467,7 +1467,7 @@ class mJy(FluxUnits):
 
     .. math::
 
-        \\textnormal{mJy} = 10^{-26} \\; \\textnormal{erg} \\; \\textnormal{s}^{-1} \\; \\textnormal{cm}^{-2} \\textnormal{Hz}^{-1}
+        \\mathrm{mJy} = 10^{-26} \\; \\mathrm{erg} \\; \\mathrm{s}^{-1} \\; \\mathrm{cm}^{-2} \\mathrm{Hz}^{-1}
 
     Attributes
     ----------
@@ -1497,7 +1497,7 @@ class mJy(FluxUnits):
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{10^{-26}}{h \\lambda} \\; \\textnormal{mJy}
+            \\mathrm{photlam} = \\frac{10^{-26}}{h \\lambda} \\; \\mathrm{mJy}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -1529,11 +1529,11 @@ class mJy(FluxUnits):
 
 
 class muJy(FluxUnits):	# New
-    """Class to handle :math:`\\mu \\textnormal{Jy}` unit.
+    """Class to handle :math:`\\mu \\mathrm{Jy}` unit.
 
     .. math::
 
-        \\mu \\textnormal{Jy} = 10^{-29} \\; \\textnormal{erg} \\; \\textnormal{s}^{-1} \\; \\textnormal{cm}^{-2} \\textnormal{Hz}^{-1}
+        \\mu \\mathrm{Jy} = 10^{-29} \\; \\mathrm{erg} \\; \\mathrm{s}^{-1} \\; \\mathrm{cm}^{-2} \\mathrm{Hz}^{-1}
 
     Attributes
     ----------
@@ -1563,7 +1563,7 @@ class muJy(FluxUnits):	# New
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{10^{-29}}{h \\lambda} \\; \\mu \\textnormal{Jy}
+            \\mathrm{photlam} = \\frac{10^{-29}}{h \\lambda} \\; \\mu \\mathrm{Jy}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -1597,7 +1597,7 @@ class nJy(FluxUnits):  # New
 
     .. math::
 
-        \\textnormal{nJy} = 10^{-32} \\; \\textnormal{erg} \\; \\textnormal{s}^{-1} \\; \\textnormal{cm}^{-2} \\textnormal{Hz}^{-1}
+        \\mathrm{nJy} = 10^{-32} \\; \\mathrm{erg} \\; \\mathrm{s}^{-1} \\; \\mathrm{cm}^{-2} \\mathrm{Hz}^{-1}
 
     Attributes
     ----------
@@ -1627,7 +1627,7 @@ class nJy(FluxUnits):  # New
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{10^{-32}}{h \\lambda} \\; \\textnormal{nJy}
+            \\mathrm{photlam} = \\frac{10^{-32}}{h \\lambda} \\; \\mathrm{nJy}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -1692,9 +1692,9 @@ class ABMag(LogFluxUnits):
 
         .. math::
 
-            m = -0.4 \\; (\\textnormal{AB}_{\\nu} + 48.6)
+            m = -0.4 \\; (\\mathrm{AB}_{\\nu} + 48.6)
 
-            \\textnormal{photlam} = \\frac{10^{m}}{h \\lambda}
+            \\mathrm{photlam} = \\frac{10^{m}}{h \\lambda}
 
         where :math:`h` is as defined in :ref:`pysynphot-constants`.
 
@@ -1761,9 +1761,9 @@ class STMag(LogFluxUnits):
 
         .. math::
 
-            m = -0.4 \\; (\\textnormal{ST}_{\\lambda} + 21.1)
+            m = -0.4 \\; (\\mathrm{ST}_{\\lambda} + 21.1)
 
-            \\textnormal{photlam} = \\frac{10^{m} \\lambda}{hc}
+            \\mathrm{photlam} = \\frac{10^{m} \\lambda}{hc}
 
         where :math:`h` and :math:`c` are as defined in
         :ref:`pysynphot-constants`.
@@ -1835,7 +1835,7 @@ class OBMag(LogFluxUnits):
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{10^{-0.4 \\; \\textnormal{obmag}}}{\\delta \\lambda \\; \\times \\; \\textnormal{area}}
+            \\mathrm{photlam} = \\frac{10^{-0.4 \\; \\mathrm{obmag}}}{\\delta \\lambda \\; \\times \\; \\mathrm{area}}
 
         where :math:`\\delta \\lambda` represent bin widths derived from
         :func:`~pysynphot.binning.calculate_bin_edges` and
@@ -1907,9 +1907,9 @@ class VegaMag(LogFluxUnits):
 
         .. math::
 
-            \\textnormal{photlam} = 10^{-0.4 \\; \\textnormal{vegamag}} \\; f_{\\textnormal{Vega}}
+            \\mathrm{photlam} = 10^{-0.4 \\; \\mathrm{vegamag}} \\; f_{\\mathrm{Vega}}
 
-        where :math:`f_{\\textnormal{Vega}}` is the flux of
+        where :math:`f_{\\mathrm{Vega}}` is the flux of
         :ref:`pysynphot-vega-spec` resampled at given wavelength values
         and converted to ``photlam``.
 
@@ -1970,7 +1970,7 @@ class Counts(FluxUnits):
 
         .. math::
 
-            \\textnormal{photlam} = \\frac{\\textnormal{counts}}{\\delta \\lambda \\; \\times \\; \\textnormal{area}}
+            \\mathrm{photlam} = \\frac{\\mathrm{counts}}{\\delta \\lambda \\; \\times \\; \\mathrm{area}}
 
         where :math:`\\delta \\lambda` represent bin widths derived from
         :func:`~pysynphot.binning.calculate_bin_edges` and

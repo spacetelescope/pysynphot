@@ -36,8 +36,8 @@ Constant                   Description            Value
 ``pysynphot.units.STZERO`` ``stmag`` zero point   -21.1 mag
 ========================== ====================== ===============
 
-.. |speed_c_math| replace:: :math:`2.99792458 \times 10^{18} \; \AA \; \textnormal{s}^{-1}`
-.. |planck_h_math| replace:: :math:`6.62620 \times 10^{-27} \; \textnormal{ergs} \; \textnormal{s}`
+.. |speed_c_math| replace:: :math:`2.99792458 \times 10^{18} \; \AA \; \mathrm{s}^{-1}`
+.. |planck_h_math| replace:: :math:`6.62620 \times 10^{-27} \; \mathrm{ergs} \; \mathrm{s}`
 
 
 .. _pysynphot-flux-units:
@@ -97,19 +97,19 @@ flux units should be self-evident.
 |nanojy |                          |              |
 +-------+--------------------------+--------------+
 
-.. |photlam_math| replace:: :math:`\textnormal{photon} \; \textnormal{s}^{-1} \; \textnormal{cm}^{-2} \; \AA^{-1}`
-.. |photnu_math| replace:: :math:`\textnormal{photon} \; \textnormal{s}^{-1} \; \textnormal{cm}^{-2} \; \textnormal{Hz}^{-1}`
-.. |flam_math| replace:: :math:`\textnormal{erg} \; \textnormal{s}^{-1} \; \textnormal{cm}^{-2} \; \AA^{-1}`
-.. |fnu_math| replace:: :math:`\textnormal{erg} \; \textnormal{s}^{-1} \textnormal{cm}^{-2} \textnormal{Hz}^{-1}`
-.. |stmag_math| replace:: :math:`-2.5 \times \log(\textnormal{flam}) - 21.1`
-.. |abmag_math| replace:: :math:`-2.5 \times \log(\textnormal{fnu})  - 48.6`
-.. |obmag_math| replace:: :math:`-2.5 \times \log(\textnormal{count})`
-.. |vegamag_math| replace:: :math:`-2.5 \times \log(\textnormal{flux} \; / \; \textnormal{flux}_{\textnormal{Vega}})`
-.. |counts_math| replace:: :math:`\textnormal{photon} \; \textnormal{s}^{-1}`
-.. |jy_math| replace:: :math:`10^{-23} \; \textnormal{erg} \; \textnormal{s}^{-1} \; \textnormal{cm}^{-2} \textnormal{Hz}^{-1}`
-.. |mjy_math| replace:: :math:`10^{-26} \; \textnormal{erg} \; \textnormal{s}^{-1} \; \textnormal{cm}^{-2} \textnormal{Hz}^{-1}`
-.. |mujy_math| replace:: :math:`10^{-29} \; \textnormal{erg} \; \textnormal{s}^{-1} \; \textnormal{cm}^{-2} \textnormal{Hz}^{-1}`
-.. |njy_math| replace:: :math:`10^{-32} \; \textnormal{erg} \; \textnormal{s}^{-1} \; \textnormal{cm}^{-2} \textnormal{Hz}^{-1}`
+.. |photlam_math| replace:: :math:`\mathrm{photon} \; \mathrm{s}^{-1} \; \mathrm{cm}^{-2} \; \AA^{-1}`
+.. |photnu_math| replace:: :math:`\mathrm{photon} \; \mathrm{s}^{-1} \; \mathrm{cm}^{-2} \; \mathrm{Hz}^{-1}`
+.. |flam_math| replace:: :math:`\mathrm{erg} \; \mathrm{s}^{-1} \; \mathrm{cm}^{-2} \; \AA^{-1}`
+.. |fnu_math| replace:: :math:`\mathrm{erg} \; \mathrm{s}^{-1} \mathrm{cm}^{-2} \mathrm{Hz}^{-1}`
+.. |stmag_math| replace:: :math:`-2.5 \times \log(\mathrm{flam}) - 21.1`
+.. |abmag_math| replace:: :math:`-2.5 \times \log(\mathrm{fnu})  - 48.6`
+.. |obmag_math| replace:: :math:`-2.5 \times \log(\mathrm{count})`
+.. |vegamag_math| replace:: :math:`-2.5 \times \log(\mathrm{flux} \; / \; \mathrm{flux}_{\mathrm{Vega}})`
+.. |counts_math| replace:: :math:`\mathrm{photon} \; \mathrm{s}^{-1}`
+.. |jy_math| replace:: :math:`10^{-23} \; \mathrm{erg} \; \mathrm{s}^{-1} \; \mathrm{cm}^{-2} \mathrm{Hz}^{-1}`
+.. |mjy_math| replace:: :math:`10^{-26} \; \mathrm{erg} \; \mathrm{s}^{-1} \; \mathrm{cm}^{-2} \mathrm{Hz}^{-1}`
+.. |mujy_math| replace:: :math:`10^{-29} \; \mathrm{erg} \; \mathrm{s}^{-1} \; \mathrm{cm}^{-2} \mathrm{Hz}^{-1}`
+.. |njy_math| replace:: :math:`10^{-32} \; \mathrm{erg} \; \mathrm{s}^{-1} \; \mathrm{cm}^{-2} \mathrm{Hz}^{-1}`
 
 
 .. _pysynphot-units-counts-mags:
@@ -117,8 +117,8 @@ flux units should be self-evident.
 Counts and Magnitudes
 ---------------------
 
-.. |ab_nu| replace:: :math:`\textnormal{AB}_{\nu}`
-.. |st_lam| replace:: :math:`\textnormal{ST}_{\lambda}`
+.. |ab_nu| replace:: :math:`\mathrm{AB}_{\nu}`
+.. |st_lam| replace:: :math:`\mathrm{ST}_{\lambda}`
 
 **pysynphot** supports counts and the following magnitude systems:
 
@@ -230,13 +230,13 @@ These are the recognized wavelength units for all spectrum objects:
 |hertz         |`~pysynphot.units.Hz`           ||hz_math|       |
 +--------------+--------------------------------+----------------+
 
-.. |cm_math| replace:: :math:`10^{-2} \; \textnormal{m}`
-.. |mm_math| replace:: :math:`10^{-3} \; \textnormal{m}`
-.. |micron_math| replace:: :math:`10^{-6} \; \textnormal{m}`
-.. |nm_math| replace:: :math:`10^{-9} \; \textnormal{m}`
-.. |angstrom_math| replace:: :math:`10^{-10} \; \textnormal{m}`
-.. |invmicron_math| replace:: :math:`10^{6} \; \textnormal{m}^{-1}`
-.. |hz_math| replace:: :math:`\textnormal{s}^{-1}`
+.. |cm_math| replace:: :math:`10^{-2} \; \mathrm{m}`
+.. |mm_math| replace:: :math:`10^{-3} \; \mathrm{m}`
+.. |micron_math| replace:: :math:`10^{-6} \; \mathrm{m}`
+.. |nm_math| replace:: :math:`10^{-9} \; \mathrm{m}`
+.. |angstrom_math| replace:: :math:`10^{-10} \; \mathrm{m}`
+.. |invmicron_math| replace:: :math:`10^{6} \; \mathrm{m}^{-1}`
+.. |hz_math| replace:: :math:`\mathrm{s}^{-1}`
 
 
 .. _pysynphot-units-examples:

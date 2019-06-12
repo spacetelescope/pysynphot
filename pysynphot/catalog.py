@@ -3,15 +3,15 @@
 :ref:`pysynphot-appendixa-phoenix`.
 
 Spectra are constructed from basis spectra which are indexed for various
-combinations of effective temperature (:math:`T_{\\textnormal{eff}}`),
+combinations of effective temperature (:math:`T_{\\mathrm{eff}}`),
 metallicity (``[M/H]``), and log surface gravity (:math:`\\log g`).
-The user may specify any combination of :math:`T_{\\textnormal{eff}}`,
+The user may specify any combination of :math:`T_{\\mathrm{eff}}`,
 ``[M/H]``, and :math:`\\log g` so long as each parameter is within the range
 for that parameter defined by the catalog.
 
 For example, the :ref:`pysynphot-appendixa-ck04` catalog contains spectra for
 effective temperatures between 3500 and 50000 K. In this case, no spectrum can
-be constructed for :math:`T_{\\textnormal{eff}}` of 50001 K or 3499 K.
+be constructed for :math:`T_{\\mathrm{eff}}` of 50001 K or 3499 K.
 The range of parameters available may vary from catalog to catalog.
 
 More information on catalogs can be found in :ref:`pysynphot-appendixa`.

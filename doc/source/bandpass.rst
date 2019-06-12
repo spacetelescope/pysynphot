@@ -147,10 +147,10 @@ with a given width, both in Angstroms. It is defined as:
 
 .. math::
 
-    \textnormal{throughput} = \left \{
+    \mathrm{throughput} = \left \{
            \begin{array}{ll}
                1   & : x_0 - w/2 \geq x \geq x_0 + w/2 \\
-               0   & : \textnormal{else}
+               0   & : \mathrm{else}
            \end{array}
        \right.
 

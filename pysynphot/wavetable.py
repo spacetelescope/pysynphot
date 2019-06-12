@@ -21,19 +21,19 @@ Its ``wavecat_file`` (see below) can contain a mix of the following:
 
     c_{2} = \\left \\{
               \\begin{array}{ll}
-                c_{2} & : \\textnormal{if given} \\\\
-                (c_{1} - c_{0})/1999 & : \\textnormal{else, where 1999 was taken from IRAF STSDAS SYNPHOT}
+                c_{2} & : \\mathrm{if given} \\\\
+                (c_{1} - c_{0})/1999 & : \\mathrm{else, where 1999 was taken from IRAF STSDAS SYNPHOT}
               \\end{array}
             \\right.
 
     c_{3} = \\left \\{
               \\begin{array}{ll}
-                c_{3} & : \\textnormal{if given} \\\\
-                c_{2} & : \\textnormal{else}
+                c_{3} & : \\mathrm{if given} \\\\
+                c_{2} & : \\mathrm{else}
               \\end{array}
             \\right.
 
-    n = \\textnormal{int}(\\frac{2 \\; (c_{1} - c_{0})}{c_{3} + c_{2}}) + 1
+    n = \\mathrm{int}(\\frac{2 \\; (c_{1} - c_{0})}{c_{3} + c_{2}}) + 1
 
     a = \\frac{0.25 \\; (c_{3}^{2} - c_{2}^{2})}{c_{1} - c_{0}}
 

@@ -307,7 +307,7 @@ class SourceSpectrum(Integrator):
 
         .. math::
 
-            \\textnormal{flux}_{\\textnormal{new}} = 10^{-0.4 \\; \\textnormal{magval}} \\; \\textnormal{flux}
+            \\mathrm{flux}_{\\mathrm{new}} = 10^{-0.4 \\; \\mathrm{magval}} \\; \\mathrm{flux}
 
         Parameters
         ----------
@@ -549,7 +549,7 @@ class SourceSpectrum(Integrator):
 
         .. math::
 
-            \\textnormal{result} = \\int F_{\\lambda} d\\lambda
+            \\mathrm{result} = \\int F_{\\lambda} d\\lambda
 
         Parameters
         ----------
@@ -1486,7 +1486,7 @@ class GaussianSource(AnalyticSpectrum):
 
         .. math::
 
-            x_{\\textnormal{first,last}} = x_{0} \\; \\pm \\; 5 \\; \\sigma
+            x_{\\mathrm{first,last}} = x_{0} \\; \\pm \\; 5 \\; \\sigma
 
             \\delta x = 0.1 \\; \\sigma
 
@@ -1667,7 +1667,7 @@ class BlackBody(AnalyticSpectrum):
 
     .. math::
 
-      \\textnormal{RENORM} = \\pi \\; (\\frac{R_{\\odot}}{1 \\; \\textnormal{kpc}})^{2}
+      \\mathrm{RENORM} = \\pi \\; (\\frac{R_{\\odot}}{1 \\; \\mathrm{kpc}})^{2}
 
     Parameters
     ----------
