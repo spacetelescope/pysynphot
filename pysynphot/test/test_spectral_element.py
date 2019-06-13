@@ -19,7 +19,7 @@ def test_sample_units():
 @pytest.mark.parametrize(
     ('obsmode', 'ans'),
     [('acs,hrc,f555w', 357.17),
-     ('acs,sbc,f122m', 91.063),
+     ('acs,sbc,f122m', 90.181221),
      ('acs,wfc1,f775w,pol_v', 444.05),
      ('cos,boa,nuv,mirrora', 370.65),
      ('nicmos,1,f090m,dn', 559.59),
@@ -36,6 +36,9 @@ def test_photbw(obsmode, ans):
 
         For stis,0.2x29,mirror,fuvmama, Synphot value was 134.79.
         New ref value from STIS data update for PySynphot in Apr 2017.
+
+        For acs,sbc,f122m, new ref value from ACS data update in
+        ACS-14 (JIRA issue).
 
     """
     band = ObsBandpass(obsmode)
