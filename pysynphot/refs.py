@@ -7,7 +7,7 @@
 * ``pysynphot.refs._default_waveset_str`` - Description of the default
   wavelength set above.
 * ``pysynphot.refs.PRIMARY_AREA`` - Telescope collecting area, i.e., the primary
-  mirror, in :math:`\\textnormal{cm}^{2}`. The value for HST is 45238.93416.
+  mirror, in :math:`\\mathrm{cm}^{2}`. The value for HST is 45238.93416.
 
 These are used in `~pysynphot.observationmode` to look up throughput files for
 a given bandpass:
@@ -151,7 +151,7 @@ def setref(graphtable=None, comptable=None, thermtable=None,
 
     area : float or `None`
         Telescope collecting area, i.e., the primary
-        mirror, in :math:`\\textnormal{cm}^{2}`.
+        mirror, in :math:`\\mathrm{cm}^{2}`.
 
     waveset : tuple or `None`
         Parameters for :func:`set_default_waveset` as follow:

@@ -114,7 +114,7 @@ Area
 ====
 
 Some calculations require the telescope collecting area in
-:math:`\textnormal{cm}^{2}`. For example, flux conversion involving counts or
+:math:`\mathrm{cm}^{2}`. For example, flux conversion involving counts or
 ``obmag``, and  :ref:`bandpass unit response <pysynphot-formula-uresp>`
 calculation.
 

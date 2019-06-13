@@ -149,7 +149,7 @@ It is equivalent to IRAF STSDAS SYNPHOT ``bandpar`` result for ``rectw``.
 
 .. math::
 
-    rectw = \frac{equvw}{\textnormal{MAX}(P_{\lambda})}
+    rectw = \frac{equvw}{\mathrm{MAX}(P_{\lambda})}
 
 Example:
 

@@ -136,7 +136,7 @@ class Gal1(_ExtinctionLaw):
         The publication where this curve was obtained from.
 
     transparencytable : array_like
-        This is the same as :math:`\\textnormal{THRU}` defined in
+        This is the same as :math:`\\mathrm{THRU}` defined in
         :meth:`~pysynphot.reddening.CustomRedLaw.reddening`.
 
     """
@@ -182,7 +182,7 @@ class Smc(_ExtinctionLaw):
         The publication where this curve was obtained from.
 
     transparencytable : array_like
-        This is the same as :math:`\\textnormal{THRU}` defined in
+        This is the same as :math:`\\mathrm{THRU}` defined in
         :meth:`~pysynphot.reddening.CustomRedLaw.reddening`.
 
     """
@@ -212,7 +212,7 @@ class Lmc(_ExtinctionLaw):
         The publication where this curve was obtained from.
 
     transparencytable : array_like
-        This is the same as :math:`\\textnormal{THRU}` defined in
+        This is the same as :math:`\\mathrm{THRU}` defined in
         :meth:`~pysynphot.reddening.CustomRedLaw.reddening`.
 
     """
@@ -243,7 +243,7 @@ class Xgal(_ExtinctionLaw):
         The publication where this curve was obtained from.
 
     transparencytable : array_like
-        This is the same as :math:`\\textnormal{THRU}` defined in
+        This is the same as :math:`\\mathrm{THRU}` defined in
         :meth:`~pysynphot.reddening.CustomRedLaw.reddening`.
 
     """
