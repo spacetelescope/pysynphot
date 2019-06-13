@@ -196,7 +196,7 @@ bandpass from above:
 
 Calculate count rate of this observation in the unit of counts/s over the HST
 collecting area (i.e., the primary mirror) that is defined in
-:math:`\textnormal{cm}^{2}`:
+:math:`\mathrm{cm}^{2}`:
 
 >>> obs.primary_area
 45238.93416
@@ -204,7 +204,7 @@ collecting area (i.e., the primary mirror) that is defined in
 909477.56364769232
 
 Calculate the count rate in
-:math:`\textnormal{counts} \; \textnormal{s}^{-1} \; \textnormal{cm}^{-2}`:
+:math:`\mathrm{counts} \; \mathrm{s}^{-1} \; \mathrm{cm}^{-2}`:
 
 >>> obs.countrate() / obs.primary_area
 20.103868062653145
@@ -466,12 +466,12 @@ Tutorial 8: Blueshift
 =====================
 
 In this tutorial, you will learn how to blueshift an observed spectrum back to
-its rest frame. The blueshift value, :math:`z_{\textnormal{blue}}`, can be
+its rest frame. The blueshift value, :math:`z_{\mathrm{blue}}`, can be
 calculated from the redshift, :math:`z`, as follows:
 
 .. math::
 
-    z_{\textnormal{blue}} = \frac{1}{1 + z} - 1
+    z_{\mathrm{blue}} = \frac{1}{1 + z} - 1
 
 Create an observed blackbody spectrum at :math:`z = 0.1` (this is similar to the
 example in :ref:`pysynphot-redshift`):

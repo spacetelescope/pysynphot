@@ -83,7 +83,7 @@ class CustomRedLaw(object):
 
             A(V) = R(V) \\; \\times \\; E(B-V)
 
-            \\textnormal{THRU} = 10^{-0.4 \\; A(V)}
+            \\mathrm{THRU} = 10^{-0.4 \\; A(V)}
 
         .. note::
 

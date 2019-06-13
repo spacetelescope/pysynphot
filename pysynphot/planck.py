@@ -21,8 +21,8 @@ These are constants used in :func:`llam_SI`:
 This is used in :func:`bb_photlam_arcsec`:
 
 * ``pysynphot.planck.F`` - Factor for conversion from
-  :math:`\\textnormal{m}^{2} \\; \\textnormal{sr}^{-1} \\; \\textnormal{m}^{-1}` to
-  :math:`\\textnormal{cm}^{2} \\; \\textnormal{arcsec}^{-2} \\; \\AA^{-1}`.
+  :math:`\\mathrm{m}^{2} \\; \\mathrm{sr}^{-1} \\; \\mathrm{m}^{-1}` to
+  :math:`\\mathrm{cm}^{2} \\; \\mathrm{arcsec}^{-2} \\; \\AA^{-1}`.
 
 """
 from __future__ import division

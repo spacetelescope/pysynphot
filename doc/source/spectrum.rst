@@ -95,11 +95,11 @@ line:
 
 .. math::
 
-    \sigma = \frac{\textnormal{FWHM}}{2 \; \sqrt{2 \; ln \; 2}}
+    \sigma = \frac{\mathrm{FWHM}}{2 \; \sqrt{2 \; ln \; 2}}
 
-    A = \frac{f_{\textnormal{tot}}}{\sqrt{2 \pi} \; \sigma}
+    A = \frac{f_{\mathrm{tot}}}{\sqrt{2 \pi} \; \sigma}
 
-    \textnormal{flux} = A \; / \; \exp(\frac{(x - x_{0})^{2}}{2 \; \sigma^{2}})
+    \mathrm{flux} = A \; / \; \exp(\frac{(x - x_{0})^{2}}{2 \; \sigma^{2}})
 
 where
 
@@ -107,7 +107,7 @@ where
 * :math:`x_{0}` is the central wavelength
 * :math:`x` is the wavelength array
 * :math:`A` is the amplitude at :math:`x_{0}`
-* :math:`f_{\textnormal{tot}}` is the total flux under the curve
+* :math:`f_{\mathrm{tot}}` is the total flux under the curve
 
 Its ``waveset`` is defined such that the spectrum is more tightly sampled around
 the peak. To create an absorption line, instead of adding the Gaussian source to
@@ -139,7 +139,7 @@ generates a power-law source:
 
 .. math::
 
-    \textnormal{flux} = (x \; / \; x_{0})^{-\alpha}
+    \mathrm{flux} = (x \; / \; x_{0})^{-\alpha}
 
 where
 
@@ -266,18 +266,18 @@ you want, as shown in the example above.
 However, three of the atlases (:ref:`pysynphot-appendixa-ck04`,
 :ref:`pysynphot-appendixa-kurucz1993`, and :ref:`pysynphot-appendixa-phoenix`)
 have a grid of basis spectra which are indexed for various combinations of
-effective temperature (:math:`T_{\textnormal{eff}}`) in Kelvin, metallicity
+effective temperature (:math:`T_{\mathrm{eff}}`) in Kelvin, metallicity
 (``[M/H]``), and log surface gravity (:math:`\log g`). They are best
 accessed with a special `~pysynphot.catalog.Icat` class.
 You may specify any combination of the properties, so long as each is
 within the allowed range, which differs from atlas to atlas. For example,
 :ref:`pysynphot-appendixa-ck04` allows
-:math:`3500 \; \textnormal{K} \le T_{\textnormal{eff}} \le 50000 \; \textnormal{K}`,
+:math:`3500 \; \mathrm{K} \le T_{\mathrm{eff}} \le 50000 \; \mathrm{K}`,
 which means that no spectrum can be constructed for effective temperatures
 below 3499 K or above 50001 K (i.e., an exception will be raised).
 The example below obtains the spectrum for a
 :ref:`pysynphot-appendixa-kurucz1993` model with
-:math:`T_{\textnormal{eff}} = 6000 \; \textnormal{K}`, ``[M/H] = 0``, and
+:math:`T_{\mathrm{eff}} = 6000 \; \mathrm{K}`, ``[M/H] = 0``, and
 :math:`\log g = 4.3`:
 
 >>> sp = S.Icat('k93models', 6440, 0, 4.3)

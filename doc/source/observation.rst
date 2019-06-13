@@ -141,7 +141,7 @@ bandpass, and plot its binned dataset:
 
 Calculate the count rate of this observation in the unit of counts/s over the
 HST collecting area (i.e., the primary mirror) that is defined in
-:math:`\textnormal{cm}^{2}`:
+:math:`\mathrm{cm}^{2}`:
 
 >>> obs.primary_area
 45238.93416

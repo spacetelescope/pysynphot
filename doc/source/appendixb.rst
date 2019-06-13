@@ -1163,7 +1163,7 @@ behalf of the `GALEX <http://www.galex.caltech.edu/>`_ project, as described in
 :ref:`Morrissey et al. (2007) <synphot-ref-morrissey2007>`.
 They were measured on the ground in units of effective area,
 and were divided by the full area of the GALEX primary mirror
-(:math:`1963.495 \; \textnormal{cm}^{2}`) to convert them to the dimensionless
+(:math:`1963.495 \; \mathrm{cm}^{2}`) to convert them to the dimensionless
 transmission values required by **pysynphot**. Therefore, these curves represent
 the true total throughput, including obscuration by the secondary mirror,
 reflectivity of the mirrors, sensitivity of the detector, and so forth.
@@ -1238,7 +1238,7 @@ included. The modified curves are shown in an
 The SDSS photometry is intended to be on the AB system
 (:ref:`Oke & Gunn 1983 <synphot-ref-oke1983>`), by which a 0-magnitude object
 should have the same counts as a source of
-:math:`F_{\nu} = 3631 \; \textnormal{Jy}` (except that it used the so-called
+:math:`F_{\nu} = 3631 \; \mathrm{Jy}` (except that it used the so-called
 "asinh" magnitudes defined by
 :ref:`Lupton et al. 1999 <synphot-ref-lupton1999>` instead of conventional
 Pogson magnitudes). However, this is known not to be exactly true, such that
@@ -1247,12 +1247,12 @@ continues to work to pin down these shifts. Their estimate, based on comparison
 to the STIS standards of :ref:`Bohlin et al. (2001) <synphot-ref-bohlin2001>`
 and confirmed by SDSS photometry and spectroscopy of fainter hot white dwarfs,
 is that the *u* band zero point is in error by 0.04 mag,
-:math:`u_{\textnormal{AB}} = u_{\textnormal{SDSS}} - 0.04 \; \textnormal{mag}`,
+:math:`u_{\mathrm{AB}} = u_{\mathrm{SDSS}} - 0.04 \; \mathrm{mag}`,
 and that *g*, *r*, and *i* are close to AB; These statements are certainly not
 precise to better than 0.01 mag. The *z* band zero point is not as certain
 (as of January 2005), but there is mild evidence that it may be shifted by about
 0.02 mag in the sense that
-:math:`z_{\textnormal{AB}} = z_{\textnormal{SDSS}} + 0.02 \; \textnormal{mag}`.
+:math:`z_{\mathrm{AB}} = z_{\mathrm{SDSS}} + 0.02 \; \mathrm{mag}`.
 
 See :ref:`Holberg & Bergeron (2006) <synphot-ref-holberg2006>` for a
 calibration of SDSS magnitudes using Vega as a reference spectrum.
