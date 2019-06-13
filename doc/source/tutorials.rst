@@ -497,8 +497,8 @@ Tutorial 9: Bandpass ``stmag`` Zeropoint
 HST bandpasses store their :ref:`pysynphot-formula-uresp` values under the
 ``PHOTFLAM`` keyword in image headers. This keyword is then used to compute
 ``stmag`` zeropoint for the respective bandpass (e.g.,
-`ACS <http://www.stsci.edu/hst/acs/analysis/zeropoints>`_ and
-`WFC3 <http://www.stsci.edu/hst/wfc3/phot_zp_lbn>`_).
+`ACS <http://www.stsci.edu/hst/instrumentation/acs/data-analysis/zeropoints.html>`_ and
+`WFC3 <http://www.stsci.edu/hst/instrumentation/wfc3/data-analysis/photometric-calibration.html#section-14525acb-c4ec-4fe8-9d25-c9606f1ea62e>`_).
 
 In this tutorial, you will learn how to calculate the ``stmag`` zeropoint for
 the F555W filter in HST/ACS WFC1 detector:
