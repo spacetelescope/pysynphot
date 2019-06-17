@@ -181,7 +181,7 @@ Phoenix Models
 The ``$PYSYN_CDBS/grid/phoenix`` directory contains models provided by
 `F. Allard et al. <http://perso.ens-lyon.fr/france.allard/>`_
 and can be found in the
-`Star, Brown Dwarf, and Planet Simulator <http://phoenix.ens-lyon.fr/simulator/index.faces>`_. They use static, spherical symmetric, 1D simulations to completely
+`Star, Brown Dwarf, and Planet Simulator <https://phoenix.ens-lyon.fr/simulator/index.faces>`_. They use static, spherical symmetric, 1D simulations to completely
 describe the atmospheric emission spectrum. The models account for the
 formation of molecular bands, such as those of water vapor, methane, or
 titanium dioxide, solving for the transfer equation over more than 20,000
