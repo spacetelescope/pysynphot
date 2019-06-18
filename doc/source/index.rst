@@ -295,7 +295,7 @@ References
 
 .. _synphot-ref-laidler2008:
 
-* `Laidler, V., et al. 2008, Synphot Data User's Guide, Version 1.2 (Baltimore, MD: STScI) <http://www.stsci.edu/hst/HST_overview/documents/synphot/hst_synphotTOC.html>`_
+* `Laidler, V., et al. 2008, Synphot Data User's Guide, Version 1.2 (Baltimore, MD: STScI) <http://www.stsci.edu/files/live/sites/www/files/home/hst/documentation/_documents/hst_synphot.pdf>`_
 
 .. _synphot-ref-landolt1983:
 
