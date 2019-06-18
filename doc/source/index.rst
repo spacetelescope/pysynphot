@@ -235,7 +235,7 @@ References
 
 .. _synphot-ref-diaz2012:
 
-* `Diaz, R.I. 2012, ISR CDBS 2012-01: pysynphot/Synphot Throughput Files: Mapping to instrument components for ACS, COS, and WFC3 (Baltimore, MD: STScI) <http://www.stsci.edu/hst/observatory/crds/documents/TIR-CDBS-2012-01.pdf>`_
+* `Diaz, R.I. 2012, ISR CDBS 2012-01: pysynphot/Synphot Throughput Files: Mapping to instrument components for ACS, COS, and WFC3 (Baltimore, MD: STScI) <http://www.stsci.edu/files/live/sites/www/files/home/hst/instrumentation/reference-data-for-calibration-and-tools/documentation/_documents/TIR-CDBS-2012-01.pdf>`_
 
 .. _synphot-ref-francis1991:
 
