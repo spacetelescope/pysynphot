@@ -1211,7 +1211,7 @@ The filter curves are shown in the
 
 The throughput data give the system photon response to point sources of the
 2.5-m SDSS survey telescope, including extinction through an airmass of 1.3 at
-`Apache Point Observatory <http://www.apo.nmsu.edu/>`_ (to which all SDSS
+`Apache Point Observatory <https://www.apo.nmsu.edu/>`_ (to which all SDSS
 photometry is referenced).
 Originally, the *ugriz* system was intended to be identical to the
 :math:`u^{\prime} g^{\prime} r^{\prime} i^{\prime} z^{\prime}`
@@ -1221,7 +1221,7 @@ and defined by the standard star system in
 of processing the SDSS data, an unpleasant discovery was made that
 the filters in the 2.5-m telescope have significantly different
 effective wavelengths from the filters in the
-`USNO <http://www.usno.navy.mil/USNO/>`_ telescope, which was used to observe
+`USNO <https://www.usno.navy.mil/USNO/>`_ telescope, which was used to observe
 the :math:`u^{\prime} g^{\prime} r^{\prime} i^{\prime} z^{\prime}`
 standards; The difference originates from the USNO filters being exposed to
 ambient air, while the survey-telescope filters live in the vacuum of the

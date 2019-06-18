@@ -10,8 +10,8 @@ Introduction
 Astrolib PySynphot (hereafter referred to only as **pysynphot**) is an
 object-oriented replacement for STSDAS SYNPHOT synthetic photometry package in
 IRAF. It is distributed as part of
-`AstroConda <http://astroconda.readthedocs.io/en/latest/>`_ (preferred)
-and also as `standalone <https://pypi.python.org/pypi/pysynphot/>`_.
+`AstroConda <https://astroconda.readthedocs.io/en/latest/>`_ (preferred)
+and also as `standalone <https://pypi.org/project/pysynphot/>`_.
 Although this package was developed for HST, it can be utilized with other
 observatories.
 
@@ -44,7 +44,7 @@ Alternately, bibcode is available from
 `Astrophysics Source Code Library <http://ascl.net/1303.023>`_.
 
 If you have questions or concerns regarding the software, please contact
-STScI Help Desk via ``help[at]stsci.edu``.
+STScI Help Desk via `hsthelp.stsci.edu <https://hsthelp.stsci.edu>`_.
 
 
 .. _pysynphot-installation-setup:
@@ -62,12 +62,12 @@ To install the PyPI release::
 
 If missing, the following dependencies must also be installed:
 
-* `astropy <https://pypi.python.org/pypi/astropy>`_ 1.1 or greater
-* `numpy <https://pypi.python.org/pypi/numpy>`_ 1.9 or greater
-* `matplotlib <http://matplotlib.org/>`_ (optional)
+* `astropy https://pypi.org/project/astropy/>`_ 1.1 or greater
+* `numpy <https://pypi.org/project/numpy/>`_ 1.9 or greater
+* `matplotlib <https://matplotlib.org/>`_ (optional)
 
 Data files for **pysynphot** are distributed separately by
-`Calibration Reference Data System <http://www.stsci.edu/hst/observatory/crds/throughput.html>`_.
+`Calibration Reference Data System <http://www.stsci.edu/hst/instrumentation/reference-data-for-calibration-and-tools/synphot-throughput-tables.html>`_.
 They are expected to follow a certain directory structure under the root
 directory, identified by the ``PYSYN_CDBS`` environment variable that *must* be
 set prior to using this package. In the example below, the root directory is
@@ -164,7 +164,7 @@ packages are already imported:
 >>> import pysynphot as S
 
 For plotting, make sure you have the optional
-`matplotlib <http://matplotlib.org/>`_ package and turn on its interactive mode:
+`matplotlib <https://matplotlib.org/>`_ package and turn on its interactive mode:
 
 >>> import matplotlib.pyplot as plt
 >>> plt.ion()
@@ -231,11 +231,11 @@ References
 
 .. _synphot-ref-demarchi2004:
 
-* `De Marchi, G. et al. 2004, ISR ACS 2004-08: Detector Quantum Efficiency and Photometric Zero Points of the ACS (Baltimore, MD: STScI) <http://www.stsci.edu/hst/acs/documents/isrs/isr0408.pdf>`_
+* `De Marchi, G. et al. 2004, ISR ACS 2004-08: Detector Quantum Efficiency and Photometric Zero Points of the ACS (Baltimore, MD: STScI) <http://www.stsci.edu/files/live/sites/www/files/home/hst/instrumentation/acs/documentation/instrument-science-reports-isrs/_documents/isr0408.pdf>`_
 
 .. _synphot-ref-diaz2012:
 
-* `Diaz, R.I. 2012, ISR CDBS 2012-01: pysynphot/Synphot Throughput Files: Mapping to instrument components for ACS, COS, and WFC3 (Baltimore, MD: STScI) <http://www.stsci.edu/hst/observatory/crds/documents/TIR-CDBS-2012-01.pdf>`_
+* `Diaz, R.I. 2012, ISR CDBS 2012-01: pysynphot/Synphot Throughput Files: Mapping to instrument components for ACS, COS, and WFC3 (Baltimore, MD: STScI) <http://www.stsci.edu/files/live/sites/www/files/home/hst/instrumentation/reference-data-for-calibration-and-tools/documentation/_documents/TIR-CDBS-2012-01.pdf>`_
 
 .. _synphot-ref-francis1991:
 
@@ -295,7 +295,7 @@ References
 
 .. _synphot-ref-laidler2008:
 
-* `Laidler, V., et al. 2008, Synphot Data User's Guide, Version 1.2 (Baltimore, MD: STScI) <http://www.stsci.edu/hst/HST_overview/documents/synphot/hst_synphotTOC.html>`_
+* `Laidler, V., et al. 2008, Synphot Data User's Guide, Version 1.2 (Baltimore, MD: STScI) <http://www.stsci.edu/files/live/sites/www/files/home/hst/documentation/_documents/hst_synphot.pdf>`_
 
 .. _synphot-ref-landolt1983:
 
@@ -313,7 +313,7 @@ References
 
 * Maiz Apellaniz, J. 2006, AJ, 131, 1184
 
-* `matplotlib Tutorial <http://matplotlib.org/users/pyplot_tutorial.html>`_
+* `matplotlib Tutorial <https://matplotlib.org/users/pyplot_tutorial.html>`_
 
 .. _synphot-ref-morrissey2007:
 
@@ -335,9 +335,9 @@ References
 
 * Prevot, M. L., Lequeux, J., Prevot, L., Maurice, E., & Rocca-Volmerange, B. 1984, A&A, 132, 389
 
-* `pysynphot Code Repository <https://aeon.stsci.edu/ssb/trac/astrolib/browser/trunk/pysynphot>`_
+* `pysynphot Code Repository <https://github.com/spacetelescope/pysynphot/>`_
 
-* `pysynphot Open Issues <https://aeon.stsci.edu/ssb/trac/astrolib/query?status=assigned&status=new&status=reopened&component=pysynphot&col=id&col=summary&col=owner&col=type&col=status&col=priority&col=milestone&order=priority>`_
+* `pysynphot Open Issues <https://github.com/spacetelescope/pysynphot/issues>`_
 
 .. _synphot-ref-rybicki1979:
 
