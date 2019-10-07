@@ -7,7 +7,7 @@ from ..obsbandpass import ObsBandpass
 
 @pytest.mark.remote_data
 def test_no_thermback():
-    bp = ObsBandpass('acs,sbc,f150lp')
+    bp = ObsBandpass('acs,wfc1,f555w')
 
     with pytest.raises(NotImplementedError):
         bp.thermback()
