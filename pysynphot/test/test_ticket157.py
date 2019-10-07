@@ -28,7 +28,7 @@ def setup_module(module):
 
     old_comptable = refs.COMPTABLE
     refs.COMPTABLE = os.path.join(
-        os.environ['PYSYN_CDBS'], 'mtab', 'OLD_FILES', 'r1j2146sm_tmc.fits')
+        os.environ['PYSYN_CDBS'], 'mtab', '39h19082m_tmc.fits')
 
     old_vegafile = locations.VegaFile
     locations.VegaFile = get_pkg_data_filename(
@@ -43,7 +43,7 @@ def teardown_module(module):
 class TestOverlapBug(object):
     def setup_class(self):
         self.sp = ArraySourceSpectrum(wave=np.arange(3000, 4000),
-                                      flux=np.ones((1000, ))*0.75,
+                                      flux=np.ones((1000, )) * 0.75,
                                       name='Short flat')
         self.bp = Box(4000, 100)
         self.refwave = 4005
@@ -81,7 +81,7 @@ class TestDiscoveryCase(TestOverlapBug):
         self.sp.convert('photlam')
         self.bp = ObsBandpass('stis,ccd,g750l,c7751,s52x02')
         self.refwave = 6200
-        self.refval = 2.97759742e-06
+        self.refval = 2.853227e-06
         self.rtol = 0.01
 
 
@@ -164,12 +164,14 @@ class TestCalcphot(object):
     def test_efflam(self):
         obs = Observation(self.sp, self.bandpass, force='extrap')
         tst = obs.efflam()
-        assert_allclose(tst, 5304.462, rtol=1e-4)
+        # Answer from updated HRC throughput from Mar 2018 (Ryon et al.)
+        assert_allclose(tst, 5303.886864, rtol=1e-4)
 
     def test_countrate(self):
         obs = Observation(self.sp, self.bandpass, force='taper')
         tst = obs.countrate()
-        assert_allclose(tst, 8.30680E+5, rtol=1e-4)
+        # Answer from updated HRC throughput from Mar 2018 (Ryon et al.)
+        assert_allclose(tst, 833324.285116, rtol=1e-4)
 
 
 @pytest.mark.remote_data
@@ -193,6 +195,7 @@ class TestETC_Imag2(object):
                    0.5 + spz)
         self.bp = ObsBandpass('acs,sbc,F140LP')
 
+    @pytest.mark.xfail(reason='Behavior changed, no longer raises')
     def test_raises(self):
         # Replaced answer for r618 (no tapering).
         # The throughput files used in this case don't actually go
@@ -216,4 +219,4 @@ class TestETC_Spec2a(TestETC_Imag2):
     def test_flux(self):
         obs = Observation(self.sp, self.bp, force='taper')
         obs.convert('counts')
-        assert_allclose(obs.binflux[500], 35.5329, rtol=1e-4)
+        assert_allclose(obs.binflux[500], 33.779645, rtol=1e-4)
