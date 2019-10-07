@@ -62,7 +62,7 @@ To install the PyPI release::
 
 If missing, the following dependencies must also be installed:
 
-* `astropy https://pypi.org/project/astropy/>`_ 1.1 or greater
+* `astropy <https://pypi.org/project/astropy/>`_ 1.1 or greater
 * `numpy <https://pypi.org/project/numpy/>`_ 1.9 or greater
 * `matplotlib <https://matplotlib.org/>`_ (optional)
 
