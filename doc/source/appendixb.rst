@@ -1313,7 +1313,7 @@ Phase B estimates of the WFIRST integrated system throughputs have been taken fr
 the `WFIRST Reference Information <https://wfirst.gsfc.nasa.gov/science/WFIRST_Reference_Information.html>`_ page at GSFC. 
 for more information. For example:
 
->>> bp = S. ObsBandpass('wfirst,wfi,f062')
+>>> bp = S.ObsBandpass('wfirst,wfi,f062')
 
 Only the Wide Field Instrument (WFI) is currently supported with the following modes:
 
