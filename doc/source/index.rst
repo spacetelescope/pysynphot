@@ -229,6 +229,10 @@ References
 
 * Cardelli, J. A., Clayton, G. C., & Mathis, J. S. 1989, ApJ, 345, 245
 
+.. _synphot-ref-cohen2003:
+
+* `Cohen, M., Wheaton, W. A., & Megeath, S. T. 2003, AJ, 126, 1090 <https://ui.adsabs.harvard.edu/abs/2003AJ....126.1090C/abstract>`_
+
 .. _synphot-ref-demarchi2004:
 
 * `De Marchi, G. et al. 2004, ISR ACS 2004-08: Detector Quantum Efficiency and Photometric Zero Points of the ACS (Baltimore, MD: STScI) <http://www.stsci.edu/files/live/sites/www/files/home/hst/instrumentation/acs/documentation/instrument-science-reports-isrs/_documents/isr0408.pdf>`_

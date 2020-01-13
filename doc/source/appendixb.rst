@@ -1141,6 +1141,38 @@ systems are small:
 * |nonhst_stromgren2| *uvby*
 
 
+.. _pysynphot-nonhst-2mass:
+
+2MASS
+-----
+
+The 2MASS *JHK*:math:`_s` throughputs are taken from :ref:`Cohen et al. (2003) <synphot-ref-cohen2003>`.
+These are normalized relative spectral response curves and include the throughputs of all of the 
+appropriate optics from the 2MASS optical system, as well as the atmosphere above the two 2MASS
+telescopes. 
+
+Zero point reference fluxes for 2MASS reproduced from the 
+`IPAC 2MASS website <https://old.ipac.caltech.edu/2mass/releases/allsky/doc/sec6_4a.html>`_ 
+are included here for reference (pay special attention to the units):
+
++-----+--------------------+-----------------+---------------+-----------------------+
+|Band |λ (µm)              |Bandwidth        |Fnu ref        |Flambda ref            |
+|     |                    |(µm)             |(Jy)           |(W/cm^2/µm)            |
++=====+====================+=================+===============+=======================+
+|J    |   1.235 ± 0.006    | 0.162 ± 0.001   | 1594 ± 27.8   | 3.129E-13 ± 5.464E-15 |
++-----+--------------------+-----------------+---------------+-----------------------+
+|H    |   1.662 ± 0.009    | 0.251 ± 0.002   | 1024 ± 20.0   | 1.133E-13 ± 2.212E-15 |
++-----+--------------------+-----------------+---------------+-----------------------+
+|Ks   |   2.159 ± 0.011    | 0.262 ± 0.002   | 666.7 ± 12.6  | 4.283E-14 ± 8.053E-16 |
++-----+--------------------+-----------------+---------------+-----------------------+
+
+To use the 2MASS throughputs:
+
+>>> bp = S.ObsBandpass('2mass,j')
+>>> bp = S.ObsBandpass('2mass,h')
+>>> bp = S.ObsBandpass('2mass,ks')
+
+
 .. _pysynphot-nonhst-cousins:
 
 Cousins
@@ -1270,6 +1302,31 @@ The Stromgren *uvby* throughputs are taken from
 :ref:`Maiz Apellaniz (2006) <synphot-ref-maiz2006>`. For example:
 
 >>> bp = S.ObsBandpass('stromgren,y')
+
+
+.. _pysynphot-nonhst-wfirst:
+
+WFIRST
+------
+
+Phase B estimates of the WFIRST integrated system throughputs have been taken from
+the `WFIRST Reference Information <https://wfirst.gsfc.nasa.gov/science/WFIRST_Reference_Information.html>`_ page at GSFC. 
+for more information. For example:
+
+>>> bp = S. ObsBandpass('wfirst,wfi,f062')
+
+Only the Wide Field Instrument (WFI) is currently supported with the following modes:
+
++------------+-----------------------------------------+
+|Description |Keywords                                 |
++============+=========================================+
+|Filter      |f062, f087, f106, f129, f146, f158, f184 |
++------------+-----------------------------------------+
+|Grating     |grism, prism                             |
++------------+-----------------------------------------+
+
+At this time, the estimated throughputs do not differentiate between the different sensor chip assemblies (SCAs).
+SCA-dependent throughputs will be delivered at a later time.
 
 
 .. _pysynphot-nonhst-deprecated:
