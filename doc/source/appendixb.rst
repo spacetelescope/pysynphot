@@ -1172,6 +1172,10 @@ To use the 2MASS throughputs:
 >>> bp = S.ObsBandpass('2mass,h')
 >>> bp = S.ObsBandpass('2mass,ks')
 
+(Note: 2MASS throughput curves were added to the TMG file in January 2020. Users must use
+a TMG/TMC file and associated throughput tables delivered after this date to use the 
+2MASS OBSMODEs.)
+
 
 .. _pysynphot-nonhst-cousins:
 
@@ -1327,6 +1331,11 @@ Only the Wide Field Instrument (WFI) is currently supported with the following m
 
 At this time, the estimated throughputs do not differentiate between the different sensor chip assemblies (SCAs).
 SCA-dependent throughputs will be delivered at a later time.
+
+(Note: WFIRST throughput curves were added to the TMG file in January 2020. Users must use
+a TMG/TMC file and associated throughput tables delivered after this date to use the 
+WFIRST OBSMODEs.)
+
 
 
 .. _pysynphot-nonhst-deprecated:
