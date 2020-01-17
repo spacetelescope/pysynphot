@@ -25,6 +25,10 @@ GT_FILE_100 = ''
 def setup_module(module):
     global GT_FILE_NO, GT_FILE_100
 
+    # Pin to an older component table
+    refs.COMPTABLE = os.path.join(
+        os.environ['PYSYN_CDBS'], 'mtab', 'OLD_FILES', '39h19082m_tmc.fits')
+
     # A stock graph table on CDBS
     path = os.environ['PYSYN_CDBS']
     GT_FILE_NO = os.path.join(path, 'mtab', 'OLD_FILES', 'n9i1408hm_tmg.fits')

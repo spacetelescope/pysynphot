@@ -1,34 +1,34 @@
-language: python
-
-python:
-    - 3.6
+language: c
 
 os:
     - linux
+
+# We need a full clone to make sure setuptools_scm works properly
+git:
+    depth: false
 
 env:
     global:
         # The following versions are the 'default' for tests, unless
         # overridden underneath. They are defined here in order to save having
         # to repeat them for all configurations.
+        - PYTHON_VERSION=3.7
         - NUMPY_VERSION=stable
         - ASTROPY_VERSION=stable
-        - PIP_DEPENDENCIES='pytest-remotedata beautifulsoup4'
+        - PIP_DEPENDENCIES='pytest-remotedata pytest-astropy-header beautifulsoup4'
         - CONDA_DEPENDENCIES=''
         - MAIN_CMD='pytest pysynphot'
 
 matrix:
     include:
 
-        - python: 3.6
-
-        - python: 2.7
-          env: ASTROPY_VERSION=lts NUMPY_VERSION=1.15 PYTEST_VERSION="<3.7"
+        - os: linux
 
         # Coverage and also test Astropy dev with remote data
-        - python: 3.7
-          env: ASTROPY_VERSION=development
-               PIP_DEPENDENCIES='codecov pytest-remotedata beautifulsoup4'
+        - os: linux
+          env: PYTHON_VERSION=3.8
+               ASTROPY_VERSION=development
+               PIP_DEPENDENCIES='codecov pytest-remotedata pytest-astropy-header beautifulsoup4'
                CONDA_DEPENDENCIES='pytest-cov coverage requests'
                MAIN_CMD='pytest pysynphot --cov-report= --cov=pysynphot --remote-data'
 
@@ -57,6 +57,7 @@ install:
     # other dependencies.
 
 script:
+    - python setup.py install
     - $MAIN_CMD
 
 after_success:

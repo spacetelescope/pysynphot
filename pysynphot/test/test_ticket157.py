@@ -28,7 +28,7 @@ def setup_module(module):
 
     old_comptable = refs.COMPTABLE
     refs.COMPTABLE = os.path.join(
-        os.environ['PYSYN_CDBS'], 'mtab', '39h19082m_tmc.fits')
+        os.environ['PYSYN_CDBS'], 'mtab', 'OLD_FILES', '39h19082m_tmc.fits')
 
     old_vegafile = locations.VegaFile
     locations.VegaFile = get_pkg_data_filename(
