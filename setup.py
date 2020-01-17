@@ -5,7 +5,7 @@ from setuptools import setup, Extension
 
 setup(
     name='pysynphot',
-    use_scm_version=True,
+    use_scm_version={'write_to': 'pysynphot/version.py'},
     author=('Vicki Laidler, Pey Lian Lim, Matt Davis, Robert Jedrzejewski, '
             'Ivo Busko'),
     author_email='help@stsci.edu',
