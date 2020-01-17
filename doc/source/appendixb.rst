@@ -1314,8 +1314,7 @@ WFIRST
 ------
 
 Phase B estimates of the WFIRST integrated system throughputs have been taken from
-the `WFIRST Reference Information <https://wfirst.gsfc.nasa.gov/science/WFIRST_Reference_Information.html>`_ page at GSFC. 
-for more information. For example:
+the `WFIRST Reference Information <https://wfirst.gsfc.nasa.gov/science/WFIRST_Reference_Information.html>`_ page at GSFC. For example:
 
 >>> bp = S.ObsBandpass('wfirst,wfi,f062')
 
