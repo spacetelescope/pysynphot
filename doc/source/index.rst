@@ -221,7 +221,7 @@ References
 
 .. _synphot-ref-brown2014:
 
-Brown, M. J. I., et al. 2014, ApJS, 212, 18
+* Brown, M. J. I., et al. 2014, ApJS, 212, 18
 
 .. _synphot-ref-calzetti2000:
 
