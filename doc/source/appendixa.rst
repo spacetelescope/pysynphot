@@ -55,6 +55,8 @@ Non-stellar models:
 +-------------------------------------+-------------------------------+              |
 |:ref:`pysynphot-appendixa-galactic`  |$PYSYN_CDBS/grid/galactic      |              |
 +-------------------------------------+-------------------------------+              |
+|:ref:`pysynphot-appendixa-brown`     |$PYSYN_CDBS/grid/brown         |              |
++-------------------------------------+-------------------------------+              |
 |:ref:`pysynphot-appendixa-etcsource` |$PYSYN_CDBS/etc/source         |              |
 +-------------------------------------+-------------------------------+--------------+
 
@@ -514,6 +516,25 @@ The example below loads the spectrum for Orion nebula:
 >>> filename = os.path.join(
 ...     os.environ['PYSYN_CDBS'], 'grid', 'galactic', 'orion_template.fits')
 >>> sp = S.FileSpectrum(filename)
+
+
+.. _pysynphot-appendixa-brown:
+
+Brown Atlas
+===========
+
+The ``$PYSYN_CDBS/grid/brown`` directory contains 129 spectral energy
+distributions for nearby galaxies, with wavelength coverage spanning from the
+ultraviolet to the mid-infrared
+(:ref:`Brown et al. 2014 <synphot-ref-brown2014>`). See
+`TRDS Brown Atlas <http://www.stsci.edu/hst/instrumentation/reference-data-for-calibration-and-tools/astronomical-catalogs/the-trds-brown-atlas>`_
+for more details.
+
+The example below loads the spectrum for Arp 256 N:
+
+>>> filename = os.path.join(
+>>>     os.environ['PYSYN_CDBS'], 'grid', 'brown', 'arp_256_n_spec.fits')
+>>> sp = FileSourceSpectrum(filename)
 
 
 .. _pysynphot-appendixa-etcsource:

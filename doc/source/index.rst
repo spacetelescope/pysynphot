@@ -132,6 +132,8 @@ These data files are needed for calculations involving source spectra:
 +------------------------------------------+----------------------------+                                                  |
 |Bruzual-Persson-Gunn-Stryker stellar atlas|$PYSYN_CDBS/grid/bpgs/      |                                                  |
 +------------------------------------------+----------------------------+                                                  |
+|Brown galaxy atlas                        |$PYSYN_CDBS/grid/brown/     |                                                  |
++------------------------------------------+----------------------------+                                                  |
 |Bruzual stellar atlas                     |$PYSYN_CDBS/grid/bz77/      |                                                  |
 +------------------------------------------+----------------------------+                                                  |
 |Galactic emission line objects            |$PYSYN_CDBS/grid/galactic/  |                                                  |
@@ -216,6 +218,10 @@ References
 .. _synphot-ref-bohlin2004:
 
 * Bohlin, R. C. & Gilliland, R. L. 2004, AJ, 127, 3508
+
+.. _synphot-ref-brown2014:
+
+Brown, M. J. I., et al. 2014, ApJS, 212, 18
 
 .. _synphot-ref-calzetti2000:
 
