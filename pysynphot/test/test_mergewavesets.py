@@ -59,7 +59,7 @@ class TestQSOCountrate(object):
 
         obs = Observation(sp, bp, force='taper')
         c = obs.countrate()
-        np.testing.assert_allclose(c, 2.3554364232173565e-05)
+        np.testing.assert_allclose(c, 2.3554364232173565e-05, rtol=0.008)
 
     @classmethod
     def teardown_class(cls):
