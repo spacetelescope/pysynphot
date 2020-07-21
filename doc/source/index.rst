@@ -71,15 +71,15 @@ Data files for **pysynphot** are distributed separately by
 They are expected to follow a certain directory structure under the root
 directory, identified by the ``PYSYN_CDBS`` environment variable that *must* be
 set prior to using this package. In the example below, the root directory is
-arbitrarily named ``/my/local/dir/cdbs/``.
+arbitrarily named ``/my/local/dir/trds/``.
 
 In bash shell::
 
-    export PYSYN_CDBS=/my/local/dir/cdbs/
+    export PYSYN_CDBS=/my/local/dir/trds/
 
 In csh shell::
 
-    setenv PYSYN_CDBS /my/local/dir/cdbs/
+    setenv PYSYN_CDBS /my/local/dir/trds/
 
 These data files are needed for calculations involving HST bandpasses:
 
@@ -161,7 +161,7 @@ packages are already imported:
 
 >>> import os
 >>> os.environ['PYSYN_CDBS']
-'/my/local/dir/cdbs/'
+'/my/local/dir/trds/'
 >>> import numpy as np
 >>> import pysynphot as S
 

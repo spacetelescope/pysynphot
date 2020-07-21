@@ -112,17 +112,17 @@ filter:
 Show all the components in the light path used to create the bandpass:
 
 >>> bp1.showfiles()
-/my/local/dir/cdbs/comp/ota/hst_ota_007_syn.fits
-/my/local/dir/cdbs/comp/acs/acs_wfc_im123_004_syn.fits
-/my/local/dir/cdbs/comp/acs/acs_f555w_wfc_005_syn.fits
-/my/local/dir/cdbs/comp/acs/acs_wfc_ebe_win12f_005_syn.fits
-/my/local/dir/cdbs/comp/acs/acs_wfc_ccd1_mjd_021_syn.fits
+/my/local/dir/trds/comp/ota/hst_ota_007_syn.fits
+/my/local/dir/trds/comp/acs/acs_wfc_im123_004_syn.fits
+/my/local/dir/trds/comp/acs/acs_f555w_wfc_005_syn.fits
+/my/local/dir/trds/comp/acs/acs_wfc_ebe_win12f_005_syn.fits
+/my/local/dir/trds/comp/acs/acs_wfc_ccd1_mjd_021_syn.fits
 
 Read the OTA and CCD transmissions from files, then multiply them:
 
->>> ota = S.FileBandpass('/my/local/dir/cdbs/comp/ota/hst_ota_007_syn.fits')
+>>> ota = S.FileBandpass('/my/local/dir/trds/comp/ota/hst_ota_007_syn.fits')
 >>> ccd = S.FileBandpass(
-...     '/my/local/dir/cdbs/comp/acs/acs_wfc_ccd1_mjd_021_syn.fits')
+...     '/my/local/dir/trds/comp/acs/acs_wfc_ccd1_mjd_021_syn.fits')
 >>> bp2 = ota * ccd
 
 Plot the bandpass and overlay its two components from above:

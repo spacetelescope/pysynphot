@@ -72,7 +72,7 @@ they will be able to use **pysynphot**. This can be done in one of two ways:
   :ref:`pysynphot-installation-setup`. This method offers the convenience of
   automatically creating the necessary directory tree for the data.
 * Individual CRDS files: An alternate method is to transfer the
-  individual tables using HTTP (``ssb.stsci.edu/cdbs``) to STScI
+  individual tables using HTTP (https://archive.stsci.edu/hlsps/reference-atlases/cdbs/) to STScI
   from the directories given also in :ref:`pysynphot-installation-setup`.
 
 The best method is perhaps a combination of the two: First-time

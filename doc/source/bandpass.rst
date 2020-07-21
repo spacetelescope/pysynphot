@@ -70,11 +70,11 @@ To see which throughput tables are being used, as set by
 :ref:`pysynphot-refdata`:
 
 >>> bp_acs.showfiles()
-/my/local/dir/cdbs/comp/ota/hst_ota_007_syn.fits
-/my/local/dir/cdbs/comp/acs/acs_wfc_im123_004_syn.fits
-/my/local/dir/cdbs/comp/acs/acs_f555w_wfc_005_syn.fits
-/my/local/dir/cdbs/comp/acs/acs_wfc_ebe_win12f_005_syn.fits
-/my/local/dir/cdbs/comp/acs/acs_wfc_ccd1_mjd_021_syn.fits
+/my/local/dir/trds/comp/ota/hst_ota_007_syn.fits
+/my/local/dir/trds/comp/acs/acs_wfc_im123_004_syn.fits
+/my/local/dir/trds/comp/acs/acs_f555w_wfc_005_syn.fits
+/my/local/dir/trds/comp/acs/acs_wfc_ebe_win12f_005_syn.fits
+/my/local/dir/trds/comp/acs/acs_wfc_ccd1_mjd_021_syn.fits
 
 Create a bandpass for Johnson *V*:
 
