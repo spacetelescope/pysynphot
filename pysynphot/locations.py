@@ -263,7 +263,7 @@ def get_latest_file(template, raise_error=False, err_msg=''):
     path_lowercase = path.lower()
 
     # Remote HTTP directory
-    if path_lowercase.startswith('http:'):
+    if path_lowercase.startswith('http'):
         try:
             response = request.urlopen(path)  # PY2 has no context manager
             soup = BeautifulSoup(response, 'html.parser')
@@ -327,7 +327,7 @@ def _get_RedLaws():
     # get all the fits files in EXTDIR
     globstr = os.path.join(extdir, '*.fits')
 
-    if extdir_lowercase.startswith('http:'):
+    if extdir_lowercase.startswith('http'):
         response = request.urlopen(extdir)  # PY2 has no context manager
         soup = BeautifulSoup(response, 'html.parser')
         files = list(set([x.text for x in soup.find_all("a")
