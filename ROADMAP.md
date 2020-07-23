@@ -1,6 +1,6 @@
 # Roadmap for PySynphot
 
-Some time in 2020, make a last release and archive this package.
+Some time in 2022, make a last release and archive this package.
 Till then, no active development will happen, except maybe
 critical bug fix, if deemed absolutely necessary.
 
