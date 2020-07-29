@@ -37,7 +37,7 @@ class CompTable(object):
         # None is common for various errors.
         # the default value of None is not useful; pyfits.open(None) does not work.
         if CFile is None :
-            raise TypeError('initializing CompTable with CFile=None; possible bad/missing CDBS')
+            raise TypeError('initializing CompTable with CFile=None; possible bad/missing PYSYN_CDBS')
 
         cp = pyfits.open(CFile)
 
@@ -82,7 +82,7 @@ class GraphTable(object):
         # None is common for various errors.
         # the default value of None is not useful; pyfits.open(None) does not work.
         if GFile is None :
-            raise TypeError('initializing GraphTable with GFile=None; possible bad/missing CDBS')
+            raise TypeError('initializing GraphTable with GFile=None; possible bad/missing PYSYN_CDBS')
 
         gp = pyfits.open(GFile)
 

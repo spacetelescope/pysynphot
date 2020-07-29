@@ -27,30 +27,30 @@ also returns the current settings, but as a Python :py:class:`dict` instead of
 printing to screen. For example:
 
 >>> S.showref()
-thermtable: /my/local/dir/cdbs/mtab/tae17277m_tmt.fits
+thermtable: /my/local/dir/trds/mtab/tae17277m_tmt.fits
    waveset: Min: 500, Max: 26000, Num: 10000.0, Delta: None, Log: True
- comptable: /my/local/dir/cdbs/mtab/yah1742rm_tmc.fits
-graphtable: /my/local/dir/cdbs/mtab/yah1742qm_tmg.fits
+ comptable: /my/local/dir/trds/mtab/yah1742rm_tmc.fits
+graphtable: /my/local/dir/trds/mtab/yah1742qm_tmg.fits
       area: 45238.93416
 >>> S.setref(graphtable='new_tmg.fits', comptable='new_tmc.fits', area=1)
 >>> S.showref()
-thermtable: /my/local/dir/cdbs/mtab/tae17277m_tmt.fits
+thermtable: /my/local/dir/trds/mtab/tae17277m_tmt.fits
    waveset: Min: 500, Max: 26000, Num: 10000.0, Delta: None, Log: True
  comptable: new_tmc.fits
 graphtable: new_tmg.fits
       area: 1
 >>> S.setref()  # Reset to software default
 >>> S.showref()
-thermtable: /my/local/dir/cdbs/mtab/tae17277m_tmt.fits
+thermtable: /my/local/dir/trds/mtab/tae17277m_tmt.fits
    waveset: Min: 500, Max: 26000, Num: 10000.0, Delta: None, Log: True
- comptable: /my/local/dir/cdbs/mtab/yah1742rm_tmc.fits
-graphtable: /my/local/dir/cdbs/mtab/yah1742qm_tmg.fits
+ comptable: /my/local/dir/trds/mtab/yah1742rm_tmc.fits
+graphtable: /my/local/dir/trds/mtab/yah1742qm_tmg.fits
       area: 45238.93416
 >>> S.refs.getref()
 {'area': 45238.93416,
- 'comptable': '/my/local/dir/cdbs/mtab/yah1742rm_tmc.fits',
- 'graphtable': '/my/local/dir/cdbs/mtab/yah1742qm_tmg.fits',
- 'thermtable': '/my/local/dir/cdbs/mtab/tae17277m_tmt.fits',
+ 'comptable': '/my/local/dir/trds/mtab/yah1742rm_tmc.fits',
+ 'graphtable': '/my/local/dir/trds/mtab/yah1742qm_tmg.fits',
+ 'thermtable': '/my/local/dir/trds/mtab/tae17277m_tmt.fits',
  'waveset': 'Min: 500, Max: 26000, Num: 10000.0, Delta: None, Log: True'}
 
 Changing the default tables is not recommended unless you know what you are
@@ -74,22 +74,22 @@ not rely on the tables does not have this feature. For example:
 >>> bp_hst.name
 'wfc3,ir,f105w'
 >>> bp_hst.showfiles()
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_primary_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_secondary_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_pom_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_csm_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_fold_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_mir1_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_mir2_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_mask_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_rcp_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_f105w_004_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_win_001_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_qe_003_syn.fits
-/my/local/dir/cdbs/comp/wfc3/wfc3_ir_cor_004_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_primary_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_secondary_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_pom_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_csm_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_fold_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_mir1_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_mir2_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_mask_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_rcp_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_f105w_004_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_win_001_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_qe_003_syn.fits
+/my/local/dir/trds/comp/wfc3/wfc3_ir_cor_004_syn.fits
 >>> bp_nonhst = S.ObsBandpass('johnson,v')
 >>> bp_nonhst.name
-'/my/local/dir/cdbs/comp/nonhst/johnson_v_004_syn.fits'
+'/my/local/dir/trds/comp/nonhst/johnson_v_004_syn.fits'
 >>> bp_nonhst.showfiles()
 AttributeError: 'TabularSpectralElement' object has no attribute 'showfiles'
 

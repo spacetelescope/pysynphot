@@ -105,7 +105,7 @@ Considering that the entire atlas occupies close to 70 MB of disk space,
 many applications could be satisfied by a copy of the solar metallicity
 spectra only (Table 2 of the README file).
 See
-`Kurucz 1993 atlas README file <http://ssb.stsci.edu/cdbs/grid/k93models/AA_README>`_
+`Kurucz 1993 atlas README file <https://archive.stsci.edu/hlsps/reference-atlases/cdbs/grid/k93models/AA_README>`_
 for more details.
 
 The models are in ``flam`` *surface* flux units. If the number of counts or the

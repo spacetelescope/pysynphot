@@ -2,7 +2,7 @@
 
 **Global Variables**
 
-* ``pysynphot.locations.rootdir`` - Root directory for CDBS/CRDS
+* ``pysynphot.locations.rootdir`` - Root directory for TRDS/CRDS
   data files. By default, it is extracted from your ``PYSYN_CDBS``
   environment variable.
 
@@ -40,7 +40,6 @@ import warnings
 from astropy.io import fits as pyfits
 from bs4 import BeautifulSoup
 
-# Replace cdbs_roots lookup with an environment variable
 try:
     rootdir = os.environ['PYSYN_CDBS']
 except KeyError:
@@ -48,7 +47,7 @@ except KeyError:
                   "crippled.")
     rootdir = ''
 
-ftp_rootdir = 'http://ssb.stsci.edu/cdbs_open/cdbs'
+ftp_rootdir = 'https://ssb.stsci.edu/trds'
 
 # Data directory is now installed locally
 specdir = os.path.join(os.path.dirname(__file__), 'data')
@@ -222,7 +221,7 @@ KUR_TEMPLATE = os.path.join(rootdir, 'grid', '*')
 VegaFile = get_data_filename('alpha_lyr_stis_010.fits')
 
 
-# CDBS moved extinction files to $PYSYN_CDBS/extinction .
+# RedCat moved extinction files to $PYSYN_CDBS/extinction .
 # The old location $PYSYN_CDBS/grid/extinction is no longer used.
 EXTDIR = 'extinction'
 
@@ -264,7 +263,7 @@ def get_latest_file(template, raise_error=False, err_msg=''):
     path_lowercase = path.lower()
 
     # Remote HTTP directory
-    if path_lowercase.startswith('http:'):
+    if path_lowercase.startswith('http'):
         try:
             response = request.urlopen(path)  # PY2 has no context manager
             soup = BeautifulSoup(response, 'html.parser')
@@ -328,7 +327,7 @@ def _get_RedLaws():
     # get all the fits files in EXTDIR
     globstr = os.path.join(extdir, '*.fits')
 
-    if extdir_lowercase.startswith('http:'):
+    if extdir_lowercase.startswith('http'):
         response = request.urlopen(extdir)  # PY2 has no context manager
         soup = BeautifulSoup(response, 'html.parser')
         files = list(set([x.text for x in soup.find_all("a")
