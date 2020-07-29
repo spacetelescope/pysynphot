@@ -86,7 +86,7 @@ These data files are needed for calculations involving HST bandpasses:
 +----------------------------+------------------------------+--------------------------------------------------+
 | Description                | Directory name               | Download                                         |
 +============================+==============================+==================================================+
-|Master tables               | $PYSYN_CDBS/mtab/            |http://ssb.stsci.edu/cdbs/tarfiles/synphot1.tar.gz|
+|Master tables               | $PYSYN_CDBS/mtab/            |http://ssb.stsci.edu/trds/tarfiles/synphot1.tar.gz|
 +----------------------------+------------------------------+                                                  |
 |HST/ACS throughput tables   | $PYSYN_CDBS/comp/acs/        |                                                  |
 +----------------------------+------------------------------+                                                  |
@@ -122,7 +122,7 @@ These data files are needed for calculations involving source spectra:
 +------------------------------------------+----------------------------+--------------------------------------------------+
 | Description                              | Directory name             | Download                                         |
 +==========================================+============================+==================================================+
-|Interstellar extinction curves            |$PYSYN_CDBS/extinction/     |http://ssb.stsci.edu/cdbs/tarfiles/synphot2.tar.gz|
+|Interstellar extinction curves            |$PYSYN_CDBS/extinction/     |http://ssb.stsci.edu/trds/tarfiles/synphot2.tar.gz|
 +------------------------------------------+----------------------------+                                                  |
 |AGN templates                             |$PYSYN_CDBS/grid/agn/       |                                                  |
 +------------------------------------------+----------------------------+                                                  |
@@ -146,13 +146,13 @@ These data files are needed for calculations involving source spectra:
 +------------------------------------------+----------------------------+                                                  |
 |Pickles stellar atlas                     |$PYSYN_CDBS/grid/pickles/   |                                                  |
 +------------------------------------------+----------------------------+--------------------------------------------------+
-|Castelli & Kurucz (2004) stellar atlas    |$PYSYN_CDBS/grid/ck04models/|http://ssb.stsci.edu/cdbs/tarfiles/synphot3.tar.gz|
+|Castelli & Kurucz (2004) stellar atlas    |$PYSYN_CDBS/grid/ck04models/|http://ssb.stsci.edu/trds/tarfiles/synphot3.tar.gz|
 +------------------------------------------+----------------------------+--------------------------------------------------+
-|Kurucz (1993) stellar atlas               |$PYSYN_CDBS/grid/k93models/ |http://ssb.stsci.edu/cdbs/tarfiles/synphot4.tar.gz|
+|Kurucz (1993) stellar atlas               |$PYSYN_CDBS/grid/k93models/ |http://ssb.stsci.edu/trds/tarfiles/synphot4.tar.gz|
 +------------------------------------------+----------------------------+--------------------------------------------------+
-|Phoenix stellar atlas                     |$PYSYN_CDBS/grid/phoenix/   |http://ssb.stsci.edu/cdbs/tarfiles/synphot5.tar.gz|
+|Phoenix stellar atlas                     |$PYSYN_CDBS/grid/phoenix/   |http://ssb.stsci.edu/trds/tarfiles/synphot5.tar.gz|
 +------------------------------------------+----------------------------+--------------------------------------------------+
-|HST calibration spectra                   |$PYSYN_CDBS/calspec/        |http://ssb.stsci.edu/cdbs/tarfiles/synphot6.tar.gz|
+|HST calibration spectra                   |$PYSYN_CDBS/calspec/        |http://ssb.stsci.edu/trds/tarfiles/synphot6.tar.gz|
 +------------------------------------------+----------------------------+--------------------------------------------------+
 
 Throughout this document, unless explicitly stated otherwise, the examples
