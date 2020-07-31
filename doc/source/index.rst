@@ -4,6 +4,12 @@
 Astrolib PySynphot (**pysynphot**)
 **********************************
 
+.. note::
+
+    This package is no longer actively developed. See
+    `package roadmap <https://github.com/spacetelescope/pysynphot/blob/master/ROADMAP.md>`_
+    for more information.
+
 Introduction
 ============
 
