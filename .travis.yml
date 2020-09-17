@@ -14,23 +14,15 @@ env:
         # to repeat them for all configurations.
         - PYTHON_VERSION=3.7
         - NUMPY_VERSION=stable
-        - ASTROPY_VERSION=stable
+        - ASTROPY_VERSION=4.1rc2
         - PIP_DEPENDENCIES='pytest-remotedata pytest-astropy-header beautifulsoup4'
         - CONDA_DEPENDENCIES=''
-        - MAIN_CMD='pytest pysynphot'
+        - MAIN_CMD='pytest pysynphot --remote-data'
 
 matrix:
     include:
 
         - os: linux
-
-        # Coverage and also test Astropy dev with remote data
-        - os: linux
-          env: PYTHON_VERSION=3.8
-               ASTROPY_VERSION=development
-               PIP_DEPENDENCIES='codecov pytest-remotedata pytest-astropy-header beautifulsoup4'
-               CONDA_DEPENDENCIES='pytest-cov coverage requests'
-               MAIN_CMD='pytest pysynphot --cov-report= --cov=pysynphot --remote-data'
 
 install:
     # We now use the ci-helpers package to set up our testing environment.
