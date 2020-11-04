@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # Weekly Wednesday 6AM build
+    # * is a special character in YAML so you have to quote this string
+    - cron: '0 6 * * 3'
+
+env:
+  PYSYN_CDBS: "https://ssb.stsci.edu/trds"
+
+jobs:
+  initial_tests:
+    runs-on: ubuntu-16.04
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Fetch tags
+      run: git fetch --prune --unshallow --tags
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+    - name: Install and build
+      run: |
+        python -m pip install --upgrade pip wheel setuptools
+        python -m pip install pytest-remotedata pytest-astropy-header
+        python setup.py install
+    - name: Test without remote data
+      run: pytest pysynphot
+
+  coverage_dev_tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Fetch tags
+      run: git fetch --prune --unshallow --tags
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install and build
+      run: |
+        python -m pip install --upgrade pip wheel setuptools
+        python -m pip install pytest-remotedata pytest-astropy-header pytest-cov codecov coverage requests
+        python -m pip install git+https://github.com/astropy/astropy.git@master#egg=astropy
+        python setup.py install
+    # NOTE: If TRDS cannot take the hit, disable --remote-data
+    - name: Test with coverage, dev astropy, and remote data
+      run: pytest pysynphot --cov-report= --cov=pysynphot --remote-data
+    - name: Coverage report
+      uses: codecov/codecov-action@f532c3a  # v1.0.7
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
