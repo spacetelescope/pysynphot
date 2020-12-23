@@ -2,9 +2,11 @@ from __future__ import absolute_import, division, print_function
 
 import os
 
+import astropy
 import numpy as np
 import pytest
-from astropy.utils.data import _find_pkg_data_path, get_pkg_data_filename
+from astropy.utils.data import get_pkg_data_filename
+from astropy.utils.introspection import minversion
 from numpy.testing import assert_allclose
 
 from .. import locations, refs
@@ -17,6 +19,13 @@ from ..spectrum import (ArraySourceSpectrum, ArraySpectralElement, BlackBody,
 
 old_comptable = None
 old_vegafile = None
+
+ASTROPY_LT_4_3 = not minversion(astropy, '4.3')
+
+if ASTROPY_LT_4_3:
+    from astropy.utils.data import _find_pkg_data_path as get_pkg_data_path
+else:
+    from astropy.utils.data import get_pkg_data_path
 
 
 def setup_module(module):
@@ -183,8 +192,8 @@ class TestETC_Imag2(object):
         # (el1302a.fits * 0.5) +
         # (el1356a.fits * 0.5) +
         # (el2471a.fits * 0.5)
-        path = _find_pkg_data_path(os.path.join('data', 'generic'),
-                                   package='pysynphot')
+        path = get_pkg_data_path(os.path.join('data', 'generic'),
+                                 package='pysynphot')
         spz = FileSourceSpectrum(os.path.join(path, 'Zodi.fits')).renorm(
             22.7, 'vegamag', ObsBandpass('V'))
         self.sp = ((FileSourceSpectrum(os.path.join(path, 'earthshine.fits')) +
