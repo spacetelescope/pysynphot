@@ -83,7 +83,7 @@ def calculate_bin_centers(edges):
         Array of bin centers. Will be 1D and have one less value than ``edges``.
 
     """
-    edges = np.asanyarray(edges, dtype=np.float)
+    edges = np.asanyarray(edges, dtype=float)
 
     if edges.ndim != 1:
         raise ValueError('edges input array must be 1D.')
@@ -91,7 +91,7 @@ def calculate_bin_centers(edges):
     if edges.size < 2:
         raise ValueError('edges input must have at least two values.')
 
-    centers = np.empty(edges.size - 1, dtype=np.float)
+    centers = np.empty(edges.size - 1, dtype=float)
 
     centers[0] = edges[:2].mean()
 

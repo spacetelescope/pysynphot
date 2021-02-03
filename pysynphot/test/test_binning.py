@@ -9,7 +9,7 @@ from .. import binning
 
 @pytest.mark.parametrize(
     ('centers', 'ref'),
-    [(np.arange(10, 20, dtype=np.float), np.arange(9.5, 20)),
+    [(np.arange(10, 20, dtype=float), np.arange(9.5, 20)),
      (2.0 ** np.arange(1, 10), [1, 3, 6, 12, 24, 48, 96, 192, 384, 640])])
 def test_calculate_bin_edges(centers, ref):
     """Test bin edges calculated for an evenly and an unevenly spaced
