@@ -192,7 +192,7 @@ resolution. The line selection is repeated at each iteration of the model
 until it has converged and the thermal structure obtained. The models here
 are calculated with a cloud model, valid across the entire parameter range.
 See
-`Phoenix models README file <http://www.stsci.edu/hst/instrumentation/reference-data-for-calibration-and-tools/astronomical-catalogs/phoenix-models-available-in-synphot>`_
+`Phoenix models README file <https://www.stsci.edu/hst/instrumentation/reference-data-for-calibration-and-tools/astronomical-catalogs/phoenix-models-available-in-synphot>`_
 for more details.
 The atlas data files are organized in a similar naming convention as
 :ref:`pysynphot-appendixa-kurucz1993`, and are easily accessible using
