@@ -19,9 +19,6 @@ jobs:
         name: Install Python
         with:
           python-version: '3.8'
-      
-      - name: Install build dependencies
-        run: pip install numpy
 
       - name: Build wheels
         env:
@@ -43,19 +40,16 @@ jobs:
         name: Install Python
         with:
           python-version: '3.8'
-      
-      - name: Install build dependencies
-        run: pip install numpy
 
       - name: Build sdist
-        run: python setup.py sdist
+        run: python -m build --sdist
 
       - uses: actions/upload-artifact@v2
         with:
           path: dist/*.tar.gz
 
   upload_pypi:
-    needs: [debug]
+    needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     # publish when a GitHub Release is created
     if: github.event_name == 'release' && github.event.action == 'published'
