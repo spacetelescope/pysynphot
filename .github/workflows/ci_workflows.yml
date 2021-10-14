@@ -52,6 +52,6 @@ jobs:
     - name: Test with coverage, dev astropy, and remote data
       run: pytest pysynphot --cov=./ --cov-report=xml --remote-data
     - name: Coverage report
-      uses: codecov/codecov-action@v1.0.13
+      uses: codecov/codecov-action@v2
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
