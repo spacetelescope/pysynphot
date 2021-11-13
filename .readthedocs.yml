@@ -1,0 +1,20 @@
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+version: 2
+
+sphinx:
+  builder: html
+  configuration: doc/source/conf.py
+  fail_on_warning: true
+
+# Set the version of Python and requirements required to build your docs
+python:
+  version: 3.8
+  system_packages: true
+  install:
+    - requirements: doc/rtd-pip-requirements
+    - method: pip
+      path: .
+
+# Don't build any extra formats
+formats: []
