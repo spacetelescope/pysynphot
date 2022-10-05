@@ -140,7 +140,7 @@ class TestAddMag(object):
 
     def test_subtract(self):
         test = self.faint.addmag(self.delta * -1.0)
-        assert_array_equal(test.flux, self.bright.flux)
+        assert_allclose(test.flux, self.bright.flux)
 
     def testtypecatch(self):
         with pytest.raises(TypeError):
