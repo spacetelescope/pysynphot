@@ -86,11 +86,11 @@ def test_phoenix_gap():
     """
     https://github.com/spacetelescope/pysynphot/issues/68
     """
-    Icat('phoenix', 2700, -1, 5.1)  # OK
+    Icat('phoenix', 2200, -1, 5.1)  # OK
     with pytest.raises(ParameterOutOfBounds):
-        Icat('phoenix', 2700, -0.5, 5.1)
+        Icat('phoenix', 2200, -0.5, 5.1)
     with pytest.raises(ParameterOutOfBounds):
-        Icat('phoenix', 2700, -0.501, 5.1)
+        Icat('phoenix', 2200, -0.501, 5.1)
 
 
 @pytest.mark.remote_data
