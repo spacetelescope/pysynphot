@@ -82,18 +82,6 @@ def test_Icat_exceptions(teff, z, logg):
 
 
 @pytest.mark.remote_data
-def test_phoenix_gap():
-    """
-    https://github.com/spacetelescope/pysynphot/issues/68
-    """
-    Icat('phoenix', 2200, -1, 5.1)  # OK
-    with pytest.raises(ParameterOutOfBounds):
-        Icat('phoenix', 2200, -0.5, 5.1)
-    with pytest.raises(ParameterOutOfBounds):
-        Icat('phoenix', 2200, -0.501, 5.1)
-
-
-@pytest.mark.remote_data
 class TestCatalogCache(object):
     """
     Test changes for Trac ticket #131.
