@@ -11,6 +11,7 @@ pysynphot/version.py
 
 # Sphinx
 _build
+doc/tsrs/bandpar_comparison/build
 
 # Packages/installer info
 *.egg*
