@@ -2,6 +2,13 @@
 # See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 version: 2
 
+build:
+  os: ubuntu-22.04
+  apt_packages:
+    - graphviz
+  tools:
+    python: "3.11"
+
 sphinx:
   builder: html
   configuration: doc/source/conf.py
@@ -9,8 +16,6 @@ sphinx:
 
 # Set the version of Python and requirements required to build your docs
 python:
-  version: 3.8
-  system_packages: false
   install:
     - requirements: doc/rtd-pip-requirements
     - method: pip
