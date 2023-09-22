@@ -21,7 +21,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     setup_requires=['setuptools_scm'],
-    python_requires='>=3.6',
+    python_requires='>=3.6,<3.12',
     install_requires=[
         'astropy',
         'numpy<2',
