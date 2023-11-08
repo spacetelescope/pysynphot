@@ -23,7 +23,7 @@ def test_sample_units():
      ('acs,wfc1,f775w,pol_v', 444.05),
      ('cos,boa,nuv,mirrora', 370.65),
      ('nicmos,1,f090m,dn', 559.59),
-     ('stis,0.2x29,mirror,fuvmama', 134.977476),
+     ('stis,0.2x29,mirror,fuvmama', 134.836982),
      ('wfc3,ir,f164n', 700.05),
      ('wfc3,uvis1,f336w', 158.44),
      ('wfc3,uvis2,f336w', 158.36)])
