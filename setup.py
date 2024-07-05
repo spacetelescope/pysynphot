@@ -26,7 +26,6 @@ setup(
         'astropy',
         'numpy<2',
         'beautifulsoup4',
-        'six'
     ],
     tests_require=['pytest', 'pytest-remotedata'],
     packages=['pysynphot',
