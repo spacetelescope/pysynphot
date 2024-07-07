@@ -1,4 +1,4 @@
-import sys,os
+import os
 import sqlite3
 
 def run():

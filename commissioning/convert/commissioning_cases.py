@@ -1,4 +1,3 @@
-import sys
 import conv_base
 
 class TestComm1(conv_base.ParentCase):

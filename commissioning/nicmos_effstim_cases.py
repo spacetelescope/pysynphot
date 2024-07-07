@@ -1,5 +1,5 @@
-from pytools import testutil
-import sys
+# from pytools import testutil
+# import sys
 import basecase
 
 

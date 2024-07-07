@@ -1,5 +1,5 @@
-import basecase
-import sys,os
+# import basecase
+# import sys,os
 
 
 pattern="""class stisS%d(countrateCase):

@@ -4,8 +4,8 @@ import numpy as N
 from astropy.io import fits as pyfits
 from pysynphot import etc
 from pyraf import iraf
-from iraf import stsdas,hst_calib,synphot
-import os,time,re
+# from iraf import stsdas,hst_calib,synphot
+import os, re
 from pysynphot.wavetable import wavetable as Wavecat
 from pysynphot.observationmode import ObservationMode
 
@@ -29,8 +29,8 @@ class calcspecCase(testutil.LogTestCase):
         if fname is None:
             fname=__file__
         self.propername=self.id()
-        base,ext=os.path.splitext(os.path.basename(fname))
-        main,case,test=self.propername.split('.')
+        base,_=os.path.splitext(os.path.basename(fname))
+        _,case,test=self.propername.split('.')
         self.name=os.path.join(base,test,case)
         self.wavename=self.name+'_wave.fits'
         #Make sure the directories exist
