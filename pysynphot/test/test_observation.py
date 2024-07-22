@@ -168,7 +168,7 @@ class TestArithmetic(object):
         assert pysynphot.observation.check_overlap(sp2, sp1) == 'partial'
 
         # Check for no overlap with 2 non-analytic spectra
-        w2 = np.array(5000., 6000., 7000.)
+        w2 = np.array([5000., 6000., 7000.])
         sp2 = ArraySourceSpectrum(w2, f)
         assert pysynphot.observation.check_overlap(sp1, sp2) == 'none'
 
