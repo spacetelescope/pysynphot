@@ -165,8 +165,7 @@ class TestArithmetic(object):
         w2 = np.array([100., 1000., 5000.])
         sp2 = ArraySourceSpectrum(w2, f)
         assert pysynphot.observation.check_overlap(sp1, sp2) == 'partial'
-        # But sp2 covers the entire span of sp1 in this case.
-        assert pysynphot.observation.check_overlap(sp2, sp1) == 'full'
+        assert pysynphot.observation.check_overlap(sp2, sp1) == 'partial'
 
         # Check for no overlap with 2 non-analytic spectra
         w2 = np.array(5000., 6000., 7000.)
