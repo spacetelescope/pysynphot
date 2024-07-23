@@ -7,6 +7,8 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose, assert_array_equal
 
+import pysynphot
+
 from ..observation import Observation
 from ..obsbandpass import ObsBandpass
 from ..spectrum import ArraySourceSpectrum, Box, FlatSpectrum
@@ -126,6 +128,49 @@ class TestArithmetic(object):
             waveunits='angstroms', fluxunits='counts')
         with pytest.raises(NotImplementedError):
             self.obs + other
+
+    def test_fluxcheck(self):
+        try:
+            self.obs._fluxcheck(self.obs.flux.sum())
+        except ValueError:
+            pytest.fail('Unexpected ValueError in the _fluxcheck method.')
+        with pytest.raises(ValueError) as e_info:
+            self.obs._fluxcheck(0.0)
+        with pytest.raises(ValueError) as e_info:
+            self.obs._fluxcheck(-10.0)
+        with pytest.raises(ValueError) as e_info:
+            self.obs._fluxcheck(np.nan)
+        with pytest.raises(ValueError) as e_info:
+            self.obs._fluxcheck(np.inf)
+
+    def test_as_spectrum(self):
+        s = self.obs.as_spectrum()
+        assert isinstance(s, ArraySourceSpectrum)
+
+    def test_check_overlap(self):
+        sp1 = FlatSpectrum(1, fluxunits='counts')
+        sp2 = FlatSpectrum(1, fluxunits='counts')
+        # Comparisons with analytic spectra will always return full
+        assert pysynphot.observation.check_overlap(sp1, sp2) == 'full'
+
+        # Check that 2 non-analytic spectra are the same
+        w1 = np.array([10., 100., 1000.])
+        w2 = np.array([10., 100., 1000.])
+        f = np.array([1., 1., 1.])
+        sp1 = ArraySourceSpectrum(w1, f)
+        sp2 = ArraySourceSpectrum(w2, f)
+        assert pysynphot.observation.check_overlap(sp1, sp2) == 'full'
+
+        # Check for partial overlap with 2 non-analytic spectra
+        w2 = np.array([100., 1000., 5000.])
+        sp2 = ArraySourceSpectrum(w2, f)
+        assert pysynphot.observation.check_overlap(sp1, sp2) == 'partial'
+        assert pysynphot.observation.check_overlap(sp2, sp1) == 'partial'
+
+        # Check for no overlap with 2 non-analytic spectra
+        w2 = np.array([5000., 6000., 7000.])
+        sp2 = ArraySourceSpectrum(w2, f)
+        assert pysynphot.observation.check_overlap(sp1, sp2) == 'none'
 
 
 @pytest.mark.remote_data
