@@ -123,7 +123,7 @@ class calcspecCase(testutil.LogTestCase):
         tidx=N.where(tt>(self.sigthresh*tt.max()))[0]
         ridx=N.where(rr>(self.sigthresh*rr.max()))[0]
         #Set a flag if they're not the same set
-        if not (N.alltrue(tidx == ridx)):
+        if N.any(tidx != ridx):
             self.tra['SigElemDiscrep']=True
             tidx=ridx
 
@@ -152,7 +152,7 @@ class calcspecCase(testutil.LogTestCase):
             self.tra['Outliers']=self.count_outliers(5)
             if (self.tra['Discrepfrac'] > self.superthresh):
                 self.tra['Extreme']=True
-            self.failUnless(N.alltrue(abs(self.adiscrep)<self.thresh),
+            self.failUnless(N.all(abs(self.adiscrep)<self.thresh),
                             msg="Worst case %f"%abs(self.adiscrep).max())
         except ZeroDivisionError:
             self.tra['Discrepfrac']=0.0
