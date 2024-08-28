@@ -1,6 +1,3 @@
-from __future__ import absolute_import, division, print_function
-from six import iteritems
-
 import os
 
 import pytest
@@ -33,7 +30,7 @@ class TestSpecHdr(object):
         assert 'G15.7' == self.h1['tdisp1'].strip().upper()
 
     def test_keys(self):
-        for k, v in iteritems(self.keys):
+        for k, v in self.keys.items():
             assert self.h0[k] == v[0]
 
 
