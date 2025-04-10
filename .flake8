@@ -1,0 +1,11 @@
+# flake8 does not support pyproject.toml (https://github.com/PyCQA/flake8/issues/234)
+
+[flake8]
+# Ignoring these for now:
+# E265: block comment should start with '#'
+# E266: too many leading '#' for block comment
+# E501: line too long
+# I100: import statements are in the wrong order
+# I101: imported names are in the wrong order
+# W504: line break after binary operator
+ignore = E265,E266,E501,I100,I101,W504

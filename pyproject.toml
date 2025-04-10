@@ -1,6 +1,97 @@
-[build-system]
-requires = [
-    "setuptools>=30.3.0",
-    "wheel",
-    "numpy",
+[project]
+name = "pysynphot"
+description = "Python Synthetic Photometry Utilities"
+authors = [
+  { name = "Vicki Laidler" },
+  { name = "Pey Lian Lim" },
+  { name = "Matt Davis" },
+  { name = "Robert Jedrzejewski" },
+  { name = "Ivo Busko" },
 ]
+classifiers = [
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Topic :: Scientific/Engineering :: Astronomy",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = ["astropy", "numpy<2", "beautifulsoup4", "six"]
+dynamic = ["version"]
+
+[project.license]
+file = "LICENSE.md"
+
+[project.urls]
+Repository = "https://github.com/spacetelescope/pysynphot"
+
+[project.optional-dependencies]
+tests = ['pytest', 'pytest-remotedata']
+
+[build-system]
+requires = ["setuptools>=30.3.0", "wheel", "numpy", "setuptools_scm[toml]>=3.4"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["pysynphot", "pysynphot.test"]
+include-package-data = false
+
+[tool.setuptools.package-dir]
+pysynphot = "pysynphot"
+
+[tool.setuptools.package-data]
+pysynphot = ["data/generic/*", "data/wavecat/*"]
+"pysynphot.test" = [
+  "data/*.*",
+  "data/cdbs/extinction/*",
+  "data/cdbs/jref/*",
+  "data/cdbs/mtab/*",
+]
+
+[tool.pytest.ini_options]
+minversion = "4"
+norecursedirs = [
+  "build",
+  "doc/build",
+  "commissioning",
+  "planning",
+  "pysynphot/src",
+]
+addopts = "-p no:warnings"
+xfail_strict = true
+astropy_header = true
+filterwarnings = ["error"]
+
+[tool.ruff.lint]
+ignore = [
+  "E265", # block comment should start with '#'
+  "E266", # too many leading '#' for block comment
+  "E501", # line too long
+  "I100", # import statements are in the wrong order
+  "I101", # imported names are in the wrong order
+  "W504", # line break after binary operator
+]
+
+[tool.coverage.run]
+omit = [
+  "pysynphot/__init__*",
+  "pysynphot/conftest.py",
+  "pysynphot/data/*",
+  "pysynphot/src/*",
+  "pysynphot/test/*",
+  "pysynphot/version*",
+  "pysynphot/spparser.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "except ImportError",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "def main\\(.*\\):",
+  "pragma: py{ignore_python_version}",
+]
+
+[tool.setuptools_scm]
+version_file = "pysynphot/version.py"
