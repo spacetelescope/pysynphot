@@ -8,7 +8,6 @@ setup(
     use_scm_version={'write_to': 'pysynphot/version.py'},
     author=('Vicki Laidler, Pey Lian Lim, Matt Davis, Robert Jedrzejewski, '
             'Ivo Busko'),
-    author_email='help@stsci.edu',
     description='Python Synthetic Photometry Utilities',
     url='https://github.com/spacetelescope/pysynphot',
     license='BSD',
