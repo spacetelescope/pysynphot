@@ -230,8 +230,8 @@ class Integrator(object):
 
         # Now check for monotonicity & enforce ascending
         sorted = N.sort(wave)
-        if not N.alltrue(sorted == wave):
-            if N.alltrue(sorted[::-1] == wave):
+        if not N.all(sorted == wave):
+            if N.all(sorted[::-1] == wave):
                 # monotonic descending is allowed
                 pass
             else:
