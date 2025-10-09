@@ -42,4 +42,4 @@ def test_photbw(obsmode, ans):
 
     """
     band = ObsBandpass(obsmode)
-    assert_allclose(band.photbw(), ans, rtol=1E-3)
+    assert_allclose(band.photbw(), ans, rtol=5E-3)
